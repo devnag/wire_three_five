@@ -1,0 +1,17 @@
+import Proof.CaseAnalysis.FinalTailComposeUniform
+
+namespace NearCubicWires.RepairSource.CloseoutFinal.C10FuelMajorant
+
+open ComponentwisePolynomial CanonicalWitnessCodec
+open RepairOrdinary RepairOrdinary.CloseoutWitness
+open RepairOrdinary.CloseoutFinalC10StageSeam
+open RepairOrdinary.CloseoutFinalC10WorkerDock
+open RepairOrdinary.CloseoutFinalC10CallCountMajorant
+open CloseoutRowsOriginalSchedule (Phase)
+
+set_option autoImplicit false
+set_option maxHeartbeats 250000
+set_option maxRecDepth 120000
+set_option warningAsError true
+
+end NearCubicWires.RepairSource.CloseoutFinal.C10FuelMajorant

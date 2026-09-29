@@ -1,0 +1,21 @@
+import Proof.Packets.SrcRes284Pro
+import Proof.Assembly.CappedReady
+
+set_option autoImplicit false
+set_option maxHeartbeats 250000
+set_option maxRecDepth 120000
+set_option warningAsError true
+
+namespace NearCubicWires.SourceStart.Res284
+open NearCubicWires NearCubicWires.P1TopDown
+open LocalBitMultitape ExtDecompositionBatch RepairOrdinary
+open RepairSource RepairOrdinary.CloseoutWitness SourceInterfaces RepairRepresentation
+open RepairSource.CloseoutFinal RepairSource.SelectedRecoveryIntegration CanonicalWitnessCodec
+open WorkspaceSelectedAdmission (originalTapes capacity)
+open RecoveryRootRound
+open WorkspaceSelectedEntryReady
+noncomputable section
+
+end
+end NearCubicWires.SourceStart.Res284
+

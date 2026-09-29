@@ -1,0 +1,59 @@
+import Proof.Circuits.TotalSelectorBodyAdapter
+import Proof.MachineModel.TotalInverseSelectorAtomStreamSourceBank
+import Proof.MachineModel.TotalStructuralAtomRangeProgram
+
+/-!
+# The guarded inverse selector atom stream
+
+The source-driven selector bank and description numeral tail are frozen.  This
+module replaces only the selector-frame adapter and balanced atom-range callee,
+then exports the existing `InverseDescriptionAtomStreamRuns` interface.
+-/
+
+namespace NearCubicWires.TotalInverseSelectorAtomStreamClosure
+
+open NearCubicWires
+open NearCubicWires.BankAtomContextRegisters
+open NearCubicWires.BankEmittedAtomLoop
+open NearCubicWires.BankRegisterCaseOneChain
+open NearCubicWires.CanonicalBalancedCall
+open NearCubicWires.CanonicalBinary
+open NearCubicWires.CaseOneRecoveryAssembly
+open NearCubicWires.CaseTwoOccurrenceProgram
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.FixedDescriptionRequestSourceAdapter
+open NearCubicWires.GeneratedBalancedRangeProgram
+open NearCubicWires.InverseDescriptionAtomStream
+open NearCubicWires.InverseLengthStage
+open NearCubicWires.InverseSubstitutionRequestWordClosure
+open NearCubicWires.InverseSelectorAtomStreamClosure
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PaddedProjectionPresentation
+open NearCubicWires.PolynomialClock
+open NearCubicWires.PreserveRightProgram
+open NearCubicWires.ProjectionRunnerBalancedProgram
+open NearCubicWires.RecoveryScheduleEnvelope
+open NearCubicWires.RuntimeCaseTwoCircuitEncodingClosure
+open NearCubicWires.SelectorDrivenBodyClosure
+open NearCubicWires.RuntimeScheduleNumeralBank
+open NearCubicWires.ScheduledRecovery
+open NearCubicWires.SelectorDrivenAtomContextRuns
+open NearCubicWires.SourceDrivenNumeralBank
+open NearCubicWires.SourceInterfaces
+open NearCubicWires.StructuralAtomCalleeProgram
+open NearCubicWires.StructuralAtomEmitterLoopProgram
+open NearCubicWires.TotalBankEmittedAtomLoop
+open NearCubicWires.TotalInverseSelectorAtomStreamSourceBank
+open NearCubicWires.TotalSelectorBodyAdapter
+open NearCubicWires.TotalStructuralAtomCalleeProgram
+open NearCubicWires.TotalStructuralAtomRangeProgram
+open NearCubicWires.UniformTargetLanguageBank
+open NearCubicWires.VerifiedLinker
+open NearCubicWires.RuntimeCaseTwoDescriptionFrameAdapter
+
+
+/-! ## 1. The guarded stream and resources -/
+
+/-! ## 2. The guarded atom-stream consumer -/
+
+end NearCubicWires.TotalInverseSelectorAtomStreamClosure

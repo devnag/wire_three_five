@@ -1,0 +1,30 @@
+import Proof.Circuits.TotalSelectorDrivenBodyAdapterRuns
+import Proof.Circuits.TotalSelectorDrivenEmitterTotalContract
+
+/-! # All-request guarded selector emitter run -/
+
+namespace NearCubicWires.TotalSelectorDrivenEmitterTotalRuns
+
+open NearCubicWires
+open NearCubicWires.BankEmittedAtomLoop
+open NearCubicWires.CanonicalBalancedCall
+open NearCubicWires.CanonicalBinary
+open NearCubicWires.CaseOneRecoveryAssembly
+open NearCubicWires.CaseTwoOccurrenceProgram
+open NearCubicWires.EmittedBranchTargetProgram
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.GeneratedBalancedRangeProgram
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PolynomialClock
+open NearCubicWires.ProjectionRunnerBalancedProgram
+open NearCubicWires.SelectorDrivenAtomContextRuns
+open NearCubicWires.SourceInterfaces
+open NearCubicWires.StructuralAtomCalleeProgram
+open NearCubicWires.StructuralAtomEmitterLoopProgram
+open NearCubicWires.TotalBankEmittedAtomLoop
+open NearCubicWires.TotalSelectorDrivenContextContracts
+open NearCubicWires.TotalSelectorDrivenEmitterResources
+open NearCubicWires.TotalSelectorDrivenEmitterTotalContract
+open NearCubicWires.TotalStructuralAtomEmitterProgram
+
+end NearCubicWires.TotalSelectorDrivenEmitterTotalRuns

@@ -1,0 +1,39 @@
+import Proof.MachineModel.TopDownWorkspaceSelectedEntry
+
+set_option autoImplicit false
+set_option maxHeartbeats 250000
+set_option maxRecDepth 120000
+set_option warningAsError true
+
+namespace NearCubicWires.SourceStart.Res284
+open Finset
+open NearCubicWires
+open NearCubicWires.ComponentwisePolynomial
+open NearCubicWires.ExtDecompositionBatch
+open NearCubicWires.LocalBitMultitape
+open NearCubicWires.RepairOrdinary
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10WorkerDockSeam (phaseRecords)
+open NearCubicWires.RepairSource.CloseoutFinal.C10SupplierCall
+open NearCubicWires.RepairSource.CloseoutLanguage (clauseWidth)
+open NearCubicWires.RepairSource.VerifierDecoding
+open NearCubicWires.SourceInterfaces
+open NearCubicWires.RepairSource.CloseoutFinal.C10PrologueUniform
+noncomputable section
+
+section sched
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10SeedEngine
+
+end sched
+
+section entry
+open NearCubicWires.P1TopDown NearCubicWires.P1TopDown.WorkspaceSelectedEntry
+open NearCubicWires.RepairSource NearCubicWires.RepairSource.CloseoutFinal NearCubicWires.RepairSource.ProjectionNormalization
+open NearCubicWires.RepairOrdinary.CloseoutWitness NearCubicWires.RepairRepresentation
+open NearCubicWires.P1TopDown.WorkspaceSelectedAdmission (originalTapes)
+open NearCubicWires.RepairOrdinary.RecoveryRootRound (install install_other)
+
+end entry
+
+end
+end NearCubicWires.SourceStart.Res284
+

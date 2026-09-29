@@ -1,0 +1,32 @@
+import Proof.Circuits.InverseDescriptionAtomStream
+import Proof.MachineModel.TotalStructuralAtomCalleeProgram
+
+/-!
+# The guarded balanced structural atom range
+
+This is the balanced-list twin of the total tagged emitter.  It installs the
+guarded pointwise callee without changing the generated range request or
+balanced atom-list output.
+-/
+
+namespace NearCubicWires.TotalStructuralAtomRangeProgram
+
+open NearCubicWires
+open NearCubicWires.BoundedOracleStructuralCircuit
+open NearCubicWires.BoundedOracleStructuralFormulaTable
+open NearCubicWires.CanonicalBalancedCall
+open NearCubicWires.CanonicalBinary
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.GeneratedBalancedRangeProgram
+open NearCubicWires.InverseDescriptionAtomStream
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PolynomialClock
+open NearCubicWires.ProjectionRunnerBalancedProgram
+open NearCubicWires.SourceInterfaces
+open NearCubicWires.StructuralAtomCalleeProgram
+open NearCubicWires.StructuralAtomEmitterLoopProgram
+open NearCubicWires.TotalSelectiveCountCasesProgram
+open NearCubicWires.TotalStructuralAtomCalleeProgram
+open NearCubicWires.VerifiedLinker
+
+end NearCubicWires.TotalStructuralAtomRangeProgram

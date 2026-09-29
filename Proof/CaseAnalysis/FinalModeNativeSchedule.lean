@@ -1,0 +1,44 @@
+import Proof.CaseAnalysis.FinalModeNativeWidth
+
+/-!
+Paper C10's record widths and call counts are polynomial in native q. Combine
+their already proved caps before choosing ONE exponent for PartsSchedule.
+The finite onset includes that schedule's ledger onset and the soundness cutoff.
+Only actual site members receive numeric fits; physical runs and their costs
+remain separate obligations. A q-polynomial exponent need not be bounded by k;
+the cold source-preprocessing exponent must still satisfy the runtime ledger.
+-/
+
+namespace NearCubicWires.RepairOrdinary.CloseoutFinalC10ModeNativeSchedule
+
+open NearCubicWires NearCubicWires.PolynomialSchedule NearCubicWires.ComponentwisePolynomial
+open NearCubicWires.RepairOrdinary.CloseoutWitness
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10ModeNativeWidth
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10ModeNativeEnvelope
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10ModeNativeStageFields
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10StageFields
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10ExactStagePackage
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10StageJoin
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10SupplierCalls
+open NearCubicWires.RepairOrdinary.CloseoutRowsOriginalSchedule (Phase)
+open NearCubicWires.RepairSource NearCubicWires.RepairSource.CloseoutFinal
+open NearCubicWires.RepairSource.CloseoutFinal.C10PartsSchedule
+open NearCubicWires.RepairSource.CloseoutFinal.C10LedgerAssembly
+open NearCubicWires.RepairSource.CloseoutFinal.C10SumFamilyTransport
+open NearCubicWires.RepairSource.CloseoutFinal.C10TailComposeUniform
+open NearCubicWires.RepairSource.CloseoutWitnessResources
+open NearCubicWires.RepairSource.CloseoutLanguage
+open NearCubicWires.RepairSource.SelectedRecoveryIntegration
+open NearCubicWires.RepairSource.CompetitorRationalGap (zeta)
+open NearCubicWires.RepairRepresentation NearCubicWires.SupplierEstimator
+open NearCubicWires.SourceInterfaces NearCubicWires.SupplierPipeline
+
+set_option autoImplicit false
+set_option maxHeartbeats 250000
+set_option maxRecDepth 120000
+set_option warningAsError true
+noncomputable section
+
+
+end
+end NearCubicWires.RepairOrdinary.CloseoutFinalC10ModeNativeSchedule

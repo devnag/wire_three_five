@@ -1,0 +1,20 @@
+import Proof.Circuits.TotalSelectorDrivenContextPipeline
+
+/-! # All-request selector atom-context run -/
+
+namespace NearCubicWires.TotalSelectorDrivenContextRuns
+
+open NearCubicWires
+open NearCubicWires.BankAtomContextRegisters
+open NearCubicWires.CaseOneRecoveryAssembly
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PaddedProjectionPresentation
+open NearCubicWires.PolynomialClock
+open NearCubicWires.SelectorDrivenAtomContext
+open NearCubicWires.SelectorDrivenAtomContextRuns
+open NearCubicWires.TotalSelectorDrivenAdapterContracts
+open NearCubicWires.TotalSelectorDrivenContextContracts
+open NearCubicWires.TotalSelectorDrivenContextPipeline
+
+end NearCubicWires.TotalSelectorDrivenContextRuns

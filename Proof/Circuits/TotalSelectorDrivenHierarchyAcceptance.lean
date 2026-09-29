@@ -1,0 +1,18 @@
+import Proof.Foundations.ScheduledRecovery
+
+/-! # Perfect oracle acceptance forces hierarchy acceptance -/
+
+namespace NearCubicWires.TotalSelectorDrivenHierarchyAcceptance
+
+open NearCubicWires
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PCPPClausePadding
+open NearCubicWires.PolynomialClock
+open NearCubicWires.ProjectionPCPPadding
+open NearCubicWires.ProjectionWidthEnvelope
+open NearCubicWires.RecoveryScheduleEnvelope
+open NearCubicWires.ScheduledRecovery
+open NearCubicWires.SourceInterfaces
+
+end NearCubicWires.TotalSelectorDrivenHierarchyAcceptance

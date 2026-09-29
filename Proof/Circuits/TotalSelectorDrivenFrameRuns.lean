@@ -1,0 +1,18 @@
+import Proof.Circuits.TotalSelectorDrivenShapeRuns
+
+/-! # All-request selector frame-adapter run -/
+
+namespace NearCubicWires.TotalSelectorDrivenFrameRuns
+
+open NearCubicWires
+open NearCubicWires.BankFrameLoweringAdapter
+open NearCubicWires.CaseOneRecoveryAssembly
+open NearCubicWires.CaseTwoOccurrenceProgram
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PolynomialClock
+open NearCubicWires.PreserveRightProgram
+open NearCubicWires.SelectorDrivenAtomContextRuns
+open NearCubicWires.TotalSelectorDrivenContextContracts
+
+end NearCubicWires.TotalSelectorDrivenFrameRuns

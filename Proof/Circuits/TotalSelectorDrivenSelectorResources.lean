@@ -1,0 +1,19 @@
+import Proof.Circuits.SelectorDrivenBodyDispatch
+
+/-! # Exact scheduled resources for the selector-frame branch selector -/
+
+namespace NearCubicWires.TotalSelectorDrivenSelectorResources
+
+open NearCubicWires
+open NearCubicWires.BankEmittedAtomLoop
+open NearCubicWires.BankEmittedBranchSelector
+open NearCubicWires.BankRecoveryCodeProgram
+open NearCubicWires.CaseOneRecoveryAssembly
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PolynomialClock
+open NearCubicWires.ScheduledRecovery
+open NearCubicWires.SelectorDrivenAtomContextRuns
+open NearCubicWires.SelectorDrivenBodyDispatch
+
+end NearCubicWires.TotalSelectorDrivenSelectorResources

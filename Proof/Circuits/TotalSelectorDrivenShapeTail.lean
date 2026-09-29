@@ -1,0 +1,21 @@
+import Proof.Circuits.TotalSelectorDrivenContextRuns
+
+/-! # Total selector atom-shape count tail -/
+
+namespace NearCubicWires.TotalSelectorDrivenShapeTail
+
+open NearCubicWires
+open NearCubicWires.BankAtomShapeCountStage
+open NearCubicWires.BankEmittedAtomLoop
+open NearCubicWires.BankFrameLoweringAdapter
+open NearCubicWires.CaseOneRecoveryAssembly
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PolynomialClock
+open NearCubicWires.ProjectionRunnerBalancedProgram
+open NearCubicWires.SelectorDrivenAtomContextRuns
+open NearCubicWires.TotalBankEmittedAtomLoop
+open NearCubicWires.TotalSelectiveCountCasesProgram
+open NearCubicWires.TotalSelectorAtomShapeProgram
+
+end NearCubicWires.TotalSelectorDrivenShapeTail

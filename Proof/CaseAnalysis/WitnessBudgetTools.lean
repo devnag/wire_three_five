@@ -1,0 +1,35 @@
+import Proof.CaseAnalysis.WitnessFamilyBudget
+
+/-! Small algebraic tools for the actual cold preprocessing ledger.
+Each rule preserves the existing existential degree before hierarchy choice. -/
+namespace NearCubicWires.RepairOrdinary.CloseoutWitness.BudgetTools
+open PaddedRunnerBudgetClosure RepairSource ProjectionNormalization
+set_option autoImplicit false
+set_option maxHeartbeats 250000
+set_option maxRecDepth 120000
+set_option warningAsError true
+
+theorem div {f : ℕ→ℕ} (hf:SourcePoly f) (g : ℕ→ℕ) : SourcePoly (fun n=>f n/g n) :=
+  hf.mono (fun n=>Nat.div_le_self (f n) (g n))
+theorem sub {f : ℕ→ℕ} (hf:SourcePoly f) (g : ℕ→ℕ) : SourcePoly (fun n=>f n-g n) :=
+  hf.mono (fun n=>Nat.sub_le (f n) (g n))
+theorem max {f g : ℕ→ℕ} (hf:SourcePoly f) (hg:SourcePoly g) : SourcePoly (fun n=>Nat.max (f n) (g n)) :=
+  (hf.add hg).mono (fun n=>max_le (Nat.le_add_right (f n) (g n)) (Nat.le_add_left (g n) (f n)))
+theorem bits {f : ℕ→ℕ} (hf:SourcePoly f) : SourcePoly (fun n=>natBitLength (f n)) :=
+  (hf.add (polyDominated_const 1)).mono (fun n=>PCPPQueryCost.width_le (f n))
+
+macro "budget_poly" : tactic => `(tactic|
+  repeat first
+  | assumption
+  | exact sourcePoly_id
+  | exact polyDominated_const _
+  | apply PolyDominated.add
+  | apply PolyDominated.mul
+  | apply sourcePoly_pow
+  | apply sourcePoly_logScale
+  | apply bits
+  | apply div
+  | apply sub
+  | apply max)
+
+end NearCubicWires.RepairOrdinary.CloseoutWitness.BudgetTools

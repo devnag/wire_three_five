@@ -1,0 +1,19 @@
+import Proof.SourceAssembly.SourceCircuitFrame
+
+/- First actual complete Request native/support family: the carried systematic
+singleton. Fixed L/target are paid finite-code words, q/circuit read from cache. -/
+set_option autoImplicit false
+set_option maxHeartbeats 250000
+set_option maxRecDepth 120000
+set_option warningAsError true
+namespace PCJ6e421fabe2aa4155_SourceSingletonRequest
+open NearCubicWires LocalBitMultitape ExtDecompositionBatch RepairOrdinary RepairRepresentation
+open SourceInterfaces RecoveryRootRound CloseoutRowsEstimatorParity SupplierPipeline SupplierEstimator
+open CloseoutRowsOriginalClause (index negative)
+open PCJd4d1d9d7d1fa4313_Production
+noncomputable section
+
+
+
+end
+end PCJ6e421fabe2aa4155_SourceSingletonRequest

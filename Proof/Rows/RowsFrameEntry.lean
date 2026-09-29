@@ -1,0 +1,20 @@
+import Proof.Rows.RowsInitGlobal
+import Proof.Rows.RowsFinalNE
+
+set_option autoImplicit false
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedSimpArgs false
+
+namespace RowsInit.FrameEntry
+open NearCubicWires NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdinary
+open NearCubicWires.ExtDecompositionBatch NearCubicWires.RepairOrdinary.RecoveryRootRound
+open NearCubicWires.RepairRepresentation NearCubicWires.P1Closure
+open NearCubicWires.RepairSource.VerifierDecoding NearCubicWires.SupplierPipeline
+open PCJ9eff70d512234a4c_Fixed PCJd4d1d9d7d1fa4313_Production
+open RowsConstruction RowsConstruction.BaseLayout RowsConstruction.PartsStep RowsConstruction.PartsFill
+attribute [local irreducible] P1TopDownPaidPayload.tapes
+noncomputable section
+
+end
+end RowsInit.FrameEntry

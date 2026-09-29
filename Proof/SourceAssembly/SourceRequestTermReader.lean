@@ -1,0 +1,12 @@
+import Proof.SourceAssembly.SourceRequestMonomialSpec
+
+set_option autoImplicit false
+set_option maxRecDepth 120000
+set_option warningAsError true
+
+namespace NearCubicWires.SourceRequest.TermReader
+open NearCubicWires LocalBitMultitape ExtDecompositionBatch RepairOrdinary RepairOrdinary.RecoveryRootRound
+open NearCubicWires.CanonicalBinary NearCubicWires.CanonicalWitnessCodec
+open NearCubicWires.RepairOrdinary.CloseoutRowsEstimatorCoefficients
+
+end NearCubicWires.SourceRequest.TermReader

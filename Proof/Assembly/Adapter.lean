@@ -1,0 +1,111 @@
+import Proof.Assembly.ClosureBinaryCachePoolCount
+import Proof.Assembly.ClosureHardwireBudget
+import Proof.Assembly.Ready
+
+section
+/- Source body: PCJ38fbfed565f64139_Cached.lean; unchanged below. -/
+
+set_option autoImplicit false
+set_option maxHeartbeats 1000000
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedVariables false
+namespace PCJ38fbfed565f64139_Cached
+open NearCubicWires NearCubicWires.LocalBitMultitape
+open NearCubicWires.RepairRepresentation NearCubicWires.RepairOrdinary
+open NearCubicWires.ExtIncidence NearCubicWires.ExtDecompositionBatch
+open NearCubicWires.P1Closure NearCubicWires.SourceInterfaces
+open NearCubicWires.RepairSource NearCubicWires.RepairSource.CloseoutFinal
+open NearCubicWires.RepairOrdinary.RecoveryRootRound
+open PCJ9eff70d512234a4c_Fixed
+attribute [local irreducible] P1TopDownPaidPayload.tapes
+noncomputable section
+
+
+def descriptorWord (printer : WilliamsAlgorithm) (ds : List P1TopDownPaidReusable.Datum) :=
+  ds.flatMap (P1TopDownPaidReusable.Datum.word printer)
+
+end
+end PCJ38fbfed565f64139_Cached
+
+end
+
+section
+/- Source body: PCJ38fbfed565f64139_Source.lean; unchanged below. -/
+set_option autoImplicit false
+set_option maxHeartbeats 250000
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedVariables false
+set_option linter.defProp false
+
+open NearCubicWires NearCubicWires.ComponentwisePolynomial NearCubicWires.RepairOrdinary.CompetitorRawFieldEmit NearCubicWires.RepairOrdinary.CloseoutRowsOriginalSchedule LocalBitMultitape ExtDecompositionBatch RepairOrdinary RepairRepresentation SourceInterfaces RepairSource RepairSource.CloseoutFinal P1TopDown RepairSource.VerifierDecoding RecoveryRootRound RecoveryExecution CloseoutRowsEstimator CloseoutRowsEstimatorCoefficients CompetitorSelectedCount MatrixScoreBatch CompetitorCountMask SupplierPipeline SupplierEstimator SupplierPrime CanonicalFourfoldRowProgram CloseoutRawRows C10ExternalRowLoop C10ThresholdNaturalRowPrint C10ThresholdParityRow C10ThresholdEstimateRowJoin CloseoutFinalC10RowAnswerWord P1Closure P1TopDownPaidReusable P1TopDownPaidReusableReserves P1TopDownPaidBinaryReserves
+
+open PCJ1fef9807c6954e94_Native
+open PCJ9eff70d512234a4c_Fixed
+namespace PCJ38fbfed565f64139_Physical
+attribute [local irreducible] P1TopDownPaidPayload.tapes
+
+end PCJ38fbfed565f64139_Physical
+
+end
+
+section
+/- Source body: PCJ38fbfed565f64139_Phase.lean; unchanged below. -/
+set_option autoImplicit false
+set_option maxHeartbeats 250000
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedVariables false
+set_option linter.defProp false
+
+open NearCubicWires NearCubicWires.ComponentwisePolynomial NearCubicWires.RepairOrdinary.CompetitorRawFieldEmit NearCubicWires.RepairOrdinary.CloseoutRowsOriginalSchedule LocalBitMultitape ExtDecompositionBatch RepairOrdinary RepairRepresentation SourceInterfaces RepairSource RepairSource.CloseoutFinal P1TopDown RepairSource.VerifierDecoding RecoveryRootRound RecoveryExecution CloseoutRowsEstimator CloseoutRowsEstimatorCoefficients CompetitorSelectedCount MatrixScoreBatch CompetitorCountMask SupplierPipeline SupplierEstimator SupplierPrime CanonicalFourfoldRowProgram CloseoutRawRows C10ExternalRowLoop C10ThresholdNaturalRowPrint C10ThresholdParityRow C10ThresholdEstimateRowJoin CloseoutFinalC10RowAnswerWord P1Closure P1TopDownPaidReusable P1TopDownPaidReusableReserves P1TopDownPaidBinaryReserves
+
+open PCJ1fef9807c6954e94_Native
+
+open PCJ9eff70d512234a4c_Fixed
+namespace PCJ38fbfed565f64139_Physical
+
+end PCJ38fbfed565f64139_Physical
+
+end
+
+section
+/- Source body: PCJ38fbfed565f64139_Selected.lean; unchanged below. -/
+set_option autoImplicit false
+set_option maxHeartbeats 250000
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedVariables false
+set_option linter.defProp false
+
+open NearCubicWires NearCubicWires.ComponentwisePolynomial NearCubicWires.RepairOrdinary.CompetitorRawFieldEmit NearCubicWires.RepairOrdinary.CloseoutRowsOriginalSchedule LocalBitMultitape ExtDecompositionBatch RepairOrdinary RepairRepresentation SourceInterfaces RepairSource RepairSource.CloseoutFinal P1TopDown RepairSource.VerifierDecoding RecoveryRootRound RecoveryExecution CloseoutRowsEstimator CloseoutRowsEstimatorCoefficients CompetitorSelectedCount MatrixScoreBatch CompetitorCountMask SupplierPipeline SupplierEstimator SupplierPrime CanonicalFourfoldRowProgram CloseoutRawRows C10ExternalRowLoop C10ThresholdNaturalRowPrint C10ThresholdParityRow C10ThresholdEstimateRowJoin CloseoutFinalC10RowAnswerWord P1Closure P1TopDownPaidReusable P1TopDownPaidReusableReserves P1TopDownPaidBinaryReserves
+
+open PCJ1fef9807c6954e94_Native
+
+open PCJ9eff70d512234a4c_Fixed
+namespace PCJ38fbfed565f64139_Physical
+
+end PCJ38fbfed565f64139_Physical
+
+end
+
+section
+/- Source body: PCJ38fbfed565f64139_Parent.lean; unchanged below. -/
+set_option autoImplicit false
+set_option maxHeartbeats 250000
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedVariables false
+set_option linter.defProp false
+
+open NearCubicWires NearCubicWires.ComponentwisePolynomial NearCubicWires.RepairOrdinary.CompetitorRawFieldEmit NearCubicWires.RepairOrdinary.CloseoutRowsOriginalSchedule LocalBitMultitape ExtDecompositionBatch RepairOrdinary RepairRepresentation SourceInterfaces RepairSource RepairSource.CloseoutFinal P1TopDown RepairSource.VerifierDecoding RecoveryRootRound RecoveryExecution CloseoutRowsEstimator CloseoutRowsEstimatorCoefficients CompetitorSelectedCount MatrixScoreBatch CompetitorCountMask SupplierPipeline SupplierEstimator SupplierPrime CanonicalFourfoldRowProgram CloseoutRawRows C10ExternalRowLoop C10ThresholdNaturalRowPrint C10ThresholdParityRow C10ThresholdEstimateRowJoin CloseoutFinalC10RowAnswerWord P1Closure P1TopDownPaidReusable P1TopDownPaidReusableReserves P1TopDownPaidBinaryReserves
+
+open PCJ1fef9807c6954e94_Native
+
+open PCJ9eff70d512234a4c_Fixed
+namespace PCJ38fbfed565f64139_Physical
+
+end PCJ38fbfed565f64139_Physical
+
+end

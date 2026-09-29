@@ -1,0 +1,44 @@
+import Proof.Circuits.SelectorDrivenBodyDispatch
+
+/-!
+# Body execution from a presentation at the selector-driven frame
+
+Site B-2c composes the selector-frame emitter with the frame-parametric
+branch dispatcher.  The presentation supplies the scheduled atom equality;
+the two target chains remain explicit premises at the same selector frame.
+-/
+
+namespace NearCubicWires.SelectorDrivenProjectionPresentation
+
+open NearCubicWires
+open NearCubicWires.BankDispatchedTargetBody
+open NearCubicWires.BankEmittedAtomLoop
+open NearCubicWires.BankEmittedBranchSelector
+open NearCubicWires.BankRecoveryCodeProgram
+open NearCubicWires.BoundedOracleStructuralCircuit
+open NearCubicWires.CanonicalBalancedCall
+open NearCubicWires.CanonicalBinary
+open NearCubicWires.CaseOneRecoveryAssembly
+open NearCubicWires.CaseTwoRecoveryAssembly
+open NearCubicWires.CaseTwoOccurrenceProgram
+open NearCubicWires.EmittedBranchTargetProgram
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.FinitePredicateCircuit
+open NearCubicWires.GeneratedBalancedRangeProgram
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PaddedProjectionPresentation
+open NearCubicWires.PolynomialClock
+open NearCubicWires.ProjectionRunnerBalancedProgram
+open NearCubicWires.ProjectionWidthEnvelope
+open NearCubicWires.RecoveryScheduleEnvelope
+open NearCubicWires.ScheduledRecovery
+open NearCubicWires.SelectorDrivenAtomContextRuns
+open NearCubicWires.SelectorDrivenBodyDispatch
+open NearCubicWires.SelectorDrivenEmitterRuns
+open NearCubicWires.SourceInterfaces
+open NearCubicWires.StructuralAtomCalleeProgram
+open NearCubicWires.StructuralAtomEmitterLoopProgram
+open NearCubicWires.UniformTargetLanguageBank
+open NearCubicWires.VerifiedLinker
+
+end NearCubicWires.SelectorDrivenProjectionPresentation

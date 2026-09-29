@@ -1,0 +1,51 @@
+import Proof.Circuits.InverseDescriptionAtomStream
+import Proof.Circuits.InverseSelectorDirectBodyClosure
+
+/-!
+# The inverse description atom stream at the selector-driven bank
+
+The selector bank first computes the scheduled source length and loads the
+exact chain frame.  The existing selector-frame adapter and balanced atom range
+then produce the description atom stream.  The frame-local numeral projection
+supplies native width and the small-oracle bound, so no schedule diagonal is
+needed.
+-/
+
+namespace NearCubicWires.InverseSelectorAtomStreamClosure
+
+open NearCubicWires
+open NearCubicWires.BankAtomContextRegisters
+open NearCubicWires.BankEmittedAtomLoop
+open NearCubicWires.BankRegisterCaseOneChain
+open NearCubicWires.CanonicalBalancedCall
+open NearCubicWires.CanonicalBinary
+open NearCubicWires.CaseOneRecoveryAssembly
+open NearCubicWires.CaseTwoOccurrenceProgram
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.FixedDescriptionRequestSourceAdapter
+open NearCubicWires.GeneratedBalancedRangeProgram
+open NearCubicWires.InverseDescriptionAtomStream
+open NearCubicWires.InverseLengthStage
+open NearCubicWires.InverseSubstitutionRequestWordClosure
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PaddedProjectionPresentation
+open NearCubicWires.PolynomialClock
+open NearCubicWires.ProjectionRunnerBalancedProgram
+open NearCubicWires.PreserveRightProgram
+open NearCubicWires.RecoveryScheduleEnvelope
+open NearCubicWires.RuntimeCaseTwoDescriptionFrameAdapter
+open NearCubicWires.RuntimeCaseTwoCircuitEncodingClosure
+open NearCubicWires.RuntimeScheduleNumeralBank
+open NearCubicWires.ScheduledRecovery
+open NearCubicWires.SelectorDrivenAtomContextRuns
+open NearCubicWires.SelectorDrivenBodyClosure
+open NearCubicWires.SourceDrivenNumeralBank
+open NearCubicWires.SourceInterfaces
+open NearCubicWires.StructuralAtomCalleeProgram
+open NearCubicWires.StructuralAtomEmitterLoopProgram
+open NearCubicWires.UniformTargetLanguageBank
+open NearCubicWires.VerifiedLinker
+
+/-! ## The selector body with its description stream installed -/
+
+end NearCubicWires.InverseSelectorAtomStreamClosure

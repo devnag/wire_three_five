@@ -1,0 +1,27 @@
+import Proof.MachineModel.BoundedOracleStructuralFormulaPrefixSATProgram
+import Proof.MachineModel.CanonicalSymmetricRowTableRequestProgram
+import Proof.MachineModel.CaseTwoOccurrenceProgram
+
+namespace NearCubicWires.CaseTwoDescriptionBitPoolProgram
+
+open NearCubicWires
+open NearCubicWires.BoundedOracleStructuralCircuit
+open NearCubicWires.BoundedOracleStructuralFormulaPrefixSATProgram
+open NearCubicWires.CanonicalBinary
+open NearCubicWires.CanonicalBinaryProgram
+open NearCubicWires.CanonicalRecoveryLanguage
+open NearCubicWires.CanonicalSATSelfReduction
+open NearCubicWires.CanonicalSymmetricRowTableRequestProgram
+open NearCubicWires.CaseTwoOccurrenceProgram
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.GeneratedBalancedRangeProgram
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PolynomialClock
+open NearCubicWires.SourceInterfaces
+open NearCubicWires.VerifiedLinker
+
+/-! ## 3. The pool -/
+
+/-! ## 4. The canonical description -/
+
+end NearCubicWires.CaseTwoDescriptionBitPoolProgram

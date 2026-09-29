@@ -1,0 +1,22 @@
+import Proof.Rows.UniformFullGate
+import Proof.Rows.MinimumGateCell
+
+/-! The same actual minimizing-mask/evaluate/erase cell uses uniform reserve
+masters across consecutive original gates. No machine is changed or duplicated. -/
+set_option autoImplicit false
+set_option warningAsError true
+set_option maxHeartbeats 850000
+set_option maxRecDepth 120000
+namespace PCJ45bee56da9f34d5a_UniformMinimumGate
+open NearCubicWires NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdinary
+open NearCubicWires.ExtDecompositionBatch NearCubicWires.RepairOrdinary.RecoveryRootRound
+open NearCubicWires.RepairRepresentation NearCubicWires.RepairSource.CloseoutFinal
+open NearCubicWires.RepairSource.VerifierDecoding NearCubicWires.P1Closure NearCubicWires.ExtIncidence NearCubicWires.SupplierPipeline
+open PCJ45bee56da9f34d5a_FullGateBounds PCJ45bee56da9f34d5a_CellGatePalette
+open PCJ45bee56da9f34d5a_MinimumGateCell (member minInput extra extraHeads heads slots slots_injective eraseSlots produce evaluate erase machine)
+open scoped BigOperators
+noncomputable section
+attribute [local irreducible] PCJ45bee56da9f34d5a_CellGate.machine
+
+end
+end PCJ45bee56da9f34d5a_UniformMinimumGate

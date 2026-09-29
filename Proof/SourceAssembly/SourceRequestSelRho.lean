@@ -1,0 +1,15 @@
+import Proof.SourceAssembly.SourceRequestCurClausePart
+
+set_option autoImplicit false
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedVariables false
+set_option linter.unusedSimpArgs false
+
+namespace NearCubicWires.SourceRequest.SelRho
+open NearCubicWires NearCubicWires.SourceRequest.SelSpec NearCubicWires.SourceRequest.CurSpec
+open NearCubicWires.SourceRequest.CurContract
+open NearCubicWires.RepairOrdinary.CloseoutRowsOriginalSchedule (Phase)
+
+end NearCubicWires.SourceRequest.SelRho
+

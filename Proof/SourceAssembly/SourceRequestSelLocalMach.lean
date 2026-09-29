@@ -1,0 +1,41 @@
+import Proof.SourceAssembly.SourceRequestSelBackThrRun
+
+set_option autoImplicit false
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedVariables false
+set_option linter.unusedSimpArgs false
+set_option linter.unusedTactic false
+set_option linter.unreachableTactic false
+
+namespace NearCubicWires.SourceRequest.SelLocal
+open NearCubicWires LocalBitMultitape ExtDecompositionBatch RepairOrdinary
+open NearCubicWires.RepairRepresentation (PCPPRequest PointwisePCPPAlgorithm pcppOutput)
+open SourceInterfaces RecoveryRootRound RepairSource.VerifierDecoding
+open NearCubicWires.ComponentwiseBranchExtraction NearCubicWires.ComponentwisePolynomial
+open NearCubicWires.RepairOrdinary.CloseoutRowsOriginalSchedule (Phase)
+open NearCubicWires.SourceRequest.SelFront NearCubicWires.SourceRequest.SelBack
+open NearCubicWires.SourceRequest.SelSpec NearCubicWires.SourceRequest.CurSpec
+open NearCubicWires.SourceRequest.CurContract NearCubicWires.SourceRequest.CoordBridge NearCubicWires.SourceRequest.TermReader
+open NearCubicWires.RepairOrdinary.CloseoutRowsOriginalClause (index negative)
+noncomputable section
+
+/-! ## The `36 ↔ 39` swap and front A's dock -/
+
+/-! ## The request-free back docks (THR) -/
+
+
+/-! ## The packed pieces and the fixed machine -/
+
+
+/-! ## Site data: the two literals' term lists and atoms -/
+
+section site
+
+end site
+
+/-! ## The entry predicate and the cost -/
+
+end
+end NearCubicWires.SourceRequest.SelLocal
+

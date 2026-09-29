@@ -1,0 +1,15 @@
+import Proof.SourceAssembly.SourceRequestCurContract
+
+set_option autoImplicit false
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedVariables false
+
+namespace NearCubicWires.SourceRequest.CurWriter
+open NearCubicWires LocalBitMultitape ExtDecompositionBatch RepairOrdinary RepairOrdinary.RecoveryRootRound
+open NearCubicWires.SourceRequest.CurPrims NearCubicWires.SourceRequest.CurComp
+noncomputable section
+
+end
+end NearCubicWires.SourceRequest.CurWriter
+

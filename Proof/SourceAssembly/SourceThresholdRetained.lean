@@ -1,0 +1,29 @@
+import Proof.SourceAssembly.SourceThresholdCanonical
+
+/- Stronger receipts for the SAME checked programs retain the actual q header.
+Existing interfaces remain unchanged. -/
+set_option autoImplicit false
+set_option maxHeartbeats 250000
+set_option maxRecDepth 120000
+set_option warningAsError true
+open NearCubicWires LocalBitMultitape ExtDecompositionBatch RepairOrdinary RepairRepresentation
+open SourceInterfaces RecoveryRootRound CloseoutRowsEstimatorParity RepairSource.VerifierDecoding
+open CloseoutRowsOriginalClause (index negative)
+noncomputable section
+namespace PCJ6e421fabe2aa4155_SourceThresholdQuery
+
+end PCJ6e421fabe2aa4155_SourceThresholdQuery
+
+namespace PCJ6e421fabe2aa4155_SourceThresholdTopQuery
+
+end PCJ6e421fabe2aa4155_SourceThresholdTopQuery
+
+namespace PCJ6e421fabe2aa4155_SourceThresholdReady
+
+end PCJ6e421fabe2aa4155_SourceThresholdReady
+
+namespace PCJ6e421fabe2aa4155_SourceThresholdPhysical
+
+end PCJ6e421fabe2aa4155_SourceThresholdPhysical
+
+end

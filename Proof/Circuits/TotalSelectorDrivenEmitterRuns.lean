@@ -1,0 +1,35 @@
+import Proof.Circuits.TotalInverseCompilerRuns
+import Proof.Circuits.TotalSelectorDrivenEmitterResources
+
+/-!
+# The guarded atom emitter at the selector-driven frame
+
+This is the selector-frame twin of `totalInverseEmitterRuns_ofCompiler`.
+The retained frame and adapter ABI are unchanged; only the structural emitter
+program and compiler contract are replaced by their total guarded versions.
+-/
+
+namespace NearCubicWires.TotalSelectorDrivenEmitterRuns
+
+open NearCubicWires
+open NearCubicWires.BankEmittedAtomLoop
+open NearCubicWires.CanonicalBalancedCall
+open NearCubicWires.CanonicalBinary
+open NearCubicWires.CaseOneRecoveryAssembly
+open NearCubicWires.CaseTwoOccurrenceProgram
+open NearCubicWires.EmittedBranchTargetProgram
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.GeneratedBalancedRangeProgram
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PolynomialClock
+open NearCubicWires.ProjectionRunnerBalancedProgram
+open NearCubicWires.SelectorDrivenAtomContextRuns
+open NearCubicWires.SelectorDrivenEmitterRuns
+open NearCubicWires.SourceInterfaces
+open NearCubicWires.StructuralAtomCalleeProgram
+open NearCubicWires.StructuralAtomEmitterLoopProgram
+open NearCubicWires.TotalBankEmittedAtomLoop
+open NearCubicWires.TotalSelectorDrivenEmitterResources
+open NearCubicWires.TotalStructuralAtomEmitterProgram
+
+end NearCubicWires.TotalSelectorDrivenEmitterRuns

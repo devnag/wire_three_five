@@ -1,0 +1,16 @@
+import Proof.CaseAnalysis.FinalFuelMajorant
+import Proof.CaseAnalysis.FinalLogFitFull
+import Proof.CaseAnalysis.FinalSupplierFuel
+
+namespace NearCubicWires.RepairSource.CloseoutFinal.C10Completion
+
+open RepairOrdinary SourceInterfaces SelectedRecoveryIntegration
+open RepairOrdinary.CloseoutFinalC10StageSeam (dockedFuel)
+open C10TailComposeUniform
+
+set_option autoImplicit false
+set_option maxHeartbeats 250000
+set_option maxRecDepth 120000
+set_option warningAsError true
+
+end NearCubicWires.RepairSource.CloseoutFinal.C10Completion

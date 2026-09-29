@@ -1,0 +1,28 @@
+import Proof.Circuits.TotalInverseCanonicalCompilerRuns
+import Proof.Circuits.TotalSelectorDrivenBranchSensitiveRun
+
+/-! # Total compiled inverse body with its canonical compiler installed -/
+
+namespace NearCubicWires.TotalInverseCanonicalCompiledBodyRun
+
+open NearCubicWires
+open NearCubicWires.BankEmittedAtomLoop
+open NearCubicWires.CanonicalBalancedCall
+open NearCubicWires.CanonicalBinary
+open NearCubicWires.CaseOneRecoveryAssembly
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.GeneratedBalancedRangeProgram
+open NearCubicWires.InverseSubstitutionRequestWordClosure
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PaddedProjectionPresentation
+open NearCubicWires.PolynomialClock
+open NearCubicWires.ProjectionRunnerBalancedProgram
+open NearCubicWires.SelectorDrivenAtomContextRuns
+open NearCubicWires.StructuralAtomCalleeProgram
+open NearCubicWires.StructuralAtomEmitterLoopProgram
+open NearCubicWires.TotalInverseCanonicalCompilerRuns
+open NearCubicWires.TotalInverseSelectorCompiledBody
+open NearCubicWires.TotalSelectorDrivenBranchSensitiveRun
+open NearCubicWires.UniformTargetTotalRun
+
+end NearCubicWires.TotalInverseCanonicalCompiledBodyRun

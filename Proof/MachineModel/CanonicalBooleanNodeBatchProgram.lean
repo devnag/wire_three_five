@@ -1,0 +1,13 @@
+import Proof.MachineModel.CanonicalBooleanNodeValidationProgram
+
+namespace NearCubicWires.CanonicalBooleanNodeBatchProgram
+
+open NearCubicWires
+open NearCubicWires.CanonicalBalancedCall
+open NearCubicWires.CanonicalBinary
+open NearCubicWires.CanonicalBooleanNodeValidationProgram
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.PolynomialClock
+open NearCubicWires.VerifiedLinker
+
+end NearCubicWires.CanonicalBooleanNodeBatchProgram

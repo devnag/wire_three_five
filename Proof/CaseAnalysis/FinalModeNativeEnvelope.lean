@@ -1,0 +1,45 @@
+import Proof.CaseAnalysis.FinalModeNativeStageFields
+import Proof.CaseAnalysis.FinalPrimeWindow
+
+/-!
+Native-mode denominator bounds, from admitted wire and description envelopes.
+The THR denominator counts primes and walk seeds, never child labels. One
+native request has one occurrence pool. All stage bounds retain membership.
+-/
+
+namespace NearCubicWires.RepairOrdinary.CloseoutFinalC10ModeNativeEnvelope
+
+open NearCubicWires NearCubicWires.ComponentwisePolynomial
+open NearCubicWires.RepairOrdinary NearCubicWires.RepairRepresentation
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10ModeNativeStageFields
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10PrimeWindow
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10WireEnvelope
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10SupplierAccuracy
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10StageFields
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10SupplierCalls
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10ThresholdRows
+open NearCubicWires.RepairSource NearCubicWires.RepairSource.CloseoutFinal
+open NearCubicWires.RepairSource.CloseoutFinal.C10NaturalModeAtoms
+open NearCubicWires.RepairSource.CloseoutFinal.C10SupplierWidth
+open NearCubicWires.RepairSource.CloseoutFinal.C10TailComposeUniform
+open NearCubicWires.RepairSource.CloseoutFinal.C10SumFamilyTransport
+open NearCubicWires.RepairSource.CloseoutFinal.C10SiteWireEnvelope
+open NearCubicWires.SourceInterfaces NearCubicWires.SupplierPipeline
+open NearCubicWires.SupplierEstimator NearCubicWires.SupplierPrime
+open NearCubicWires.RecoveryWitnessPolicy
+open NearCubicWires.CanonicalWitnessCodec
+open NearCubicWires.RepairOrdinary.CloseoutWitness
+open NearCubicWires.RepairOrdinary.CloseoutRowsOriginalSchedule (Phase)
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10ExactnessFamily
+open NearCubicWires.RepairSource.CloseoutFinal.C10TotalDecode
+open NearCubicWires.RepairSource.SelectedRecoveryIntegration
+
+set_option autoImplicit false
+set_option maxHeartbeats 250000
+set_option maxRecDepth 120000
+set_option warningAsError true
+noncomputable section
+
+
+end
+end NearCubicWires.RepairOrdinary.CloseoutFinalC10ModeNativeEnvelope

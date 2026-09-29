@@ -1,0 +1,14 @@
+import Proof.MachineModel.RuntimeShape
+import Proof.SourceAssembly.SourceBundle
+
+set_option autoImplicit false
+set_option maxHeartbeats 250000
+set_option maxRecDepth 120000
+set_option warningAsError true
+
+namespace NearCubicWires.RuntimeShape
+open PCJ6e421fabe2aa4155_SourceBundle
+open NearCubicWires.RepairSource NearCubicWires.RepairSource.CloseoutFinal NearCubicWires.P1TopDown
+
+
+end NearCubicWires.RuntimeShape

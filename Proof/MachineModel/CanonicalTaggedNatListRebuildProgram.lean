@@ -1,0 +1,31 @@
+import Batteries.Tactic.OpenPrivate
+import Proof.MachineModel.CanonicalTaggedSpineIndexProgram
+import Proof.Circuits.ValidatorCanonicalizerRebuildLedger
+
+namespace NearCubicWires.CanonicalTaggedNatListRebuildProgram
+
+open NearCubicWires
+open NearCubicWires.BalancedClauseStreamFlattenProgram
+open NearCubicWires.CanonicalBalancedAtomIndexProgram
+open NearCubicWires.CanonicalBalancedBuilder
+open NearCubicWires.CanonicalBalancedCall
+open NearCubicWires.CanonicalBalancedMidpointRebuildProgram
+open NearCubicWires.CanonicalBinary
+open NearCubicWires.CanonicalBinaryProgram
+open NearCubicWires.CanonicalGateAtomHeadListProgram
+open NearCubicWires.CanonicalNatDecodeProgram
+open NearCubicWires.CanonicalNatValidationProgram
+open NearCubicWires.CanonicalSignedAtomRequestProgram
+open NearCubicWires.CanonicalTaggedNatListValidationProgram
+open NearCubicWires.CanonicalTaggedSpineIndexProgram
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.GeneratedBalancedRangeProgram
+open NearCubicWires.PolynomialClock
+open NearCubicWires.ValidatorCanonicalizerRebuildLedger
+open NearCubicWires.VerifiedLinker
+
+/-! ## §2 The indexed request family -/
+
+/-! ## §3 The rebuilt tagged-nat list validator -/
+
+end NearCubicWires.CanonicalTaggedNatListRebuildProgram

@@ -1,0 +1,36 @@
+import Proof.SourceAssembly.SourceStepsSeamRc
+
+section
+set_option autoImplicit false
+set_option maxRecDepth 120000
+set_option maxHeartbeats 250000
+set_option warningAsError true
+set_option linter.unusedVariables false
+
+open NearCubicWires LocalBitMultitape ExtDecompositionBatch
+open RepairOrdinary RepairRepresentation SupplierEstimator SupplierPipeline SourceInterfaces
+open PCJ9eff70d512234a4c_Fixed PCJd4d1d9d7d1fa4313_Production PCJc4297ab269d8423a_Source
+open PCJ1fef9807c6954e94_Native PCJ515eaa990d75455b_FamilyInit
+open NearCubicWires.RepairSource NearCubicWires.RepairSource.CloseoutFinal
+open NearCubicWires.SourceBudget NearCubicWires.SourceBudget.Params NearCubicWires.Admission NearCubicWires.RuntimeShape
+open NearCubicWires.SourceConstruction NearCubicWires.SourceSkeleton NearCubicWires.SourceSkeleton.ClassR
+namespace NearCubicWires.SourceSkeleton.ClassV4
+noncomputable section
+
+section gauge
+
+end gauge
+
+section site
+
+
+end site
+
+section fits4
+
+end fits4
+
+end
+end NearCubicWires.SourceSkeleton.ClassV4
+end
+

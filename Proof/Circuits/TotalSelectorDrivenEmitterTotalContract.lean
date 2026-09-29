@@ -1,0 +1,17 @@
+import Proof.Circuits.TotalSelectorDrivenEmitterResources
+import Proof.Circuits.UniformTargetTotalRun
+
+/-! # All-request guarded emitter contract at the selector frame -/
+
+namespace NearCubicWires.TotalSelectorDrivenEmitterTotalContract
+
+open NearCubicWires
+open NearCubicWires.CanonicalBinary
+open NearCubicWires.CaseOneRecoveryAssembly
+open NearCubicWires.EmittedBranchTargetProgram
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PolynomialClock
+open NearCubicWires.SelectorDrivenAtomContextRuns
+
+end NearCubicWires.TotalSelectorDrivenEmitterTotalContract

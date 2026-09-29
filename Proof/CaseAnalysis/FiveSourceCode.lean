@@ -1,0 +1,26 @@
+import Proof.SourceAssembly.MaskSource
+
+section
+/- Source body: PCJ38fbfed565f64139_Source.lean; adapted only for the paid mask load. -/
+set_option autoImplicit false
+set_option maxHeartbeats 1000000
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedVariables false
+set_option linter.defProp false
+
+open NearCubicWires NearCubicWires.ComponentwisePolynomial NearCubicWires.RepairOrdinary.CompetitorRawFieldEmit NearCubicWires.RepairOrdinary.CloseoutRowsOriginalSchedule LocalBitMultitape ExtDecompositionBatch RepairOrdinary RepairRepresentation SourceInterfaces RepairSource RepairSource.CloseoutFinal P1TopDown RepairSource.VerifierDecoding RecoveryRootRound RecoveryExecution CloseoutRowsEstimator CloseoutRowsEstimatorCoefficients CompetitorSelectedCount MatrixScoreBatch CompetitorCountMask SupplierPipeline SupplierEstimator SupplierPrime CanonicalFourfoldRowProgram CloseoutRawRows C10ExternalRowLoop C10ThresholdNaturalRowPrint C10ThresholdParityRow C10ThresholdEstimateRowJoin CloseoutFinalC10RowAnswerWord P1Closure P1TopDownPaidReusable P1TopDownPaidReusableReserves P1TopDownPaidBinaryReserves
+
+open PCJ1fef9807c6954e94_Native
+open PCJ9eff70d512234a4c_Fixed PCJd4d1d9d7d1fa4313_Production
+namespace RCFive.Source
+open PCJc4297ab269d8423a_Source
+attribute [local irreducible] P1TopDownPaidPayload.tapes
+
+
+
+/- Fixed layout and code, with no source length, clause index, request, or receipt parameter. -/
+
+
+end RCFive.Source
+end

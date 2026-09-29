@@ -1,0 +1,31 @@
+import Proof.Packets.SrcEntryW4
+import Proof.SourceAssembly.SourceStepsV5b
+
+section
+set_option autoImplicit false
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedVariables false
+
+open NearCubicWires NearCubicWires.ComponentwisePolynomial NearCubicWires.RepairOrdinary.CompetitorRawFieldEmit NearCubicWires.RepairOrdinary.CloseoutRowsOriginalSchedule LocalBitMultitape ExtDecompositionBatch RepairOrdinary RepairRepresentation SourceInterfaces RepairSource RepairSource.CloseoutFinal P1TopDown RepairSource.VerifierDecoding RecoveryRootRound RecoveryExecution CloseoutRowsEstimator CloseoutRowsEstimatorCoefficients CompetitorSelectedCount MatrixScoreBatch CompetitorCountMask SupplierPipeline SupplierEstimator SupplierPrime CanonicalFourfoldRowProgram CloseoutRawRows C10ExternalRowLoop C10ThresholdNaturalRowPrint C10ThresholdParityRow C10ThresholdEstimateRowJoin CloseoutFinalC10RowAnswerWord P1Closure P1TopDownPaidReusable P1TopDownPaidReusableReserves P1TopDownPaidBinaryReserves
+open PCJ1fef9807c6954e94_Native
+open PCJ9eff70d512234a4c_Fixed PCJd4d1d9d7d1fa4313_Production
+open PCJc4297ab269d8423a_Source
+open NearCubicWires.SourceConstruction NearCubicWires.SourceConstruction.InitRun
+open NearCubicWires.SourceConstruction NearCubicWires.SourceConstruction.InitRun
+open NearCubicWires.SourceParent NearCubicWires.SourcePhase NearCubicWires.SourceSkeleton
+namespace NearCubicWires.SourceStart.EntryW
+open NearCubicWires.SourceSkeleton.FirstW
+noncomputable section
+
+section fam
+
+set_option hygiene false in
+local notation "𝔉" => forcedChoices mask packets rows (FillV5.resPV5 selector mask packets rows) (ParamsV4.fPW selector xtra mask packets rows)
+
+end fam
+
+end
+end NearCubicWires.SourceStart.EntryW
+end
+

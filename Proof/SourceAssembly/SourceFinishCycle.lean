@@ -1,0 +1,18 @@
+import Proof.SourceAssembly.SourceDimension
+import Proof.SourceAssembly.SourceFinish
+
+section
+set_option autoImplicit false
+set_option maxRecDepth 120000
+set_option warningAsError true
+
+open NearCubicWires LocalBitMultitape ExtDecompositionBatch RepairOrdinary RepairRepresentation
+open RepairOrdinary.RecoveryRootRound RepairSource.VerifierDecoding SourceInterfaces
+open PCJ1fef9807c6954e94_Native PCJ515eaa990d75455b_FamilyInit
+namespace NearCubicWires.SourceConstruction.FinishCycle
+noncomputable section
+attribute [local irreducible] P1TopDownPaidPayload.tapes
+
+end
+end NearCubicWires.SourceConstruction.FinishCycle
+end

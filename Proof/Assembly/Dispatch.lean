@@ -1,0 +1,26 @@
+import Proof.Assembly.Front
+
+/-! One fixed runtime flag selects the native producer or a paid terminal
+prefix. Both branches retain the original initializer bank and complete costs.
+The terminal provider is uniform in the source-fixed code parameters. -/
+set_option autoImplicit false
+set_option maxHeartbeats 1000000
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedVariables false
+set_option linter.defProp false
+
+namespace PCJ82c9aee13cca4960_Dispatch
+open NearCubicWires NearCubicWires.LocalBitMultitape
+open NearCubicWires.RepairRepresentation NearCubicWires.SourceInterfaces
+open NearCubicWires.RepairSource NearCubicWires.RepairSource.CloseoutFinal
+open NearCubicWires.RepairSource.VerifierDecoding
+open NearCubicWires.ExtDecompositionBatch NearCubicWires.RepairOrdinary
+open NearCubicWires.RepairOrdinary.RecoveryRootRound
+open NearCubicWires.RepairOrdinary.RecoveryExecution
+open NearCubicWires.SupplierEstimator NearCubicWires.SupplierPipeline
+open PCJ1fef9807c6954e94_Native PCJ515eaa990d75455b_FamilyInit
+open PCJf990607ff5714139_Generator PCJ9a78bdaedf5d4482_Front
+open P1TopDownPaidReusableReserves P1TopDownPaidBinaryReserves
+
+end PCJ82c9aee13cca4960_Dispatch

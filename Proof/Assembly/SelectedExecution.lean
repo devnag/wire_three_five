@@ -1,0 +1,16 @@
+import Proof.Assembly.SelectedFactorization
+set_option autoImplicit false
+set_option maxHeartbeats 800000
+set_option maxRecDepth 120000
+set_option warningAsError true
+namespace PCJ4bc2e7e825fa4f9c_
+open NearCubicWires NearCubicWires.P1TopDown
+open LocalBitMultitape ExtDecompositionBatch RepairOrdinary
+open RepairSource RepairSource.CloseoutFinal RepairSource.VerifierDecoding
+open CloseoutRowsOriginalSchedule ControllerSelectedContinuation
+open PCJad94ffa93252467f_SelectedFactorization
+noncomputable section
+attribute [local irreducible] WorkspaceSelectedAdmission.originalTapes WorkspaceSelectedEntry.size branch
+
+end
+end PCJ4bc2e7e825fa4f9c_

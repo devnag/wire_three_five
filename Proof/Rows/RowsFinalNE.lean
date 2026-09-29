@@ -1,0 +1,20 @@
+import Proof.Rows.RowsCostBound
+
+set_option autoImplicit false
+set_option maxRecDepth 120000
+set_option warningAsError true
+
+namespace RowsConstruction.FinalNE
+open NearCubicWires NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdinary
+open NearCubicWires.ExtDecompositionBatch NearCubicWires.RepairOrdinary.RecoveryRootRound
+open NearCubicWires.RepairRepresentation NearCubicWires.P1Closure
+open NearCubicWires.RepairSource.VerifierDecoding NearCubicWires.SupplierPipeline NearCubicWires.SupplierPrime
+open PCJ9eff70d512234a4c_Fixed PCJd4d1d9d7d1fa4313_Production
+open PCJ45bee56da9f34d5a_RowState PCJ45bee56da9f34d5a_RowReady
+open RowsConstruction.BaseLayout RowsConstruction.CompleteBank RowsConstruction.PartsStep
+attribute [local irreducible] P1TopDownPaidPayload.tapes
+open RowsConstruction.PartsFill RowsConstruction.CostBound
+noncomputable section
+
+end
+end RowsConstruction.FinalNE

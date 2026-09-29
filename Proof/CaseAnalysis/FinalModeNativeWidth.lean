@@ -1,0 +1,35 @@
+import Proof.CaseAnalysis.FinalModeNativeEnvelope
+
+/-!
+The native denominator width is polynomial in native q, before choosing the
+schedule exponent. One polynomial witness then fixes an exponent and finite
+onset for the existing entryWidthSchedule. No restriction to the old soundness
+cutoff, no physical runtime assertion, and no enlarged resource budget.
+-/
+
+namespace NearCubicWires.RepairOrdinary.CloseoutFinalC10ModeNativeWidth
+
+open NearCubicWires NearCubicWires.PolynomialSchedule
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10ModeNativeEnvelope
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10PrimeWindow
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10WireEnvelope
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10StageFields
+open NearCubicWires.RepairSource NearCubicWires.RepairSource.CloseoutFinal
+open NearCubicWires.RepairSource.CloseoutFinal.C10PartsSchedule
+open NearCubicWires.RepairSource.CloseoutFinal.C10LedgerAssembly
+open NearCubicWires.RepairSource.CloseoutRawRows
+open NearCubicWires.RepairSource.CloseoutWitnessResources
+open NearCubicWires.RepairSource.CloseoutLanguage
+open NearCubicWires.RepairRepresentation NearCubicWires.RecoveryWitnessPolicy
+open NearCubicWires.SourceInterfaces NearCubicWires.SupplierEstimator
+open NearCubicWires.SupplierPipeline NearCubicWires.SupplierPrime
+
+set_option autoImplicit false
+set_option maxHeartbeats 250000
+set_option maxRecDepth 120000
+set_option warningAsError true
+noncomputable section
+
+
+end
+end NearCubicWires.RepairOrdinary.CloseoutFinalC10ModeNativeWidth

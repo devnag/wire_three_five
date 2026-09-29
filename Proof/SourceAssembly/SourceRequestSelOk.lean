@@ -1,0 +1,22 @@
+import Proof.SourceAssembly.SourceRequestSelSymMach
+
+set_option autoImplicit false
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedVariables false
+
+namespace NearCubicWires.SourceRequest.SelLocal
+open NearCubicWires LocalBitMultitape ExtDecompositionBatch RepairOrdinary
+open SourceInterfaces RepairSource.VerifierDecoding
+open NearCubicWires.ComponentwiseBranchExtraction NearCubicWires.ComponentwisePolynomial
+open NearCubicWires.RepairOrdinary.CloseoutRowsOriginalSchedule (Phase)
+open NearCubicWires.SourceRequest.SelSpec NearCubicWires.SourceRequest.CurSpec NearCubicWires.SourceRequest.CoordBridge
+noncomputable section
+
+section
+
+end
+
+end
+end NearCubicWires.SourceRequest.SelLocal
+

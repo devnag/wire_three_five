@@ -1,0 +1,24 @@
+import Proof.Circuits.TotalSelectorDrivenFrameRuns
+
+/-! # Concrete all-request guarded selector body adapter -/
+
+namespace NearCubicWires.TotalSelectorDrivenBodyAdapterRuns
+
+open NearCubicWires
+open NearCubicWires.BankAtomContextRegisters
+open NearCubicWires.CaseOneRecoveryAssembly
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PaddedProjectionPresentation
+open NearCubicWires.PolynomialClock
+open NearCubicWires.SelectorDrivenAtomContextRuns
+open NearCubicWires.SelectorDrivenProjectionTableStage
+open NearCubicWires.TotalBankEmittedAtomLoop
+open NearCubicWires.TotalSelectorBodyAdapter
+open NearCubicWires.TotalSelectorDrivenAdapterRuns
+open NearCubicWires.TotalSelectorDrivenContextContracts
+open NearCubicWires.TotalSelectorDrivenContextRuns
+open NearCubicWires.TotalSelectorDrivenFrameRuns
+open NearCubicWires.TotalSelectorDrivenShapeRuns
+
+end NearCubicWires.TotalSelectorDrivenBodyAdapterRuns

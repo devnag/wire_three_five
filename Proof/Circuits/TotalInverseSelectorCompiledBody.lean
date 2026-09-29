@@ -1,0 +1,34 @@
+import Proof.Circuits.TotalInverseSelectorAtomStreamClosure
+import Proof.Circuits.TotalInverseSelectorDirectBodyClosure
+
+/-!
+# The guarded selector-compiled direct body
+
+This module installs the concrete guarded description atom stream into the
+guarded direct body and exports the selector-compiler convenience theorem.
+-/
+
+namespace NearCubicWires.TotalInverseSelectorCompiledBody
+
+open NearCubicWires
+open NearCubicWires.BankEmittedAtomLoop
+open NearCubicWires.CanonicalBalancedCall
+open NearCubicWires.CanonicalBinary
+open NearCubicWires.CaseOneRecoveryAssembly
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.GeneratedBalancedRangeProgram
+open NearCubicWires.InverseSelectorDirectBodyClosure
+open NearCubicWires.InverseSubstitutionRequestWordClosure
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PaddedProjectionPresentation
+open NearCubicWires.PolynomialClock
+open NearCubicWires.ProjectionRunnerBalancedProgram
+open NearCubicWires.SelectorDrivenAtomContextRuns
+open NearCubicWires.SourceInterfaces
+open NearCubicWires.StructuralAtomCalleeProgram
+open NearCubicWires.StructuralAtomEmitterLoopProgram
+open NearCubicWires.TotalInverseSelectorAtomStreamClosure
+open NearCubicWires.TotalInverseSelectorDirectBodyClosure
+open NearCubicWires.TotalBankEmittedAtomLoop
+
+end NearCubicWires.TotalInverseSelectorCompiledBody

@@ -1,0 +1,18 @@
+import Proof.Rows.RowsCellGeneric
+import Proof.Rows.RowsThrMask
+
+set_option autoImplicit false
+set_option maxRecDepth 120000
+set_option warningAsError true
+
+namespace RowsConstruction.MaskGeneric
+open NearCubicWires NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdinary
+open NearCubicWires.RepairRepresentation NearCubicWires.SupplierPipeline
+open NearCubicWires.ExtDecompositionBatch NearCubicWires.RepairOrdinary.RecoveryRootRound
+open NearCubicWires.RepairSource.VerifierDecoding NearCubicWires.RepairSource.CloseoutFinal
+open NearCubicWires.BlockPlatform RowsConstruction.ThrCell RowsConstruction.ThrMask
+open RowsConstruction.CellGeneric
+noncomputable section
+
+end
+end RowsConstruction.MaskGeneric

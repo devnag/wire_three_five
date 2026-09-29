@@ -1,0 +1,15 @@
+import Proof.Assembly.ActualClause
+set_option autoImplicit false
+set_option maxHeartbeats 300000
+set_option maxRecDepth 120000
+set_option warningAsError true
+namespace PCJ30aa6f1b7c2a4221_
+open NearCubicWires LocalBitMultitape ExtDecompositionBatch RepairOrdinary
+open RepairRepresentation SourceInterfaces RepairSource.VerifierDecoding RecoveryRootRound
+open RepairSource RepairSource.CloseoutFinal P1TopDown
+noncomputable section
+attribute [local irreducible] WorkspaceSelectedAdmission.originalTapes WorkspaceSelectedEntry.size
+
+
+end
+end PCJ30aa6f1b7c2a4221_

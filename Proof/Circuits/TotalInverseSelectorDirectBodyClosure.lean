@@ -1,0 +1,63 @@
+import Proof.Circuits.InverseSelectorDirectBodyClosure
+import Proof.Circuits.TotalSelectorBodyAdapter
+import Proof.Circuits.TotalSelectorDrivenEmitterRuns
+
+/-!
+# The guarded inverse selector direct body
+
+The two direct register chains and occurrence encoding are frozen. This module
+replaces only the selector-frame adapter and bank emitter, exposes their exact
+program/bit/fuel ownership, and retains the existing
+`InverseSelectorDirectBodyRun` result ABI.
+-/
+
+namespace NearCubicWires.TotalInverseSelectorDirectBodyClosure
+
+open NearCubicWires
+open NearCubicWires.BankDispatchedTargetBody
+open NearCubicWires.BankEmittedAtomLoop
+open NearCubicWires.BankEmittedBranchSelector
+open NearCubicWires.BankRecoveryCodeProgram
+open NearCubicWires.CanonicalBalancedCall
+open NearCubicWires.CanonicalBinary
+open NearCubicWires.CaseOneRecoveryAssembly
+open NearCubicWires.CaseTwoRecoveryAssembly
+open NearCubicWires.EmittedBranchTargetProgram
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.GeneratedBalancedRangeProgram
+open NearCubicWires.InverseSelectorDirectBodyClosure
+open NearCubicWires.InverseSelectorOccurrenceEncodingClosure
+open NearCubicWires.InverseSubstitutionRequestWordClosure
+open NearCubicWires.InverseTotalScheduledRowStageClosure
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PaddedProjectionPresentation
+open NearCubicWires.PolynomialClock
+open NearCubicWires.ProjectionRunnerBalancedProgram
+open NearCubicWires.RecoveryScheduleEnvelope
+open NearCubicWires.RuntimeCaseTwoDescriptionFrameAdapter
+open NearCubicWires.RuntimeCaseTwoOccurrenceEncodingClosure
+open NearCubicWires.ScheduledRecovery
+open NearCubicWires.SelectorDrivenAtomContextRuns
+open NearCubicWires.SelectorDrivenBodyClosure
+open NearCubicWires.SelectorDrivenBodyDispatch
+open NearCubicWires.SelectorDrivenEmitterRuns
+open NearCubicWires.SelectorDrivenRegisterCaseOneChain
+open NearCubicWires.SelectorDrivenRegisterCaseTwoChain
+open NearCubicWires.SelectorDrivenRegisterTargetChainBase
+open NearCubicWires.SourceInterfaces
+open NearCubicWires.StructuralAtomCalleeProgram
+open NearCubicWires.StructuralAtomEmitterLoopProgram
+open NearCubicWires.TotalBankEmittedAtomLoop
+open NearCubicWires.TotalSelectorBodyAdapter
+open NearCubicWires.TotalSelectorDrivenEmitterResources
+open NearCubicWires.TotalSelectorDrivenEmitterRuns
+open NearCubicWires.UniformTargetLanguageBank
+open NearCubicWires.VerifiedLinker
+
+/-! ## 1. Exact guarded program and resources -/
+
+/-! ## 2. Guarded direct body from an occurrence encoding -/
+
+/-! ## 3. Atom-stream specialization -/
+
+end NearCubicWires.TotalInverseSelectorDirectBodyClosure

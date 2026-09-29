@@ -1,0 +1,29 @@
+import Proof.Circuits.ValidatorPolicyWidthClosure
+
+namespace NearCubicWires.ValidatorUnconditionalBudget
+
+open NearCubicWires
+open NearCubicWires.CanonicalBooleanCircuitValidationProgram
+open NearCubicWires.CanonicalRecoveryRequest
+open NearCubicWires.CanonicalRecoveryValidatorProgram
+open NearCubicWires.CanonicalWitnessCodec
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.ExecutableRecoveryMachine
+open NearCubicWires.RecoveryLimitsComputableFamily
+open NearCubicWires.RecoveryLimitsFrontEndProgram
+open NearCubicWires.RecoveryVerifierResourceEnvelope
+open NearCubicWires.RecoveryWitnessPolicy
+open NearCubicWires.ValidatorCompositeLeafBounds
+open NearCubicWires.ValidatorComputableLimitsAssembly
+open NearCubicWires.ValidatorPolicyWidthClosure
+open NearCubicWires.ValidatorPolynomialDomination
+open NearCubicWires.ValidatorStageEnvelopes
+open NearCubicWires.VerifiedLinker
+
+/-! ## §1 The validator's budget from the family's parameter
+
+Everything below `hparameter` is `ValidatorComputableLimitsAssembly` §3
+verbatim; the only change is which fact pays for the structural prefix's width
+side. -/
+
+end NearCubicWires.ValidatorUnconditionalBudget

@@ -1,0 +1,60 @@
+import Proof.SourceAssembly.SourceCircuitFrame
+
+set_option autoImplicit false
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedVariables false
+open NearCubicWires LocalBitMultitape ExtDecompositionBatch RepairOrdinary RepairRepresentation
+open SourceInterfaces RecoveryRootRound CloseoutRowsEstimatorParity RepairSource.VerifierDecoding
+open CloseoutRowsOriginalClause (index negative)
+noncomputable section
+
+namespace NearCubicWires.SourceRequest.Gen.ParityQuery
+
+
+end NearCubicWires.SourceRequest.Gen.ParityQuery
+
+namespace NearCubicWires.SourceRequest.Gen.SymmetricQuery
+
+end NearCubicWires.SourceRequest.Gen.SymmetricQuery
+
+namespace NearCubicWires.SourceRequest.Gen.SymmetricHeaderQuery
+
+end NearCubicWires.SourceRequest.Gen.SymmetricHeaderQuery
+
+namespace NearCubicWires.SourceRequest.Gen.ThresholdHeader
+
+end NearCubicWires.SourceRequest.Gen.ThresholdHeader
+
+namespace NearCubicWires.SourceRequest.Gen.ThresholdCache
+
+end NearCubicWires.SourceRequest.Gen.ThresholdCache
+
+namespace NearCubicWires.SourceRequest.Gen.ThresholdQuery
+
+end NearCubicWires.SourceRequest.Gen.ThresholdQuery
+
+namespace NearCubicWires.SourceRequest.Gen.ThresholdTopQuery
+
+end NearCubicWires.SourceRequest.Gen.ThresholdTopQuery
+
+namespace NearCubicWires.SourceRequest.Gen.ThresholdReady
+
+end NearCubicWires.SourceRequest.Gen.ThresholdReady
+
+namespace NearCubicWires.SourceRequest.Gen.ThresholdPhysical
+
+end NearCubicWires.SourceRequest.Gen.ThresholdPhysical
+
+namespace NearCubicWires.SourceRequest.Gen.ThresholdCanonical
+open SupplierPipeline CompilerSemantics
+
+end NearCubicWires.SourceRequest.Gen.ThresholdCanonical
+
+namespace NearCubicWires.SourceRequest.Gen.CircuitFrame
+open RepairSource.ProjectionNormalization SupplierPipeline CompilerSemantics
+
+end NearCubicWires.SourceRequest.Gen.CircuitFrame
+
+
+end

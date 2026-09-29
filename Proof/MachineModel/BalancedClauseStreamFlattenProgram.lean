@@ -1,0 +1,11 @@
+import Proof.Circuits.CanonicalBalancedTraversal
+
+namespace NearCubicWires.BalancedClauseStreamFlattenProgram
+
+open NearCubicWires
+open NearCubicWires.CanonicalBinary
+open NearCubicWires.CanonicalBinaryProgram
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.PolynomialClock
+
+end NearCubicWires.BalancedClauseStreamFlattenProgram

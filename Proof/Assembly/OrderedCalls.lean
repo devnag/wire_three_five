@@ -1,0 +1,13 @@
+import Proof.CaseAnalysis.FinalExactFraction
+import Proof.CaseAnalysis.FinalGuardedStageConsumer
+import Proof.CaseAnalysis.FinalRetainedPhaseFold
+set_option autoImplicit false
+set_option maxHeartbeats 500000
+set_option maxRecDepth 120000
+set_option warningAsError true
+namespace PCJ2f4bbfb841674a7c_
+open NearCubicWires ComponentwisePolynomial RepairOrdinary
+open CloseoutRowsEstimatorCoefficients.Stream (Entry contributions)
+open CloseoutFinalC10WorkerChain CloseoutFinalC10Exactness CloseoutFinalC10SupplierCalls
+
+end PCJ2f4bbfb841674a7c_

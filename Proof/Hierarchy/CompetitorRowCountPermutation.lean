@@ -1,0 +1,26 @@
+import Proof.Hierarchy.CompetitorCountTableBounds
+
+/-! Physical positional-subset enumeration may permute external cut order.
+The exact signed sum is invariant under that permutation; ordered equations
+inside each power-radix stack are unchanged. -/
+namespace NearCubicWires.RepairOrdinary.CompetitorRowCountMeaning
+open SupplierPrinter SupplierPipeline SupplierEstimator ThresholdCompiler
+open SupplierPrime ThresholdAlignedEnvelope MatrixScoreBatch EquationRow RowBinLift
+set_option autoImplicit false
+set_option maxHeartbeats 250000
+set_option maxRecDepth 120000
+set_option warningAsError true
+
+end NearCubicWires.RepairOrdinary.CompetitorRowCountMeaning
+
+namespace NearCubicWires.RepairOrdinary.CompetitorCountTable
+open LocalBitMultitape RecoveryExecution RecoveryRootRound RepairRepresentation
+open CompetitorCrossScheduler (producer)
+open SupplierPrinter SupplierPipeline SupplierEstimator ThresholdCompiler
+open SupplierPrime ThresholdAlignedEnvelope RowBinLift
+set_option autoImplicit false
+set_option maxHeartbeats 250000
+set_option maxRecDepth 120000
+set_option warningAsError true
+
+end NearCubicWires.RepairOrdinary.CompetitorCountTable

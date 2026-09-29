@@ -1,0 +1,17 @@
+import Proof.MachineModel.CanonicalNatDecodeProgram
+import Proof.MachineModel.PreserveRightProgram
+
+namespace NearCubicWires.CanonicalSupplierCircuitHeaderProgram
+
+open NearCubicWires
+open NearCubicWires.CanonicalBinary
+open NearCubicWires.CanonicalBinaryProgram
+open NearCubicWires.CanonicalNatDecodeProgram
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.PolynomialClock
+open NearCubicWires.PreserveRightProgram
+open NearCubicWires.VerifiedLinker
+
+/-! ## Linked native-count header -/
+
+end NearCubicWires.CanonicalSupplierCircuitHeaderProgram

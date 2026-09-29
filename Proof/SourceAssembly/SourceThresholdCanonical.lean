@@ -1,0 +1,17 @@
+import Proof.SourceAssembly.SourceThresholdPhysical
+
+set_option autoImplicit false
+set_option maxHeartbeats 250000
+set_option maxRecDepth 120000
+set_option warningAsError true
+namespace PCJ6e421fabe2aa4155_SourceThresholdCanonical
+open NearCubicWires LocalBitMultitape ExtDecompositionBatch RepairOrdinary RepairRepresentation
+open SourceInterfaces RecoveryRootRound CloseoutRowsEstimatorParity SupplierPipeline CompilerSemantics
+open CloseoutRowsOriginalClause (index negative)
+open PCJ6e421fabe2aa4155_SourceThresholdPhysical
+noncomputable section
+
+
+
+end
+end PCJ6e421fabe2aa4155_SourceThresholdCanonical

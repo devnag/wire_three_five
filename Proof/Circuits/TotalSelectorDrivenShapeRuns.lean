@@ -1,0 +1,21 @@
+import Proof.Circuits.TotalSelectorDrivenShapeTail
+
+/-! # All-request guarded selector atom-shape run -/
+
+namespace NearCubicWires.TotalSelectorDrivenShapeRuns
+
+open NearCubicWires
+open NearCubicWires.BankAtomShapeCountStage
+open NearCubicWires.BankEmittedAtomLoop
+open NearCubicWires.CaseOneRecoveryAssembly
+open NearCubicWires.CaseTwoOccurrenceProgram
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PolynomialClock
+open NearCubicWires.SelectorDrivenAtomContextRuns
+open NearCubicWires.TotalBankEmittedAtomLoop
+open NearCubicWires.TotalSelectorAtomShapeProgram
+open NearCubicWires.TotalSelectorDrivenContextContracts
+open NearCubicWires.TotalSelectorDrivenShapeTail
+
+end NearCubicWires.TotalSelectorDrivenShapeRuns

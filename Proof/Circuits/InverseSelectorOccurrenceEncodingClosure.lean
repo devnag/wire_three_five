@@ -1,0 +1,40 @@
+import Proof.Circuits.InverseSelectorOccurrenceQuad
+import Proof.Circuits.InverseSubstitutionRequestWordClosure
+
+/-!
+# The inverse Case-2 occurrence runner from one encoding stream
+
+The selector-driven native-width stream turns a substituted-circuit encoding
+into the oracle triple.  The selector-driven occurrence quad then supplies the
+other four packet fields.  Consequently the complete occurrence callee no
+longer needs a public-target/scheduled-length diagonal.
+-/
+
+namespace NearCubicWires.InverseSelectorOccurrenceEncodingClosure
+
+open NearCubicWires
+open NearCubicWires.BankRegisterCaseOneChain
+open NearCubicWires.BankRegisterCaseTwoChain
+open NearCubicWires.CanonicalTargetLanguageProgram
+open NearCubicWires.CaseOneRecoveryAssembly
+open NearCubicWires.CaseTwoOccurrenceProgram
+open NearCubicWires.CaseTwoOccurrenceSpecification
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.InverseSelectorNativeWidth
+open NearCubicWires.InverseSelectorOccurrenceQuad
+open NearCubicWires.InverseSelectorRequestSourceAdapter
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PolynomialClock
+open NearCubicWires.RecoveryScheduleEnvelope
+open NearCubicWires.RuntimeCaseTwoOccurrenceClosure
+open NearCubicWires.RuntimeCaseTwoOccurrenceEncodingClosure
+open NearCubicWires.RuntimeCaseTwoOccurrencePacketSplit
+open NearCubicWires.RuntimeCaseTwoOracleTripleProgram
+open NearCubicWires.RuntimeCaseTwoBlockOccurrenceProgram
+open NearCubicWires.ScheduledRecovery
+open NearCubicWires.SourceInterfaces
+open NearCubicWires.VerifiedLinker
+
+/-! ## Complete occurrence runner -/
+
+end NearCubicWires.InverseSelectorOccurrenceEncodingClosure

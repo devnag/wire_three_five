@@ -1,0 +1,41 @@
+import Proof.Circuits.TotalInverseCanonicalBodySelectorResources
+
+/-! # Closing the five canonical selector heads from their component ledgers -/
+
+namespace NearCubicWires.TotalInverseCanonicalBodySelectorLocalClosure
+
+open NearCubicWires
+open NearCubicWires.BankEmittedAtomLoop
+open NearCubicWires.BankRecoveryCodeProgram
+open NearCubicWires.BankRegisterCaseOneChain
+open NearCubicWires.BoundedOracleStructuralCircuit
+open NearCubicWires.CanonicalBinary
+open NearCubicWires.CanonicalRecoveryRequest
+open NearCubicWires.CaseOneRecoveryAssembly
+open NearCubicWires.CaseTwoOccurrenceProgram
+open NearCubicWires.EmittedBranchTargetProgram
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.InverseSelectorCanonicalResourceFrontier
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PaddedRunnerBudgetDomination
+open NearCubicWires.PolynomialClock
+open NearCubicWires.PreserveRightProgram
+open NearCubicWires.RecoveryScheduleEnvelope
+open NearCubicWires.RuntimeScheduleNumeralBank
+open NearCubicWires.ScheduledRecovery
+open NearCubicWires.SelectorDrivenAtomContextRuns
+open NearCubicWires.SourceDrivenNumeralBank
+open NearCubicWires.TotalBankEmittedAtomLoop
+open NearCubicWires.TotalInverseCanonicalBodySelectorResources
+open NearCubicWires.TotalInverseCanonicalCompiledBodyResources
+open NearCubicWires.TotalInverseCanonicalCompilerRuns
+open NearCubicWires.TotalInverseCanonicalRangeResources
+open NearCubicWires.TotalSelectorBodyAdapter
+open NearCubicWires.TotalSelectorDrivenEmitterResources
+open NearCubicWires.TotalStructuralAtomEmitterProgram
+open NearCubicWires.UniformTargetLanguageBank
+open NearCubicWires.ValidatorPolynomialDomination
+open NearCubicWires.VerifiedLinker
+
+
+end NearCubicWires.TotalInverseCanonicalBodySelectorLocalClosure

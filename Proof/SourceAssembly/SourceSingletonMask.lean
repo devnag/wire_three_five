@@ -1,0 +1,16 @@
+import Proof.SourceAssembly.SourceSingletonMaskData
+set_option autoImplicit false
+set_option maxHeartbeats 500000
+set_option maxRecDepth 120000
+set_option warningAsError true
+namespace PCJ6e421fabe2aa4155_SourceSingletonMask
+open NearCubicWires LocalBitMultitape ExtDecompositionBatch RepairOrdinary RepairRepresentation
+open SourceInterfaces RecoveryRootRound CloseoutRowsEstimatorParity SupplierPipeline SupplierEstimator CompilerSemantics RepairSource.VerifierDecoding
+open CloseoutRowsOriginalClause (index negative)
+open PCJd4d1d9d7d1fa4313_Production PCJc4297ab269d8423a_Source
+noncomputable section
+
+
+
+end
+end PCJ6e421fabe2aa4155_SourceSingletonMask

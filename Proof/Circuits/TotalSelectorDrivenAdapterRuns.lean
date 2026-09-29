@@ -1,0 +1,34 @@
+import Proof.Circuits.TotalSelectorBodyAdapter
+import Proof.Circuits.TotalSelectorDrivenAdapterContracts
+
+/-!
+# All-request selector adapter contracts
+
+These are totality counterparts of the onset-indexed selector propositions.
+They expose the same programs, resources, and outputs but quantify over every
+language request, including target zero and malformed raw codes.
+-/
+
+namespace NearCubicWires.TotalSelectorDrivenAdapterRuns
+
+open NearCubicWires
+open NearCubicWires.BankEmittedAtomLoop
+open NearCubicWires.BankProjectionTableStage
+open NearCubicWires.CanonicalBinary
+open NearCubicWires.CaseOneRecoveryAssembly
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PaddedProjectionPresentation
+open NearCubicWires.PolynomialClock
+open NearCubicWires.ProjectionRunnerBalancedProgram
+open NearCubicWires.RecoveryScheduleEnvelope
+open NearCubicWires.RuntimeScheduleNumeralBank
+open NearCubicWires.SelectorDrivenAtomContext
+open NearCubicWires.SelectorDrivenAtomContextRuns
+open NearCubicWires.SelectorDrivenProjectionTableStage
+open NearCubicWires.SourceDrivenNumeralBank
+open NearCubicWires.TotalSelectorBodyAdapter
+open NearCubicWires.TotalSelectorDrivenAdapterContracts
+open NearCubicWires.UniformTargetLanguageBank
+
+end NearCubicWires.TotalSelectorDrivenAdapterRuns

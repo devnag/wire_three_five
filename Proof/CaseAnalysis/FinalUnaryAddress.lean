@@ -1,0 +1,15 @@
+import Proof.CaseAnalysis.FinalRequestAtCursor
+import Proof.CaseAnalysis.FinalSiteRoundPorts
+
+namespace NearCubicWires.RepairOrdinary.CloseoutFinalC10UnaryAddressProbe
+open LocalBitMultitape ExtDecompositionBatch RepairRepresentation SourceInterfaces
+open RepairSource.VerifierDecoding RecoveryRootRound
+open CloseoutFinalC10ExactRecordLoop CloseoutFinalC10RoundCursor
+open CloseoutRowsEstimatorCoefficients.Stream (Entry)
+set_option autoImplicit false
+set_option maxHeartbeats 250000
+set_option maxRecDepth 120000
+set_option warningAsError true
+
+
+end NearCubicWires.RepairOrdinary.CloseoutFinalC10UnaryAddressProbe

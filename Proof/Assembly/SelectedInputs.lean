@@ -1,0 +1,17 @@
+import Proof.Assembly.PhaseInput
+set_option autoImplicit false
+set_option maxHeartbeats 800000
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option quotPrecheck false
+namespace PCJ30aa6f1b7c2a4221_.SelectedConstruction
+open NearCubicWires LocalBitMultitape ExtDecompositionBatch RepairOrdinary P1TopDown
+open RepairSource RepairSource.CloseoutFinal SourceInterfaces
+open CloseoutRowsOriginalSchedule CloseoutRowsEstimatorCoefficients.Stream
+open ControllerSelectedContinuation (bodyTapes)
+noncomputable section
+attribute [local irreducible] WorkspaceSelectedAdmission.originalTapes WorkspaceSelectedEntry.size
+
+
+end
+end PCJ30aa6f1b7c2a4221_.SelectedConstruction

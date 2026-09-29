@@ -1,0 +1,31 @@
+import Proof.Circuits.SelectorDrivenBodyClosure
+import Proof.MachineModel.TotalSelectorAtomShapeProgram
+
+/-!
+# The guarded selector-frame body adapter
+
+This replaces only the selector adapter's atom-count shape tail.  Projection
+table/context construction and the retained-frame ABI remain unchanged.
+-/
+
+namespace NearCubicWires.TotalSelectorBodyAdapter
+
+open NearCubicWires
+open NearCubicWires.BankAtomContextRegisters
+open NearCubicWires.BankAtomShapeCountStage
+open NearCubicWires.BankEmittedAtomLoop
+open NearCubicWires.BankFrameLoweringAdapter
+open NearCubicWires.CaseOneRecoveryAssembly
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PaddedProjectionPresentation
+open NearCubicWires.PolynomialClock
+open NearCubicWires.SelectorDrivenAtomContextRuns
+open NearCubicWires.SelectorDrivenBodyClosure
+open NearCubicWires.SelectorDrivenProjectionPresentation
+open NearCubicWires.SelectorDrivenProjectionTableStage
+open NearCubicWires.SourceInterfaces
+open NearCubicWires.TotalBankEmittedAtomLoop
+open NearCubicWires.TotalSelectorAtomShapeProgram
+
+end NearCubicWires.TotalSelectorBodyAdapter

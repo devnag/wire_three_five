@@ -1,0 +1,23 @@
+import Proof.MachineModel.ClosureBinaryHeaderCapacity
+import Proof.MachineModel.ClosureBinaryPreparedCost
+import Proof.MachineModel.ClosureBinaryRowCost
+import Proof.MachineModel.TopDownPaidFamilyConsumers
+import Proof.MachineModel.TopDownPaidReusableReserves
+
+/-! One explicit reserve for every actual binary request in a family. Existing
+header production and original-degree driver estimates discharge the capacities.
+These arithmetic facts leave the physical source/template production visible. -/
+set_option autoImplicit false
+set_option maxHeartbeats 500000
+set_option maxRecDepth 120000
+set_option warningAsError true
+namespace NearCubicWires.P1TopDownPaidBinaryReserves
+open LocalBitMultitape RepairOrdinary RepairRepresentation ExtDecompositionBatch
+open CloseoutRowsEstimator CloseoutRowsEstimatorCoefficients CompetitorSelectedCount
+open MatrixScoreBatch CompetitorCountMask RecoveryRootRound P1Closure
+open SupplierPipeline SupplierEstimator CanonicalFourfoldRowProgram ThresholdCompiler SourceInterfaces
+open RepairSource CloseoutFinal P1TopDownPaidReusable P1TopDownPaidReusableReserves
+attribute [local irreducible] BinaryPool.pool CompactBounds.radix
+
+
+end NearCubicWires.P1TopDownPaidBinaryReserves

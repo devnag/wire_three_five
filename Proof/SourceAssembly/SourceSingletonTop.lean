@@ -1,0 +1,20 @@
+import Proof.SourceAssembly.SourceSingletonRequest
+import Proof.SourceAssembly.SourceTopNative
+
+set_option autoImplicit false
+set_option maxHeartbeats 250000
+set_option maxRecDepth 120000
+set_option warningAsError true
+open NearCubicWires LocalBitMultitape ExtDecompositionBatch RepairOrdinary RepairRepresentation
+open SourceInterfaces RecoveryRootRound CloseoutRowsEstimatorParity SupplierPipeline SupplierEstimator CompilerSemantics
+open CloseoutRowsOriginalClause (index negative)
+open PCJd4d1d9d7d1fa4313_Production
+noncomputable section
+namespace PCJ6e421fabe2aa4155_SourceSingletonRequest
+
+end PCJ6e421fabe2aa4155_SourceSingletonRequest
+namespace PCJ6e421fabe2aa4155_SourceSingletonTop
+
+
+end PCJ6e421fabe2aa4155_SourceSingletonTop
+end

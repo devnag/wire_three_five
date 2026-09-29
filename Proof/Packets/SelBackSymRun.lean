@@ -1,0 +1,26 @@
+import Proof.Packets.SelBackSym
+
+set_option autoImplicit false
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedVariables false
+set_option linter.unusedSimpArgs false
+set_option linter.unusedTactic false
+set_option linter.unreachableTactic false
+
+namespace NearCubicWires.SourceRequest.SelBackSym
+open NearCubicWires LocalBitMultitape ExtDecompositionBatch RepairOrdinary
+open SourceInterfaces RepairSource.VerifierDecoding
+open NearCubicWires.ComponentwiseBranchExtraction NearCubicWires.ComponentwisePolynomial
+open NearCubicWires.RepairOrdinary.CloseoutRowsOriginalSchedule (Phase)
+open NearCubicWires.SourceRequest.SelFront NearCubicWires.SourceRequest.SelSpec NearCubicWires.SourceRequest.CurSpec
+open NearCubicWires.SourceRequest.CurContract NearCubicWires.SourceRequest.CoordBridge NearCubicWires.SourceRequest.TermReader
+open NearCubicWires.SourceRequest.SelBack
+noncomputable section
+
+section run
+
+end run
+end
+end NearCubicWires.SourceRequest.SelBackSym
+

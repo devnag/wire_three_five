@@ -1,0 +1,23 @@
+import Proof.MachineModel.OrdinaryBoundedCounter
+import Proof.Packets.ToeplitzSeedBits
+
+/-! Exact label widths of the frozen powered walk. A base label has four
+physical bits even though its arithmetic branch uses only three of them. -/
+set_option autoImplicit false
+set_option warningAsError true
+namespace Theorem25Completion.FrozenWalkABI
+open NearCubicWires NearCubicWires.SupplierWalk NearCubicWires.SupplierWalkBridge
+open NearCubicWires.RepairOrdinary NearCubicWires.RepairOrdinary.SignedSortKey
+
+def labelBits (label : Fin 16):=binary 4 label.val
+
+theorem labelBits_length (label : Fin 16) : (labelBits label).length=4 := binary_length _ _
+
+theorem labelBits_value (label : Fin 16) : RadixSemantics.value (labelBits label)=label.val :=
+  binary_value 4 label.val label.isLt
+
+theorem label_cardinality : Fintype.card PoweredMargulisLabel=2^160 := by
+  rw [card_poweredMargulisLabel]
+  norm_num
+
+end Theorem25Completion.FrozenWalkABI

@@ -1,0 +1,16 @@
+import Proof.MachineModel.ControllerCappedRuntime
+
+namespace PCJ644510ff491048c3_
+open NearCubicWires NearCubicWires.LocalBitMultitape NearCubicWires.ExtDecompositionBatch
+open NearCubicWires.RepairOrdinary NearCubicWires.RepairSource
+open NearCubicWires.RepairSource.CloseoutFinal NearCubicWires.SourceInterfaces
+open NearCubicWires.P1TopDown
+set_option autoImplicit false
+set_option warningAsError true
+set_option maxHeartbeats 250000
+set_option maxRecDepth 120000
+noncomputable section
+attribute [local irreducible] WorkspaceSelectedAdmission.originalTapes WorkspaceSelectedEntry.size
+
+end
+end PCJ644510ff491048c3_

@@ -1,0 +1,32 @@
+import Proof.MachineModel.StructuralAtomCalleeProgram
+import Proof.MachineModel.TotalSelectiveCountCasesProgram
+
+/-!
+# The guarded structural atom callee
+
+This is the direct two-instruction projection wrapper around the
+program-parametric structural formula stream.
+-/
+
+namespace NearCubicWires.TotalStructuralAtomCalleeProgram
+
+open NearCubicWires
+open NearCubicWires.BankRecoveryCodeProgram
+open NearCubicWires.BoundedOracleStructuralCircuit
+open NearCubicWires.BoundedOracleStructuralFormulaTable
+open NearCubicWires.BoundedOracleStructuralSelectiveCompiler
+open NearCubicWires.BoundedOracleStructuralSelectiveProgram
+open NearCubicWires.CanonicalBalancedCall
+open NearCubicWires.CaseTwoOccurrenceProgram
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.GeneratedBalancedRangeProgram
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PolynomialClock
+open NearCubicWires.ProjectionRunnerBalancedProgram
+open NearCubicWires.SourceInterfaces
+open NearCubicWires.StructuralAtomCalleeProgram
+open NearCubicWires.StructuralAtomEmitterLoopProgram
+open NearCubicWires.TotalSelectiveCountCasesProgram
+open NearCubicWires.VerifiedLinker
+
+end NearCubicWires.TotalStructuralAtomCalleeProgram

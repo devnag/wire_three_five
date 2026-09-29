@@ -1,0 +1,54 @@
+import Proof.Circuits.InverseSelectorOccurrenceEncodingClosure
+import Proof.Circuits.InverseTotalScheduledRowStageClosure
+import Proof.CaseAnalysis.SelectorDrivenRegisterCaseTwoChain
+
+/-!
+# The inverse selector body with both direct register chains installed
+
+Case One uses the total guarded row program.  Case Two uses the selector-driven
+occurrence runner assembled from one substituted-circuit encoding stream.  The
+body therefore exposes only the emitter/compiler and range-width obligations;
+neither a schedule diagonal nor query-count positivity remains.
+-/
+
+namespace NearCubicWires.InverseSelectorDirectBodyClosure
+
+open NearCubicWires
+open NearCubicWires.BankDispatchedTargetBody
+open NearCubicWires.BankEmittedAtomLoop
+open NearCubicWires.BankEmittedBranchSelector
+open NearCubicWires.BankRegisterCaseOneChain
+open NearCubicWires.BankRecoveryCodeProgram
+open NearCubicWires.CanonicalBalancedCall
+open NearCubicWires.CanonicalBinary
+open NearCubicWires.CanonicalTargetLanguageProgram
+open NearCubicWires.CaseOneRecoveryAssembly
+open NearCubicWires.CaseTwoRecoveryAssembly
+open NearCubicWires.EmittedBranchTargetProgram
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.GeneratedBalancedRangeProgram
+open NearCubicWires.InverseSelectorOccurrenceEncodingClosure
+open NearCubicWires.InverseSubstitutionRequestWordClosure
+open NearCubicWires.InverseTotalScheduledRowStageClosure
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PaddedProjectionPresentation
+open NearCubicWires.PolynomialClock
+open NearCubicWires.ProjectionRunnerBalancedProgram
+open NearCubicWires.RecoveryScheduleEnvelope
+open NearCubicWires.RuntimeCaseTwoOccurrenceEncodingClosure
+open NearCubicWires.RuntimeCaseTwoDescriptionFrameAdapter
+open NearCubicWires.ScheduledRecovery
+open NearCubicWires.SelectorDrivenAtomContextRuns
+open NearCubicWires.SelectorDrivenBodyClosure
+open NearCubicWires.SelectorDrivenBodyDispatch
+open NearCubicWires.SelectorDrivenEmitterRuns
+open NearCubicWires.SelectorDrivenRegisterCaseOneChain
+open NearCubicWires.SelectorDrivenRegisterCaseTwoChain
+open NearCubicWires.SelectorDrivenRegisterTargetChainBase
+open NearCubicWires.SourceInterfaces
+open NearCubicWires.StructuralAtomCalleeProgram
+open NearCubicWires.StructuralAtomEmitterLoopProgram
+open NearCubicWires.UniformTargetLanguageBank
+open NearCubicWires.VerifiedLinker
+
+end NearCubicWires.InverseSelectorDirectBodyClosure

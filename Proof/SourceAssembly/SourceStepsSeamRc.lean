@@ -1,0 +1,26 @@
+import Proof.Packets.BudgetJ5R
+import Proof.Packets.SourceParamsK
+
+section
+set_option autoImplicit false
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedVariables false
+
+open NearCubicWires LocalBitMultitape ExtDecompositionBatch
+open RepairOrdinary RepairRepresentation SupplierEstimator SupplierPipeline SourceInterfaces
+open PCJ9eff70d512234a4c_Fixed PCJd4d1d9d7d1fa4313_Production PCJc4297ab269d8423a_Source
+open NearCubicWires.RepairSource NearCubicWires.RepairSource.CloseoutFinal
+open NearCubicWires.SourceBudget NearCubicWires.SourceBudget.Params NearCubicWires.Admission NearCubicWires.RuntimeShape
+open NearCubicWires.SourceConstruction NearCubicWires.SourceSkeleton
+namespace NearCubicWires.SourceSkeleton.ClassR
+noncomputable section
+
+section fits
+
+end fits
+
+end
+end NearCubicWires.SourceSkeleton.ClassR
+end
+

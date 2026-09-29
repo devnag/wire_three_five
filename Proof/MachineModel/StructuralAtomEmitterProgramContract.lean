@@ -1,0 +1,25 @@
+import Proof.MachineModel.TotalStructuralAtomCalleeProgram
+
+/-!
+# The structural atom emitter's callee/program contract
+
+This module isolates the exact pointwise proposition consumed by the guarded
+emitter.  It contains no emitter bytecode.
+-/
+
+namespace NearCubicWires.TotalStructuralAtomEmitterProgram
+
+open NearCubicWires
+open NearCubicWires.BoundedOracleStructuralCircuit
+open NearCubicWires.ExecutableInterfaces
+open NearCubicWires.GeneratedBalancedRangeProgram
+open NearCubicWires.OuterPCPRecovery
+open NearCubicWires.PolynomialClock
+open NearCubicWires.ProjectionRunnerBalancedProgram
+open NearCubicWires.SourceInterfaces
+open NearCubicWires.StructuralAtomCalleeProgram
+open NearCubicWires.StructuralAtomEmitterLoopProgram
+open NearCubicWires.TotalSelectiveCountCasesProgram
+open NearCubicWires.TotalStructuralAtomCalleeProgram
+
+end NearCubicWires.TotalStructuralAtomEmitterProgram

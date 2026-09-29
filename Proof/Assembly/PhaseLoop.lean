@@ -1,0 +1,15 @@
+import Proof.Assembly.SelectedPhases
+import Proof.Assembly.SiteLoop
+import Proof.CaseAnalysis.FinalSumFamilyTransport
+set_option autoImplicit false
+set_option maxHeartbeats 500000
+set_option maxRecDepth 120000
+set_option warningAsError true
+namespace PCJ30aa6f1b7c2a4221_.PhaseLoop
+open NearCubicWires NearCubicWires.P1TopDown NearCubicWires.LocalBitMultitape
+open NearCubicWires.ExtDecompositionBatch NearCubicWires.RepairOrdinary
+open NearCubicWires.RepairSource NearCubicWires.RepairSource.CloseoutFinal
+open NearCubicWires.SourceInterfaces
+attribute [local irreducible] WorkspaceSelectedAdmission.originalTapes WorkspaceSelectedEntry.size
+
+end PCJ30aa6f1b7c2a4221_.PhaseLoop

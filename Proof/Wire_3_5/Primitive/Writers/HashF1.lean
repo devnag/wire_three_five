@@ -1,0 +1,303 @@
+import Proof.Wire_3_5.Primitive.Writers.ThrCap4
+import Proof.Wire_3_5.FinalPass.HashFree
+
+/-! # HASH setup (A), part 3: the HASH free numbers' fits at the capacity v2
+
+The HASH stage's free numbers are `Fp` on `hashX = {thrX with a := t}`. `thr_fits2` gives the numbers
+machine's call-only fits (`ThrFitAt`'s fields that do not read the free program's input); **`HashFitX`** collects the
+five that do (`ok`, `fv`, `fd0`, `fd1`, `fd3`) at `hashX`, and **`hash_fitsX`** proves them once `C_c ≥ C₀`
+(`thr_fits2`'s proof at `hashX`: `t = thrCallT` is the data word's entry `12`, `hn12`, `hashX_small`).
+
+Paper quantity of the main type: the HASH stage's free numbers `h, Q', m, pr, ρ` against the capacity. -/
+
+set_option autoImplicit false
+set_option linter.unusedVariables false
+set_option linter.unusedSimpArgs false
+
+namespace NearCubicWires.WireExponent3_5.PrimAsm.ThrCap
+open NearCubicWires NearCubicWires.WireExponent3_5 NearCubicWires.RepairOrdinary
+open NearCubicWires.WireExponent3_5.PrimT.C4Set NearCubicWires.WireExponent3_5.PrimAsm
+open NearCubicWires.WireExponent3_5.Shared NearCubicWires.WireExponent3_5.Cost NearCubicWires.WireExponent3_5.Primitive
+open NearCubicWires.WireExponent3_5.Stars NearCubicWires.SupplierPipeline NearCubicWires.WireExponent3_5.Split
+open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.PrimAsm.WriterIface
+open NearCubicWires.WireExponent3_5.PrimAsm.ThrFam
+open NearCubicWires.WireExponent3_5.PrimT
+
+section Small
+variable {kclk : ℕ} {E : Envelope} {B : TimeBudget kclk E} (I : PrimitiveInputs B)
+  (alg : RepairRepresentation.DecompositionAlgorithm) {n a : ℕ}
+  (Cs : Fin a → NormalizedThresholdThresholdCircuit n) (carriers : List (Carrier n)) (hs : I.StarAt n)
+
+/-- The data word's entry `12` is the moment count `t`. -/
+theorem hn12 : (hnC I alg Cs carriers hs).getD 12 0 = thrCallT alg I hs Cs carriers := by
+  rw [show (12 : ℕ) = 10 + 2 from rfl, hn_get I alg Cs carriers hs 10 (by norm_num), thrCallT_tt]
+  rfl
+
+/-- The HASH call's `FreeIn` is small once each of its twelve fields is. -/
+theorem hashX_small (Ds : ℕ)
+    (h1 : n ≤ 2 ^ (Ds * C4Cap.bsq n)) (h2 : SeedFix.callKh (I.starParams n hs) ≤ 2 ^ (Ds * C4Cap.bsq n))
+    (h3 : Ledger.Lq n ≤ 2 ^ (Ds * C4Cap.bsq n)) (h4 : B.capOf .thr n ≤ 2 ^ (Ds * C4Cap.bsq n))
+    (h5 : thrCallT alg I hs Cs carriers ≤ 2 ^ (Ds * C4Cap.bsq n)) (h6 : carriers.length ≤ 2 ^ (Ds * C4Cap.bsq n))
+    (h7 : thrDigits (I.starParams n hs) Cs alg (thrCallDen alg I hs Cs) ≤ 2 ^ (Ds * C4Cap.bsq n))
+    (h8 : SeedFix.thrCount alg I hs Cs ≤ 2 ^ (Ds * C4Cap.bsq n))
+    (h9 : max (SeedFix.callKh (I.starParams n hs) + SeedFix.callKh (I.starParams n hs))
+      (Nat.clog 2 (SeedFix.thrCount alg I hs Cs)) ≤ 2 ^ (Ds * C4Cap.bsq n))
+    (h10 : Enum.thrNT alg I hs Cs ≤ 2 ^ (Ds * C4Cap.bsq n))
+    (h11 : wOf (SeedFix.callKh (I.starParams n hs)) (SeedFix.thrCount alg I hs Cs) ≤ 2 ^ (Ds * C4Cap.bsq n))
+    (h12 : C4Geo.dRow (I.starParams n hs) ≤ 2 ^ (Ds * C4Cap.bsq n)) :
+    C4SymW.FreeSmall Ds (FinalPass.HashFr.hashX I alg Cs carriers hs) :=
+  ⟨h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12⟩
+
+end Small
+
+/-- **The HASH free numbers' fits at `M`** (the five of `ThrFitAt` that read the free program's input, at
+`hashX`). -/
+structure HashFitX (Fp : FreeProg) (M : ℕ) {kclk : ℕ} {E : Envelope} {B : TimeBudget kclk E}
+    (I : PrimitiveInputs B) (alg : RepairRepresentation.DecompositionAlgorithm) {n a : ℕ}
+    (Cs : Fin a → NormalizedThresholdThresholdCircuit n) (carriers : List (Carrier n)) (hs : I.StarAt n) : Prop where
+  ok : Fp.ok (2 * M + 2) (FinalPass.HashFr.hashX I alg Cs carriers hs)
+  fv : ∀ j, Fp.val (FinalPass.HashFr.hashX I alg Cs carriers hs) j + 1 ≤ M
+  fd0 : SeedFix.callKh (I.starParams n hs) + SeedFix.callKh (I.starParams n hs) +
+    Fp.val (FinalPass.HashFr.hashX I alg Cs carriers hs) 0 + 1 ≤ M
+  fd1 : max (SeedFix.callKh (I.starParams n hs) + SeedFix.callKh (I.starParams n hs))
+      (Nat.clog 2 (SeedFix.thrCount alg I hs Cs)) * 8 *
+    (max (SeedFix.callKh (I.starParams n hs) + SeedFix.callKh (I.starParams n hs))
+      (Nat.clog 2 (SeedFix.thrCount alg I hs Cs)) +
+      max (SeedFix.callKh (I.starParams n hs) + SeedFix.callKh (I.starParams n hs))
+        (Nat.clog 2 (SeedFix.thrCount alg I hs Cs)) + 1) + Fp.val (FinalPass.HashFr.hashX I alg Cs carriers hs) 1 + 1 ≤ M
+  fd3 : wOf (SeedFix.callKh (I.starParams n hs)) (SeedFix.thrCount alg I hs Cs) + 1 +
+    Fp.val (FinalPass.HashFr.hashX I alg Cs carriers hs) 0 + 1 ≤ M
+
+/-- **The HASH free numbers fit the capacity v2** `2^{⌊n/8⌋ + C}` once `C ≥ C₀` (`thr_fits2`'s proof at `hashX`). -/
+theorem hash_fitsX (l : Literals) (F : GateFree l) (Fp : FreeProg)
+    (hok : ∀ Ds : ℕ, ∃ Ko : ℕ, ∀ (cap : ℕ) (x : FreeIn), C4SymW.FreeSmall Ds x → Ko * 2 ^ (x.n / 8) ≤ cap → Fp.ok cap x)
+    (hval : ∀ Ds : ℕ, ∃ Kv : ℕ, ∀ (x : FreeIn) (j : Fin 7), C4SymW.FreeSmall Ds x → j.val ≠ 6 →
+      Fp.val x j ≤ Kv * 2 ^ (x.n / 8))
+    (hrho : ∃ Kr Dr : ℕ, ∀ x : FreeIn, Fp.val x 6 ≤ Kr * (x.n + 1) ^ Dr)
+    (Cw Dw Cnw Dnw : ℕ) (hwb : ∀ n, CallSize.wordBound 26 26 2 n ≤ Cw * (n + 1) ^ Dw)
+    (hnw : ∀ n, C4GateSym.needW n ≤ Cnw * (n + 1) ^ Dnw) :
+    ∃ Cc0 : ℕ, ∀ Cc : ℕ, Cc0 ≤ Cc → ∀ (kclk coef A a0 : ℕ) (ha0 : a0 ≤ kclk + 1) (n a : ℕ) (ha : a ≤ 4)
+      (Cs : Fin a → NormalizedThresholdThresholdCircuit n) (carriers : List (Carrier n)) (translation : List ℕ),
+      (callInputs l F kclk coef A a0 ha0).Call (thrReq n a ha Cs carriers translation) →
+      ∀ hs : (callInputs l F kclk coef A a0 ha0).StarAt n,
+      HashFitX Fp (2 ^ C4Cap.capExp2 Cc n) (callInputs l F kclk coef A a0 ha0) (gate0 l F).alg Cs carriers hs := by
+  obtain ⟨Kr, Dr, hr⟩ := hrho
+  -- the exponents
+  obtain ⟨ek, hek⟩ : ∃ x, x = 2 * F.cr + 2 := ⟨_, rfl⟩
+  obtain ⟨eC, heC⟩ : ∃ x, x = eCap l F.cr := ⟨_, rfl⟩
+  obtain ⟨eT, heT⟩ : ∃ x, x = eTn l F := ⟨_, rfl⟩
+  obtain ⟨eq, heq⟩ : ∃ x, x = eQt l F.cr F.filterErrDeg := ⟨_, rfl⟩
+  obtain ⟨eS, heS⟩ : ∃ x, x = eSb l F.cr F.filterErrDeg := ⟨_, rfl⟩
+  obtain ⟨eWd, heWd⟩ : ∃ x, x = Nat.clog 2 Cw + Dw := ⟨_, rfl⟩
+  obtain ⟨eN, heN⟩ : ∃ x, x = Nat.clog 2 Cnw + Dnw := ⟨_, rfl⟩
+  obtain ⟨eW, heW⟩ : ∃ x, x = 9 + 8 * (ek + eq) + 8 * ek := ⟨_, rfl⟩
+  obtain ⟨eH, heH⟩ : ∃ x, x = 2 * eT + 10 := ⟨_, rfl⟩
+  obtain ⟨eR, heR⟩ : ∃ x, x = Nat.clog 2 Kr + Dr := ⟨_, rfl⟩
+  obtain ⟨Ds, hDs⟩ : ∃ x, x = eT + eq + ek + eC + eS + eW + eT + eT + 40 := ⟨_, rfl⟩
+  obtain ⟨Ko, hok'⟩ := hok Ds
+  obtain ⟨Kv, hval'⟩ := hval Ds
+  obtain ⟨U, hU⟩ : ∃ x, x = 4 * (ek + eC + eT + eq + eS + eWd + eN + eW + eH + eR + Ds + F.cr + F.filterErrDeg) + 100 :=
+    ⟨_, rfl⟩
+  obtain ⟨K0, hK0⟩ := C4Cap.mul_sq_le_div16 U
+  obtain ⟨K1, hK1⟩ : ∃ x, x = K0 + Nat.clog 2 Kv := ⟨_, rfl⟩
+  refine ⟨K1 + Nat.clog 2 Ko + 12,
+    fun Cc hCc kclk coef A a0 ha0 n a ha Cs carriers translation hcall hs => ?_⟩
+  -- the size unit `s = (B+1)²`, `e = ⌊n/8⌋`, `M = 2^{e + Cc}` and `E₀ = 2^{e + K₁}`
+  obtain ⟨s, hsd⟩ : ∃ x, x = C4Cap.bsq n := ⟨_, rfl⟩
+  have hs1 : 1 ≤ s := hsd ▸ C4Cap.bsq_pos n
+  obtain ⟨e, hed⟩ : ∃ x, x = n / 8 := ⟨_, rfl⟩
+  obtain ⟨M, hMd⟩ : ∃ x, x = 2 ^ C4Cap.capExp2 Cc n := ⟨_, rfl⟩
+  have hMe : M = 2 ^ (e + Cc) := by rw [hMd, hed]; rfl
+  rw [← hMd]
+  obtain ⟨E0, hE0⟩ : ∃ x, x = 2 ^ (e + K1) := ⟨_, rfl⟩
+  have hE1 : 1 ≤ E0 := hE0 ▸ Nat.one_le_two_pow
+  have hME : 2048 * E0 ≤ M := by
+    rw [hMe, hE0, show (2048 : ℕ) = 2 ^ 11 by norm_num, ← pow_add]
+    exact Nat.pow_le_pow_right (by norm_num) (by omega)
+  have hUs : U * s ≤ e + K0 := by
+    have h1 := hK0 n
+    have h2 : U * s = U * (natBitLength n + 1) ^ 2 := by rw [hsd]; rfl
+    omega
+  have toE : ∀ {X a : ℕ}, X ≤ 2 ^ (a * s) → a ≤ U → X ≤ E0 := fun hX ha => by
+    rw [hE0]
+    exact le_trans hX (Nat.pow_le_pow_right (by norm_num)
+      (le_trans (Nat.mul_le_mul_right s ha) (le_trans hUs (by omega))))
+  have pwl : ∀ {x e : ℕ}, x ≤ e * s → x ≤ 2 ^ (e * s) := fun hx => C4Cap.pw_lin hx
+  have pwc : ∀ {X c : ℕ}, X ≤ c → X ≤ 2 ^ (c * s) := fun hX => C4Cap.pw_const hs1 hX
+  have pwp : ∀ {X Y a b : ℕ}, X ≤ 2 ^ (a * s) → Y ≤ 2 ^ (b * s) → X * Y ≤ 2 ^ ((a + b) * s) :=
+    fun hX hY => C4Cap.pw_mul hX hY
+  have hsz : ∀ {X e' : ℕ}, X ≤ 2 ^ (e' * s) → e' ≤ Ds → X ≤ 2 ^ (Ds * C4Cap.bsq n) := fun hX he => by
+    rw [← hsd]; exact C4Cap.pw_mono he hX
+  -- the call's facts and sizes
+  obtain ⟨hk2, hdesc, henv⟩ := C4GateSym.thr_call_facts l F kclk coef A a0 ha0 n a ha Cs carriers translation hcall
+  have hn8 := HashFam.fam_n8 l F kclk coef A a0 ha0 hs
+  obtain ⟨hkk, hcapT, hhn, hQ, hsb, hwl, hnW⟩ :=
+    thr_sizes l F Cw Dw Cnw Dnw hwb hnw kclk coef A a0 ha0 ha Cs carriers translation hcall hs
+  rw [← hsd, ← hek] at hkk
+  rw [← hsd, ← heC] at hcapT
+  rw [← hsd, ← heT] at hhn
+  rw [← hsd, ← heq] at hQ
+  rw [← hsd, ← heS, filterParams_thr _ rfl] at hsb
+  rw [← hsd, ← heWd] at hwl
+  rw [← hsd, ← heN] at hnW
+  have hN2 : n + 2 ≤ 2 ^ (1 * s) := by rw [hsd]; exact C4Cap.n2_pw n
+  have hmem : ∀ k, k < 16 → (hnC (callInputs l F kclk coef A a0 ha0) (gate0 l F).alg Cs carriers hs).getD k 0 ≤
+      2 ^ (eT * s) := fun k hk => hhn _ (HashSizes.hashNums_getD_mem _ _ _ _ _ _ k hk)
+  have hG : Fintype.card (ThrEq ((callInputs l F kclk coef A a0 ha0).starParams n hs) Cs (gate0 l F).alg) ≤
+      2 ^ (eT * s) := by
+    rw [← hn2 (callInputs l F kclk coef A a0 ha0) (gate0 l F).alg Cs carriers hs]; exact hmem 2 (by norm_num)
+  have hc : thrCutoff ((callInputs l F kclk coef A a0 ha0).starParams n hs) Cs (gate0 l F).alg
+      (thrCallDen (gate0 l F).alg (callInputs l F kclk coef A a0 ha0) hs Cs) ≤ 2 ^ (eT * s) := by
+    rw [← hn4 (callInputs l F kclk coef A a0 ha0) (gate0 l F).alg Cs carriers hs]; exact hmem 4 (by norm_num)
+  have hpS : ThrQ.primeSum (thrCutoff ((callInputs l F kclk coef A a0 ha0).starParams n hs) Cs (gate0 l F).alg
+      (thrCallDen (gate0 l F).alg (callInputs l F kclk coef A a0 ha0) hs Cs)) ≤ 2 ^ (eT * s) := by
+    rw [← hn6 (callInputs l F kclk coef A a0 ha0) (gate0 l F).alg Cs carriers hs]; exact hmem 6 (by norm_num)
+  have hdig : thrDigits ((callInputs l F kclk coef A a0 ha0).starParams n hs) Cs (gate0 l F).alg
+      (thrCallDen (gate0 l F).alg (callInputs l F kclk coef A a0 ha0) hs Cs) ≤ 2 ^ (eT * s) := by
+    rw [← hn7 (callInputs l F kclk coef A a0 ha0) (gate0 l F).alg Cs carriers hs]; exact hmem 7 (by norm_num)
+  have hgG := pwp hsb hG
+  have hNT := pwp hgG hpS
+  have hell : max (SeedFix.callKh ((callInputs l F kclk coef A a0 ha0).starParams n hs) +
+      SeedFix.callKh ((callInputs l F kclk coef A a0 ha0).starParams n hs))
+      (Nat.clog 2 (SeedFix.thrCount (gate0 l F).alg (callInputs l F kclk coef A a0 ha0) hs Cs)) ≤ (ek + eq) * s :=
+    max_le (le_trans hkk (Nat.mul_le_mul_right _ (Nat.le_add_right _ _)))
+      (le_trans (C4Cap.clog_pw hQ) (Nat.mul_le_mul_right _ (Nat.le_add_left _ _)))
+  have hw1 : wOf (SeedFix.callKh ((callInputs l F kclk coef A a0 ha0).starParams n hs))
+      (SeedFix.thrCount (gate0 l F).alg (callInputs l F kclk coef A a0 ha0) hs Cs) + 1 ≤ eW * s := by
+    rw [heW]; exact C4SymN.w_le hell hkk hs1
+  have hl3 := C4SymN.l3_le hell hs1
+  have hbl : (hbC (callInputs l F kclk coef A a0 ha0) (gate0 l F).alg Cs carriers translation hs).length ≤
+      2 ^ (eH * s) := by
+    rw [hbF_length]
+    have h1 := pwp (pwp (pwp (pwc (le_refl 2)) (pwc (le_refl 2))) (hmem 12 (by norm_num))) (hmem 14 (by norm_num))
+    have h2 := C4Cap.pw_add hs1 h1 (pwc (le_refl 1))
+    refine C4Cap.pw_mono ?_ (le_of_eq_of_le ?_ h2)
+    · rw [heH]; omega
+    · ring
+  have hwd : ((thrReq n a ha Cs carriers translation).word ++
+      hbC (callInputs l F kclk coef A a0 ha0) (gate0 l F).alg Cs carriers translation hs).length ≤
+      2 ^ ((eWd + eH + 1) * s) := by
+    rw [List.length_append]; exact C4Cap.pw_add hs1 hwl hbl
+  have hSm : 4 * (n + 2) ≤ 2 ^ ((4 + 1) * s) := pwp (pwc (le_refl 4)) hN2
+  have hdR : C4Geo.dRow ((callInputs l F kclk coef A a0 ha0).starParams n hs) ≤ 2 ^ ((4 + 1) * s) :=
+    le_trans (C4SymN.dRow_le _) hSm
+  -- the call's numbers are small
+  have hFS : C4SymW.FreeSmall Ds (FinalPass.HashFr.hashX (callInputs l F kclk coef A a0 ha0) (gate0 l F).alg Cs carriers hs) :=
+    hashX_small (callInputs l F kclk coef A a0 ha0) (gate0 l F).alg Cs carriers hs Ds
+      (hsz (le_trans (Nat.le_add_right n 2) hN2) (by omega))
+      (hsz (pwl (le_trans (Nat.le_add_left _ _) hkk)) (by omega))
+      (hsz (pwl (by rw [one_mul, hsd]; exact C4Cap.lq_le_bsq n)) (by omega)) (hsz hcapT (by omega))
+      (hsz (le_of_eq_of_le (hn12 (callInputs l F kclk coef A a0 ha0) (gate0 l F).alg Cs carriers hs).symm
+        (hmem 12 (by norm_num))) (by omega)) (hsz (pwc hk2) (by omega)) (hsz hdig (by omega)) (hsz hQ (by omega))
+      (hsz (pwl hell) (by omega))
+      (hsz (le_of_eq_of_le (thrNT_link _ _ Cs hs rfl) hNT) (by omega))
+      (hsz (pwl (le_trans (Nat.le_succ _) hw1)) (by omega)) (hsz hdR (by omega))
+  -- the free numbers
+  have hfv : ∀ j : Fin 7, Fp.val (FinalPass.HashFr.hashX (callInputs l F kclk coef A a0 ha0) (gate0 l F).alg Cs carriers hs) j ≤ E0 := by
+    intro j
+    by_cases hj : j.val = 6
+    · have hj' : j = 6 := Fin.ext hj
+      subst hj'
+      have h2 : (n + 1) ^ Dr ≤ 2 ^ (Dr * s) :=
+        le_trans (Nat.pow_le_pow_left (Nat.le_succ _) Dr) (by rw [hsd]; exact C4Cap.pow_pw Dr n)
+      have h3 : Fp.val (FinalPass.HashFr.hashX (callInputs l F kclk coef A a0 ha0) (gate0 l F).alg Cs carriers hs) 6 ≤ Kr * 2 ^ (Dr * s) :=
+        le_trans (hr _) (Nat.mul_le_mul_left _ h2)
+      exact toE (C4Cap.pw_K hs1 h3) (by rw [← heR]; omega)
+    · have h3 : Fp.val (FinalPass.HashFr.hashX (callInputs l F kclk coef A a0 ha0) (gate0 l F).alg Cs carriers hs) j ≤ Kv * 2 ^ e := by
+        rw [hed]; exact hval' _ j hFS hj
+      rw [hE0]
+      exact C4SymN.mono8 (by omega) (C4SymN.of_K h3)
+  have hF : Fp.ok (2 * M + 2) (FinalPass.HashFr.hashX (callInputs l F kclk coef A a0 ha0) (gate0 l F).alg Cs carriers hs) := by
+    apply hok' _ _ hFS
+    have h1 : Ko * 2 ^ e ≤ 2 ^ (e + Nat.clog 2 Ko) := C4SymN.of_K le_rfl
+    have h2 : 2 ^ (e + Nat.clog 2 Ko) ≤ M := by rw [hMe]; exact Nat.pow_le_pow_right (by norm_num) (by omega)
+    have h3 : Ko * 2 ^ e ≤ 2 * M + 2 := by omega
+    rw [hed] at h3
+    exact h3
+  -- the atoms below `E₀`
+  have aQ := toE hQ (by omega)
+  have akk := toE (pwl hkk) (by omega)
+  have asb := toE hsb (by omega)
+  have aG := toE hG (by omega)
+  have apS := toE hpS (by omega)
+  have agG := toE hgG (by omega)
+  have aNT := toE hNT (by omega)
+  have aW := toE (C4Cap.pw_exp hw1) (by omega)
+  have acnt := toE (pwp hNT (C4Cap.pw_exp (le_trans (Nat.le_succ _) hw1))) (by omega)
+  have an := toE hN2 (by omega)
+  have ad1 := toE (pwp (pwp (pwl hell) (pwc (le_refl 8))) (pwl hl3)) (by omega)
+  have aw1 := toE (pwl hw1) (by omega)
+  have a8 := toE (pwp (pwl hell) (pwc (le_refl 8))) (by omega)
+  have a3 := toE (pwp (pwc (le_refl 3)) (pwl hell)) (by omega)
+  have awd := toE hwd (by omega)
+  have anW := toE hnW (by omega)
+  have a26 : (n + 1) ^ 26 ≤ E0 :=
+    toE (le_trans (Nat.pow_le_pow_left (Nat.le_succ _) 26) (by rw [hsd]; exact C4Cap.pow_pw 26 n)) (by omega)
+  have acap := toE hcapT (by omega)
+  have aerr : F.filterErrDeg * Ledger.Lq n ≤ E0 :=
+    toE (pwl (Nat.mul_le_mul_left _ (by rw [hsd]; exact C4Cap.lq_le_bsq n))) (by omega)
+  have hn3 : n + 3 ≤ 2 ^ ((1 + 1 + 1) * s) := C4Cap.pw_add (X := n + 2) (Y := 1) hs1 hN2 (pwc (le_refl 1))
+  have afe4 := toE (pwp (pwc (le_refl (F.filterErrDeg + 4))) hn3) (by omega)
+  have acr := toE (pwc (le_refl (2 * F.cr + 20))) (by omega)
+  have aGc := toE (pwp hG hc) (by omega)
+  have ahn : ∀ v ∈ hnC (callInputs l F kclk coef A a0 ha0) (gate0 l F).alg Cs carriers hs, v ≤ E0 :=
+    fun v hv => toE (hhn v hv) (by omega)
+  -- the counts
+  have hcx : ∀ c ∈ carriers.map (·.length), c ≤ (n + 1) ^ 26 := by
+    intro c hc'
+    obtain ⟨X, hX, rfl⟩ := List.mem_map.mp hc'
+    exact (henv X hX).1
+  have hxs : (carriers.map (·.length)).sum ≤ 2 * (n + 1) ^ 26 := by
+    have h1 := List.sum_le_card_nsmul (carriers.map (·.length)) ((n + 1) ^ 26) hcx
+    rw [List.length_map, smul_eq_mul] at h1
+    exact le_trans h1 (Nat.mul_le_mul_right _ hk2)
+  have htg : (ThrTab.tupleG Cs).length ≤ 4 * (n + 1) ^ 26 :=
+    le_trans (C4GateSym.tupleG_len_le Cs _ hdesc) (Nat.mul_le_mul_right _ ha)
+  -- the request's parts
+  have hwsplit : (thrReq n a ha Cs carriers translation).word = Data.reqW n true (ReqBridge.thrCodes Cs)
+      (carriers.map Carrier.code) (RepairRepresentation.natListWord translation) := by
+    have h := ReqBridge.reqW_thrReq ha Cs carriers translation []
+    rw [List.append_nil, List.append_nil] at h
+    exact h.symm
+  have htr1 : (RepairRepresentation.natListWord translation).length ≤ (thrReq n a ha Cs carriers translation).word.length := by
+    rw [hwsplit]; unfold Data.reqW; simp only [List.length_append]; omega
+  have htr2 : translation.length ≤ (RepairRepresentation.natListWord translation).length := by
+    unfold RepairRepresentation.natListWord
+    rw [List.length_append]
+    have := len_le_flat translation
+    omega
+  have hcodes : (ReqBridge.thrCodes Cs).length = a := by unfold ReqBridge.thrCodes; simp
+  have hwlen : (thrReq n a ha Cs carriers translation).word.length ≤
+      ((thrReq n a ha Cs carriers translation).word ++
+        hbC (callInputs l F kclk coef A a0 ha0) (gate0 l F).alg Cs carriers translation hs).length := by
+    rw [List.length_append]; omega
+  have b1 : 2 ^ (natBitLength n + 1) ≤ 4 * n + 4 := by
+    have := CopyNat.two_pow_natBitLength_le n; rw [pow_succ]; omega
+  have b2 := C4GateSym.nbl_small (ReqBridge.thrCodes Cs).length (by rw [hcodes]; exact ha)
+  have b3 := C4GateSym.nbl_small (carriers.map Carrier.code).length (by rw [List.length_map]; omega)
+  -- the filter's bit counts
+  have l3 : (SymDec.gP n (((gate0 l F).budget kclk coef A a0 ha0).capOf .thr n)
+      ((callInputs l F kclk coef A a0 ha0).filterErrDeg * Ledger.Lq n)).labelBits ≤
+      32 * ((callInputs l F kclk coef A a0 ha0).filterParams .thr n).cap + 2 * (n + 1) ^ 26 := by
+    unfold Filters.GapParams.labelBits Filters.GapParams.prefixBits
+    exact max_le (le_trans (clog_le_self' _) (Nat.le_add_right _ _)) (le_trans (clog_le_self' _) (Nat.le_add_left _ _))
+  have l4 : (SymDec.gP n (((gate0 l F).budget kclk coef A a0 ha0).capOf .thr n)
+      ((callInputs l F kclk coef A a0 ha0).filterErrDeg * Ledger.Lq n)).fieldBits ≤ 2 * (n + 1) ^ 26 + 4 := by
+    unfold Filters.GapParams.fieldBits; exact Nat.add_le_add_right (clog_le_self' _) 4
+  have l5 : (SymDec.gP n (((gate0 l F).budget kclk coef A a0 ha0).capOf .thr n)
+      ((callInputs l F kclk coef A a0 ha0).filterErrDeg * Ledger.Lq n)).walkLen ≤
+      F.filterErrDeg * Ledger.Lq n + 1 := by
+    unfold Filters.GapParams.walkLen; show 2 * (F.filterErrDeg * Ledger.Lq n / 4) + 1 ≤ _; omega
+  have hsb2 : 2 ^ ((SymDec.gP n (((gate0 l F).budget kclk coef A a0 ha0).capOf .thr n)
+      ((callInputs l F kclk coef A a0 ha0).filterErrDeg * Ledger.Lq n)).seedBits + 1) =
+      2 * 2 ^ (SymDec.gP n (((gate0 l F).budget kclk coef A a0 ha0).capOf .thr n)
+      ((callInputs l F kclk coef A a0 ha0).filterErrDeg * Ledger.Lq n)).seedBits := by rw [pow_succ]; ring
+  have fv := fun j => hfv j
+  exact {
+    ok := hF
+    fv := fun j => by have := fv j; omega
+    fd0 := by have := fv 0; omega
+    fd1 := by have := fv 1; omega
+    fd3 := by have := fv 0; omega }
+
+end NearCubicWires.WireExponent3_5.PrimAsm.ThrCap

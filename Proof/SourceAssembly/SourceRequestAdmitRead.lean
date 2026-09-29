@@ -1,0 +1,24 @@
+import Mathlib.Algebra.Order.Floor.Semifield
+import Proof.SourceAssembly.SourcePhaseEntry
+import Proof.SourceAssembly.SourceRequestCoordBridge
+
+set_option autoImplicit false
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedVariables false
+
+namespace NearCubicWires.SourceRequest.AdmitRead
+open NearCubicWires SourceInterfaces RepairSource RepairRepresentation
+open SelectedRecoveryIntegration CanonicalWitnessCodec SupplierPipeline
+open NearCubicWires.RepairOrdinary
+open CloseoutWitness CloseoutWitness.SelectedSource
+noncomputable section
+
+section site
+open NearCubicWires.RepairSource.CloseoutFinal (Parameters)
+
+end site
+
+end
+end NearCubicWires.SourceRequest.AdmitRead
+

@@ -1,0 +1,26 @@
+import Proof.SourceAssembly.AdmissionCaps
+
+set_option autoImplicit false
+set_option maxHeartbeats 250000
+set_option maxRecDepth 120000
+set_option warningAsError true
+
+namespace NearCubicWires.Admission
+open NearCubicWires NearCubicWires.SupplierPipeline NearCubicWires.SourceInterfaces
+open NearCubicWires.ComponentwisePolynomial NearCubicWires.RepairRepresentation
+open NearCubicWires.RepairSource NearCubicWires.RepairSource.CloseoutFinal
+open NearCubicWires.RepairSource.CloseoutFinal.C10TotalDecode
+open NearCubicWires.RepairSource.CloseoutFinal.C10SumFamilyTransport
+open NearCubicWires.RepairSource.SelectedRecoveryIntegration
+open NearCubicWires.RepairSource.CloseoutLanguage (clauseWidth)
+open PCJd4d1d9d7d1fa4313_Production
+
+noncomputable section
+
+section
+
+end
+
+
+end
+end NearCubicWires.Admission

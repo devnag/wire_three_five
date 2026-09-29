@@ -1,0 +1,29 @@
+import Proof.MachineModel.RuntimeShape
+import Proof.SourceAssembly.AdmissionInput
+import Proof.SourceAssembly.SourceBundle
+
+set_option autoImplicit false
+set_option maxHeartbeats 250000
+set_option maxRecDepth 120000
+set_option warningAsError true
+
+namespace NearCubicWires.Admission
+open NearCubicWires NearCubicWires.SupplierPipeline NearCubicWires.SourceInterfaces
+open NearCubicWires.SupplierEstimator NearCubicWires.SupplierWalkBridge NearCubicWires.SupplierListSchedule
+open NearCubicWires.CanonicalFourfoldRowProgram
+open NearCubicWires.PolynomialSchedule NearCubicWires.RepairRepresentation NearCubicWires.SupplierCapacity
+open NearCubicWires.RepairSource NearCubicWires.RepairSource.CloseoutFinal
+open NearCubicWires.RepairOrdinary.CloseoutRowsRawLogShape
+open NearCubicWires.RepairSource.CloseoutRawRows (descriptionEnvelope descriptionEnvelope_polynomial
+  rowDepthAt windowSumAt symmetric_occurrences_description threshold_occurrences_description)
+open PCJ9eff70d512234a4c_Fixed PCJd4d1d9d7d1fa4313_Production
+
+noncomputable section
+
+/-! ## The printer inequality's constants, named (so the case lemmas stay small) -/
+
+
+
+
+end
+end NearCubicWires.Admission
