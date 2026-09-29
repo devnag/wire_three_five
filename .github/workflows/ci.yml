@@ -6,7 +6,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: python3 scripts/check_names.py .
-      - run: test -z "$(git ls-files | sort -f | uniq -Di)"   # no two paths differ only by case (macOS, Windows)
+      - run: dups=$(git ls-files | tr '[:upper:]' '[:lower:]' | sort | uniq -d); test -z "$dups" || { echo "$dups"; exit 1; }   # no two paths differ only by case (macOS, Windows)
   statement:
     runs-on: ubuntu-latest
     steps:
