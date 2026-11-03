@@ -1,4 +1,6 @@
+import Proof.Foundations.CanonicalBinaryProgram
 import Proof.MachineModel.PreserveRightProgram
+import Proof.Foundations.VerifiedLinker
 
 /-!
 # Fixed lookup in Lean's canonical `Encodable` list spine

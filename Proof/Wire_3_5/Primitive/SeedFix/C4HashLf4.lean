@@ -1,10 +1,22 @@
-import Proof.Wire_3_5.Primitive.SeedFix.C4HashLf3
+import Lean
+import Proof.Wire_3_5.Primitive.SeedFix.C4HashLf2Base
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.HashFree
+import Proof.Wire_3_5.FinalPass.HashFree2
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
 
-/-! # The HASH part of C4Leaf: the two call facts from `HashEAt`
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # The HASH part of C4Leaf: the two call facts from the `HashEAt`
 
 `HashSideAt2`'s conjuncts `1 ≤ fr 3` (the pool's `h`) and `CoefFit` (the pool request's coefficients fit) at a THR call,
 from the HASH builder's side conditions (`HashFreeOk2.side`: `HashEAt`'s last two clauses, at `thrR0 … (fr 3) (fr 2) 0 …`
-whose pool request is `poolReq … (fr 3) (fr 2) 0`). The construction packages `HashObl2` with them.
+whose pool request is `poolReq … (fr 3) (fr 2) 0`). PA2 packages `HashObl2` with them.
 * **`hash_h1`**, **`hash_hcf`**.
 
 Paper quantity of the main type: the HASH child's compiler request (its pool's precision `h ≥ 1`, its coefficients'
@@ -47,3 +59,5 @@ theorem hash_hcf : CompilerMachine.Pool.CoefFit ((gate0 l F).alg) (PrimT.C4Geo.p
 end Call
 
 end NearCubicWires.WireExponent3_5.PrimT.C4HL
+
+end

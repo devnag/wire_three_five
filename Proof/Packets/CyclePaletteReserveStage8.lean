@@ -14,10 +14,14 @@ open NearCubicWires.RepairSource.ProjectionNormalization NearCubicWires.RepairSo
 open NearCubicWires.RepairSource.VerifierDecoding
 open Completion
 noncomputable section
+attribute [local irreducible] worker1 worker2 worker3 worker4 worker5 worker6 worker7 worker8
 
 attribute [local irreducible] List.replicate Nat.pow
 
+def slots8 : Fin 3→Fin 80 := ![76,78,79]
+def phase8 := RecoveryFocus.machine slots8 worker8
 
+def joined8 := Composition.machine joined7 phase8
 
 end
 end Theorem25Completion.CyclePaletteReserve

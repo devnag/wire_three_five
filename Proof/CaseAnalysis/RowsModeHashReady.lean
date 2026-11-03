@@ -1,4 +1,6 @@
+import Proof.CaseAnalysis.RowsFamilyLoop
 import Proof.CaseAnalysis.RowsModeLiteralPair
+import Proof.MachineModel.OrdinaryMemoryEmitCounter
 
 /-! The actual complete hash prefix is prepared for the literal-cache cell
 scan. Original seed/label/depth fields are retained; all scan heads return. -/

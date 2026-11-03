@@ -1,4 +1,6 @@
 import Proof.Rows.MinimumMaskCell
+import Proof.CaseAnalysis.RowsOriginalClauseLoop
+import Proof.CaseAnalysis.RowsFamilyLoop
 
 /-! The actual q-counted native-sign pass builds the minimizing assignment.
 Every weight is read in native order; the target suffix is never consumed. -/

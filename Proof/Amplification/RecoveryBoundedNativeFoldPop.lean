@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryBoundedNativeUnaryOriginal
+import Proof.PCP.PCPUnaryStackPop
 
 /-! Pop a saved original compiler reference into reusable allocated storage.
 The consumed stack suffix is actually erased, and its live cursor is kept. -/

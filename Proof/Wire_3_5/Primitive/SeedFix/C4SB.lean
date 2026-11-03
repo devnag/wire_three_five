@@ -1,5 +1,6 @@
 import Proof.Wire_3_5.Primitive.SeedFix.C4SA
 import Proof.Wire_3_5.Primitive.Writers.SymDecRun
+import Proof.Wire_3_5.Primitive.Writers.SymQM
 
 /-! # C4 per-call setup (item 3), part 2: the SYM call's numbers in registers
 

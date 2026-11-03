@@ -1,4 +1,5 @@
 import Proof.MachineModel.BankFields
+import Proof.MachineModel.OrdinaryMatrixBucketRootPower
 
 /-! The actual incidence table and two copies of its last row index are the
 only row-dependent native inputs. Common false backing erases the dependence

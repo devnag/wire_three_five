@@ -1,5 +1,6 @@
 import Proof.Circuits.CanonicalWitnessCodec
 import Proof.Foundations.CircuitRestriction
+import Proof.Foundations.PolynomialClock
 import Proof.Foundations.PolynomialSchedule
 
 /-!

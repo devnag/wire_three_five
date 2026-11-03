@@ -1,5 +1,8 @@
+import Proof.Wire_3_5.FinalPass.WordLib
 import Proof.Wire_3_5.FinalPass.HashTable
 import Proof.Wire_3_5.UnionMachine.RoundParse
+import Proof.Wire_3_5.UnionMachine.UnionCodecBase
+import Proof.Foundations.OrdinaryStreaming
 
 /-! # PA library (a), part 1: framed natural-number fields on a word stream
 
@@ -7,7 +10,7 @@ Realizes the first step of `lem:primitive`'s algorithm, "The algorithm receives 
 descriptions" (P3:3119-3120): a primitive call arrives as the framed word `frame req.word` (the Theorem 2.5 word
 function's input tape), whose fields are self-delimiting binary naturals `natWord x = 1^L 0 b₀…b_{L−1}`
 (`framedNatBits`, `L = natBitLength x`, little-endian payload). The final pass and seed fixing read these fields with
-the register programs of `Proof.Wire_3_5.FinalPass.Words` (`WM`), so the readers here are `WM` subroutines with
+the register programs of `WireExponent3_5FinalPassWords` (`WM`), so the readers here are `WM` subroutines with
 parametric stream and register indices, specified by `WExec` (sound for the compiled machine, `WExec.exec`).
 
 Paper quantity of the main types: the call's description fields (its natural-number fields `x`, read from

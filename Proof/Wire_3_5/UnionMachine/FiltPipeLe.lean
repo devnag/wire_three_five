@@ -1,3 +1,5 @@
+import Proof.Wire_3_5.Primitive.Writers.FiltPipe
+import Proof.Wire_3_5.UnionMachine.FiltSetupIface5
 import Proof.Wire_3_5.Primitive.Writers.BudgetIface2
 
 /-! # The FILTER pipeline's cost is polynomial with an exponent linear in `e`
@@ -103,6 +105,7 @@ theorem visitZCost_at (M n : ℕ) (hM : 1 ≤ M) (hn : n ≤ 128) : visitZCost M
 
 end Poly
 
+
 section Poly2
 open NearCubicWires.WireExponent3_5.FinalPass.Filt
 
@@ -143,6 +146,7 @@ theorem loadCost_eq (ws : List (List Bool)) :
 
 end Poly2
 
+
 section Words
 open NearCubicWires.WireExponent3_5.PrimAsm.FiltRec
 
@@ -168,6 +172,7 @@ theorem filtEmit_length (Lp d cap1 thr c : ℕ) (tw : List Bool) (labs : List �
   omega
 
 end Words
+
 
 section Fields
 open NearCubicWires.WireExponent3_5.ListMachine

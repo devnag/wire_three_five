@@ -12,6 +12,7 @@ open NearCubicWires.ExtDecompositionBatch NearCubicWires.RepairOrdinary.Recovery
 open NearCubicWires.RepairRepresentation NearCubicWires.RepairSource.VerifierDecoding
 open NearCubicWires.RepairSource.CloseoutFinal SignedSortKey
 noncomputable section
+attribute [local irreducible] PCJ45bee56da9f34d5a_TopFrameReentry.machine
 
 def caps (U :Nat) (i :Fin 101):=if i=94 then U else 0
 def bank (a B p w F U v key circuit :Nat) (source payload out :List Bool):Fin 103→List Bool:=

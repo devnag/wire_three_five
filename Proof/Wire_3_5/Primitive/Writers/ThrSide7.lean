@@ -1,13 +1,28 @@
-import Proof.Wire_3_5.Primitive.Writers.ThrSide6
+import Lean
+import Proof.Wire_3_5.Primitive.Writers.ThrSide6Base
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.ThrSide1
+import Proof.Wire_3_5.Primitive.Writers.ThrSide2
+import Proof.Wire_3_5.Primitive.Writers.ThrSide3
+import Proof.Wire_3_5.Assembly.Split
 
-/-! # c4 THR block, piece 6 part 7: the THR child request's precondition (`hpre`, `CoefFit`)
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2 c4 THR block, piece 6 part 7: the THR child request's precondition (`hpre`, `CoefFit`)
 
 The THR twin of the SymBF, SymHp1–3, SymOcc3–4 (P3:1882-1900, alg:compiler's precondition; P3:2477-2496 and
 3011-3016 the THR batch; P3:3094-3107 the THR load): at a THR call, the THR batch meets `SampShape.BatchFacts` with
 `f r = 1` (carrier rows) or `2τ₀` (the RADIX row) and `8·Σf = m`; the request's `h·Q'·d ≤ pr`,
 `N^{16}·2^{8ℓ}·2^{Q'} ≤ 2^{pr}`, the pool's fits at `h = d_H(n+1)^{e_H}`, and the printer's budget `occBound` within
 the rectangle (the child expression's `≤ 2^{A₁(k+L) + 1392c_d L²}` terms, the dense pool's `≤ 2^{k + c_{Da}L}`
-children) under the THR printer floor `occCDT ≤ C_D`; hence `hpre` at every child prefix (`pre_of`).
+children) under the THR printer floor `occCDT ≤ C_D`; hence `hpre` at every child prefix (the `pre_of`).
 
 * `Qp_eq_thr`, `dig_pos`, `m_eq_thr`, `m_le_thr`, `thrF`, **`thr_hmf`**, **`thrBatchFacts`**, `thrT_le2`, `A1T`,
   **`lenV_thr`**, **`hqd_thr`**, **`coef_thr`**, `occCDT`, **`occ_thr`**, **`hpre_thr`**, **`thrHcf`**.
@@ -93,7 +108,7 @@ theorem m_le_thr (c : SymC) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : 
   have e2 : 16 * ((10 * CallIndex.algX l + 32) * L) = 16 * (10 * CallIndex.algX l + 32) * L := by ring
   omega
 
-/-- The THR rows' factor counts by row position (`thr_rows_factors`). -/
+/-- The THR rows' factor counts by row position (the `thr_rows_factors`). -/
 noncomputable def thrF (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ}
     (Cs : Fin a' → NormalizedThresholdThresholdCircuit n) (carriers : List (Carrier n))
     (hs : (callInputs l F kclk coef A a ha).StarAt n) : ℕ → ℕ :=
@@ -228,3 +243,5 @@ theorem lenV_thr (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ} (ha' :
 end Gate
 
 end NearCubicWires.WireExponent3_5.PrimAsm.ThrSide
+
+end

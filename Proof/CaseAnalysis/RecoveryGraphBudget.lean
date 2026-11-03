@@ -1,5 +1,6 @@
 import Proof.CaseAnalysis.RecoveryGraphSerializeRun
 import Proof.CaseAnalysis.RecoveryGraphSupport
+import Proof.Circuits.DecompositionSourceBounds
 
 /-! Resource applications for the same original graph and cold serializer.
 The formula byte bound is a projection of its paid ordinary producer. -/

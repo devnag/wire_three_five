@@ -23,6 +23,9 @@ variable (a :DecompositionAlgorithm) (r :FourfoldRequest NormalizedThresholdThre
  (four :r.circuits.length ≤ 4) (sel :ThresholdRows.Selection a r) (I :Finset (Fin r.q)) (x :BitInput r.q)
  {cutoff :Nat} (prime :PrimeIndex cutoff) (o :Fin prime.val) (T L target w F U v C P :Nat)
 
+def budget:=((PCJ45bee56da9f34d5a_NativeFamilyFlags.budget 1 r.q L target
+ (PCJ45bee56da9f34d5a_NativeFlagsMeaning.circuits r).length T+1+((4*P+27)+1+(6*U+10*w+28)))+1+(2*U+6))+1+
+ FinalPrimeThresholdRow.rowFuel w (PCJ45bee56da9f34d5a_StreamCompare.count a r sel I x)
 def input:=PCJ45bee56da9f34d5a_StreamCompare.bank w
  (PCJ45bee56da9f34d5a_StreamPair.input a r four sel I x T L target prime.val w F U v o.val)
 

@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoveryUniversalNodeRun
+import Proof.MachineModel.OrdinaryMatrixScoreSkipFields
 
 /-! The original table's prior-count driver locates the end of its actual
 framed live-reference stream. Reuse the checked counted field scanner;

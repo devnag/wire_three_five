@@ -1,3 +1,4 @@
+import Proof.MachineModel.BoundedOracleStructuralSelectiveProgram
 import Proof.MachineModel.TotalSelectiveVerifierRowProgram
 
 /-!

@@ -1,5 +1,6 @@
-import Proof.Amplification.RecoveryTseitinRawIncrement
 import Proof.Supplier.RowCoordinateIncrement
+import Proof.Amplification.RecoveryEraseWidth
+import Proof.Amplification.RecoveryTseitinRawIncrement
 
 /-! The retained degree template advances using the existing unary scan.
 The two head moves are actual transitions, so the source template returns

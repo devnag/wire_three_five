@@ -14,5 +14,10 @@ open PCJc4297ab269d8423a_Source
 open PCJ6e421fabe2aa4155_SourceClear (join)
 noncomputable section
 
+def prepend {mask : MaskProducer} {selector : CyclicChoice.Laws}
+    {a : DecompositionAlgorithm} {packet : PacketWriter selector a} {U s : Nat}
+    (c : MaskSeedCode mask packet U) (p : Machine U s) : MaskSeedCode mask packet U :=
+  { c with prefixStates := _, lead := Composition.machine p c.lead }
+
 end
 end PCJ6e421fabe2aa4155_SourceRefill

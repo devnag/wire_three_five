@@ -14,5 +14,6 @@ set_option warningAsError true
 noncomputable def decisionTail (lower : Bool) := Composition.machine clearProgram (decisionProgram lower)
 noncomputable def machine (lower : Bool) (k : ℕ) (q : ℚ) :=
   Composition.machine (constantsProgram k q) (decisionTail lower)
+def budget (b k : ℕ) := CompetitorThresholdConstants.budget b k+2*capacity b+2000*(b+1)^2+6
 
 end NearCubicWires.RepairOrdinary.CompetitorThresholdAmbient

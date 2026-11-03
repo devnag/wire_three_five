@@ -1,6 +1,8 @@
+import Proof.MachineModel.CanonicalBalancedValidationMapProgram
+import Proof.Circuits.CanonicalForkCall
+import Proof.Circuits.CanonicalRoundCall
 import Proof.Amplification.RecoveryLimitsComputableFamily
 import Proof.Amplification.RecoveryVerifierResourceEnvelope
-import Proof.Circuits.CanonicalRoundCall
 
 namespace NearCubicWires.ValidatorPolynomialDomination
 
@@ -58,6 +60,13 @@ theorem PolyBounded.mono
     (h : PolyBounded value measure coefficient degree)
     (hle : value' ≤ value) :
     PolyBounded value' measure coefficient degree := hle.trans h
+
+theorem PolyBounded.coefficient_mono
+    {value measure coefficient coefficient' degree : ℕ}
+    (h : PolyBounded value measure coefficient degree)
+    (hle : coefficient ≤ coefficient') :
+    PolyBounded value measure coefficient' degree :=
+  h.trans (Nat.mul_le_mul_right _ hle)
 
 theorem PolyBounded.degree_mono
     {value measure coefficient degree degree' : ℕ}

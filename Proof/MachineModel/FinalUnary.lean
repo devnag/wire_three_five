@@ -1,4 +1,5 @@
 import Proof.MachineModel.OccurrenceRun
+import Proof.MachineModel.UWalkUnary
 
 /-! Reuse the checked unary copier at a retained head-one template. Both
 one-cell positioning moves are paid; zero uses the same construction. -/

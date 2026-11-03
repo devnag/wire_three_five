@@ -1,5 +1,6 @@
-import Proof.Hierarchy.CompetitorRawScalarEmit
 import Proof.PCP.PCPPQueryField
+import Proof.Hierarchy.CompetitorRawScalarEmit
+import Proof.MachineModel.OrdinaryWilliamsSourceCropLayout
 
 /-! The exact source-request word copies the actual native arity field and
 appends the raw bits of the physically produced canonical circuit frame. -/

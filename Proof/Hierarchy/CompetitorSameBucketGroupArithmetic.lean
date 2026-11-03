@@ -1,4 +1,5 @@
 import Proof.Hierarchy.CompetitorSameBucketGroupArithmeticMap
+import Proof.Hierarchy.HierarchyBinaryMultiplyEntry
 
 /-! One complete reusable natural accumulator update for either sign bank:
 widen the actual magnitude, execute binary add/copyback, then erase only

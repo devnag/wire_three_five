@@ -1,5 +1,5 @@
-import Proof.Amplification.RecoveryPCPFormulaResumeProofSource
 import Proof.MachineModel.OrdinaryAmplifierReplay
+import Proof.Amplification.RecoveryPCPFormulaResumeProofSource
 
 /-! Execute the selected schedule amplifier and physically reset its exact
 framed output for the enclosing recovery graph. -/

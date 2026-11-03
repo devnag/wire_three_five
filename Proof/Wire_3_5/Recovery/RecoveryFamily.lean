@@ -1,5 +1,6 @@
+import Proof.Wire_3_5.Transfer.TransferUnionCompleteBase
+import Proof.Wire_3_5.Stars.StarCarrier
 import Proof.CaseAnalysis.SampledWitness
-import Proof.Wire_3_5.Transfer.TransferUnionComplete
 
 /-! # The occurrence-averaged approximate sum as the union's atom family (P3:3715-3724; D1.1)
 

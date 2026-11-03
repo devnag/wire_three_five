@@ -1,5 +1,7 @@
 import Proof.MachineModel.CanonicalBoolListValidationProgram
 import Proof.MachineModel.CanonicalIntListValidationProgram
+import Proof.MachineModel.CanonicalTaggedTupleProgram
+import Proof.MachineModel.PreserveRightProgram
 
 /-!
 # Canonical supported-gate validation

@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CaseTwoScalars
+import Proof.Hierarchy.HierarchyFixedWord
 
 /-! Pay for the larger rewind-log driver and the fixed tag width after
 the original R/B capacity fields. No initialized workspace is assumed. -/

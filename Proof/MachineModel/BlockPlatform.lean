@@ -1,3 +1,4 @@
+import Proof.MachineModel.Runs
 import Proof.MachineModel.Layout
 
 /-! # Block: a machine bundled with its banks and its cost.
@@ -76,13 +77,6 @@ def seq (b c : Block t) (hH : b.exitH = c.entryH) (hA : b.exitA = c.entryA) : Bl
 @[simp] theorem seq_exitA (b c : Block t) (hH : b.exitH = c.entryH) (hA : b.exitA = c.entryA) :
     (seq b c hH hA).exitA = c.exitA := rfl
 
-/-- Weaken the cost to whatever the consumer's budget actually is. Stating the
-final budget once here is what removes the per-junction `omega` reassociation. -/
-def upto (b : Block t) (n : ℕ) (h : b.cost ≤ n) : Block t :=
-  { b with cost := n, run := b.run.enlarge h }
-
-@[simp] theorem upto_cost (b : Block t) (n : ℕ) (h : b.cost ≤ n) : (upto b n h).cost = n := rfl
-
 /-- Retained false backing on every tape, at once. -/
 def padded (b : Block t) (cap : Fin t → ℕ) : Block t :=
   { b with entryA := fun i => ZeroPadding.pad (cap i) (b.entryA i),
@@ -115,18 +109,6 @@ exactly what a caller's loop hypothesis needs in order to reuse a body. -/
     (hi : Function.Injective slots) (H : Fin u → ℕ) (A : Fin u → List Bool)
     (hH : ∀ j, H (slots j) = b.entryH j) (hA : ∀ j, A (slots j) = b.entryA j) :
     (focusedInto b slots hi H A hH hA).cost = b.cost := rfl
-
-/-- A three-stage chain, to show the seams and the cost compose without any
-per-junction arithmetic beyond one final `upto`. -/
-def seq₃ (a b c : Block t)
-    (h₁H : a.exitH = b.entryH) (h₁A : a.exitA = b.entryA)
-    (h₂H : b.exitH = c.entryH) (h₂A : b.exitA = c.entryA) : Block t :=
-  seq (seq a b h₁H h₁A) c h₂H h₂A
-
-@[simp] theorem seq₃_cost (a b c : Block t)
-    (h₁H : a.exitH = b.entryH) (h₁A : a.exitA = b.entryA)
-    (h₂H : b.exitH = c.entryH) (h₂A : b.exitA = c.entryA) :
-    (seq₃ a b c h₁H h₁A h₂H h₂A).cost = a.cost + 1 + b.cost + 1 + c.cost := rfl
 
 end
 end NearCubicWires.BlockPlatform

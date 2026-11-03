@@ -1,5 +1,5 @@
-import Proof.PCP.PCPPNativeCircuitNodes
 import Proof.PCP.PCPPNativeNodeNotRetained
+import Proof.PCP.PCPPNativeCircuitNodes
 import Proof.PCP.PCPPNativeRequestSchema
 
 /-! Exact retained projection-row cache and the literal two-node output

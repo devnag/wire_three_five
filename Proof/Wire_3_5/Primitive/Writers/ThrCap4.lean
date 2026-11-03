@@ -1,9 +1,22 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.ThrCap3
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.HashFam
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.C4GateThrB
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.ThrCap4Base
 
-/-! # c4 THR block, piece 3 part 4: the THR numbers machine and the hash bits' program at the capacity v2
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2 c4 THR block, piece 3 part 4: the THR numbers machine and the hash bits' program at the capacity v2
 
 P3:2929-2941, 3011-3016 (the THR stage's thirty-nine words at the call's `Q`, `ℓ`, `n_T`, `dRow` and the free numbers),
-P3:2331-2333 (the fixed hash's bits, read off the THR input), (the capacity `2·2^{⌊n/8⌋ + C} + 2`): from the fits
+P3:2331-2333 (the fixed hash's bits, read off the THR input), #153 (the capacity `2·2^{⌊n/8⌋ + C} + 2`): from the fits
 (`ThrFitAt`), the THR numbers machine's run `ThrBig` (`bigT_spec` at the call's own numbers, through `thrX_eq`,
 `thrQ_link`, `thrNT_link`, `dRow_link`) and the hash bits' program's run (`hbX_spec`, its steps kept); at every THR call
 of the gate once `C ≥ C₀` (`thr_fits2`).
@@ -24,11 +37,6 @@ open NearCubicWires.WireExponent3_5.PrimAsm.ThrFam NearCubicWires.WireExponent3_
 open NearCubicWires.WireExponent3_5.PrimAsm.SymLayout
 open NearCubicWires.RepairOrdinary.Streaming (marks)
 open NearCubicWires.WireExponent3_5.PrimT
-
-/-- The THR numbers machine's step bound (`bigT_spec`'s). -/
-def thrBigCost (cap n a nc Kb fc : ℕ) : ℕ :=
-  ThrNums.numsTCost cap n a nc Kb + 1 + (400 * UnaryPow.sq cap + 1 + (fc + 1 + (200 * UnaryPow.sq cap + 1 +
-    400 * UnaryPow.sq cap)))
 
 section At
 variable (l : Literals) (F : GateFree l) (Fp : FreeProg) (kclk coef A a0 : ℕ) (ha0 : a0 ≤ kclk + 1) {n a : ℕ}
@@ -157,3 +165,5 @@ theorem thr_hxe_at (hcall : (callInputs l F kclk coef A a0 ha0).Call (thrReq n a
 end At
 
 end NearCubicWires.WireExponent3_5.PrimAsm.ThrCap
+
+end

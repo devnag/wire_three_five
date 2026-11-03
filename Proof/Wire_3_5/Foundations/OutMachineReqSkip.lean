@@ -1,4 +1,5 @@
-import Proof.Wire_3_5.Foundations.OutMachineSlot1W
+import Proof.Wire_3_5.Foundations.OutMachineSlot1WBase
+import Proof.Wire_3_5.Primitive.Writers.ParseNat
 
 /-! # The request word's frame boundary: skipping `r.word` inside a marked input
 

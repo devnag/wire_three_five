@@ -1038,6 +1038,10 @@ def decodeBooleanCircuit
   (decodeBooleanCircuitCandidate n code).bind fun circuit =>
     if encodeBooleanCircuit circuit = code then some circuit else none
 
+@[simp] theorem decodeBooleanCircuit_zero (n : ℕ) :
+    decodeBooleanCircuit n 0 = none := by
+  rfl
+
 theorem encodeBooleanCircuit_of_decode
     {n code : ℕ} {circuit : BooleanCircuit n}
     (hdecode : decodeBooleanCircuit n code = some circuit) :
@@ -1107,6 +1111,24 @@ def decodeCanonicalRational (code : ℕ) : Option ℚ :=
     if encodeCanonicalRational coefficient = code then
       some coefficient
     else none
+
+theorem encodeCanonicalRational_of_decode
+    {code : ℕ} {coefficient : ℚ}
+    (hdecode : decodeCanonicalRational code = some coefficient) :
+    encodeCanonicalRational coefficient = code := by
+  unfold decodeCanonicalRational at hdecode
+  generalize hcandidate :
+    decodeCanonicalRationalCandidate code = candidate at hdecode
+  cases candidate with
+  | none => simp at hdecode
+  | some decoded =>
+      simp only [Option.bind_some] at hdecode
+      split at hdecode
+      · rename_i hcanonical
+        simp only [Option.some.injEq] at hdecode
+        subst decoded
+        exact hcanonical
+      · simp at hdecode
 
 theorem decodeCanonicalRational_encode (coefficient : ℚ) :
     decodeCanonicalRational (encodeCanonicalRational coefficient) =
@@ -1307,6 +1329,31 @@ def decodeLegalCircuitSum
   (decodeLegalCircuitSumCandidate codec wires description limits code).bind
     fun checked =>
       if checked.code codec = code then some checked else none
+
+theorem CheckedLegalCircuitSum.code_of_decode
+    {Circuit : CircuitFamily}
+    {codec : CanonicalCircuitCodec Circuit}
+    {wires description : {n : ℕ} → Circuit n → ℕ}
+    {limits : LegalSumLimits} {code : ℕ}
+    {checked : CheckedLegalCircuitSum Circuit wires description limits}
+    (hdecode :
+      decodeLegalCircuitSum codec wires description limits code =
+        some checked) :
+    checked.code codec = code := by
+  unfold decodeLegalCircuitSum at hdecode
+  generalize hcandidate :
+    decodeLegalCircuitSumCandidate codec wires description limits code =
+      candidate at hdecode
+  cases candidate with
+  | none => simp at hdecode
+  | some decoded =>
+      simp only [Option.bind_some] at hdecode
+      split at hdecode
+      · rename_i hcanonical
+        simp only [Option.some.injEq] at hdecode
+        subst decoded
+        exact hcanonical
+      · simp at hdecode
 
 private theorem checkedLegalCircuitSum_ext
     {Circuit : CircuitFamily}

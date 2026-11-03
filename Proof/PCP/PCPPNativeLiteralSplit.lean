@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeClauseBlock
+import Proof.MachineModel.OrdinaryRewindWorkspace
 
 /-! Split the actual compact literal code 2*j+negative into its raw index
 and sign. This is parity on the original code, never Nat.unpair decoding. -/

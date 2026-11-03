@@ -1,4 +1,5 @@
 import Proof.Circuits.InverseSubstitutionRequestTail
+import Proof.MachineModel.RuntimeCaseTwoCircuitEncodingClosure
 import Proof.MachineModel.RuntimeCaseTwoDescriptionFrameAdapter
 
 /-!

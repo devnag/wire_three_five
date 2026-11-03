@@ -1,6 +1,7 @@
 import Proof.Circuits.BoundedOracleStructuralCircuit
 import Proof.Circuits.CanonicalBalancedCall
 import Proof.MachineModel.GeneratedBalancedRangeProgram
+import Proof.MachineModel.PreserveRightProgram
 import Proof.MachineModel.ProjectionRunnerAtomProgram
 
 /-!

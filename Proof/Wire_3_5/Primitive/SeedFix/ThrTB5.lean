@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.Primitive.SeedFix.ThrTB4
+import Proof.Wire_3_5.Primitive.SeedFix.ThrTB4Base
 
 /-! # THRTAIL T-B, part 5: the unit side of the THR shell (the scrub capacity)
 

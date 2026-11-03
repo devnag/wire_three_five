@@ -1,4 +1,6 @@
+import Proof.MachineModel.RuntimeShape
 import Proof.Packets.BudgetJ5Loops
+import Proof.SourceAssembly.SourceBundle
 import Proof.SourceAssembly.SourceSkelTop
 
 section
@@ -22,6 +24,22 @@ attribute [local irreducible] P1TopDownPaidPayload.tapes WorkspaceSelectedAdmiss
 section atK
 
 end atK
+
+/-- S's site class, per parameter tuple: EXPONENTS (and the divisor and live scale) fixed before the hierarchy
+index, COEFFICIENTS at the index `k` (the type enforces the order of choices). -/
+structure SiteClassFam where
+  dS : (sources : EightSources) → (gamma : Real) → 0 < gamma → gamma < 1/2 → Parameters sources gamma → ℕ
+  hT : (sources : EightSources) → (gamma : Real) → 0 < gamma → gamma < 1/2 → Parameters sources gamma → ℕ
+  hS : (sources : EightSources) → (gamma : Real) → 0 < gamma → gamma < 1/2 → Parameters sources gamma → ℕ
+  m : (sources : EightSources) → (gamma : Real) → 0 < gamma → gamma < 1/2 → Parameters sources gamma → ℕ
+  L : (sources : EightSources) → (gamma : Real) → 0 < gamma → gamma < 1/2 → Parameters sources gamma → ℕ
+  cP : (sources : EightSources) → (gamma : Real) → 0 < gamma → gamma < 1/2 → Parameters sources gamma → ℕ → ℕ
+  cT : (sources : EightSources) → (gamma : Real) → 0 < gamma → gamma < 1/2 → Parameters sources gamma → ℕ → ℕ
+  cS : (sources : EightSources) → (gamma : Real) → 0 < gamma → gamma < 1/2 → Parameters sources gamma → ℕ → ℕ
+
+/-- The schedule exponent (chosen before `k`). -/
+abbrev rSel (sources : EightSources) {gamma : Real} (p : Parameters sources gamma) : ℕ :=
+  (CloseoutFinalC10ModeNativeSchedule.selected sources p 0).exponent
 
 section holes
 

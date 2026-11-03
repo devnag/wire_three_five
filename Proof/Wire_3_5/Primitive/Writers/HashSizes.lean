@@ -1,4 +1,6 @@
-import Proof.Wire_3_5.Primitive.Writers.BudgetIface
+import Proof.Wire_3_5.Primitive.Writers.PlanBase
+import Proof.Wire_3_5.Primitive.Writers.ThrDataIface3
+import Proof.Wire_3_5.UnionMachine.FiltSetupIface5
 
 /-! # (HASH (d4)), part 1: the aux filter's error exponent is `O(L²)`
 

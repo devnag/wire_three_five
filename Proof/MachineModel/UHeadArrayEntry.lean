@@ -1,4 +1,5 @@
 import Proof.MachineModel.UHeadArray
+import Proof.PCP.VerifierDecodingCap
 
 /-! Remove proof-only zero backing at head-array entry, while retaining the
 actual decoder-produced capped tape-count driver at head one. -/

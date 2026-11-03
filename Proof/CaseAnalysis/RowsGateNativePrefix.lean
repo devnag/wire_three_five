@@ -1,4 +1,8 @@
 import Proof.CaseAnalysis.RowsGateSupportCount
+import Proof.Supplier.EquationNaturalHeader
+import Proof.Supplier.EquationHeaderAppend
+import Proof.Supplier.EquationRowForward
+import Proof.Supplier.EquationRowCutsForward
 
 /-! The original count or the retained top's support supplies the actual
 native arity prefix. Both choices use existing paid counters and header

@@ -1,68 +1,64 @@
-import Proof.Wire_3_5.Recovery.HybridProgChoose
-import Proof.Wire_3_5.Recovery.HybridProgRuns
-import Proof.Wire_3_5.Assembly.FreeRecovery
+import Lean
+import Proof.Wire_3_5.Recovery.HybridLeaf
+import Proof.Wire_3_5.Recovery.RecoveryBudget
+import Proof.Wire_3_5.Stage35.Common
+import Proof.Wire_3_5.Stage35.KitMain
+import Proof.Wire_3_5.Stage35.ExecCost
 
-/-! # The hybrid slice is in `E^NP` (P3:3758-3759; D1.6 D)
 
-Realizes "The resulting slice is computable in `E^NP`. Run the fixed refuter [...] on the source length `N_{a(n)}`"
-(P3:3758-3759) for the recovered language of the hybrid route (`recLanguageCut2`): the hybrid program runs on
-every input length within `C·(2^n+1)^E` (`runs`, `exists_budget`), so base's `Closeout.certificate_of_runs` gives an
-ordinary `E^NP` certificate of its target (`certificate`, base's `CommonProgramCertificate` restated); with the onset
-above `2^{n₀}` the target is `recLanguageCut2` at cutoff = onset (`target_eq`); hence **`certGen`**: `CertGen l`, the
-residual of leaf R's checked plan (`Split.recoveryLeafF_of_certGen`).
+/-!
+# The recovered language is in `E^NP` (the recovery leaf's certificate)
 
-Paper quantity of the main type (`certGen`): the `E^NP` certificate of the recovered hybrid language. -/
+Paper v2, §H.6 "Exact lengths and canonical recovery": "The resulting slice is computable in `E^NP`. Run the fixed
+refuter to obtain `z`, and then make the case decision of §H.5 in three stages. Each stage is a SAT query of size
+`2^{O(q)}` followed by prefix self-reduction […] No formula contains the algorithm `A_G`. […] Since `q = O(n)`, this is
+`2^{O(n)}` overall." (stages in the near-cubic-wires order: source circuit, first accepted oracle `O*`, proof circuit
+with `O_{B_pf} = O*`).
+
+At the literals `l`: the composed program (`NearCubicGates.Close.Recovery3.Common.existsCertificate` at `ws l`: this
+proof's scan prefix and the after-prefix program) with the Case-2 kit (`Stage35.KitMain.kit_of`: the Case-2
+execution with the XOR schedule `t(q)+1`, the clause bound at `d_G` from `clauseBits_le`). The execution's cost class
+(`ExecCost.FoldNeedCap`, `ExecCost.HtwoCostPoly`) is the input `CostAt l`.
+
+* `certGen_of_cost : CostAt l → Split.CertGen l`, `costAt l : CostAt l` (`Stage35.ExecCost`), and
+  **`certGen : ∀ l, Split.CertGen l`**.
+-/
 
 set_option autoImplicit false
 
+
 namespace NearCubicWires.RepairSource.HybridProgram
-open LocalBitMultitape RepairOrdinary SourceInterfaces CloseoutLanguage
+open _root_.NearCubicWires _root_.NearCubicWires.RepairSource _root_.NearCubicWires.RepairOrdinary
 open NearCubicWires.WireExponent3_5 NearCubicWires.WireExponent3_5.Transfer
-noncomputable section
+open _root_.NearCubicWires.WireExponent3_5.Transfer (zu zv)
 
-/-- **One ordinary `E^NP` certificate of the hybrid program's target** (base's `certificate`). -/
-theorem certificate (p : Parameters) (M : OrdinaryWeakMachine) (c : Constants) (sup : Suppliers p M c) :
-    Nonempty (OrdinaryENPCertificate RecoveryOracle.correctedSat (target p M)) := by
-  obtain ⟨C, E, h⟩ := exists_budget p c
-  refine ⟨Closeout.certificate_of_runs (target p M) (program p) C E ?_⟩
-  intro n point
-  have hb := h (List.ofFn point)
-  simp only [List.length_ofFn] at hb
-  exact (runs p M c sup n point).enlarge hb
+/-- The Case-2 execution's cost class at the literals `l` (the budget statements of `Stage35.ExecCostSpec`). -/
+def CostAt (l : Literals) : Prop :=
+  Stage35.ExecCost.FoldNeedCap (gateMW l) (gateSV l) (gatePCPP l) (oracleDeg l) (recDG l) ∧
+  ∀ e1 e2 e3 e4 : ℕ, Stage35.ExecCost.HtwoCostPoly (gateMW l) (gateSV l) (gatePCPP l) (oracleDeg l) (recDG l) kclk
+    (gateApad l) (zu (gateCParams1 l).ζ) (zv (gateCParams1 l).ζ) e1 e2 e3 e4
 
-theorem sliceIdx_le (l : Literals) (G : Split.Gate) (kclk n : ℕ) :
-    sliceIdx (gateZeta_pos l) (gateZeta_lt l) kclk G.Apad (recDG l) n ≤ n := by
-  rw [sliceIdx_eq]
-  exact Nat.findGreatest_le n
+theorem recDG_pos (l : Literals) : 1 ≤ recDG l := by unfold recDG; omega
 
-/-- **The target is the recovered language** at cutoff = onset, once the onset is above `2^{n₀}`. -/
-theorem target_eq (p : Parameters) (M : OrdinaryWeakMachine) (n₀ : ℕ) (h2 : 2 ^ n₀ ≤ p.onset)
-    (hn₀ : ∀ n, n₀ ≤ n → index p n = sliceIdx (gateZeta_pos p.l) (gateZeta_lt p.l) p.kclk p.G.Apad (recDG p.l) n) :
-    recLanguageCut2 p.l p.G p.kclk M p.onset = target p M := by
-  funext n x
-  rw [recLanguageCut2_eq]
-  by_cases hn : n₀ ≤ n
-  · rw [← hn₀ n hn]
-    rfl
-  · have hi : index p n < n₀ := lt_of_le_of_lt (CertPrefix.prefixS_le _ _ _ _ _ n) (by omega)
-    have hs : sliceIdx (gateZeta_pos p.l) (gateZeta_lt p.l) p.kclk p.G.Apad (recDG p.l) n < n₀ :=
-      lt_of_le_of_lt (sliceIdx_le p.l p.G p.kclk n) (by omega)
-    have hpi : 2 ^ index p n < 2 ^ n₀ := Nat.pow_lt_pow_right (by norm_num) hi
-    have hps : 2 ^ sliceIdx (gateZeta_pos p.l) (gateZeta_lt p.l) p.kclk p.G.Apad (recDG p.l) n < 2 ^ n₀ :=
-      Nat.pow_lt_pow_right (by norm_num) hs
-    rw [if_neg (by omega), inactive_target p M n x (by unfold length; omega)]
+/-- **D1.6 from the cost class**: the recovered language is in `E^NP` at every weak machine within `o(N^{kclk+2})`. -/
+theorem certGen_of_cost (l : Literals) (hc : CostAt l) : Split.CertGen l := by
+  intro M hM
+  have hkit := Stage35.KitMain.kit_of (gateMW l) (gateSV l) (gatePCPP l)
+    l.eightSources.amplification.schedule (recDG l)
+    (gateZeta_pos l) (gateZeta_lt l) (recDG_pos l) (clauseBits_le l) hc.1 hc.2
+  obtain ⟨kit⟩ := hkit
+  obtain ⟨onset, -, hcert⟩ := NearCubicGates.Close.Recovery3.Common.existsCertificate (ws l) (gatePCPP l)
+    l.eightSources.amplification.schedule (recDG l) (gateZeta_pos l) (gateZeta_lt l) (recDG_pos l) kit 0 M hM
+  exact ⟨onset, hcert⟩
 
-/-- **D1.6: `CertGen l`**, the residual of leaf R's plan. -/
-theorem certGen (l : Literals) : Split.CertGen l := by
-  intro kclk M hM
-  have hApad : (gateSource l).degrees.proofLog + 6 ≤ (Split.gate0 l (Split.freeSat l)).Apad := le_rfl
-  obtain ⟨e1, e2, e3, f1, f2, f3, f4, onset, Aw, Bw, Aq, Bq, refuter, c, ⟨n₀, h2, hn₀⟩, sup⟩ :=
-    choose l (Split.gate0 l (Split.freeSat l)) hApad kclk M hM
-  refine ⟨onset, ?_⟩
-  have e := target_eq ⟨l, Split.gate0 l (Split.freeSat l), kclk, 0, e1, e2, e3, f1, f2, f3, f4, onset, Aw, Bw, Aq, Bq,
-    refuter⟩ M n₀ h2 hn₀
-  exact e ▸ certificate _ M c sup
+/-- The cost class holds at every literal set (`Stage35.ExecCost`). -/
+theorem costAt (l : Literals) : CostAt l :=
+  ⟨Stage35.ExecCost.foldNeedCap _ _ _ _ _,
+    fun e1 e2 e3 e4 => Stage35.ExecCost.htwoCostPoly _ _ _ _ _ _ _ _ _ e1 e2 e3 e4⟩
 
-end
+/-- **`CertGen l`**, the recovery leaf's certificate: the recovered language is in `E^NP` at every weak machine within
+`o(N^{kclk+2})`. -/
+theorem certGen (l : Literals) : Split.CertGen l := certGen_of_cost l (costAt l)
 
 end NearCubicWires.RepairSource.HybridProgram
+

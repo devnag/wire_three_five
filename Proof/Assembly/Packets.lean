@@ -1,4 +1,9 @@
 import Proof.Assembly.LiveRows
+import Proof.MachineModel.ClosureBinaryRequest
+import Proof.MachineModel.ClosureCompactFamily
+import Proof.MachineModel.ClosureBinaryPool
+import Proof.CaseAnalysis.FinalModeNativeStageFields
+
 set_option autoImplicit false
 set_option maxHeartbeats 4000000
 set_option maxRecDepth 120000
@@ -84,6 +89,12 @@ def thrFamily (a : DecompositionAlgorithm)
               (C10SupplierRowInput.joinInput I (fun _ => false) z)
               (ThresholdRows.equation a r sel) p.val = offset.val) }))))⟩
 
+def request (sources : EightSources) (L target : Nat) (mode : Bool)
+    {q : Nat} {circuit : BooleanCircuit q} {pcpp : PointwisePCPP circuit}
+    (atoms : List (C10TotalDecode.Atom pcpp)) : Family q L :=
+  if mode then symFamily ⟨q, atoms.map C10NaturalModeAtoms.nativeSymmetricAtom⟩ L target
+  else thrFamily (decompositionOf sources) ⟨q, atoms.map C10NaturalModeAtoms.nativeThresholdAtom⟩ L target
+
 abbrev live {q L : Nat} (F : Family q L) := CyclicChoice.live F.occurrences L
 abbrev residual {q L : Nat} (_F : Family q L) := q - normalizedLiveCount q L
 
@@ -138,6 +149,16 @@ def PacketFacts {q L : Nat} (a : DecompositionAlgorithm) (F : Family q L) (g : G
         (LiveRows.residualAssignment F.occurrences (live F)
           (C10SupplierRowInput.joinInput (live F) (BinaryPool.assignmentAt (live F) yi.val)
             (C10SupplierRowInput.residualPoint (live F) (residual F) g.arity x))) r.reference)
+
+/-- The exact normalization, lowering and finite-pool packet theorem consumed below. -/
+def CompilerLaws : Prop :=
+  ∀ (sources : EightSources) (L target : Nat) (mode : Bool)
+    {q : Nat} {circuit : BooleanCircuit q} {pcpp : PointwisePCPP circuit}
+    (atoms : List (C10TotalDecode.Atom pcpp))
+    (g : Geometry (request sources L target mode atoms))
+    (r : Row (request sources L target mode atoms).occurrences L),
+    r ∈ (request sources L target mode atoms).rows →
+      PacketFacts (decompositionOf sources) (request sources L target mode atoms) g r
 
 end
 end Packets

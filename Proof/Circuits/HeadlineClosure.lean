@@ -1,9 +1,10 @@
-import Proof.Foundations.AsymptoticAdapters
 import Proof.Foundations.CanonicalEncodedListLengthProgram
 import Proof.Foundations.ExecutableProgramTightRefuterSource
 import Proof.Foundations.OperationalWilliamsSourceCore
-import Proof.Foundations.RecoveryPipeline
 import Proof.Foundations.TseitinCNF
+import Proof.Foundations.VerifiedLinker
+import Proof.Foundations.RecoveryPipeline
+import Proof.Foundations.AsymptoticAdapters
 
 /-!
 # Closed-form adapters from recovered per-class facts to the exact headlines

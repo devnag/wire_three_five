@@ -1,4 +1,5 @@
 import Proof.PCP.ProjectionNormalizationStreamBounds
+import Proof.MachineModel.OrdinaryWilliamsInputHeader
 
 /-! A reusable physical parser for the unary-length natural fields in the
 explicit PCPP object. It copies or skips one complete field, retaining the

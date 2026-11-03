@@ -1,15 +1,31 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.C4HkJ
 import Proof.Wire_3_5.Primitive.Writers.HashSetH2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.HashFree
+import Proof.Wire_3_5.FinalPass.HashFree2
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.C3ReqIface3
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTypes
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.HashSetH2Base
+import Proof.Wire_3_5.Primitive.SeedFix.C4HkJBase
 
-/-! # The HASH part of C4Leaf ((A)): the HASH setup docked into the HASH stage at a THR call
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # The HASH part of C4Leaf (#196, (A)): the HASH setup docked into the HASH stage at a THR call
 
 P3:3011-3016 (the HASH stage: its setup, the loop over the hash seed's bits, the finisher), P3:2327-2336 (the greedy
 choice prints the fixed hash's bits), P3:3105-3115 (the stage within the seed-fixing budget `c₄·seedClasses E₄`).
-The HASH setup (`HashSetH.setupH_run`) ends in `HBank2`; the uniform HASH stage
+The HASH setup (`HashSetH.setupH_run`) ends in the `HBank2`; the uniform HASH stage
 (`C4Hk.hash_call_run`) runs from any such setup run. **`hash_at_call`** composes them at a THR call, given:
 * **`HashSideAt`** (the setup's side conditions at the call: the THR fit, the HASH fits `HashFitX`, `TF2Ok`, the
   numbers machine's need, the cell's `CellFit`, and the call facts);
-* **`HashStepsAt`** (**(C)**, `hash_steps_gen`: the stage's steps, with the setup's explicit cost `hashC0`,
+* **`HashStepsAt`** (**(C)**, the `hash_steps_gen`: the stage's steps, with the setup's explicit cost `hashC0`,
   within `c₄·seedClasses E₄`);
 * the data facts (as in the THR leaf), the three stage contracts (`DataRerun`, `KwDock`, `QCopy`), the C3 writer.
 
@@ -55,3 +71,5 @@ noncomputable def hashStageH : SeedFixTypes.Stage3 :=
 end Call
 
 end NearCubicWires.WireExponent3_5.PrimT.C4HL
+
+end

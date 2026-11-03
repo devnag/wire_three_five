@@ -1,4 +1,24 @@
-import Proof.Wire_3_5.UnionMachine.NumsA6
+import Lean
+import Proof.Wire_3_5.UnionMachine.NumsA6Base
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.FpInLen
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Primitive.Writers.HashFam
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.C4GateSymB
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.NumsA3
+import Proof.Wire_3_5.UnionMachine.NumsA4
+import Proof.Wire_3_5.UnionMachine.NumsA13Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # NW phase (a), part 13 (build once): the SYM numbers' full register export
 
@@ -27,7 +47,6 @@ open NearCubicWires.WireExponent3_5.FinalPass.Tm NearCubicWires.WireExponent3_5.
 open NearCubicWires.WireExponent3_5.FinalPass.PlanFP
 
 section Vec
-
 
 end Vec
 
@@ -58,13 +77,6 @@ theorem ident_flat : 2 ^ FlatNums.fbv (SymDec.cyOf Cs).sum
   SymDec.fbv_eq_nFlat (callInputs l F kclk coef A a ha) Cs carriers _ rfl rfl
 
 end Ident
-
-/-- `dM_j = |symGates C_j|` below `a`. -/
-theorem cy_getD_len {n a' : ℕ} (Cs : Fin a' → NormalizedSymmetricThresholdCircuit n) (j : ℕ) (h : j < a') :
-    (SymDec.cyOf Cs).getD j 0 = (Stars.symGates (Cs ⟨j, h⟩)).length := by
-  unfold SymDec.cyOf
-  rw [List.getD_eq_getElem _ _ (by simpa using h)]
-  simp
 
 /-- **The SYM numbers at a SYM request, the full register export** (`x = 0` bank, at `cap₀ ≥ K₀·X^{D₀}`). -/
 theorem numsAtG {n a' : ℕ} (ha' : a' ≤ 4) (Cs : Fin a' → NormalizedSymmetricThresholdCircuit n)
@@ -299,3 +311,5 @@ theorem numsBankG (x : ℕ) {n a' : ℕ} (ha' : a' ≤ 4) (Cs : Fin a' → Norma
 end Gate
 
 end NearCubicWires.WireExponent3_5.UnionMachine.NumsA
+
+end

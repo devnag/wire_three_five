@@ -31,5 +31,28 @@ structure WorkerData where
   onset : ℕ
   passed : (n : ℕ) → BitInput n → List Bool → Bool
 
+variable (sources : EightSources) {gamma : ℝ} (p : Parameters sources gamma) (W : WorkerData)
+
+/-- Exactly the header/oracle/size/typed-family premises of the existing pinned
+completeness bridges, with their fixed cap1. No semantic [0,1] condition. -/
+def LegalWitness (n : ℕ) (x : BitInput n) (bits : List Bool) : Prop :=
+  16*bits.length ≤ n ∧ CompetitorWitnessTriple.headerValid bits ∧
+  ∃ oracle : BooleanCircuit ((outer sources W.k W.clock).result.pcp.nativeWidth n),
+    decodeBooleanCircuit ((outer sources W.k W.clock).result.pcp.nativeWidth n)
+      (RadixSemantics.value (BoundedFields.oracle bits)) = some oracle ∧
+    oracle.size ≤ oracleSizeBound p.degree ((outer sources W.k W.clock).result.pcp.nativeWidth n) ∧
+    ((∃ family : SymFamily sources W.k W.clock p x oracle,
+        SumFamily.decode symmetricCircuitCodec NormalizedSymmetricThresholdCircuit.wireCount
+          NormalizedSymmetricThresholdCircuit.descriptionBits (symLimits sources W.k W.clock p x oracle)
+          (CloseoutWitnessPolicy.variableCount sources W.k W.clock x oracle)
+          (RadixSemantics.value (BoundedFields.family bits)) = some family ∧
+        BoundedFields.symmetric bits = true) ∨
+     (∃ family : ThrFamily sources W.k W.clock p x oracle,
+        SumFamily.decode thresholdCircuitCodec NormalizedThresholdThresholdCircuit.wireCount
+          NormalizedThresholdThresholdCircuit.descriptionBits (thrLimits sources W.k W.clock p x oracle)
+          (CloseoutWitnessPolicy.variableCount sources W.k W.clock x oracle)
+          (RadixSemantics.value (BoundedFields.family bits)) = some family ∧
+        BoundedFields.symmetric bits = false))
+
 end
 end NearCubicWires.RepairSource.CloseoutFinal.C10GuardedMachineConsumer

@@ -1,5 +1,6 @@
 import Proof.Supplier.RowCommonResources
-import Proof.Supplier.RowFieldPaddingAppend
+import Proof.PCP.ProjectionDimensionTemplate
+import Proof.Supplier.RowCommonBounds
 
 /-! Construct exactly the existing outer row capacity from its paid raw
 maximum occurrence count, common output width and native cache capacity.

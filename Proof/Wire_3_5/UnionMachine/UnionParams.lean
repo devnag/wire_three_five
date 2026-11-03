@@ -105,16 +105,4 @@ noncomputable def unionCompleteParams {cp sp : ℝ} (hsp : 0 ≤ sp) (ε : ℚ) 
 
 end Params
 
-/-- **Every PCPP gap has the masked verifier's constants** (soundness and completeness). -/
-theorem exists_unionParams {cp sp : ℝ} (hsp : 0 ≤ sp) (hgap : sp < cp) :
-    ∃ params : MaskedSoundnessParameters cp sp, Nonempty (MaskedCompletenessParameters params) := by
-  have hg : 0 < cp - sp := by linarith
-  obtain ⟨ε, hε0, hε⟩ := exists_rat_btwn (show (0 : ℝ) < min 1 ((cp - sp) / 1000) by positivity)
-  obtain ⟨τ, hτ1, hτ2⟩ := exists_rat_btwn (show (cp + sp) / 2 < (cp + sp) / 2 + (cp - sp) / 10 by linarith)
-  have hε0' : (0 : ℚ) < ε := by exact_mod_cast hε0
-  have hε1 : ε ≤ 1 := by have := lt_of_lt_of_le hε (min_le_left _ _); exact_mod_cast this.le
-  have hεg : (ε : ℝ) ≤ (cp - sp) / 1000 := (lt_of_lt_of_le hε (min_le_right _ _)).le
-  exact ⟨unionSoundParams hsp ε hε0' hε1 hεg τ hτ1.le,
-    ⟨unionCompleteParams hsp ε hε0' hε1 hεg τ hτ1.le hτ2.le⟩⟩
-
 end NearCubicWires.WireExponent3_5.Transfer

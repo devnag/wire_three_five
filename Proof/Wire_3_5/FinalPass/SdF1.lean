@@ -1,5 +1,5 @@
 import Proof.Wire_3_5.FinalPass.SdW1
-import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.CallIndexBase
 import Proof.Wire_3_5.FinalPass.ThrSz1
 
 /-! # S4 (the seeds phase), part 48: the star call's sizes, polynomial in `n` (P3:3170-3178)

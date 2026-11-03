@@ -1,4 +1,6 @@
 import Proof.Wire_3_5.UnionMachine.NumsC1
+import Proof.Wire_3_5.Primitive.Writers.NumsX
+import Proof.Wire_3_5.FinalPass.SdR10Base
 
 /-! # NW phase (c), part 2: the program `cProg` (n, the mode bit, `e = n − k`, `T_f`)
 

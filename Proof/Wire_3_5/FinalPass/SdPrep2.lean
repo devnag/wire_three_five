@@ -1,5 +1,7 @@
 import Proof.Wire_3_5.FinalPass.SdPrep1
 import Proof.Wire_3_5.FinalPass.TabDec2
+import Proof.Wire_3_5.FinalPass.HashTable
+import Proof.Wire_3_5.FinalPass.WordMap
 
 /-! # S4 (the seeds phase), part 24: the tables writer's request (P3:3170-3178)
 

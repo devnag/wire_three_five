@@ -1,4 +1,5 @@
-import Proof.Supplier.RowFieldPaddingAppend
+import Proof.Supplier.RowCommonBounds
+import Proof.MachineModel.OrdinaryWitnessCounterAdvance
 
 /-! The tuple enumerator advances a bounded binary cursor on four retained
 tapes. A real transition clears the previous continuation flag before the

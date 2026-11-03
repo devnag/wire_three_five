@@ -1,12 +1,29 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.ThrSide4
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.HashFam
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.ThrSide1
+import Proof.Wire_3_5.Primitive.Writers.ThrSide2
+import Proof.Wire_3_5.Primitive.Writers.ThrSide3
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.ThrSide5Base
 
-/-! # c4 THR block, piece 6 part 5: the THR free numbers and the enumeration's side conditions (`hok`)
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2 c4 THR block, piece 6 part 5: the THR free numbers and the enumeration's side conditions (`hok`)
 
 The THR twin of the SymFr3/SymCap3 at the THR call: the free numbers `freeVal2 (thrK2 c) (thrX …)` (`m =
 max(8·|carriers| + 16·τ₀, 8)`: the carrier rows have one factor, the RADIX row `2τ₀`, BShape5's
 `thr_rows_factors`), the requests' degree bound `thrDF c x = d_D(⌊√(B_T L)⌋ + L²)` (the paper's `d_T`,
 P3:3094-3100); at a THR call `n_T ≤ 2^{TWd}`, `Q ≥ 1`, `Q' ≤ pr`, `1 ≤ h`, and the enumeration's hypotheses at every
-child prefix (`EnumCap.enumOk_of`, the capacity `2^{⌊n/16⌋ + d_C L²}`) under the THR load floor.
+child prefix (the `EnumCap.enumOk_of`, the capacity `2^{⌊n/16⌋ + d_C L²}`) under the THR load floor.
 
 * **`thrK2`**, **`thrDF`**; `hnT_thr`, `hQ_thr`, `hQp_thr`, **`thrQ_of`**, **`thrHok`**.
 
@@ -23,12 +40,6 @@ open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.
 open NearCubicWires.WireExponent3_5.FinalPass.FreeGen
 open NearCubicWires.WireExponent3_5.FinalPass.SymFr (SymC symKn cK pow_N_le one_le_L n2_le_L kh_two cr_le_k
   pow_mono_mul k_le_L2)
-
-/-- **The THR constants**: `m = max(8·|carriers| + 16·τ₀, 8)` (the field `M` of `thrX` is the digit count `τ₀`). -/
-def thrK2 (c : SymC) : FreeK2 := ⟨⟨c.dT, c.dC, c.dQ, c.dH, 8, 0, 0, 0, 0, 16, c.dP, c.dA, c.dR⟩, c.eH, c.eP, 8⟩
-
-/-- **The THR requests' degree bound** `d_D(⌊√(B_T L)⌋ + L²)` (the paper's `d_T = C_D(√(B_T L) + L²)`). -/
-def thrDF (c : SymC) (x : FreeIn) : ℕ := c.dD * (Nat.sqrt (x.capS * β x) + β x * β x)
 
 section Gate
 variable (l : Literals) (F : GateFree l)
@@ -175,3 +186,5 @@ theorem thrHok (c : SymC) (hdT : 2 * eNT l F.filterErrDeg ≤ c.dT)
 end Gate
 
 end NearCubicWires.WireExponent3_5.PrimAsm.ThrSide
+
+end

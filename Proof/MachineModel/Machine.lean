@@ -37,6 +37,13 @@ def machine : Machine 5 7 where
       else ⟨0, ![none, none, none, none, some true], ![.stay, .right, .stay, .stay, .right]⟩)
     else none
 
+/-- Every configuration the producer visits. The output head is always at the
+end of the output and the count head at the end of the unary count. -/
+def cfg (q : Fin 7) (input : List Bool) (ih B th : ℕ) (scratch : List Bool) (sh : ℕ)
+    (out : List Bool) (count : ℕ) : Configuration 5 7 :=
+  ⟨q, ![ih, th, sh, out.length, count],
+    ![input, UnaryTemplate.tape B, scratch, out, List.replicate count true]⟩
+
 @[simp] theorem halted_six : machine.halted 6 = true := rfl
 
 /-! ## One transition per rule branch. Input reads are stated by the scanned bit. -/

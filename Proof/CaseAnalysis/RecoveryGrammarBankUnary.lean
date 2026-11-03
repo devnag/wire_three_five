@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CloseoutRecoveryGrammarBank
+import Proof.MachineModel.OrdinaryMatrixBucketRootPower
 
 /-! The physically reloaded prototype is exactly the original unary
 worker's padded input, including its original graph and actual count ports. -/

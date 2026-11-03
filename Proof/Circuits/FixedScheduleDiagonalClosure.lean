@@ -1,6 +1,6 @@
-import Proof.Circuits.FixedScheduleAtomLoop
 import Proof.MachineModel.BankAtomContextRegisters
 import Proof.MachineModel.BankFramedTargetChains
+import Proof.Circuits.FixedScheduleAtomLoop
 
 /-!
 # The fixed schedule's diagonal cluster, assembled

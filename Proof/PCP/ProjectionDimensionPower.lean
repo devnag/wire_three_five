@@ -1,5 +1,6 @@
-import Proof.Hierarchy.HierarchyWidth
 import Proof.MachineModel.OrdinaryMatrixDimensionBinary
+import Proof.MachineModel.OrdinaryWilliamsUnaryProduct
+import Proof.Hierarchy.HierarchyWidth
 
 /-! Fixed unary polynomial evaluation for dimensions polynomial in log T.
 The coefficient is printed by finite control; every multiplication and reset

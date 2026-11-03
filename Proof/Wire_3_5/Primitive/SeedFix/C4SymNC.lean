@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.Primitive.SeedFix.C4SymNB
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymNBBase
 import Proof.Wire_3_5.Primitive.SeedFix.C4SymLk
 import Proof.Wire_3_5.Primitive.SeedFix.C4SymKB2
 

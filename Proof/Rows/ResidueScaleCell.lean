@@ -1,7 +1,6 @@
-import Proof.Rows.CellGatePalette
-import Proof.Rows.HeaderRewind
 import Proof.Rows.ResidueProductBounds
-import Proof.Rows.TopChildCursor
+import Proof.Rows.TopFrameReentry
+import Proof.CaseAnalysis.RowsTouchingFrameStream
 
 /-! A reusable physical modular-product emitter. Resident short masters are
 copied into the product worker, the computed residue is appended in framed

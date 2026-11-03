@@ -1,4 +1,8 @@
 import Proof.Wire_3_5.Recovery.CertSchedule
+import Proof.MachineModel.UWalkArithmetic
+import Proof.MachineModel.ClockUnarySum
+import Proof.CaseAnalysis.ScheduleClog
+import Proof.Hierarchy.HierarchyBinaryPower
 
 /-! # The width `q(2^a)` computed by an ordinary machine (P3:3637-3640, 3738-3741; D1.6, the prefix stage)
 

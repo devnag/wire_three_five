@@ -1,3 +1,4 @@
+import Proof.Wire_3_5.Primitive.SeedFix.HashRefM
 import Proof.Wire_3_5.FinalPass.EnumCap6
 
 /-! # The HASH printed objective's shape: term count, coefficients, factors

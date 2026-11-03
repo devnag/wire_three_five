@@ -1,6 +1,7 @@
 import Proof.Wire_3_5.Filters.FilterKWise
-import Proof.Wire_3_5.Filters.GFExists
+import Proof.Wire_3_5.Filters.FilterGap
 import Proof.Wire_3_5.Lists.ListPoly
+import Proof.Wire_3_5.Filters.GFExists
 
 /-! # `filt:majorant` (P3:2121-2203): the concentrated count hash and its pointwise failure majorant
 

@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryMatrixBatchRankedGate
+import Proof.Amplification.RecoveryScratchErase
 
 /-! The first executed phase of the repeated raw-cut body. One physical D
 sweep clears all score, sort, packet and cut-bank work together, preserving

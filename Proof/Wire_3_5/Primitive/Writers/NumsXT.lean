@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.ThresholdWriter.Shell2
+import Proof.Wire_3_5.Primitive.Writers.SparseNum
 
 /-! # for THR (v2): the THR dimension stage at `mOfT KL P = mOf P + KL·L²`
 
@@ -59,5 +60,6 @@ theorem mOfT_eq (KL : ℕ) (P : Shared.StarParams) :
 
 /-- The stage's cost before the teardown. -/
 def numsStageCostT (n cr KL W : ℕ) : ℕ := 11 * W + 20 + 1 + 1 + 1 + numsCostT n cr KL W
+
 
 end NearCubicWires.WireExponent3_5.PrimAsm.NumsXT

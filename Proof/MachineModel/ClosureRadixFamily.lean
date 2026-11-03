@@ -1,3 +1,38 @@
+import Proof.MachineModel.ClosureRadix
+import Proof.Supplier.RowTupleCommonEquation
+import Proof.Supplier.RowTupleFixedCapacity
+import Proof.Supplier.RowTupleCursorEquation
+import Proof.Supplier.RowTupleCursorLayout
+import Proof.Supplier.RowTupleCursorBody
+import Proof.Supplier.RowTupleFramedBody
+import Proof.Supplier.RowTupleEnumeratedEquations
+import Proof.Supplier.RowTupleCutBody
+import Proof.Supplier.RowTupleCutList
+import Proof.CaseAnalysis.RowsEnumeratedCuts
+import Proof.CaseAnalysis.RowsComputedCuts
+import Proof.CaseAnalysis.RowsDegreeReset
+import Proof.CaseAnalysis.RowsCacheInput
+import Proof.CaseAnalysis.RowsCutMeaning
+import Proof.CaseAnalysis.RowsReusableCuts
+import Proof.CaseAnalysis.RowsLoopLayout
+import Proof.CaseAnalysis.RowsLoopBoundary
+import Proof.CaseAnalysis.RowsLoopInterface
+import Proof.CaseAnalysis.RowsDegreeBody
+import Proof.CaseAnalysis.RowsDegreeLoop
+import Proof.CaseAnalysis.RowsDegreeRange
+import Proof.CaseAnalysis.RowsPolynomial
+import Proof.CaseAnalysis.RowsSharedDigits
+import Proof.CaseAnalysis.RowsSharedInput
+import Proof.CaseAnalysis.RowsPreparationBounds
+import Proof.CaseAnalysis.RowsPreparationFits
+import Proof.CaseAnalysis.RowsPreparationInput
+import Proof.CaseAnalysis.RowsBankFields
+import Proof.CaseAnalysis.RowsBankPolynomial
+import Proof.CaseAnalysis.RowsSourceLoad
+import Proof.CaseAnalysis.RowsPacketPolynomial
+import Proof.CaseAnalysis.RowsPacketOptional
+import Proof.CaseAnalysis.RowsFamilyLoop
+import Proof.MachineModel.ClosureRadixCoordinate
 import Proof.MachineModel.ClosureMaskDegree
 
 /-! A whole selected tuple now reaches the complete common-width equation
@@ -16,6 +51,9 @@ def one (N : ℕ) (bits : List Bool) : List (Fin N) :=
 
 def tupleSlots : Fin 14→Fin 48 := ![36,37,23,24,38,39,40,41,42,43,44,45,46,47]
 def rowSlots (i : Fin 36) : Fin 48 := i.castAdd 12
+noncomputable def first := RecoveryFocus.machine tupleSlots RowTupleMaskReady.machine
+noncomputable def last := RecoveryFocus.machine rowSlots P1CompactRowCommonCoordinateLoop.machine
+noncomputable def machine := Composition.machine first last
 
 end NearCubicWires.RepairOrdinary.P1CompactRowTupleCommonEquation
 
@@ -336,6 +374,17 @@ def polynomial {l r : ℕ} (gs : List (ExactThresholdGate (l+r))) [_radix : P1Ra
 def family {l r : ℕ} (gs : List (ExactThresholdGate (l+r))) [_radix : P1Radix gs] (bank : List (List (List Bool))) :=
   bank.map (polynomial gs)
 
+theorem one_length (N : ℕ) (bits : List Bool) :
+    (P1CompactRowTupleCommonEquation.one N bits).length≤N := by
+  unfold P1CompactRowTupleCommonEquation.one
+  split_ifs with h
+  · exact (RowMaskMeaning.typed_le N 0 bits (by omega)).trans h
+  · simp
+
+theorem monomial_length {l r : ℕ} (gs : List (ExactThresholdGate (l+r))) [_radix : P1Radix gs] (bits : List Bool) :
+    (monomial gs bits).length≤gs.length := by
+  simpa only [monomial,P1CompactRowCachedEquation.equations,List.length_map] using one_length gs.length bits
+
 theorem monomial_fit {l r : ℕ} (gs : List (ExactThresholdGate (l+r))) [_radix : P1Radix gs] (bits : List Bool)
     (e : Equation l r) (he : e∈monomial gs bits) :
     equationMagnitudeBound e<2^(P1Radix.bits gs) := by
@@ -343,6 +392,13 @@ theorem monomial_fit {l r : ℕ} (gs : List (ExactThresholdGate (l+r))) [_radix 
   obtain ⟨i,_,rfl⟩ := List.mem_map.mp hn
   rw [coordinates_magnitude]
   exact P1CompactRowCachedEquation.cache_radix_safe gs i
+
+theorem family_lengths {l r : ℕ} (gs : List (ExactThresholdGate (l+r))) [_radix : P1Radix gs]
+    (bank : List (List (List Bool))) (ms : List (List (Equation l r)))
+    (hm : ms∈family gs bank) (m : List (Equation l r)) (hmem : m∈ms) : m.length≤gs.length := by
+  obtain ⟨rows,_,rfl⟩ := List.mem_map.mp hm
+  obtain ⟨bits,_,rfl⟩ := List.mem_map.mp hmem
+  exact monomial_length gs bits
 
 theorem family_fit {l r : ℕ} (gs : List (ExactThresholdGate (l+r))) [_radix : P1Radix gs]
     (bank : List (List (List Bool))) (ms : List (List (Equation l r)))
@@ -352,6 +408,12 @@ theorem family_fit {l r : ℕ} (gs : List (ExactThresholdGate (l+r))) [_radix : 
   obtain ⟨m,hm,he⟩ := List.mem_flatten.mp he
   obtain ⟨bits,_,rfl⟩ := List.mem_map.mp hm
   exact monomial_fit gs bits e he
+
+def input (s Q : ℕ) (gs : List (ExactThresholdGate ((s+1)/2+s/2))) [_radix : P1Radix gs]
+    (bank : List (List (List Bool))) (hs : 67 ≤ s)
+    (hg : (RowBinLift.batch Q (family gs bank)).length^100≤2^s) : EquationRow.Input :=
+  CloseoutRows.commonInput s (P1Radix.bits gs) gs.length Q (family gs bank)
+    hs hg (family_lengths gs bank) (family_fit gs bank)
 
 end NearCubicWires.RepairOrdinary.P1CompactCloseoutRowsCacheInput
 

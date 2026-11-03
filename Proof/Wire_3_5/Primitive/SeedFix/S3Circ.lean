@@ -1,4 +1,6 @@
 import Proof.Wire_3_5.Primitive.SeedFix.S3Term
+import Proof.Wire_3_5.FinalPass.Pop
+import Proof.Wire_3_5.FinalPass.Sym
 import Proof.Wire_3_5.Primitive.SeedFix.TabRef
 
 /-! # S3, part 5: one SYM circuit's factor at a sampled point, on the evaluator's layout (P3:3170-3178)

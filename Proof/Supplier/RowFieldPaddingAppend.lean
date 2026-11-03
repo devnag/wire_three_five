@@ -1,5 +1,6 @@
 import Proof.Amplification.RecoveryPaddedCopyMeaning
 import Proof.Supplier.EquationWidenLoop
+import Proof.Supplier.RowCachedEquationMeaning
 import Proof.Supplier.RowCoordinateIncrement
 
 /-! Append the physically widened field to the live cut stream. The source,

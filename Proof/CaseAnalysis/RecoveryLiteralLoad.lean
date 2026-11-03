@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.RecoveryLiteralDriver
+import Proof.PCP.PCPFieldMoves
+import Proof.Amplification.RecoveryFocusDock
 
 /-! Read one original framed literal code directly into its existing decoder.
 The decoder's sign/index ports are the retained literal bank's 48/49, so no

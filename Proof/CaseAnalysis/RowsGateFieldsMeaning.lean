@@ -1,3 +1,4 @@
+import Proof.CaseAnalysis.RowsGateFieldsBudget
 import Proof.CaseAnalysis.RowsGateSupportMeaning
 import Proof.CaseAnalysis.RowsStrictNative
 

@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoveryGrammarBankAtoms
+import Proof.Amplification.RecoveryQueryCellReuse
 
 /-! Close a grammar child with one actual continuation. The erased suffix
 left by a reverse fold is the same paid false backing as the next stack. -/

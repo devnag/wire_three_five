@@ -1,6 +1,7 @@
+import Proof.Wire_3_5.Primitive.Writers.ThrStrip6
+import Proof.Wire_3_5.Primitive.SeedFix.C4SJ
 import Proof.Wire_3_5.Primitive.SeedFix.C4SL
 import Proof.Wire_3_5.Primitive.Writers.C3WDock
-import Proof.Wire_3_5.Primitive.Writers.ThrStrip6
 
 /-! # c4 THR block, the THR compiler writer's run: **`thrC3_run`**
 

@@ -31,4 +31,27 @@ set_option maxHeartbeats 250000
 set_option maxRecDepth 120000
 set_option warningAsError true
 
+/-- The fold's width trace ends on the final accumulator, so the answer is
+valid at the trace's width. -/
+theorem folded_valid (scalarWidth : ℕ) (start : CompetitorValidity.Estimate)
+    (terms : List CompetitorValidity.Estimate)
+    (htrace : CompetitorSumWidth.Trace scalarWidth start terms) :
+    CompetitorValidity.Estimate.Valid
+      (CompetitorSumFold.folded start terms) scalarWidth := by
+  induction terms generalizing start with
+  | nil => exact htrace
+  | cons term terms inductionHypothesis =>
+      exact inductionHypothesis _ htrace.2.2
+
+/-- **Constraint 10, settled.**  The estimator's answer is a valid `Estimate` at
+the fold's own width; no fresh constant enters. -/
+theorem answer_valid (recordWidth : ℕ) (entries : List Entry)
+    (hvalid : ∀ estimate ∈ contributions entries,
+      CompetitorValidity.Estimate.Valid estimate recordWidth) :
+    CompetitorValidity.Estimate.Valid
+      (CompetitorSumFold.folded CompetitorSumWidth.zero (contributions entries))
+      (foldWidth recordWidth entries) :=
+  folded_valid _ _ _ (CompetitorSumWidth.uniform_trace recordWidth
+    (contributions entries) hvalid)
+
 end NearCubicWires.RepairOrdinary.CloseoutFinalC10WorkerWidth

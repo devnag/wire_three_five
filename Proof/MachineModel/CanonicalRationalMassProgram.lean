@@ -1,6 +1,10 @@
+import Proof.Circuits.CanonicalBalancedTraversal
 import Proof.Circuits.CanonicalBalancedCall
+import Proof.MachineModel.CanonicalBinaryArithmeticProgram
 import Proof.MachineModel.CanonicalBitSerialMulProgram
 import Proof.MachineModel.CanonicalRationalValidationProgram
+import Proof.MachineModel.PreserveRightProgram
+import Proof.Foundations.VerifiedLinker
 
 /-!
 # Exact rational coefficient-mass accounting

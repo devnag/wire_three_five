@@ -1,4 +1,27 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.S5TRun1
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.FpInLen
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.S5TJoin2
+import Proof.Wire_3_5.FinalPass.S5TNum3
+import Proof.Wire_3_5.FinalPass.S5TRun0
+import Proof.Wire_3_5.FinalPass.S5TStage
+import Proof.Wire_3_5.FinalPass.SeamsProg2
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.TS4K
+import Proof.Wire_3_5.Primitive.SeedFix.TS4O
+import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPoly
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.S5TNum4
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-! # S5-THR, part 41: the THR stage at a SYM request, and at every request (P3:3170-3181)
 
@@ -125,3 +148,5 @@ theorem stage_at (Sw : SymWords) (r : PlanFP.FReq l F kclk coef A a ha) :
 end Run2
 
 end NearCubicWires.WireExponent3_5.FinalPass.S5T
+
+end

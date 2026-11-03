@@ -21,4 +21,11 @@ theorem child_bytes {n : ℕ} (gs : List (ExactThresholdGate n)) (i : ℕ) (hi :
   simp only [List.length_append] at h
   omega
 
+theorem coordinate_bytes {n : ℕ} (g : ExactThresholdGate n) (j : ℕ) (hj : j≤n) :
+    (RowNativeCoordinate.prior g j).length≤(exactWord g).length ∧
+    natBitLength (RowNativeCoordinate.value g j hj).natAbs≤(exactWord g).length := by
+  have h := congrArg List.length (RowNativeCoordinate.selected_word g j hj)
+  simp only [List.length_append,DecompositionSource.intWord_length,intBitLength,natBitLength] at h ⊢
+  constructor <;> omega
+
 end NearCubicWires.RepairOrdinary.RowCachedCoordinateBounds

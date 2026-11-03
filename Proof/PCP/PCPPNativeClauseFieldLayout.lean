@@ -1,4 +1,6 @@
 import Proof.PCP.PCPPNativeClauseReferenceWord
+import Proof.PCP.PCPFieldMoves
+import Proof.PCP.ProjectionNormalizationUnary
 
 /-! Read the actual original clause's framed Nat.bits field. The native
 output natWord format is not assumed equal to this source encoding. -/

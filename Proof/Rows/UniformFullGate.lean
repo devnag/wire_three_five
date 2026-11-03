@@ -11,6 +11,7 @@ open NearCubicWires.ExtDecompositionBatch NearCubicWires.RepairOrdinary.Recovery
 open NearCubicWires.RepairRepresentation NearCubicWires.RepairSource.CloseoutFinal
 open NearCubicWires.P1Closure NearCubicWires.ExtIncidence
 open PCJ45bee56da9f34d5a_FullGateBounds PCJ45bee56da9f34d5a_CellGatePalette
+open PCJ45bee56da9f34d5a_FullGateRun (masterCaps pad_cold)
 open scoped BigOperators
 noncomputable section
 attribute [local irreducible] PCJ45bee56da9f34d5a_CellGate.machine

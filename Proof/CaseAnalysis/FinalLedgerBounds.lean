@@ -1,4 +1,10 @@
 import Proof.CaseAnalysis.FinalLedgerAssembly
+import Proof.CaseAnalysis.FinalStageSeam
+import Proof.CaseAnalysis.FinalWordsStage
+import Proof.CaseAnalysis.Language
+import Proof.Hierarchy.CompetitorMonomialEntry
+import Proof.Hierarchy.CompetitorSumEntry
+import Proof.Hierarchy.CompetitorCountRecordAppend
 
 namespace NearCubicWires.RepairSource.CloseoutFinal.C10LedgerBounds
 
@@ -19,7 +25,24 @@ noncomputable section
 
 /-! ## Section 3  `hdriver` -- the words stage against a power of the width -/
 
+/-- `CompetitorDimensions.budget` (`Proof/Hierarchy/CompetitorDimensions.lean`) is
+quadratic: its dominant summand is `WilliamsUnaryProduct.budget ((b+1)*(b+1)) 4096`. -/
+theorem dimensions_budget_le (b : ℕ) :
+    CompetitorDimensions.budget b ≤ 25000 * (b + 1) ^ 2 := by
+  unfold CompetitorDimensions.budget CompetitorDimensions.bootstrapBudget
+    WilliamsUnaryProduct.budget
+  nlinarith
+
 /-! ## Section 4  `hrest` -- the docked body and the tail against `A * (N+1)` -/
+
+/-- `CompetitorCountRecordAppend.budget` (`Proof/Hierarchy/CompetitorCountRecordAppend.lean`)
+is `CompetitorDimensions.budget` plus a linear term. -/
+theorem countRecordAppend_le (b : ℕ) :
+    CompetitorCountRecordAppend.budget b ≤ 25120 * (b + 1) ^ 2 := by
+  have h := dimensions_budget_le b
+  unfold CompetitorCountRecordAppend.budget CompetitorCountRecordPrepare.budget
+    CompetitorRationalDecision.width
+  nlinarith
 
 /-! ## Section 5  `hrest` at `a := 1`, from a polylogarithmic width schedule -/
 

@@ -25,6 +25,10 @@ open NearCubicWires.RepairOrdinary NearCubicWires.RepairOrdinary.CloseoutFinalC1
 open NearCubicWires.ComponentwiseBranchExtraction NearCubicWires.RepairOrdinary.CloseoutRowsOriginalSchedule
 open NearCubicWires.SourceInterfaces NearCubicWires.LocalBitMultitape
 
+/-- One side's validity-block count: systematic `1 + J + J²`, auxiliary `J² + J³ + J⁴`. -/
+def penLen (sys : Bool) (J : Nat) : Nat :=
+  if sys then 1 + (J + J * J) else J * J + (J * J * J + J * J * (J * J))
+
 end site
 
 end NearCubicWires.SourceRequest.MonomialSpec

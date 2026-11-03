@@ -1,4 +1,5 @@
 import Proof.Foundations.CanonicalBalanced
+import Statement
 
 /-!
 # Canonical structural binary syntax

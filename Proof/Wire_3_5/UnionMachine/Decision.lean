@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.UnionMachine.Plan
+import Proof.Wire_3_5.UnionMachine.PlanBase
 
 /-! # C6, U7: the decision (P3:3485-3489, "accept only if [...]")
 

@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.RecoverySourceGraph
+import Proof.Hierarchy.HierarchyStreamReady
+import Proof.Circuits.PaddedRunnerBudgetClosure
 
 /-! The source and all physical scalar suppliers have one fixed polynomial
 in the paid W. The hierarchy clock is fixed before these C.12 constants. -/

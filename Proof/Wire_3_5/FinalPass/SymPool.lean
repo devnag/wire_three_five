@@ -1,5 +1,5 @@
 import Proof.Wire_3_5.FinalPass.PoolFit3
-import Proof.Wire_3_5.FinalPass.SymHr
+import Proof.Wire_3_5.FinalPass.SymHrBase
 
 /-! # The SYM pool's coefficient width: `h = dH·(n+1)^{eH}` fits the pool
 

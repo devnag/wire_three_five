@@ -1,7 +1,31 @@
-import Mathlib
-import Proof.Rows.RowsFinalNE
 import Proof.Rows.RowsInitGlobal
+import Proof.CaseAnalysis.RowsOriginalSwitch
+import Proof.Circuits.DecompositionCountPosition
+import Proof.Foundations.OrdinaryStreaming
+import Proof.MachineModel.BlockScrub
+import Proof.MachineModel.OrdinaryFramedIncrement
+import Proof.MachineModel.OrdinaryMatrixUnaryTemplate
+import Proof.PCP.PCPPNativeArithmetic
+import Proof.Packets.PacketFamilyParent
+import Proof.Packets.PacketsFieldWidth
+import Proof.Packets.PacketsGate
+import Proof.Packets.PacketsMetaField
+import Proof.Packets.PacketsMetaMul
+import Proof.Packets.PacketsMetaPair
+import Proof.Packets.PacketsSetupWords
+import Proof.Packets.PacketsWalk
+import Proof.Rows.RowsInitBinWords
+import Proof.Rows.RowsInitC5
+import Proof.Rows.RowsInitCount
+import Proof.Rows.RowsInitLoopWords
+import Proof.Rows.RowsInitThrInitRun
+import Proof.Rows.RowsInitThrLoop
+import Proof.Rows.RowsInitThrWork
+import Proof.Rows.RowsKeyZeroThr
+import Proof.Rows.RowsPartsFill
 import Proof.Rows.RowsSymLoopFan
+import Proof.Rows.RowsThrBounds
+import Proof.Rows.RowsFinalNE
 
 /-! # Rows initializer: the `InitHole'` assembly, part 1 — offsets, the machine, the work phase at every request, the cost
 

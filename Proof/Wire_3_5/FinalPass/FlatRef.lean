@@ -1,5 +1,6 @@
 import Proof.Wire_3_5.FinalPass.FiltTabSel
 import Proof.Wire_3_5.FinalPass.ListEvalBridge
+import Proof.Wire_3_5.FinalPass.Sym
 
 /-! # Final pass, (L): the amplified list's report from bits (P3:1392-1398, 1508-1520, 3170-3178)
 

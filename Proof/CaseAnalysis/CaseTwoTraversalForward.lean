@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.CaseTwoTraversalController
+import Proof.PCP.PCPPNativeForwardScalar
+import Proof.Assembly.AppendOutputLength
 
 /-! The actual native stream only moves right. The existing measured-output
 wrapper can therefore produce its physical length and rewind it once. -/

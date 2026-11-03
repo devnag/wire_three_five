@@ -1,7 +1,15 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.SymLeafIface
 import Proof.Wire_3_5.Primitive.Writers.PopSetupSpecB2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Primitive.Writers.WritersJoin
 
-/-! # POP setup: the SYM writer's leaf from its producers, over `PopSetupSpecB2` (type)
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2 (POP setup): the SYM writer's leaf from its producers, over `PopSetupSpecB2` (type)
 
 `SymLeaf.SymLeafOf` with the POP setup `Q : PopSetupSpecB2 W` (the need's measure reads the row
 offset `r4`, `PopSetupSpecB2`) in place of `PopSetupSpecB W`; the other producers (the walk bank, the FILTER setup,
@@ -23,3 +31,5 @@ abbrev SymLeafOf2 (l : Literals) : Type :=
     BudgetIface.FiltPipeLe2 → PopPipeLe → WritersJoin.SymLeafJ2 l
 
 end NearCubicWires.WireExponent3_5.PrimAsm.SymLeaf
+
+end

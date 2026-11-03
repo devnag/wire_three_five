@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeNodeRead
+import Proof.MachineModel.OrdinaryMatrixTemplateEntries
 
 /-! Convert the actual head-one sentinel supplied by native/projection
 readers into raw unary counters. Both cursor shifts and the existing copy

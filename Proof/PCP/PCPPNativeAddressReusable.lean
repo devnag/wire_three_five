@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeAddressReset
+import Proof.Amplification.RecoveryScratchErase
 
 /-! The shared-address append operation with physically reusable workspace.
 The bounded scratch is swept after its heads are reset; the two counters

@@ -10,6 +10,7 @@ set_option maxHeartbeats 250000
 set_option maxRecDepth 120000
 set_option warningAsError true
 
+def word (n : ℕ) := List.replicate n true++[false]
 def machine : Machine 2 4 where
   descriptionBits := 0
   start := 0

@@ -1,4 +1,5 @@
 import Proof.PCP.ProjectionNormalizationDedupBytes
+import Proof.MachineModel.ClockUnaryProduct
 
 /-! Paid sentinel product for the query-padding and total-field drivers.
 The first operand is the actual raw unary R produced by dimensions. -/

@@ -1,5 +1,6 @@
 import Proof.Packets.WalkUnframe
 import Proof.Rows.SourceDockCore
+import Proof.MachineModel.OrdinaryMaskedReset
 
 /-! Read the second coordinate before the first. This is the actual bit
 order of the Toeplitz walk equivalence, before low-padding removal. -/

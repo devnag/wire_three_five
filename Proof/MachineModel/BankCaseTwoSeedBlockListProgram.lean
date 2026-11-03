@@ -1,4 +1,5 @@
 import Proof.MachineModel.BankScheduleDiagonal
+import Proof.MachineModel.CaseTwoSeedBlockListProgram
 
 /-!
 # The Case-2 seed block list, driven from the numeral bank's registers

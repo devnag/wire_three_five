@@ -27,6 +27,10 @@ noncomputable def stage3 := RecoveryFocus.machine (fieldSlots a) (PCPPQueryField
 noncomputable def stage4 := RecoveryFocus.machine (recSlots a) Records.machine
 noncomputable def stage5 := RecoveryFocus.machine (totSlots a) TotalsAppend.machine
 
+noncomputable def bodyM :=
+  Composition.machine (Composition.machine (Composition.machine
+    (Composition.machine (stage1 a) (stage2 a)) (stage3 a)) (stage4 a)) (stage5 a)
+
 def bodyCost (q : ℕ) (g : SupportedNormalizedGate q) : ℕ :=
   (2*(frame (nativeWord g)).length+2) + 1 + Counted.budget a (request g) + 1 +
     (2*natBitLength (children a g).length+3) + 1 +

@@ -1,4 +1,6 @@
 import Proof.PCP.VerifierDecodingRun
+import Proof.MachineModel.OrdinaryControlPrefix
+import Proof.MachineModel.OrdinaryStreamConcat
 
 /-! Actual bounded unary-header parsing on the shared framed tape. Each true
 payload bit emits one unary count cell; the first false payload terminates

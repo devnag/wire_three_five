@@ -1,4 +1,5 @@
 import Proof.Foundations.RecoverySourceContracts
+import Statement
 
 /-!
 # Binding: CLW20 Lemma 3.9 (from [STV01]) → `Nonempty RepairSource.SourceAmplifierFactory`

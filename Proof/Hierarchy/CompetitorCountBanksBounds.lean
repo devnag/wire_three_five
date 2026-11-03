@@ -1,4 +1,5 @@
 import Proof.Hierarchy.CompetitorCountBanks
+import Proof.Hierarchy.CompetitorSameBucketDenseBounds
 
 /-! Complete both-bank runtime including the actual same-bucket sort/group
 and all cross-table preparation. Source logarithmic dependence is unchanged. -/

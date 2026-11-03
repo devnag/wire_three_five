@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoverySourceLiteralDriver
+import Proof.PCP.ProjectionNormalizationFieldList
 
 /-! Select an actual framed query address using the original source literal's
 physical unary driver. The existing field copier and repeater do all scans;

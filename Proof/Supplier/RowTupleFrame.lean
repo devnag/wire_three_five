@@ -1,4 +1,4 @@
-import Proof.Supplier.RowTupleCursorErase
+import Proof.Supplier.RowTupleCursorBody
 
 /-! Consume the exact checked enumerator grammar. Each selected tuple has
 its ordinary digit blocks followed by the extra zero bit and terminator;

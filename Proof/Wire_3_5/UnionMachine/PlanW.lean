@@ -1,8 +1,21 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.Plan
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Assembly.Free
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.UnionCheck
+import Proof.Wire_3_5.UnionMachine.PlanWBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # C6: leaf U's enclosing application, the front at the refuter's witness length (F9)
 
-The plan of `Proof.Wire_3_5.UnionMachine.Plan` with ONE correction to its front residual: every per-witness field
+The plan of `WireExponent3_5UnionMachinePlan` (M4) with ONE correction to its front residual: every per-witness field
 of the front (`run`, `loop`, `capPos`, `accFit`, `sem`, `rej`, `len`, `perCall`, `capAcc`) is required only
 at the refuter's witness length `w.length = N / 16` ("the weak machine guesses", P3:3669; base's weak machines read a
 `⌊N/16⌋`-bit witness, `WitnessRun`). Over EVERY word the front is uninhabitable: its cost `cost N` depends on `N`
@@ -42,5 +55,6 @@ section LeafB
 
 end LeafB
 
-
 end NearCubicWires.WireExponent3_5.UnionMachine.PlanW
+
+end

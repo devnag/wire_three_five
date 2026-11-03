@@ -1,6 +1,7 @@
-import Proof.Amplification.RecoveryCaseOneBooleanOutput
 import Proof.CaseAnalysis.RetainedRefuterRun
 import Proof.CaseAnalysis.ScheduleGuardedBound
+import Proof.Amplification.RecoveryPrefixPrepareCall
+import Proof.Amplification.RecoveryCaseOneBooleanOutput
 
 /-! The common schedule's finite-branch controller. It executes the refuter
 only when the already-computed onset flag is true; the false branch uses the

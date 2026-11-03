@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeDescriptorEntry
+import Proof.PCP.PCPPNativePadding
 
 /-! Exact false-node padding from the raw count returned by cold metadata.
 Template production, the paid sentinel-head shift and the whole padding

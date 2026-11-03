@@ -1,5 +1,6 @@
-import Proof.Wire_3_5.Filters.FilterSoftGauss
 import Proof.Wire_3_5.Sampler.SamplerSeed
+import Proof.Wire_3_5.Filters.GFTrace
+import Proof.Wire_3_5.Filters.FilterSoftGauss
 
 /-! # B6: `samp:seed`'s exact conditional probabilities by binary Gaussian elimination (P3:2950-2957)
 
@@ -13,7 +14,7 @@ conditional-probability refs `condProbGauss` (elimination) and `condProbBrute` (
 sentence is **`condProbGauss_eq_brute`**: for every prefix and every list of (label, position) constraints the
 elimination form equals the completion count, through `gauss_solutions_card`. The field meaning of `gen` is
 `gen_spec` (it is `Σ_i a_i λ^i` in `𝔽₂[X]/(p)`), and **`pos_eq_gen`** identifies the reference generator with the
-generator `pos` of `Proof.Wire_3_5.Sampler.SamplerSeed`.
+generator `pos` of `WireExponent3_5SamplerSeed`.
 
 Main declarations: `fpow_spec`, **`gen_spec`**, **`gen_bit`** (each output bit is `Σ_j seed_j·coeff_j` over `𝔽₂`),
 `testBit_mask`, `bitF_fixed`, **`rowSat_iff`** (a row of `system` holds at the completion `r` iff the generator's

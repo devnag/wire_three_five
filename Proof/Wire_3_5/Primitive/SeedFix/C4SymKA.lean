@@ -1,4 +1,6 @@
-import Proof.Wire_3_5.Primitive.SeedFix.C4SymWF
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymWE
+import Proof.Wire_3_5.Primitive.SeedFix.C3ReqIface
+import Proof.MachineModel.UFrontWitnessFields
 
 /-! # C4.K SYM, part 1: the SYM stage at every call, from its side conditions
 

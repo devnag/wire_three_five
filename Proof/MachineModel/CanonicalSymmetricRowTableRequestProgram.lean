@@ -1,5 +1,6 @@
 import Proof.MachineModel.CanonicalOccurrenceRequestProgram
 import Proof.MachineModel.CanonicalSymmetricLiveMaskProgram
+import Proof.MachineModel.CanonicalSymmetricSupportMaskProgram
 
 namespace NearCubicWires.CanonicalSymmetricRowTableRequestProgram
 

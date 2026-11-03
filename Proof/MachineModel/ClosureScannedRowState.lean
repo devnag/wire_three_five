@@ -1,4 +1,4 @@
-import Proof.MachineModel.ClosureActualRawRow
+import Proof.MachineModel.ClosureRawRowState
 
 /-! Full-state reuse of the existing warm scanner/printer.  These identities
 test the actual exit, not just its answer port.  The next row's header and

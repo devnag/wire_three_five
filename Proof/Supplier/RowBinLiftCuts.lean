@@ -1,5 +1,6 @@
-import Proof.Supplier.EquationGateCapacity
 import Proof.Supplier.RowBinLiftOccurrences
+import Proof.Supplier.EquationRowRequest
+import Proof.Supplier.EquationGateCapacity
 
 /-! Concrete signed cuts for the A.12 occurrence expansion. The declared width
 is computed from the actual emitted fields. The ordinary enumerator must still
@@ -50,5 +51,16 @@ theorem split_value {l r : ℕ} (c : ℤ) (e : Equation l r) (row column : ℕ) 
 
 def cuts {l r : ℕ} (Q : ℕ) (monomials : List (List (Equation l r))) : List Cut :=
   (terms Q monomials).map fun t => split t.1 (canonicalEquationStack t.2)
+
+theorem cuts_length {l r : ℕ} (Q : ℕ) (monomials : List (List (Equation l r))) :
+    (cuts Q monomials).length=
+      ∑ j ∈ Finset.range (min Q monomials.length),monomials.length.choose (j+1) := by
+  rw [cuts,List.length_map,terms_length]
+
+theorem cuts_lengths {l r : ℕ} (Q : ℕ) (monomials : List (List (Equation l r)))
+    (c : Cut) (hc : c ∈ cuts Q monomials) :
+    c.leftWeights.length=l ∧ c.rightWeights.length=r := by
+  obtain ⟨t,_,rfl⟩ := List.mem_map.mp hc
+  simp [split]
 
 end NearCubicWires.RepairOrdinary.RowBinLift

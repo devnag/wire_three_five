@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.Writers.CellState
+import Proof.Wire_3_5.MachineModel.BlockJoin
 
 /-! # PA (d), the writers' unit machine (decode, branch, pipeline, counter)
 

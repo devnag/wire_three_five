@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.FinalSelectorCellSetter
+import Proof.MachineModel.UWalkUnary
 import Proof.CaseAnalysis.RowsEstimatorPad
 
 /-! A.4 cold start, part 5: the LOADER, first group of ports.
@@ -22,6 +23,16 @@ set_option maxHeartbeats 250000
 set_option maxRecDepth 120000
 set_option warningAsError true
 
+/-- A worker with all heads at zero, docked into the ambient bank. -/
+theorem dock_ready {t u s n : ℕ} (p : Machine t s) (slots : Fin t→Fin u)
+    (hi:Function.Injective slots) (A : Fin u→List Bool) (inp out : Fin t→List Bool)
+    (h:Step p n (fun _=>0) inp (fun _=>0) out) (hin:∀ k,A (slots k)=inp k):
+    Step (RecoveryFocus.machine slots p) n (fun _=>0) A (fun _=>0) (install slots A out):=by
+  have focused:=h.focus slots hi (fun _=>0) A
+  have heads:dockH slots (fun _=>0) (fun _ : Fin t=>0)=(fun _ : Fin u=>0):=by
+    funext i;unfold dockH;split <;> rfl
+  exact focused.congr_in heads (install_existing slots A inp hin) |>.congr heads rfl
+
 /-- The `ClockJoin` flavour of a heads-at-zero receipt. -/
 theorem step_of_clock {t s n : ℕ} {p : Machine t s} {inp out : Fin t→List Bool}
     (h:ClockJoin.ReadyRun p n inp out):Step p n (fun _=>0) inp (fun _=>0) out:=by
@@ -32,6 +43,7 @@ theorem step_of_clock {t s n : ℕ} {p : Machine t s} {inp out : Fin t→List Bo
 
 /-! ### Slot maps -/
 
+def padSlots : Fin 4→Fin 96:=![1,2,41,44]
 
 
 /-! ### Worker receipts, all heads at zero -/

@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.MachineModel.BlockCost
+import Proof.Amplification.RecoveryCursorCalls
 
 /-! # Block v3 (S5): the conditional block (branch on a scanned bit)
 

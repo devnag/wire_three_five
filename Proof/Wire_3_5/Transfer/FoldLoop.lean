@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoveryGrammarRepeat
+import Proof.MachineModel.ClockJoin
 
 /-! # The uniform loop of the XOR fold (P3:3729-3733, 3758-3771; D1.6b)
 

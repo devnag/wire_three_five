@@ -1,4 +1,17 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.CoreJ10
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.CoreIfaceMJ
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.Assembly.Gate0
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S5Core over the writers with arbitrary residues, part J11: the core half's layout and machine (P3:3170-3181)
 
@@ -105,3 +118,5 @@ noncomputable def coreMJ :=
 end Mach
 
 end NearCubicWires.WireExponent3_5.FinalPass.Core
+
+end

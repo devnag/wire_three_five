@@ -1,4 +1,7 @@
 import Proof.Hierarchy.CompetitorBankMergeContext
+import Proof.Hierarchy.CompetitorMatrixPlaneTable
+import Proof.Hierarchy.CompetitorResidueTableDock
+import Proof.Hierarchy.CompetitorOddRowSliceProjection
 
 /-! One literal 159-tape boundary for merge, signed residue and parity
 selection. The actual retained parity chooses the residue output routing;

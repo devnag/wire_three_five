@@ -1,4 +1,5 @@
 import Proof.Circuits.TotalSelectorDrivenAtomStreamRuns
+import Proof.MachineModel.RuntimeCaseTwoCircuitEncodingClosure
 
 /-! # Onset-free selector circuit-encoding contracts -/
 

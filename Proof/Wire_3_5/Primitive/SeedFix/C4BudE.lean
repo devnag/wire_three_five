@@ -1,6 +1,26 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.C4BudD
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymNEBase
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
 import Proof.Wire_3_5.Primitive.SeedFix.C4SymKB4
-import Proof.Wire_3_5.Primitive.SeedFix.C4SymNE
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.CallSize
+import Proof.Wire_3_5.Primitive.Writers.SymNeed
+import Proof.Wire_3_5.Primitive.SeedFix.C4GateSymB
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymNA
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymNB
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Primitive.SeedFix.C4BudEBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # C4.K item (h), part 5: the SYM stage's steps at every SYM call within `c₄·seedClasses E₄`
 
@@ -97,11 +117,6 @@ theorem ell_le (l : Literals) (F : GateFree l) (kclk coef A a0 : ℕ) (ha0 : a0 
     (Nat.clog 2 (SeedFix.symCount (callInputs l F kclk coef A a0 ha0) hs Cs carriers))) ≤ 2 * e
   omega
 
-/-- The two center-bit halves: `2·d_row ≤ n − k + 1` (`centerBits_sum`, `centerBits_balanced`). -/
-theorem d2_le (P : StarParams) : 0 + C4Geo.dRow P + C4Geo.dRow P ≤ P.n - P.k + 1 := by
-  have h1 := P.centerBits_sum
-  have h2 := P.centerBits_balanced
-  have e : C4Geo.dRow P = P.leftCenterBits := rfl
-  omega
-
 end NearCubicWires.WireExponent3_5.PrimT.C4Bud
+
+end

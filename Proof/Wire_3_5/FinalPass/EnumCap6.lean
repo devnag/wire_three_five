@@ -1,5 +1,6 @@
 import Proof.Wire_3_5.FinalPass.EnumCap5
 import Proof.Wire_3_5.Primitive.Writers.C3WFields
+import Proof.Wire_3_5.Primitive.Writers.ParseNat
 import Proof.Wire_3_5.Primitive.Writers.SFCost5
 
 /-! # The child's cost at a call, generic, part 2: the compiler input's fixed fields

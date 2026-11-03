@@ -1,5 +1,9 @@
 import Proof.Wire_3_5.Recovery.CertWidth
 import Proof.Wire_3_5.Transfer.FoldBody
+import Proof.CaseAnalysis.ScheduleCompare
+import Proof.Amplification.RecoveryTapeSupport
+import Proof.CaseAnalysis.CapacityPower
+import Proof.PCP.ProjectionDimensionTemplate
 
 /-! # The XOR schedule `t(q)` computed by an ordinary loop (P3:3818-3822, 3758-3759; D1.6, the prefix stage)
 

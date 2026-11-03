@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CloseoutWitnessTraversalCold
+import Proof.PCP.ProjectionNormalizationCounter
 
 /-! The shared DFS feeds the existing serializer's counted-stream ABI.
 The raw unary count is converted by the already accepted unit product. -/

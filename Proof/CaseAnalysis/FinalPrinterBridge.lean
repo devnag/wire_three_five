@@ -1,4 +1,5 @@
 import Proof.MachineModel.CanonicalFourfoldRowProgram
+import Proof.Foundations.SupplierPrinter
 
 set_option autoImplicit false
 

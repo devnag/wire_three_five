@@ -39,6 +39,25 @@ theorem count_output (x : State) (word : List Bool) (k n : Nat)
     rw [counted_tapes]
     exact (Function.update_of_ne (Ne.symm (hi 1)) _ _).symm
 
+theorem count_run (x : State) (word : List Bool) (k : Nat)
+    (hz : x.count=0) (hs : x.inner.stream.source=frame word) (hp : x.inner.stream.pos=2*k) :
+    ∃ r,runFrom countMachine (3*x.limit+3) (x.cfg countMachine.start)=some r ∧
+      r.steps ≤ 3*x.limit+3 ∧
+      (r.final.control=3 ↔ (readCount x.limit (word.drop k)).isSome=true) ∧
+      ∀ n rest,readCount x.limit (word.drop k)=some (n,rest) →
+        n ≤ x.limit ∧ r.final=(counted x n).cfg 3 := by
+  obtain ⟨base,hr,hb,hc,hf⟩ := RecoveryCertificateCount.padded_bounded_at x.capacity x.limit word k
+  obtain ⟨r,h,hfinal,hsteps⟩ := RecoveryFocus.run_config countSlots countSlots_injective
+    RecoveryCertificateCount.machine (x.cfg (0 : Fin 5)).heads (x.cfg (0 : Fin 5)).tapes _ _ base hr
+  rw [count_input x word k hz hs hp] at h
+  refine ⟨r,h,hsteps.le.trans hb,?_,?_⟩
+  · simpa only [hfinal,RecoveryFocus.config] using hc
+  · intro n rest hparse
+    obtain ⟨hn,he⟩ := hf n rest hparse
+    refine ⟨hn,?_⟩
+    rw [hfinal,he]
+    exact count_output x word k n hs hp
+
 theorem counted_valid (x : State) (n : Nat) (hx : x.Valid) (hn : n ≤ x.limit) :
     (counted x n).Valid := ⟨hx.1,hx.2.1,hx.2.2.1,hn,hx.2.2.2.2⟩
 

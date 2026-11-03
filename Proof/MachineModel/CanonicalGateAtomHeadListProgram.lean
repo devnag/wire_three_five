@@ -1,4 +1,5 @@
 import Proof.MachineModel.CanonicalSignedAtomRequestProgram
+import Proof.MachineModel.TaggedProgramChoice
 
 namespace NearCubicWires.CanonicalGateAtomHeadListProgram
 

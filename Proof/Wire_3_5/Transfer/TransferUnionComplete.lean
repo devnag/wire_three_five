@@ -1,5 +1,12 @@
+import Lean
 import Proof.Wire_3_5.Transfer.TransferUnionSound
 import Proof.Wire_3_5.Filters.FilterGap
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.Transfer.TransferUnionCompleteBase
+
+
+noncomputable section
+
 
 /-! # The union machine's completeness side (P3:3564-3614, 3711-3729): an accepting guess from an approximation
 
@@ -9,8 +16,8 @@ accepting sparse guess in that mode, contradicting rejection of the union machin
 
 * it passes the syntactic checks (oracle size, grid signs, the `⌊N/16⌋` word) and its calls are admissible, and
 * its grid sums are a completeness witness for the honest proof of the (tautological) substituted circuit — `[0,1]`
-  sums `T_X` with `E_pos‖T_X − B_X‖₁ ≤ ζ` and `‖S_X − T_X‖₄ ≤ δ` (`tr:completeness`) — whose filters miss
-  incidence mass at most `β + ξ` (`tr:missing`), with the propagated error `(1+Λ̄(q))⁴q^{−D} ≤ ε₀`:
+  sums `T_X` with `E_pos‖T_X − B_X‖₁ ≤ ζ` and `‖S_X − T_X‖₄ ≤ δ` (`tr:completeness`, M3) — whose filters miss
+  incidence mass at most `β + ξ` (`tr:missing`), with the propagated error `(1+Λ̄(q))⁴q^{−D} ≤ ε₀` (M4):
 
 `unionAccepts_of_parts`. The thresholds come from the three test bounds and the accuracy, in the real form
 `completeness_accepts_real`; the honest clause acceptance `≥ c_p` is the PCPP algorithm's `complete` at every random
@@ -26,47 +33,18 @@ open NearCubicWires.RepairSource NearCubicWires.RepairRepresentation
 open NearCubicWires.WireExponent3_5.Shared (uMean bitR uMean_mono)
 open NearCubicWires.ComponentwiseBranchExtraction (systematicConstraint)
 
-/-- `tr:completeness`'s acceptance with real estimates: within `ε₀` of the tests of a completeness witness whose
-masks miss at most `β + ξ`, the estimates pass the thresholds. -/
-theorem completeness_accepts_real {q : ℕ} {H : BooleanCircuit q} (pcpp : PointwisePCPP H) {cp sp : ℝ}
-    {params : MaskedSoundnessParameters cp sp} (cparams : MaskedCompletenessParameters params)
-    {Seed : Type} [Fintype Seed] [Nonempty Seed] (aux : BitInput q → BitInput pcpp.auxiliaryBits)
-    (T S : PcppVar pcpp → BitInput q → ℝ) (w : CompletenessWitness pcpp aux T S cparams.ζ cparams.δ)
-    (G : PcppVar pcpp → Seed → BitInput q → Bool)
-    (hacc : cp ≤ uMean (fun x : BitInput q => pcpp.satisfiedFraction x (aux x)))
-    (hmissing : uMean (fun p : Fin (2 ^ pcpp.clauseBits) × Fin 2 × (Seed × BitInput q) =>
-        1 - bitR (G (posVar pcpp p.1 p.2.1) p.2.2.1 p.2.2.2)) ≤ (cparams.β : ℝ) + cparams.ξ)
-    (Vh Qh μh : ℝ) (hV : |Vh - testV pcpp S G| ≤ params.eps0) (hQ : |Qh - testQ pcpp S G| ≤ params.eps0)
-    (hμ : |μh - testMu pcpp S G| ≤ params.eps0) :
-    Vh ≤ 2 * (params.v0 : ℝ) ∧ Qh ≤ 1 + (params.v0 : ℝ) ∧ (params.threshold : ℝ) ≤ μh := by
-  have hζ1 : Real.sqrt (cparams.ζ : ℝ) ≤ 1 := by
-    rw [Real.sqrt_le_one]; exact_mod_cast cparams.ζ_le_one
-  have hδ1 : (cparams.δ : ℝ) ≤ 1 := by exact_mod_cast cparams.δ_le_one
-  have hu : Real.sqrt (cparams.ζ : ℝ) + cparams.δ ≤ 2 := by linarith
-  have hVb := completeness_testV w G
-  have hQb := completeness_testQ w G
-  have hmiss := (missingClause_le G).trans (mul_le_mul_of_nonneg_left hmissing zero_le_two)
-  have hμb := completeness_testMu w G hacc hmiss hu
-  have hVs := cparams.V_slack
-  have hQs := cparams.Q_slack
-  have hμs := cparams.μ_slack
-  refine ⟨?_, ?_, ?_⟩
-  · linarith [(abs_le.mp hV).2]
-  · linarith [(abs_le.mp hQ).2]
-  · linarith [(abs_le.mp hμ).1]
-
 section Union
 variable {kclk : ℕ} {E : Envelope} {B : TimeBudget kclk E} {I : PrimitiveInputs B}
 
-/-- The honest acceptance on a tautology (P3:3712-3714, 3573-3575): if the substituted circuit accepts every random
-input, the PCPP algorithm's honest assignment satisfies at least `c_p` of the clauses at every input. -/
-theorem honest_acceptance (S : UnionSetup I) {N : ℕ} (z : BitInput N) (oracle : BooleanCircuit (S.pcp.nativeWidth N))
-    (htaut : ∀ x, (S.request z oracle).circuit.eval x = true) :
-    S.pcppAlg.completeness ≤ uMean (fun x : BitInput (S.request z oracle).arity =>
-      (S.pcppOf z oracle).satisfiedFraction x ((S.pcppOf z oracle).honestAuxiliary x)) := by
-  have h := uMean_mono (Ω := BitInput (S.request z oracle).arity) (f := fun _ => S.pcppAlg.completeness)
-    (g := fun x => (S.pcppOf z oracle).satisfiedFraction x ((S.pcppOf z oracle).honestAuxiliary x))
-    (fun x => S.pcppAlg.complete (S.request z oracle) x (htaut x))
+/-- The honest acceptance on a tautology (Case 2; Lemma H.4): if `H_Γ` accepts every input, the PCPP algorithm's honest assignment satisfies at least `c_p` of the clauses at every input. -/
+theorem honest_acceptance (S : UnionSetup I) {N : ℕ} (z : BitInput N)
+    (Γ : NearCubicGates.Close.Outer.OuterGuess (S.width N))
+    (htaut : ∀ x, (S.request z Γ).circuit.eval x = true) :
+    S.pcppAlg.completeness ≤ uMean (fun x : BitInput (S.request z Γ).arity =>
+      (S.pcppOf z Γ).satisfiedFraction x ((S.pcppOf z Γ).honestAuxiliary x)) := by
+  have h := uMean_mono (Ω := BitInput (S.request z Γ).arity) (f := fun _ => S.pcppAlg.completeness)
+    (g := fun x => (S.pcppOf z Γ).satisfiedFraction x ((S.pcppOf z Γ).honestAuxiliary x))
+    (fun x => S.pcppAlg.complete (S.request z Γ) x (htaut x))
   rwa [uMean_const] at h
 
 namespace UnionGuess
@@ -95,16 +73,17 @@ theorem forms_guess (hsign : ∀ X a, g.sign X a ∈ ({-1, 0, 1} : Finset ℤ)) 
   rw [h1, h2, h3, zero_add, add_zero, Finset.mul_sum]
   exact Finset.sum_congr rfl fun a _ => by ring
 
-/-- **Acceptance from its parts** (P3:3564-3614, 3669-3691): a guess passing the syntactic checks, with admissible
+/-- **Acceptance from its parts** (Lemma H.4; Lemma H.7): a guess whose pair passes the outer step's guards and which
+passes the syntactic checks, with admissible
 calls, whose grid sums are a completeness witness for the honest proof of a tautological substituted circuit and
 whose filters miss at most `β + ξ` of the incidence mass, is accepted, once `(1+Λ̄(q))⁴q^{−D} ≤ ε₀`. -/
 theorem unionAccepts_of_parts (P : FusedPrimitive I) (cparams : MaskedCompletenessParameters S.params)
-    (hsize : g.oracle.size ≤ RecoveryScheduleEnvelope.oracleSizeBound S.G (S.pcp.nativeWidth N))
+    (hguards : PairGuards S z g.pair)
     (hsign : ∀ X a, g.sign X a ∈ ({-1, 0, 1} : Finset ℤ)) (hword : g.word.length ≤ N / 16)
     (hVcall : ∀ pos j t, (g.polyVAt pos).coeff j t ≠ 0 → I.Call (g.vCall pos t))
     (hQcall : ∀ pos j t, (g.polyQAt pos).coeff j t ≠ 0 → I.Call (g.vCall pos t))
     (hμcall : ∀ i j t, (g.polyMuAt i).coeff j t ≠ 0 → I.Call (g.muCall i t))
-    (htaut : ∀ x, (S.request z g.oracle).circuit.eval x = true)
+    (htaut : ∀ x, (S.request z g.pair).circuit.eval x = true)
     (T : PcppVar g.pcpp → BitInput g.q → ℝ)
     (w : CompletenessWitness g.pcpp g.pcpp.honestAuxiliary T (g.forms hsign).guess cparams.ζ cparams.δ)
     (hmissing : uMean (fun p : Fin (2 ^ g.pcpp.clauseBits) × Fin 2 × (I.Seed g.mode g.q × BitInput g.q) =>
@@ -117,9 +96,9 @@ theorem unionAccepts_of_parts (P : FusedPrimitive I) (cparams : MaskedCompletene
   have hQacc := seed_propagated_Q I P hL (g.forms hsign) g.carrier g.translation hQcall
   have hμacc := seed_propagated_Mu I P hL (g.forms hsign) g.carrier g.translation hμcall
   obtain ⟨hV, hQ, hμ⟩ := completeness_accepts_real g.pcpp cparams g.pcpp.honestAuxiliary T (g.forms hsign).guess w
-    (carrierFilter I g.mode g.pcpp g.carrier g.translation) (honest_acceptance S z g.oracle htaut) hmissing
+    (carrierFilter I g.mode g.pcpp g.carrier g.translation) (honest_acceptance S z g.pair htaut) hmissing
     (g.Vhat P) (g.Qhat P) (g.μhat P) (hVacc.trans hD) (hQacc.trans hD) (hμacc.trans hD)
-  exact ⟨hsize, hsign, hword, hVcall, hQcall, hμcall, hV, hQ, hμ⟩
+  exact (unionAccepts_iff P g).2 ⟨hguards, hsign, hword, hVcall, hQcall, hμcall, hV, hQ, hμ⟩
 
 /-! ## Admissible calls: the tuple of a nonzero coefficient lies in the named carriers -/
 
@@ -160,26 +139,6 @@ theorem gates_parity_sublist (X : PcppVar g.pcpp) (h : g.sysBit X = true) :
   rw [if_pos h]
   exact List.sublist_append_right _ _
 
-theorem coeff_factor_ne {α : Type} {P : Poly4 α} {j : Fin 4} {t : Fin 4 → α} (h : P.coeff j t ≠ 0) (k : Fin 4) :
-    P.F j k (t k) ≠ 0 := by
-  unfold Poly4.coeff at h
-  have h2 : ∏ k, P.F j k (t k) ≠ 0 := right_ne_zero_of_mul h
-  exact (Finset.prod_ne_zero_iff.mp h2) k (Finset.mem_univ _)
-
-theorem polyV_factor {α : Type} (sys : Bool) (wS wOne wE : α → ℝ) (j k : Fin 4) :
-    (polyV sys wS wOne wE).F j k = wS ∨ (polyV sys wS wOne wE).F j k = wOne ∨
-      (sys = true ∧ (polyV sys wS wOne wE).F j k = wE) := by
-  cases sys <;> fin_cases j <;> fin_cases k <;> simp [polyV, Poly4.mk4, fac4]
-
-theorem polyQ_factor {α : Type} (wS wOne : α → ℝ) (j k : Fin 4) :
-    (polyQ wS wOne).F j k = wS ∨ (polyQ wS wOne).F j k = wOne := by
-  fin_cases j <;> fin_cases k <;> simp [polyQ, Poly4.mk4, fac4]
-
-theorem polyMu_factor {α : Type} (n₀ n₁ : Bool) (wX wY wOne : α → ℝ) (j k : Fin 4) :
-    (polyMu n₀ n₁ wX wY wOne).F j k = wX ∨ (polyMu n₀ n₁ wX wY wOne).F j k = wY ∨
-      (polyMu n₀ n₁ wX wY wOne).F j k = wOne := by
-  fin_cases j <;> fin_cases k <;> simp [polyMu, Poly4.mk4, fac4]
-
 /-- A tuple entry allowed for a `V`/`Q` call of `X` has its gates in `X`'s carrier. -/
 theorem gates_sublist_of_allowed (X : PcppVar g.pcpp) (a : g.AtomIx)
     (ha : (∃ u, a = Sum.inl u) ∨ (∃ b, a = Sum.inr (Sum.inl (X, b))) ∨
@@ -191,7 +150,7 @@ theorem gates_sublist_of_allowed (X : PcppVar g.pcpp) (a : g.AtomIx)
   · exact g.gates_parity_sublist X hs
 
 open Classical in
-/-- The translation is well formed at a star length (`selectCodes_length`, `selectCodes_lt`). -/
+/-- The translation is well formed at a star length (the `selectCodes_length`, `selectCodes_lt`). -/
 theorem translationOk (hStar : I.StarAt g.q) (req : PrimRequest) (hn : req.n = g.q)
     (ht : req.translation = g.translation) : B.TranslationOk req := by
   have htr : g.translation = (I.starParams g.q hStar).selectCodes g.pops := by
@@ -277,24 +236,6 @@ theorem calls_admissible (hStar : I.StarAt g.q) (hFit : B.FitsAt g.q) (hname : 2
       exact Or.inl (g.gates_sublist_of_allowed _ _ (Or.inl ⟨u, hu⟩))
 
 /-! ## The missing mass at the guess's own carriers (`tr:missing`, P3:3413-3443) -/
-
-/-- The residual bits of a carrier have twice its length. -/
-theorem length_residualBits {n : ℕ} (X : Stars.Carrier n) (c u v : BitInput n) :
-    (Stars.Carrier.residualBits X c u v).length = 2 * X.length := by
-  unfold Stars.Carrier.residualBits
-  rw [List.length_flatMap]
-  simp only [List.length_cons, List.length_nil, List.map_const', List.sum_replicate, smul_eq_mul]
-  ring
-
-/-- `star:selection`'s objective of a list indexed by `Fin k`. -/
-theorem objective_finRange (P : Shared.StarParams) (σ : P.Translation) {k : ℕ} (F : Fin k → ℚ × Stars.Carrier P.n) :
-    (P.objective σ ((List.finRange k).map F) : ℝ) =
-      (∑ i : Fin k, ((F i).1 : ℝ) * ∑ x : BitInput P.n, (Stars.inputPopulation P σ (F i).2 x : ℝ)) / 2 ^ P.n := by
-  unfold Shared.StarParams.objective
-  rw [List.map_map, ← Fin.sum_univ_def]
-  simp only [Function.comp_apply]
-  push_cast
-  rfl
 
 /-- Grouping a position sum by the variable named there. -/
 theorem sum_pos_eq_sum_var (G : PcppVar g.pcpp → ℝ) :
@@ -442,12 +383,8 @@ theorem missing_at_guess (hStar : I.StarAt g.q) (spectrum : ExpanderSpectrumCont
 
 /-! ## The guess word, the carriers' envelope and wires -/
 
-theorem length_flatten_ofFn {β : Type} {k : ℕ} (F : Fin k → List β) :
-    (List.ofFn F).flatten.length = ∑ a, (F a).length := by
-  rw [List.length_flatten, List.map_ofFn, List.sum_ofFn]; rfl
-
 theorem word_length_le (Ko Ks Kc : ℕ)
-    (hO : (natWord (ExecutableInterfaces.encodeBooleanCircuit g.oracle)).length ≤ Ko)
+    (hO : (NearCubicWires.WireExponent3_5.UnionMachine.Front35.pairWord g.pair).length ≤ Ko)
     (hS : ∀ X a, (intWord (g.sign X a)).length ≤ Ks) (hC : ∀ X a, (natWord (g.mode.code (g.atom X a))).length ≤ Kc) :
     g.word.length ≤ 1 + Ko + (g.pcpp.systematicBits + g.pcpp.auxiliaryBits) * (g.s * (Ks + Kc)) := by
   unfold word
@@ -465,16 +402,6 @@ theorem word_length_le (Ko Ks Kc : ℕ)
     calc _ ≤ ∑ _X : PcppVar g.pcpp, g.s * (Ks + Kc) := Finset.sum_le_sum fun X _ => hinner X
       _ = _ := by rw [Finset.sum_const, Finset.card_univ, Fintype.card_fin, smul_eq_mul]
   exact Nat.add_le_add (Nat.add_le_add_left hO 1) houter
-
-theorem wires_append {n : ℕ} (X Y : Stars.Carrier n) :
-    Stars.Carrier.wires (X ++ Y) = Stars.Carrier.wires X + Stars.Carrier.wires Y := by
-  unfold Stars.Carrier.wires; rw [List.map_append, List.sum_append]
-
-theorem wires_flatten_ofFn {n k : ℕ} (F : Fin k → Stars.Carrier n) :
-    Stars.Carrier.wires (List.ofFn F).flatten = ∑ a, Stars.Carrier.wires (F a) := by
-  unfold Stars.Carrier.wires
-  rw [List.map_flatten, List.sum_flatten, List.map_ofFn, List.map_ofFn, List.sum_ofFn]
-  rfl
 
 /-- The carrier's wires: at most `s·w + C_par q²` when every atom has at most `w` wires and the parity at most
 `C_par q²` (P3:3409-3410, 3413-3419). -/
@@ -528,35 +455,37 @@ end UnionGuess
 /-! ## The guess of a sparse witness, and the accepting guess -/
 
 section Build
-variable (S : UnionSetup I) {N : ℕ} (z : BitInput N) (oracle : BooleanCircuit (S.pcp.nativeWidth N)) (m : Mode)
-variable {J : PcppVar (S.pcppOf z oracle) → Type}
+variable (S : UnionSetup I) {N : ℕ} (z : BitInput N) (Γ : NearCubicGates.Close.Outer.OuterGuess (S.width N)) (m : Mode)
+variable {J : PcppVar (S.pcppOf z Γ) → Type}
 
 /-- The sign of a grid entry: the witness's sign on a drawn atom, zero on the zero atom. -/
-def witnessSign (σ : PcppVar (S.pcppOf z oracle) → Fin (S.gridSize (S.request z oracle).arity) → ℤ)
-    (atom : ∀ X, Fin (S.gridSize (S.request z oracle).arity) → Option (J X))
-    (X : PcppVar (S.pcppOf z oracle)) (a : Fin (S.gridSize (S.request z oracle).arity)) : ℤ :=
+def witnessSign (σ : PcppVar (S.pcppOf z Γ) → Fin (S.gridSize (S.request z Γ).arity) → ℤ)
+    (atom : ∀ X, Fin (S.gridSize (S.request z Γ).arity) → Option (J X))
+    (X : PcppVar (S.pcppOf z Γ)) (a : Fin (S.gridSize (S.request z Γ).arity)) : ℤ :=
   match atom X a with
   | some _ => σ X a
   | none => 0
 
 /-- The circuit of a grid entry: the drawn atom, or the constant for the zero atom. -/
-def witnessAtom (C : ∀ X, J X → m.Circuit (S.request z oracle).arity)
-    (atom : ∀ X, Fin (S.gridSize (S.request z oracle).arity) → Option (J X))
-    (X : PcppVar (S.pcppOf z oracle)) (a : Fin (S.gridSize (S.request z oracle).arity)) :
-    m.Circuit (S.request z oracle).arity :=
+def witnessAtom (C : ∀ X, J X → m.Circuit (S.request z Γ).arity)
+    (atom : ∀ X, Fin (S.gridSize (S.request z Γ).arity) → Option (J X))
+    (X : PcppVar (S.pcppOf z Γ)) (a : Fin (S.gridSize (S.request z Γ).arity)) :
+    m.Circuit (S.request z Γ).arity :=
   match atom X a with
   | some j => C X j
   | none => S.constAtom m _
 
-/-- **The guess of a sparse witness** (P3:3578-3582): the oracle, the mode, and per variable the witness's grid signs
+/-- **The guess of a sparse witness** (P3:3578-3582): the pair `Γ`, the mode, and per variable the witness's grid signs
 and drawn atoms. -/
-def guessOfWitness (C : ∀ X, J X → m.Circuit (S.request z oracle).arity)
-    (σ : PcppVar (S.pcppOf z oracle) → Fin (S.gridSize (S.request z oracle).arity) → ℤ)
-    (atom : ∀ X, Fin (S.gridSize (S.request z oracle).arity) → Option (J X)) : UnionGuess S z :=
-  ⟨oracle, m, witnessSign S z oracle σ atom, witnessAtom S z oracle m C atom⟩
+def guessOfWitness (C : ∀ X, J X → m.Circuit (S.request z Γ).arity)
+    (σ : PcppVar (S.pcppOf z Γ) → Fin (S.gridSize (S.request z Γ).arity) → ℤ)
+    (atom : ∀ X, Fin (S.gridSize (S.request z Γ).arity) → Option (J X)) : UnionGuess S z :=
+  ⟨Γ, m, witnessSign S z Γ σ atom, witnessAtom S z Γ m C atom⟩
 
 end Build
 
 end Union
 
 end NearCubicWires.WireExponent3_5.Transfer
+
+end

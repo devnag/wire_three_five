@@ -1,5 +1,8 @@
+import Proof.MachineModel.CanonicalNativeCallProgram
 import Proof.MachineModel.CanonicalSupplierGateProgram
+import Proof.MachineModel.CanonicalSupplierSupportCompressionProgram
 import Proof.MachineModel.CanonicalSupportedGateRelationProgram
+import Proof.MachineModel.TaggedProgramChoice
 
 /-!
 # Canonical support-compressed supplier gate decomposition

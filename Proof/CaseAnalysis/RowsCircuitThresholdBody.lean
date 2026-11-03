@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RowsCircuitSymmetricBody
+import Proof.CaseAnalysis.RowsCircuitBodyFields
 
 /-! The same accepted threshold top and retained bitmap feed the complete
 body, preserving original serialized descriptions and selected-bottom order. -/

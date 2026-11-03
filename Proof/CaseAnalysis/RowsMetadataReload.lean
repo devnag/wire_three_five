@@ -1,5 +1,6 @@
-import Proof.Amplification.RecoveryRowLookupTapes
 import Proof.CaseAnalysis.RowsMetadataCopy
+import Proof.Amplification.RecoveryCursorCalls
+import Proof.Amplification.RecoveryRowLookupTapes
 import Proof.Hierarchy.HierarchyAllocation
 
 /-! Six existing bounded-copy calls reload exactly the degree worker's

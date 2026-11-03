@@ -1,5 +1,7 @@
-import Proof.CaseAnalysis.RowsCircuitBottomDock
 import Proof.CaseAnalysis.RowsSupportLoop
+import Proof.CaseAnalysis.RowsCircuitBottomDock
+import Proof.CaseAnalysis.RowsCircuitBottomTemplate
+import Proof.CaseAnalysis.RowsCircuitLayout
 
 /-! The retained-support loop uses the same actual bottom-count template at
 full circuit port624. The only new public port is1703; old ports are unchanged. -/

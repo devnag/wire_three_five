@@ -1,4 +1,6 @@
 import Proof.MachineModel.OrdinaryMatrixBatchRightPass
+import Proof.MachineModel.OrdinaryMatrixRightHandoff
+import Proof.MachineModel.OrdinaryMatrixRightPaper
 
 /-! The executed right stream is exactly the right-plane consumer's full
 occurrence order: gates, buckets, then stable sorted ids. Zero cells and

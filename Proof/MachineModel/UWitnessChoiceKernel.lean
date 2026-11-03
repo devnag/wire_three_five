@@ -1,5 +1,5 @@
-import Proof.MachineModel.OrdinaryWitnessPrefix
 import Proof.MachineModel.UInputOrdinary
+import Proof.MachineModel.OrdinaryWitnessPrefixBody
 
 /-! Guarded choice copying. The inherited counter/advance routine is reused,
 but each physical outer marker is tested before copying its payload. A short

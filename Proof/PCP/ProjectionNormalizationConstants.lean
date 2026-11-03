@@ -1,4 +1,5 @@
 import Proof.PCP.ProjectionNormalizationFieldList
+import Proof.Hierarchy.HierarchyFixedWord
 
 /-! The padding producer uses the existing finite literal-word printer at
 a retained output cursor. The printed word is fixed zero-projection code;

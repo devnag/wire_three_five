@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CaseTwoBinaryField
+import Proof.MachineModel.GeneratedAmplifierSemantics
 
 /-! The physical little-endian field is the original PCPP clause address. -/
 namespace NearCubicWires.RepairOrdinary.CloseoutCaseTwo.BinaryField

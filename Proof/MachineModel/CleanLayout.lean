@@ -1,4 +1,5 @@
 import Proof.MachineModel.Body
+import Proof.Amplification.RecoveryScratchErase
 
 /-! The occurrence's paid cleanup erases the original source bank and the
 frame-copy counter together. The two existing erase ports are retained. -/

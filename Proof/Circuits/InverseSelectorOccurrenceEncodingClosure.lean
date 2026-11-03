@@ -1,5 +1,7 @@
 import Proof.Circuits.InverseSelectorOccurrenceQuad
+import Proof.Circuits.InverseSelectorNativeWidth
 import Proof.Circuits.InverseSubstitutionRequestWordClosure
+import Proof.MachineModel.RuntimeCaseTwoOracleTripleProgram
 
 /-!
 # The inverse Case-2 occurrence runner from one encoding stream

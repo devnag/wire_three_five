@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.Writers.ThrFin1
+import Proof.Wire_3_5.FinalPass.SampleRef
 
 /-! # c4 THR block, the THR finisher's append, run
 

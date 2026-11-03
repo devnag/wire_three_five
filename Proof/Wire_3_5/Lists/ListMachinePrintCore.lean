@@ -160,12 +160,31 @@ end One
 namespace Seek
 open One (cfg)
 
+def machine : Machine 1 3 where
+  descriptionBits := 0
+  start := 0
+  halted := fun q => q.val == 2
+  rule := fun q sc =>
+    if q.val = 0 then some (if sc 0 then ⟨1, ![none], ![.right]⟩ else ⟨2, ![none], ![.stay]⟩)
+    else if q.val = 1 then some ⟨0, ![none], ![.right]⟩
+    else none
+
 end Seek
 
 /-! ## `UExtend`: `frame (1^i)` to `frame (1^{i+1})` at its terminator -/
 
 namespace UExtend
 open One (cfg)
+
+def machine : Machine 1 4 where
+  descriptionBits := 0
+  start := 0
+  halted := fun q => q.val == 3
+  rule := fun q _ =>
+    if q.val = 0 then some ⟨1, ![some true], ![.right]⟩
+    else if q.val = 1 then some ⟨2, ![some true], ![.right]⟩
+    else if q.val = 2 then some ⟨3, ![some false], ![.stay]⟩
+    else none
 
 end UExtend
 

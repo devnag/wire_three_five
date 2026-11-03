@@ -1,8 +1,27 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.C4BudE
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.CallSize
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.SymNeed
+import Proof.Wire_3_5.Primitive.SeedFix.C4GateSymB
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymNB
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.SeedFix.C4BudEBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # C4.K item (h), part 6: `sym_steps_le` generic in the free program (for contract v7)
 
-P3:3098-3100, 3105-3115: `sym_steps_le` reads only the free program's steps, its pad exponent and the pad bound
+P3:3098-3100, 3105-3115: the `sym_steps_le` reads only the free program's steps, its pad exponent and the pad bound
 of `SymFreeOk6`; v7 (`SymFreeOk7`) keeps those fields, so the budget takes them as hypotheses.
 
 * **`sym_steps_gen`**.
@@ -225,3 +244,5 @@ theorem sym_steps_gen (l : Literals) (F : GateFree l) (Kp Dp : ℕ)
     (hpad kclk coef A a0 ha0 n a ha Cs carriers translation hcall hs) (hK1 n) hK2 le_rfl hEc hEa hAt
 
 end NearCubicWires.WireExponent3_5.PrimT.C4Bud
+
+end

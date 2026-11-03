@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryCaseOnePaddedBitState
+import Proof.Amplification.RecoveryCaseOneSourceMeaning
 
 /-! The actual hierarchy source, original canonical recovery, selected
 amplifier and complete-table evaluator compute the paper's padded Case-1 bit at the requested target address.

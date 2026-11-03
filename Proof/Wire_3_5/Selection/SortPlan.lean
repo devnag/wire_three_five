@@ -1,5 +1,6 @@
-import Proof.Wire_3_5.FinalPass.WordMap
 import Proof.Wire_3_5.Selection.MathDefs
+import Proof.Wire_3_5.FinalPass.WordMap
+import Proof.MachineModel.OrdinaryRadixSemantics
 
 /-! # C1.3 plan: the `<`-join as a radix sort and one scan (P3:1345-1356)
 

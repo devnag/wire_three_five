@@ -1,6 +1,7 @@
-import Proof.CaseAnalysis.CommonCutoff
-import Proof.CaseAnalysis.CommonProgramCertificate
+import Proof.CaseAnalysis.Assembly
 import Proof.CaseAnalysis.HardnessPair
+import Proof.CaseAnalysis.CommonProgramCertificate
+import Proof.CaseAnalysis.CommonCutoff
 import Proof.CaseAnalysis.WeakSelectedRuntime
 import Proof.CaseAnalysis.WitnessWeakMachine
 

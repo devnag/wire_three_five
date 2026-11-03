@@ -1,6 +1,7 @@
-import Proof.Supplier.RowThresholdSelections
-import Proof.Wire_3_5.Primitive.PrimitiveSym
 import Proof.Wire_3_5.Primitive.Threshold.PrimitiveThrRow
+import Proof.Wire_3_5.Primitive.PrimitiveSym
+import Proof.Supplier.SupplierEstimator
+import Proof.Supplier.RowThresholdSelections
 
 /-! # Primitive: the two errors of a threshold-top call (P3:3140-3168)
 
@@ -195,6 +196,7 @@ theorem thrRhat_eq_of_correct (g : ThrEq P Cs algorithm) (pr : PrimeIndex (thrCu
     exact hcorr _ (mem_thrPops P Cs algorithm den g pr d true c u v)
   · funext d
     exact hcorr _ (mem_thrPops P Cs algorithm den g pr d false c u v)
+
 
 /-! ## The first error: the reported-list observable against the masked truth -/
 

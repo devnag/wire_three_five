@@ -1,5 +1,7 @@
-import Proof.MachineModel.OrdinaryMatrixBatchColumnsCopy
 import Proof.MachineModel.OrdinaryMatrixBatchSetup
+import Proof.MachineModel.OrdinaryMatrixBatchColumnsCopy
+import Proof.MachineModel.OrdinaryMatrixScoreTemplateEntry
+import Proof.MachineModel.ClockScalarFields
 
 /-! The width part of the batch header, parsed once: the weight count `width` and the columns of `φ`.
 

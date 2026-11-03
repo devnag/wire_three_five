@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CaseTwoLiteralIndices
+import Proof.PCP.PCPPQueryCachedReaders
 
 /-! The actual cached clause call, original literal decoding, and paid result
 clear. Its unsigned variable index is retained while the same source cache is

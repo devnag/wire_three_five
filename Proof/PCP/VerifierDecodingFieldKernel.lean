@@ -1,4 +1,5 @@
 import Proof.PCP.VerifierDecodingBitWidth
+import Proof.MachineModel.OrdinaryPartitionWorkspace
 
 /-! Read one fixed-width field from the retained code. The output is framed
 for the shared binary comparison kernel. Existing output storage is reused

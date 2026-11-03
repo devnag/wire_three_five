@@ -1,3 +1,4 @@
+import Proof.Foundations.BalancedCNFCodec
 import Proof.Foundations.TseitinCNF
 
 /-!

@@ -105,12 +105,59 @@ theorem expand_pick (i : Fin 9) : RecoveryFocus.pick expandSlots i=
     | exact RecoveryFocus.pick_slot expandSlots expand_injective 1
     | exact RecoveryFocus.pick_slot expandSlots expand_injective 2
 noncomputable def expand := RecoveryFocus.machine expandSlots DecompositionBitFields.machine
+noncomputable def machine := Composition.machine first expand
 
 def output (source : List Bool) (pos : ℕ) (bits : List Bool) (sign : Bool) : Configuration 9 16 :=
   ⟨15,![pos,0,0,1,2*bits.length+1,0,0,3*bits.length,0],
     ![source,List.replicate bits.length true,List.replicate bits.length true,
       UnaryTemplate.tape bits.length,frame bits,List.replicate (2*bits.length+1) false,
       [sign],DecompositionBitFields.stream bits,[DecompositionBitFields.present bits]]⟩
+
+theorem magnitude_run (pre tail : List Bool) (z : ℤ) :
+    ∃ r,runFrom machine (10*natBitLength z.natAbs+11)
+      (Composition.leftConfig 6 (Composition.leftConfig 8
+        (input (pre++intWord z++tail) pre.length)))=some r ∧
+      r.final=output (pre++intWord z++tail) (pre.length+(intWord z).length)
+        (binary (natBitLength z.natAbs) z.natAbs) (decide (z<0)) ∧
+      r.steps=10*natBitLength z.natAbs+11 := by
+  let bits := binary (natBitLength z.natAbs) z.natAbs
+  let source := pre++intWord z++tail
+  obtain ⟨p,hp,pf,ps⟩ := field_run pre tail z
+  obtain ⟨b,hb,bf,bs⟩ := DecompositionBitFields.field_run [] bits [] [] false
+  simp only [List.nil_append,List.append_nil,List.length_nil,Nat.zero_add,Bool.false_or] at hb bf
+  let selected :=  DecompositionBitFields.cfg 0 (frame bits) 0 [] false
+  have hi : RecoveryFocus.config expandSlots p.final.heads p.final.tapes selected=
+      Composition.restart p.final expand.start := by
+    apply WilliamsSourceCrop.focus_same
+    · intro i
+      rw [pf]
+      fin_cases i <;> rfl
+    · intro i
+      rw [pf]
+      fin_cases i <;> rfl
+  obtain ⟨f,hf,ff,fs⟩ := RecoveryFocus.run_config expandSlots expand_injective
+    DecompositionBitFields.machine p.final.heads p.final.tapes _ selected b hb
+  rw [hi] at hf
+  have whole := Composition.run_join first expand _ _ _ p f hp hf
+  have hw : bits.length=natBitLength z.natAbs := binary_length _ _
+  rw [hw] at whole
+  have htime : (6*natBitLength z.natAbs+9)+1+(4*natBitLength z.natAbs+1)=
+      10*natBitLength z.natAbs+11 := by omega
+  rw [htime] at whole
+  refine ⟨Composition.joinedReceipt p f,whole,?_,?_⟩
+  · change Composition.rightConfig 10 f.final=_
+    rw [ff,bf,pf]
+    apply configuration_ext
+    · rfl
+    · funext i
+      fin_cases i <;> simp [Composition.rightConfig,RecoveryFocus.config,expand_pick,DecompositionBitFields.cfg,fieldOutput,MatrixDimensionField.output,
+        TapeEmbedding.config,output,DecompositionBitFields.stream_length,Fin.addCases,bits]
+    · funext i
+      fin_cases i <;> simp [Composition.rightConfig,RecoveryFocus.config,expand_pick,DecompositionBitFields.cfg,fieldOutput,MatrixDimensionField.output,
+        TapeEmbedding.config,output,Fin.addCases,bits]
+  · change p.steps+1+f.steps=_
+    rw [ps,fs,bs,hw]
+    omega
 
 theorem native_positive (n : ℕ) (hn : 0<n) :
     DecompositionBitFields.fields (binary (natBitLength n) n)=DecompositionBitFields.fields n.bits := by

@@ -1,4 +1,5 @@
 import Proof.Hierarchy.CompetitorSameBucketSignedMeaning
+import Proof.Hierarchy.CompetitorMatrixPlaneTable
 
 /-! Exact interoperability of the executed same-bucket dense bytes with
 the existing indexed table state, and combined P/N fits at the SAME width.

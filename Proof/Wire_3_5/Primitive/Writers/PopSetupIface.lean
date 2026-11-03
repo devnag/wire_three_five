@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.Writers.CellUnit
+import Proof.Wire_3_5.Primitive.Writers.Enum
 
 /-! # The POP setup's interface, (iii)
 

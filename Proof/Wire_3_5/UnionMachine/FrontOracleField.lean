@@ -1,5 +1,6 @@
-import Proof.Wire_3_5.FinalPass.HashTable
 import Proof.Wire_3_5.UnionMachine.FrontWalkRef
+import Proof.Wire_3_5.FinalPass.WordAux
+import Proof.Wire_3_5.FinalPass.HashTable
 
 /-! # C6 front, U1a: the walker of the guess's oracle field (P3:3669-3671)
 
@@ -739,7 +740,7 @@ theorem restOf_eq (t : List Bool) : restOf t = t.drop (pos1 t + ncp t) := by
     · rw [min_eq_right (by omega), List.drop_eq_nil_of_le (by omega), List.drop_eq_nil_of_le (by omega)]
   · rw [List.drop_eq_nil_of_le (by omega), List.drop_eq_nil_of_le (by omega)]
 
-/-- The verdict of the registers after the scan is the reference one. -/
+/-- The verdict of the registers after the scan is T's. -/
 theorem verdict_eq (w : List Bool) :
     vOf (if ncp w.tail < ones w.tail then 1 else if ones w.tail < w.tail.length then (if w = [] then 1 else 0) else 1)
       (ones w.tail) (if ncp w.tail = 0 then 0 else (w.tail.getD (pos1 w.tail + ncp w.tail - 1) false).toNat) =

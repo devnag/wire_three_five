@@ -1,5 +1,12 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.UnionSchedule
 import Proof.Wire_3_5.UnionMachine.UnionCodec
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.UnionCodecBase
+
+
+noncomputable section
+
 
 /-! # The union machine's exact acceptance function (P3:3669-3691, 3485-3489)
 
@@ -20,7 +27,7 @@ values `P.value` at the call schedule.
   call admissible (by the Boolean `callOk`), and `tr:thresholds` in exact rationals at the answers `val`.
 * **`unionCheck_iff`**: `unionCheck S z g g.translation callOk P.value = true ↔ UnionAccepts S P z g` whenever
   `callOk` decides `I.Call` on the scheduled requests (only there: `GatesIn` holds on every nonzero-coefficient call
-  by construction of the carriers, `gates_sublist_of_allowed`, so `callOk` may be the numeric conjuncts).
+  by construction of the carriers, the `gates_sublist_of_allowed`, so `callOk` may be the numeric conjuncts).
 * **`unionRun S z tr callOk val w`**: decode the witness `w` (`decodeGuess`), then `unionCheck`.
   `unionRun_sound`: an accepting run yields an accepting guess (the `SoundFor` direction);
   `unionRun_complete`: every accepting guess is accepted on every witness length `W ≥ ⌊N/16⌋` (the `CompleteFor`
@@ -45,7 +52,7 @@ variable {S : UnionSetup I} {N : ℕ} {z : BitInput N} (g : UnionGuess S z)
 
 /-- The guess as the check reads it, at the translation `tr`. -/
 def checkData (tr : List ℕ) : UnionCheckData :=
-  ⟨g.mode, g.q, (S.request z g.oracle).circuit, g.pcpp, g.s, g.sign, g.atom, S.constAtom g.mode g.q,
+  ⟨g.mode, g.q, (S.request z g.pair).circuit, g.pcpp, g.s, g.sign, g.atom, S.constAtom g.mode g.q,
     S.parityAtom g.mode g.q, S.gridMass g.q, tr⟩
 
 theorem checkData_circ (tr : List ℕ) : (g.checkData tr).circ = g.circ := by
@@ -132,20 +139,61 @@ theorem coeffMu_ne_zero (tr : List ℕ) (i : Fin (2 ^ g.pcpp.clauseBits)) (j : F
 
 end UnionGuess
 
+instance (G ν : ℕ) {m : ℕ} (B : BooleanCircuit m) : Decidable (NearCubicGates.Close.Outer.SrcFits G ν B) := by
+  unfold NearCubicGates.Close.Outer.SrcFits; infer_instance
+
+instance (ν : ℕ) {N : ℕ} (z : BitInput N) {m : ℕ} (B : BooleanCircuit m) :
+    Decidable (NearCubicGates.Close.Outer.CheckAt ν z B) := by
+  unfold NearCubicGates.Close.Outer.CheckAt; infer_instance
+
+/-- The outer step's guards on a pair `Γ` (Lemma H.7; the machine's order): live setup, `N = 2^a` past the onset, both
+circuits of size `≤ q^G`, the description-length guard and the source check. -/
+def PairGuards (S : UnionSetup I) {N : ℕ} (z : BitInput N) (Γ : NearCubicGates.Close.Outer.OuterGuess (S.width N)) :
+    Prop :=
+  S.live = true ∧ N = 2 ^ Nat.log 2 N ∧ S.onset ≤ Nat.log 2 N ∧
+  Γ.src.size ≤ oracleSizeBound S.G (S.width N) ∧ Γ.pf.size ≤ oracleSizeBound S.G (S.width N) ∧
+  NearCubicGates.Close.Outer.SrcFits S.lenG (Nat.log 2 N) Γ.src ∧
+  NearCubicGates.Close.Outer.CheckAt (Nat.log 2 N) z Γ.src
+
+instance (S : UnionSetup I) {N : ℕ} (z : BitInput N) (Γ : NearCubicGates.Close.Outer.OuterGuess (S.width N)) :
+    Decidable (PairGuards S z Γ) := by
+  unfold PairGuards; infer_instance
+
+/-- The guards of `UnionAccepts` on a guess: those of its pair. -/
+def UnionGuards (S : UnionSetup I) {N : ℕ} (z : BitInput N) (g : UnionGuess S z) : Prop := PairGuards S z g.pair
+
+instance (S : UnionSetup I) {N : ℕ} (z : BitInput N) (g : UnionGuess S z) : Decidable (UnionGuards S z g) := by
+  unfold UnionGuards; infer_instance
+
+/-- `UnionAccepts` is the pair's guards followed by the old tail. -/
+theorem unionAccepts_iff (P : FusedPrimitive I) {S : UnionSetup I} {N : ℕ} {z : BitInput N} (g : UnionGuess S z) :
+    UnionAccepts S P z g ↔ PairGuards S z g.pair ∧
+      ((∀ X a, g.sign X a ∈ ({-1, 0, 1} : Finset ℤ)) ∧ g.word.length ≤ N / 16 ∧
+      (∀ pos j t, (g.polyVAt pos).coeff j t ≠ 0 → I.Call (g.vCall pos t)) ∧
+      (∀ pos j t, (g.polyQAt pos).coeff j t ≠ 0 → I.Call (g.vCall pos t)) ∧
+      (∀ i j t, (g.polyMuAt i).coeff j t ≠ 0 → I.Call (g.muCall i t)) ∧
+      g.Vhat P ≤ 2 * (S.params.v0 : ℝ) ∧ g.Qhat P ≤ 1 + (S.params.v0 : ℝ) ∧ (S.params.threshold : ℝ) ≤ g.μhat P) := by
+  unfold UnionAccepts PairGuards
+  constructor
+  · rintro ⟨h1, h2, h3, h4, h5, h6, h7, rest⟩
+    exact ⟨⟨h1, h2, h3, h4, h5, h6, h7⟩, rest⟩
+  · rintro ⟨⟨h1, h2, h3, h4, h5, h6, h7⟩, rest⟩
+    exact ⟨h1, h2, h3, h4, h5, h6, h7, rest⟩
+
 variable {S : UnionSetup I} {N : ℕ} {z : BitInput N}
 
 /-- **The schedule's length is polynomial**: at most `24·K·(1 + 2K(s+1))⁴` for `K = c·(size(H)+1)^d`. -/
 theorem length_schedule_le (g : UnionGuess S z) (tr : List ℕ) :
     (g.checkData tr).schedule.length ≤
-      24 * (S.pcppAlg.coefficient * ((S.request z g.oracle).circuit.size + 1) ^ S.pcppAlg.degree) *
-        (1 + 2 * (S.pcppAlg.coefficient * ((S.request z g.oracle).circuit.size + 1) ^ S.pcppAlg.degree) *
+      24 * (S.pcppAlg.coefficient * ((S.request z g.pair).circuit.size + 1) ^ S.pcppAlg.degree) *
+        (1 + 2 * (S.pcppAlg.coefficient * ((S.request z g.pair).circuit.size + 1) ^ S.pcppAlg.degree) *
           (g.s + 1)) ^ 4 := by
-  set K := S.pcppAlg.coefficient * ((S.request z g.oracle).circuit.size + 1) ^ S.pcppAlg.degree with hK
-  have hM : 2 ^ (g.checkData tr).pcpp.clauseBits ≤ K := S.pcppAlg.clauseCountBound (S.request z g.oracle)
+  set K := S.pcppAlg.coefficient * ((S.request z g.pair).circuit.size + 1) ^ S.pcppAlg.degree with hK
+  have hM : 2 ^ (g.checkData tr).pcpp.clauseBits ≤ K := S.pcppAlg.clauseCountBound (S.request z g.pair)
   have hsys : (g.checkData tr).pcpp.systematicBits ≤ K := by
-    refine (S.pcppAlg.systematicBound (S.request z g.oracle)).trans (Nat.mul_le_mul_left _ ?_)
-    exact Nat.pow_le_pow_left (by have := (S.request z g.oracle).sizeLarge; omega) _
-  have haux : (g.checkData tr).pcpp.auxiliaryBits ≤ K := S.pcppAlg.auxiliaryBound (S.request z g.oracle)
+    refine (S.pcppAlg.systematicBound (S.request z g.pair)).trans (Nat.mul_le_mul_left _ ?_)
+    exact Nat.pow_le_pow_left (by have := (S.request z g.pair).sizeLarge; omega) _
+  have haux : (g.checkData tr).pcpp.auxiliaryBits ≤ K := S.pcppAlg.auxiliaryBound (S.request z g.pair)
   have hA : (g.checkData tr).atomCount ≤ 1 + 2 * K * (g.s + 1) := by
     unfold UnionCheckData.atomCount UnionCheckData.nvars
     have hs : (g.checkData tr).s = g.s := rfl
@@ -161,3 +209,5 @@ theorem length_schedule_le (g : UnionGuess S z) (tr : List ℕ) :
 end Check
 
 end NearCubicWires.WireExponent3_5.Transfer
+
+end

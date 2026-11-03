@@ -1,4 +1,4 @@
-import Proof.Supplier.RowTupleCutAppend
+import Proof.Supplier.RowTupleCutBody
 
 /-! The actual selected tuple stream emits every complete signed cut,
 reusing one cached coefficient and retaining the whole-row append cursor. -/
@@ -11,5 +11,6 @@ set_option maxHeartbeats 250000
 set_option maxRecDepth 120000
 set_option warningAsError true
 
+noncomputable def machine := StreamController.machine RowTupleCutBody.machine 44
 
 end NearCubicWires.RepairOrdinary.RowTupleCutList

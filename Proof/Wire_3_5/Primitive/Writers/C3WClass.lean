@@ -1,6 +1,6 @@
-import Proof.Wire_3_5.Primitive.Writers.C3WCostCall
-import Proof.Wire_3_5.UnionMachine.PreProof
-import Proof.Wire_3_5.Primitive.SeedFix.C4GateThrB
+import Proof.Wire_3_5.Primitive.Writers.C3WCostCallBase
+import Proof.Wire_3_5.UnionMachine.PreProofBase
+import Proof.Wire_3_5.Primitive.SeedFix.C4GateThrBBase
 import Proof.Wire_3_5.Primitive.Writers.ThrData2
 
 /-! # C3 request writer, part 21: the call's steps in the preprocessing class

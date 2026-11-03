@@ -1,5 +1,15 @@
-import Proof.Wire_3_5.Primitive.Writers.WriterIfaceJ
+import Lean
+import Proof.Wire_3_5.Primitive.Writers.WriterIfaceJBase
 import Proof.Wire_3_5.Primitive.SeedFix.C4Geo
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The pool-geometry writers' interface on the request word (restates PA's GeoIface)
 
@@ -88,3 +98,5 @@ structure GateThrWriterAt extends WriterStage where
 end Geo
 
 end NearCubicWires.WireExponent3_5.PrimT.GeoIface2
+
+end

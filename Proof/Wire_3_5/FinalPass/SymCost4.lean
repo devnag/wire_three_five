@@ -1,6 +1,23 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SymCost2
 import Proof.Wire_3_5.FinalPass.SymCost3
-import Proof.Wire_3_5.FinalPass.SymDeg
+import Proof.Wire_3_5.FinalPass.SymDegBase
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SymCap3
+import Proof.Wire_3_5.FinalPass.SymHp2
+import Proof.Wire_3_5.FinalPass.SymHp3
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.FinalPass.SymSz2
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SymCost4Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The SYM child's cost, part 4: `hcost` at a SYM call (generic in the batch)
 
@@ -35,10 +52,6 @@ noncomputable def kF (l : Literals) (F : GateFree l) (n : ℕ) : ℕ := ((gate0 
 /-- **The child's step bound** `K_ch(n) = 2^{n − k + d_A L − 4}`. -/
 noncomputable def symKch (l : Literals) (F : GateFree l) (c : SymC) (n : ℕ) : ℕ :=
   2 ^ (n - kF l F n + c.dA * Nat.clog 2 (n + 2) - 4)
-
-/-- The call's numbers' exponent. -/
-def eXOf (cD dQ dD dH eH dP eP cO eNc eQc U L : ℕ) : ℕ :=
-  3 * efOf cD dQ dD dH eH dP eP U L + (eNc + 8 * eQc + 24 + cO) * U + 9
 
 section Gate
 variable (l : Literals) (F : GateFree l)
@@ -202,3 +215,5 @@ theorem symHcost_of (c : SymC) (wa : WilliamsAlgorithm) (eT : ℕ) (hc : HpreC l
 end Gate
 
 end NearCubicWires.WireExponent3_5.FinalPass.SymFr
+
+end

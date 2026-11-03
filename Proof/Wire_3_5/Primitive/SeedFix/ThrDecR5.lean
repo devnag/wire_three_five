@@ -1,4 +1,6 @@
 import Proof.Wire_3_5.Primitive.SeedFix.ThrDecR4
+import Proof.Wire_3_5.Primitive.Writers.Enum
+import Proof.Wire_3_5.Primitive.ThresholdWriter.Joins
 
 /-! # THR decode front, RADIX part 5: the scan's item is the prime row's prime
 

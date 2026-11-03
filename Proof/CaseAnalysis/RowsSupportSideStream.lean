@@ -1,4 +1,6 @@
+import Proof.CaseAnalysis.RowsGateBankPorts
 import Proof.CaseAnalysis.RowsCircuitBottomErase
+import Proof.MachineModel.Runs
 
 namespace NearCubicWires.RepairOrdinary.CloseoutRowsSupportSideStream
 open LocalBitMultitape CanonicalWitnessCodec SupplierPipeline RadixSemantics

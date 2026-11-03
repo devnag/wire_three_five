@@ -1,4 +1,6 @@
 import Proof.Wire_3_5.UnionMachine.CWRoundA
+import Proof.CaseAnalysis.RowsGateHeader
+import Proof.PCP.PCPPairCanonical
 
 /-! # C6 front, U5, the code writers: loop B's round — one bottom's atom code
 
@@ -306,6 +308,7 @@ theorem roundB_run (W : ℕ) (ys : List (List Bool)) (hys : ∀ y ∈ ys, y.leng
   · rw [b8 _ (by intro k; rw [abSl_val]; fin_cases k <;> decide), b7 _ (by decide), b6 _ (by decide),
       b5 _ (by decide), b4 _ (by decide), b3 _ (by decide), show (1 : Fin 292) = cropSl 2 from rfl, b2hit, c2]
   · exact (install_slot abSl abSl_inj B7 o8 2).trans a2
+
 
 /-! ## Loop B: every bottom -/
 

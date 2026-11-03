@@ -1,5 +1,5 @@
-import Proof.Wire_3_5.Primitive.Writers.SymFamCost
-import Proof.Wire_3_5.Primitive.Writers.HashLeaf
+import Proof.Wire_3_5.Primitive.Writers.SymFamCostBase
+import Proof.Wire_3_5.Primitive.Writers.HashLeafBase
 
 /-! # SYM leaf, part 13: the SYM writer's leaf
 

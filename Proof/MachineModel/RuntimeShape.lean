@@ -1,6 +1,6 @@
-import Proof.CaseAnalysis.FinalLedgerAssembly
-import Proof.MachineModel.TopDownSelectedAssembly
-import Proof.MachineModel.TopDownWorkspaceSelectedBudget
+import Proof.Supplier.SupplierCapacity
+import Proof.Supplier.SupplierEstimator
+import Proof.MachineModel.TopDownSelectedRuntime
 
 /-! # R1: the runtime contract, proved before the source fuel exists
 
@@ -26,6 +26,27 @@ open SupplierEstimator SupplierCapacity
 
 /-! ## 1. The logarithm facts the table saving uses -/
 
+/-- `Nat.clog 2 (q+2) ≥ Nat.log 2 q + 1`: the live logarithm dominates the consumer's. -/
+theorem log_succ_le_logScale (q : ℕ) : Nat.log 2 q + 1 ≤ logScale q := by
+  unfold logScale
+  have h : Nat.log 2 q < Nat.clog 2 (q+2) := by
+    rw [Nat.lt_clog_iff_pow_lt (by decide)]
+    rcases Nat.eq_zero_or_pos q with hq | hq
+    · subst hq
+      simp
+    · have hp := Nat.pow_log_le_self 2 (Nat.pos_iff_ne_zero.mp hq)
+      omega
+  omega
+
+theorem succ_le_two_pow_logScale (q : ℕ) : q+1 ≤ 2^logScale q := by
+  unfold logScale
+  have h := Nat.le_pow_clog (by decide : 1 < 2) (q+2)
+  omega
+
+theorem succ_pow_le (q h : ℕ) : (q+1)^h ≤ 2^(h*logScale q) := by
+  calc (q+1)^h ≤ (2^logScale q)^h := Nat.pow_le_pow_left (succ_le_two_pow_logScale q) h
+    _ = 2^(h*logScale q) := by rw [← pow_mul, Nat.mul_comm]
+
 /-! ## 2. Absorption of each class into the consumer's allowance -/
 
 /-! ## 3. The shape theorem, generic in the width function -/
@@ -33,6 +54,24 @@ open SupplierEstimator SupplierCapacity
 /-! ## 4. At the consumer's own width, logarithm and sigma -/
 
 open P1TopDown
+
+/-- The three cost classes of one fuel function, fused with the live scale, its order fact
+and the bound (one object: no correct-but-useless half can typecheck). -/
+structure Split (σ : ℕ) (q : ℕ → ℕ) (sourceDegree : ℕ) (F : ℕ → ℕ) where
+  liveScale : ℕ
+  tableExponent : ℕ
+  smallExponent : ℕ
+  smallDivisor : ℕ
+  sourceCoefficient : ℕ
+  tableCoefficient : ℕ
+  smallCoefficient : ℕ
+  onset : ℕ
+  two_le_divisor : 2 ≤ smallDivisor
+  /-- `paper.tex:2307`: the live scale is chosen after the table exponent. -/
+  order : tableExponent+σ+2 ≤ liveScale
+  bound : ∀ n, onset ≤ n → F n ≤ sourceCoefficient*(n+1)^sourceDegree+
+    tableCoefficient*((q n+1)^tableExponent*2^(q n-normalizedLiveCount (q n) liveScale))+
+    smallCoefficient*((q n+1)^smallExponent*2^(q n/smallDivisor))
 
 
 

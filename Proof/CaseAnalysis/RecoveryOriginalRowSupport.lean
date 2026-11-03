@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoveryRowInputSupport
+import Proof.CaseAnalysis.RecoveryRowAddressMeaning
 
 /-! Apply the physical input-support lemma to the original normalized PCP,
 original builder and actual projected addresses. This is the input_bound

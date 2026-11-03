@@ -16,6 +16,14 @@ open PCJ9eff70d512234a4c_Fixed
 namespace PCJd4d1d9d7d1fa4313_Production
 attribute [local irreducible] P1TopDownPaidPayload.tapes
 
+abbrev PacketLibrary (selector : CyclicChoice.Laws) :=
+  (a : DecompositionAlgorithm) → PacketWriter selector a
+abbrev RowLibrary (selector : CyclicChoice.Laws) :=
+  (a : DecompositionAlgorithm) → (printer : WilliamsAlgorithm) → RowProducer selector a printer
+
+/-- The existing reusable family loader source; the descriptor is appended here. -/
+noncomputable def sourcePort (a : WilliamsAlgorithm) : Fin (r_tapes a) :=
+ ⟨P1TopDownPaidPayload.tapes a+1+2,by unfold r_tapes; omega⟩
 
 end PCJd4d1d9d7d1fa4313_Production
 

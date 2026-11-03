@@ -1,9 +1,22 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SeamsProg2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.FinalPass.SeamsProg
+import Proof.Wire_3_5.FinalPass.SeamsPt
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.FinalPass.SeamsProg2Base
 
-/-! # The S5 sub-seam over the SYM evaluator's words
 
-The sub-seam (`S5Seam`) takes the SYM evaluator as a `SymPtEval`; since the evaluator is a
-`SymPtEval2`, and the front needs only its call words and numbers (`Seams.SymWords`, `SeamsProg2`). This file is
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2: the S5 sub-seam over the SYM evaluator's words
+
+The sub-seam (`S5Seam`) takes the SYM evaluator as a `SymPtEval`; since #103 the evaluator is a
+`SymPtEval2`, and the front needs only its call words and numbers (`Seams.SymWords`, the `SeamsProg2`). This file is
 the sub-seam's twin over `Sw : SymWords` and `Seams.frontWordsW`: the layout `S5Lay Sw.nw` (unchanged, it depends on
 the word count only), S4's register length `blOf2`, **`S5Thr2`** (the THR half), **`ThrExit2`**, **`S5Core2`** (the
 core half). The types are the case `Sw = symToWords E3` (`Seams.frontWordsOf_toWords`).
@@ -32,7 +45,7 @@ noncomputable def blOf2 {nw : ℕ} (L : S5Lay nw) (r : FReq l F kclk coef A a ha
 
 variable (l F kclk coef A a ha)
 
-/-- **The THR half**: from any bank with the input on tape `0` and the THR slots and scratch blank, every
+/-- **The THR half** (C6b): from any bank with the input on tape `0` and the THR slots and scratch blank, every
 head at `0`, it writes the THR slots of `frontWordsW`, leaves its scratch blank of length `≤ len r` (`len r` within
 S4's register length), keeps every other tape, and returns every head to `0`. -/
 structure S5Thr2 (L : S5Lay Sw.nw) where
@@ -64,3 +77,5 @@ structure ThrExit2 (L : S5Lay Sw.nw) (r : FReq l F kclk coef A a ha) (Ab : Fin L
 end Family
 
 end NearCubicWires.WireExponent3_5.PrimAsm.S5Seam
+
+end

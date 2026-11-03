@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.FinalPass.SdSeedL
+import Proof.Wire_3_5.FinalPass.SeamsBase
 
 /-! # S4 (the seeds phase), part 22: the seed loop's sum is the final pass's numerator (P3:3044-3048)
 

@@ -1,4 +1,7 @@
+import Proof.MachineModel.OrdinaryAdd
+import Proof.Circuits.DecompositionCountPosition
 import Mathlib.Data.Nat.Choose.Bounds
+import Proof.Supplier.SupplierTouching
 import Proof.CaseAnalysis.RowsCircuitBottomReturned
 
 /-! A Pascal cell uses the existing streaming binary adder. Its two

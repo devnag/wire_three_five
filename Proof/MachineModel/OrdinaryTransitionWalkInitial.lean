@@ -1,5 +1,6 @@
 import Proof.MachineModel.OrdinaryMemoryCheckerTraceBounds
 import Proof.MachineModel.UWalkCapacity
+import Proof.MachineModel.ClockDyadicLedger
 
 /-! The exact mathematical store supplied by U's executed initialization
 and numeric bootstrap. Its reusable walk invariant follows solely from the

@@ -19,6 +19,9 @@ noncomputable section
 attribute [local irreducible] P1TopDownPaidPayload.tapes
 
 section y0
+variable {selector : CyclicChoice.Laws} (mask : MaskProducer)
+  (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector) (rows : PCJc4297ab269d8423a_Source.RowLibrary selector)
+  (sources : EightSources) {gamma : Real} (p : Parameters sources gamma) (k r scratch : Nat)
 
 set_option hygiene false in
 local notation "oracleC" => C10TotalDecode.oracleOf sources k (PolynomialClock.ordinaryClock k) p.degree n bits

@@ -1,7 +1,11 @@
+import Proof.Supplier.BoundedOracleStructuralSelectiveCompiler
+import Proof.Foundations.CanonicalBinaryProgram
+import Proof.Foundations.CanonicalEncodedListLengthProgram
 import Proof.MachineModel.CanonicalNatDecodeProgram
 import Proof.MachineModel.CanonicalProjectedRandomBitProgram
 import Proof.MachineModel.CanonicalThreeCNFLiteralProgram
-import Proof.Supplier.BoundedOracleStructuralSelectiveCompiler
+import Proof.Circuits.CallableRelocation
+import Proof.MachineModel.PreserveRightProgram
 
 /-!
 # Fixed selective bounded-oracle structural program

@@ -1,5 +1,6 @@
 import Proof.MachineModel.CanonicalSupplierCircuitHeaderProgram
 import Proof.MachineModel.CanonicalSupplierGateBatchProgram
+import Proof.MachineModel.PreserveRightProgram
 
 /-!
 # Canonical supplier single-circuit bottom decomposition

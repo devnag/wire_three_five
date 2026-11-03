@@ -1,5 +1,6 @@
-import Proof.Wire_3_5.FinalPass.HashCell
 import Proof.Wire_3_5.Primitive.SeedFix.C4Iface
+import Proof.Wire_3_5.FinalPass.HashCell
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixSampObjective
 
 /-! # C6 tail, item 2 (part 1): the sample positions as Horner values
 

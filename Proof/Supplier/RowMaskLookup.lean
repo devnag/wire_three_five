@@ -13,5 +13,6 @@ set_option warningAsError true
 
 noncomputable def machine := Composition.machine RowMaskPositionLoop.machine RowMaskConsume.machine
 
+def budget (N w d : ℕ) := d*(2*N+8*w+15)+8*w+14+N*(4*N+21)
 
 end NearCubicWires.RepairOrdinary.RowMaskLookup

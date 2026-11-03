@@ -1,5 +1,7 @@
 import Proof.Wire_3_5.Primitive.SeedFix.C4GatesZ
 import Proof.Wire_3_5.Primitive.Writers.DataBlank
+import Proof.Wire_3_5.Primitive.Writers.WriterIfaceJBase
+import Proof.Wire_3_5.Primitive.SeedFix.C4Geo
 import Proof.Wire_3_5.Primitive.Writers.GeoFront
 
 /-! # G2, the SYM gate-frame writer, part 1: the layout (P3:1655-1664, 3119-3120)

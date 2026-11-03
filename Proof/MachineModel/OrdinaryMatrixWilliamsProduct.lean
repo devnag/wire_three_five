@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryMatrixWilliamsInput
+import Proof.MachineModel.OrdinaryWilliamsCeilRealization
 
 /-! The actual ordinary producer now calls the corrected Williams source
 wrapper and pays a complete return scan. Native count cells retain their
@@ -27,8 +28,26 @@ theorem source_run (a : WilliamsAlgorithm) (r : Request) (negative : Bool) (bit 
   have hh := (source a).headsReset (request r negative bit) actual ha
   exact ⟨actual,ha,ho,hh,runFrom_steps_le _ _ _ _ ha⟩
 
+noncomputable def tapes (a : WilliamsAlgorithm) := 424+(source a).program.tapeCount
+noncomputable def slots (a : WilliamsAlgorithm) (i : Fin (source a).program.tapeCount) : Fin (tapes a) :=
+  if i.val=0 then ⟨422,by unfold tapes; omega⟩ else i.natAdd 424
 
+theorem slots_injective (a : WilliamsAlgorithm) : Function.Injective (slots a) := by
+  intro i j he
+  unfold slots at he
+  split at he <;> split at he
+  · exact Fin.ext (by omega)
+  · have h := congrArg Fin.val he; simp only [Fin.val_natAdd] at h; omega
+  · have h := congrArg Fin.val he; simp only [Fin.val_natAdd] at h; omega
+  · have h := congrArg Fin.val he; simp only [Fin.val_natAdd] at h; exact Fin.ext (by omega)
+
+noncomputable def first (a : WilliamsAlgorithm) := TapeEmbedding.machine (source a).program.tapeCount MatrixWilliamsInput.machine
+noncomputable def last (a : WilliamsAlgorithm) := RecoveryFocus.machine (slots a) (source a).program.machine
+noncomputable def machine (a : WilliamsAlgorithm) := Composition.machine (first a) (last a)
+noncomputable def input (a : WilliamsAlgorithm) (r : Request) : Fin (tapes a) → List Bool :=
+  Fin.addCases (m := 424) (n := (source a).program.tapeCount) (motive := fun _ => List Bool) (MatrixWilliamsInput.input r) (fun _ => [])
 noncomputable def budget (a : WilliamsAlgorithm) (r : Request) := MatrixWilliamsInput.budget r+1+sourceBudget a r
+noncomputable def outputTape (a : WilliamsAlgorithm) := slots a (source a).program.outputTape
 
 theorem initial_join {t e s v : ℕ} (p : Machine t s) (q : Machine (t+e) v) (ts : Fin t → List Bool) :
     Composition.leftConfig v (TapeEmbedding.config (fun _ : Fin e => 0) (fun _ : Fin e => []) (initialConfiguration p ts))=
@@ -40,5 +59,41 @@ theorem initial_join {t e s v : ℕ} (p : Machine t s) (q : Machine (t+e) v) (ts
     change (Fin.addCases (m := t) (n := e) (motive := fun _ => ℕ) (fun _ => 0) (fun _ => 0)) i=0
     refine Fin.addCases (fun j => ?_) (fun j => ?_) i <;> simp only [Fin.addCases_left,Fin.addCases_right]
   · rfl
+
+theorem call_run {s : ℕ} (a : WilliamsAlgorithm) (r : Request) (negative : Bool) (bit : ℕ)
+    (c : Configuration (tapes a) s)
+    (ct : ∀ j,c.tapes (slots a j)=(source a).program.inputTapes
+      (natWord r.U++MatrixSignedPlane.plane r negative bit++MatrixRightPlaneNative.plane r) j)
+    (ch : ∀ j,c.heads (slots a j)=0) : ∃ actual,
+    runFrom (last a) (sourceBudget a r) (Composition.restart c (last a).start)=some actual ∧
+    actual.final.tapes (outputTape a)=planeCounts r negative bit ∧ actual.final.heads (outputTape a)=0 ∧
+    (∀ i : Fin 424,i.val≠422 → actual.final.tapes (i.castAdd (source a).program.tapeCount)=c.tapes (i.castAdd (source a).program.tapeCount) ∧
+      actual.final.heads (i.castAdd (source a).program.tapeCount)=c.heads (i.castAdd (source a).program.tapeCount)) ∧
+    actual.steps≤ sourceBudget a r := by
+  obtain ⟨body,hr,bodyT,bodyH,bodyS⟩ := source_run a r negative bit
+  let entry := initialConfiguration (source a).program.machine ((source a).program.inputTapes
+    (natWord r.U++MatrixSignedPlane.plane r negative bit++MatrixRightPlaneNative.plane r))
+  have hi : RecoveryFocus.config (slots a) c.heads c.tapes entry=Composition.restart c (last a).start :=
+    WilliamsSourceCrop.focus_same (slots a) c entry ch ct
+  obtain ⟨focused,hf,ff,fs⟩ := RecoveryFocus.run_config (slots a) (slots_injective a) (source a).program.machine
+    c.heads c.tapes _ entry body hr
+  rw [hi] at hf
+  refine ⟨focused,hf,?_,?_,?_,fs.trans_le bodyS⟩
+  · rw [ff]
+    simpa only [outputTape,RecoveryFocus.config,RecoveryFocus.pick_slot (slots a) (slots_injective a)] using bodyT
+  · rw [ff]
+    simp only [outputTape,RecoveryFocus.config,RecoveryFocus.pick_slot (slots a) (slots_injective a),bodyH]
+  · intro i hi
+    have hn : ∀ j,slots a j≠i.castAdd (source a).program.tapeCount := by
+      intro j hj
+      unfold slots at hj
+      split at hj
+      · have h := congrArg Fin.val hj; simp only [Fin.val_castAdd] at h; omega
+      · have h := congrArg Fin.val hj; simp only [Fin.val_natAdd,Fin.val_castAdd] at h; omega
+    rw [ff]
+    simp [RecoveryFocus.config,RecoveryFocus.pick,not_exists.mpr hn]
+
+theorem selected_ne (j : Fin 7) : ((MatrixWilliamsDimensions.selected j).castAdd 2).val≠422 := by
+  fin_cases j <;> decide
 
 end NearCubicWires.RepairOrdinary.MatrixWilliamsProduct

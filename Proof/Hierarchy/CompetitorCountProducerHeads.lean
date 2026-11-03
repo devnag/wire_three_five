@@ -1,4 +1,5 @@
 import Proof.Hierarchy.CompetitorCountEntryHeads
+import Proof.Hierarchy.CompetitorCountProducer
 
 /-! The existing exact SUM producer with its full reusable scalar endpoint:
 source/count cursors are explicit and the scalar result head is zero. -/

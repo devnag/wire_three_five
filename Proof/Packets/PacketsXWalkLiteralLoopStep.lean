@@ -1,0 +1,23 @@
+import Proof.Packets.PacketsXWalkLiteralLoopData
+
+/-! Every counted walk iteration executes the actual visit and actual
+transition. The final visit consumes the last remaining transcript block. -/
+set_option autoImplicit false
+set_option maxHeartbeats 1200000
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedSimpArgs false
+namespace Theorem25Completion.WalkLiteralLoop
+open NearCubicWires NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdinary
+open NearCubicWires.ExtDecompositionBatch NearCubicWires.RepairSource.VerifierDecoding
+open NearCubicWires.SourceInterfaces NearCubicWires.SupplierToeplitz NearCubicWires.SupplierToeplitzCore NearCubicWires.SupplierWalkBridge
+open NearCubicWires.SupplierWalk NearCubicWires.CanonicalFourfoldRowProgram NearCubicWires.RepairSource.CloseoutRawRows
+open PCJ9eff70d512234a4c_Fixed.Materializer
+open CloseoutRowsModeCache NormalizedFiniteTransport Theorem25Completion.CycleBounds
+open VectorBottomUp SubstitutionCensus
+noncomputable section
+variable {population active depth n : Nat}
+attribute [local irreducible] WalkLiteralVisit.machine WalkLiteralAdvance.machine
+
+end
+end Theorem25Completion.WalkLiteralLoop

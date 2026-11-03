@@ -1,4 +1,5 @@
 import Proof.Hierarchy.CompetitorResidueTableClear
+import Proof.Hierarchy.CompetitorDimensions
 
 /-! Cold residue-table preparation from the real raw W/Q fields, P/N bank
 and cell-count driver. Capacity and the second width tape are produced. -/

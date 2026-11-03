@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.Language
+import Proof.Hierarchy.HierarchyProjectionPrefix
 
 /-! Reuse the existing cold hierarchy prefix for the schedule's exact native
 width. No projection-source invocation or replacement normalization is needed. -/

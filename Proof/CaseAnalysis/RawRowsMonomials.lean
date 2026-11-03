@@ -55,5 +55,10 @@ theorem rawDegree_substitute {d : ℕ} (atom : ℕ → StructuralGF2Polynomial)
       exact rawDegree_mono hm (hP m (by simp))
     · exact ih (fun n hn => hP n (by simp [hn]))
 
+def coordinateDegree {q : ℕ} (gs : List (SupportedNormalizedGate q)) (L den : ℕ) : ℕ :=
+  let active := touchingCost (occurrenceSupport gs) (normalizedLiveSet gs L)
+  canonicalWalkLength den * structuralListCoordinateRawDegree (canonicalGradedDepth active)
+    (executableGradedWindow active) gradedTerminalWindow
+
 end
 end NearCubicWires.RepairSource.CloseoutRawRows

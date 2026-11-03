@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.RowsIntegerTapes
+import Proof.MachineModel.OrdinaryFrameLoad
+import Proof.Amplification.RecoveryScratchErase
 
 /-! One integer round keeps the raw canonical stream and native output
 outside its reusable decoder bank. The literal field count is an outer driver. -/

@@ -1,5 +1,5 @@
-import Proof.CaseAnalysis.RecoveryGrammarAllocationFits
 import Proof.CaseAnalysis.RecoveryGraphBudget
+import Proof.CaseAnalysis.RecoveryGrammarAllocationFits
 
 /-! The existing original graph Fits predicates lift to the caller's paid
 coarse workspace. No exact graph size is evaluated by a new machine. -/

@@ -1,10 +1,11 @@
-import Proof.Wire_3_5.UnionMachine.FrontKit
 import Proof.Wire_3_5.UnionMachine.FrontSize
+import Proof.Wire_3_5.UnionMachine.FrontKit
+import Proof.CaseAnalysis.CloseoutScheduleMetadata
 
 /-! # C6 front, U1a: the oracle's size check as a stage (P3:3669)
 
 Docks the size check (`FrontSize.sizeP_true` / `sizeP_false`) as one machine on its own `19` tapes, from the framed
-input `x` (tape `0`, only counted), the Theorem 2.5 repository's decoder flag `[o.isSome]` (tape `1`), the raw descriptor (tape `2`) and the
+input `x` (tape `0`, only counted), v8's decoder flag `[o.isSome]` (tape `1`), the raw descriptor (tape `2`) and the
 width `1^q` (tape `3`): base's metadata counter (`1^{|x|}`), the register fill (`FrontFill`), the cell, the check. Its
 cell (tape `12`) is `sizeVerdict G q o`: `decide (c.size ≤ oracleSizeBound G q)` for the decoded oracle `o = some c`
 (whose descriptor is on tape `2`), `false` when nothing decoded.

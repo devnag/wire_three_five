@@ -1,3 +1,5 @@
+import Proof.Assembly.AppendOutputLength
+import Proof.Hierarchy.CompetitorRationalProducts
 import Proof.Assembly.AppendFrameKernel
 
 /-! An append-only ordinary producer can frame its actual output with a

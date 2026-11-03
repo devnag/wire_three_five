@@ -10,5 +10,6 @@ set_option maxHeartbeats 250000
 set_option maxRecDepth 120000
 set_option warningAsError true
 
+def start (w k M : ℕ) := initial (frame (binary (w*k+1) 0)) M
 
 end NearCubicWires.RepairOrdinary.RowTupleEnumeration

@@ -1,4 +1,5 @@
-import Proof.Wire_3_5.UnionMachine.RadSpec
+import Proof.Wire_3_5.Primitive.Writers.WriteNat
+import Proof.Wire_3_5.UnionMachine.RadSpecBase
 
 /-! # RADIX stage 5b, part 1: the block writer's register kit (row:radix, P3:2585-2623)
 

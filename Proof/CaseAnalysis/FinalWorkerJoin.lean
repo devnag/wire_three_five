@@ -25,4 +25,19 @@ theorem contributions_length (entries : List Entry) :
     (contributions entries).length = entries.length := by
   rw [contributions, List.length_map]
 
+/-- The multiply stage's scalar width fits inside the join width. -/
+theorem width_le_joinWidth (recordWidth : ℕ) (entries : List Entry) :
+    CompetitorRationalDecision.width recordWidth ≤ joinWidth recordWidth entries := by
+  unfold joinWidth foldWidth CompetitorSumWidth.width
+  nlinarith [Nat.zero_le (contributions entries).length,
+    Nat.zero_le (CompetitorRationalDecision.width recordWidth)]
+
+/-- One call per record fits inside the join width. -/
+theorem length_le_joinWidth (recordWidth : ℕ) (entries : List Entry) :
+    entries.length ≤ joinWidth recordWidth entries := by
+  unfold joinWidth foldWidth CompetitorSumWidth.width
+  rw [contributions_length]
+  nlinarith [Nat.zero_le entries.length,
+    Nat.zero_le (CompetitorRationalDecision.width recordWidth)]
+
 end NearCubicWires.RepairOrdinary.CloseoutFinalC10WorkerJoin

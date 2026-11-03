@@ -1,7 +1,9 @@
 import Proof.Amplification.CanonicalRecoveryRequest
 import Proof.CaseAnalysis.CaseTwoWitnessCompleteness
+import Proof.Foundations.QuotientBudgetCurrency
+import Proof.Foundations.VerifiedLinker
+import Proof.MachineModel.BoundedOracleRecoveryProgram
 import Proof.MachineModel.CanonicalRecoveryValidatorProgram
-import Proof.MachineModel.QuotientProgramConversion
 import Proof.PCP.PaddedProjectionRunnerOutputs
 
 namespace NearCubicWires.PaddedProjectionRunnerAssembly

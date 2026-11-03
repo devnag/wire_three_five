@@ -1,5 +1,7 @@
 import Proof.MachineModel.OrdinaryMatrixCoefficientNative
 import Proof.MachineModel.OrdinaryMatrixHeaderScratch
+import Proof.MachineModel.OrdinaryMatrixBatchColumnsCopy
+import Proof.Amplification.RecoveryScratchErase
 
 /-! The coefficient pass obtains every loop dimension by parsing the same original framed Request. No
 positioned cut stream or unary driver is an external input. All header work is charged once.

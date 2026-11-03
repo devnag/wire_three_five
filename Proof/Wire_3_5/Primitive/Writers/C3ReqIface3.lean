@@ -1,9 +1,20 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.C3ReqIface
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
 
-/-! # The C3 request writers' deliverable with a polynomial load premise
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2: the C3 request writers' deliverable with a polynomial load premise
 
 The THR and SYM pools' coefficient width `h` is `poly(n)` bits: `alg:disjoint`'s children carry the gate's weight bits,
-which are bounded only by the description. So the premise `h + Q' + m + pr ≤ c_N·(ψ+1)` of `C3ReqIface.C3ReqAt` cannot hold together with `CoefFit`. This file restates the writers' contract with the
+which are bounded only by the description. So the premise `h + Q' + m + pr ≤ c_N·(ψ+1)` of T's
+`C3ReqIface.C3ReqAt` cannot hold together with `CoefFit`. This file restates the writers' contract with the
 premise `h + Q' + m + pr ≤ c_N·(ψ+1)·(n+1)^{D_N}`:
 * **`C3ReqAt3`**: `C3ReqIface.C3ReqAt` verbatim (its stages `C3Stage`, runs `C3Run`, fields `preW`/`postW` of
   `r0`), with that premise;
@@ -80,3 +91,5 @@ def C3ReqLeaf3 (l : Literals) : Type :=
     Σ cW : ℕ, ∀ (kclk coef A a : ℕ) (ha : a ≤ kclk + 1), C3ReqAt3 l F EW cW cN DN kclk coef A a ha
 
 end NearCubicWires.WireExponent3_5.PrimAsm.C3ReqIface3
+
+end

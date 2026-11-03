@@ -1,8 +1,24 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.C3W3Budget
 import Proof.Wire_3_5.Primitive.Writers.C3ReqIface3
 import Proof.Wire_3_5.Primitive.Writers.C3WLeaf
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.C3WBudgetA
+import Proof.Wire_3_5.Primitive.Writers.C3WCall
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.GeoIface2
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.C3W3BudgetBase
+import Proof.Wire_3_5.Primitive.Writers.C3WBudgetABase
+import Proof.Wire_3_5.Primitive.SeedFix.C3ReqIface
 
-/-! # The C3 request writers at the polynomial load premise (`C3ReqIface3.C3ReqLeaf3`)
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2: the C3 request writers at the polynomial load premise (`C3ReqIface3.C3ReqLeaf3`)
 
 The writers (`C3Leaf.c3At`, the same stages and runs) with the budget at the premise
 `h + Q' + m + pr ≤ c_N·(Ψ+1)·(n+1)^{D_N}` (`C3Cost.call_budget3`): **`c3At3`**, **`c3ReqLeaf3`** (envelope
@@ -77,3 +93,5 @@ noncomputable def c3ReqLeaf3 (l : Literals) : C3ReqIface3.C3ReqLeaf3 l := fun cN
     c3At3 l F cN kclk coef A a ha DN hCD⟩⟩
 
 end NearCubicWires.WireExponent3_5.PrimAsm.C3Leaf
+
+end

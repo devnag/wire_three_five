@@ -1,6 +1,6 @@
-import Proof.CaseAnalysis.CloseoutRowsEstimatorWarmFields
 import Proof.Rows.ClosureOffsetMask
 import Proof.Rows.FinalCoordinateBridge
+import Proof.CaseAnalysis.CloseoutRowsEstimatorWarmFields
 
 /-!
 # The per-row selection mask word, in the printer's own cell order
@@ -49,7 +49,17 @@ open NearCubicWires.P1Closure
 open NearCubicWires.RepairSource.VerifierDecoding
 noncomputable section
 
+variable {n : Nat} (live : Finset (Fin n)) (s : Nat)
+  (harity : (s+1)/2+s/2=(liveᶜ).card) (sel : BitInput (liveᶜ).card → Bool)
+
 /-! ## 1. The word -/
+
+/-- **The row payload's selection mask.**  One bit per residual column, enumerated exactly once,
+in `C10ExternalRowLoop.printerPoint` order: flat index `k` is printed row `k / 2^(s/2)` and
+printed column `k % 2^(s/2)`. -/
+def gridWord : List Bool :=
+  (List.range (2^s)).map fun k =>
+    sel (C10ExternalRowLoop.printerPoint live s harity (k/2^(s/2)) (k%2^(s/2)))
 
 /-! ## 2. `gridWord` is the payload field -/
 

@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.FinalPass.HashFree
+import Proof.Wire_3_5.FinalPass.HashFreeBase
 
 /-! # C4KW: the HASH setup's kept words writer (types, stage interfaces)
 

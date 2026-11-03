@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryProjectionRows
+import Proof.PCP.ProjectionNormalizationQueryBytes
 
 /-! The emitted address frames agree with the SAME original normalized PCP
 query projections. This connects the physical row loop to the paid R1 native

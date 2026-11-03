@@ -1,4 +1,5 @@
 import Proof.Hierarchy.HierarchyNormalizedRun
+import Proof.Foundations.OrdinaryFramedSource
 
 /-! The one actual normalized constructor on the literal ordinary hierarchy
 input. The native codec and source request are transported without change. -/

@@ -15,5 +15,10 @@ open P1TopDownPaidReusable
 
 noncomputable def coefficient (a : WilliamsAlgorithm) : Nat :=
   10*DriverLayout.e a+10*DriverLayout.sweepCount a+1300
+def buffer (D : Nat) := D+1
+noncomputable def rewind (a : WilliamsAlgorithm) (D : Nat) :=
+  (coefficient a+2)*(D+1)
+noncomputable def workspace (a : WilliamsAlgorithm) (D : Nat) :=
+  (2*coefficient a+20)*(D+1)
 
 end NearCubicWires.P1TopDownPaidReusableReserves

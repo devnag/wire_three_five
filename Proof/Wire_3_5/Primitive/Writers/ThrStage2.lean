@@ -1,5 +1,5 @@
 import Proof.Wire_3_5.Primitive.Writers.ThrStage1
-import Proof.Wire_3_5.Primitive.Writers.ThrSet5
+import Proof.Wire_3_5.Primitive.Writers.ThrSet4
 
 /-! # c4 THR block, the THR stage from its setup (`thrStage_run`)
 

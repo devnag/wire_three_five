@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPRequestNodeListEntry
+import Proof.Circuits.DecompositionPrepare
 
 /-! Reuse the existing cold native header and measured capacity producer.
 Only source, capacity and the already-correct count overlap the node bank. -/

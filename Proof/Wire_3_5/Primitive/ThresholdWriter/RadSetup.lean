@@ -1,7 +1,18 @@
+import Lean
 import Proof.Wire_3_5.Primitive.ThresholdWriter.Joins
-import Proof.Wire_3_5.Primitive.Writers.WriterIfaceJ
+import Proof.Wire_3_5.Primitive.Writers.WriterIfaceJBase
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.ThresholdWriter.RadSetupBase
 
-/-! # THR, W7 seam: the RADIX row setup TYPE (`RadSetupSpec`; builds it, THR docks it)
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # THR, W7 seam: the RADIX row setup TYPE (`RadSetupSpec`; PA2 builds it, THR docks it)
 
 P3:2585-2623 (row:radix): row `(g, p)` reduces its coefficients modulo `p`, writes each `a_i` in radix `b₀ = 2` with
 `τ₀` digits, gives residual `Z_i^±` exactly `v_{i,d}` labelled copies per digit and sign, applies the single fixed count
@@ -32,17 +43,6 @@ open NearCubicWires.WireExponent3_5.Cost NearCubicWires.WireExponent3_5.Split Ne
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.PrimThrW.Joins
 
 /-! ## The inputs on the cell layout -/
-
-/-- The setup's twenty input registers `410 … 429`. -/
-def rsReg (i : Fin 20) : Fin LNR := ⟨410 + i.val, by have := i.isLt; unfold LNR; omega⟩
-
-/-- The primes stream (W6's `sPr`), the level-records stream (`sWin`), the modulus-word stream (`sMod`). -/
-def sPrK : Fin 161 := 130
-def sWinK : Fin 161 := 131
-def sModK : Fin 161 := 132
-
-/-- The paper's expansion bound `v ≤ C·(n+2)^D·2^{K·L²}`, `L = ⌈log₂(n+2)⌉`. -/
-def QuasiBounded (v n C D K : ℕ) : Prop := v ≤ C * (n + 2) ^ D * 2 ^ (K * Nat.clog 2 (n + 2) ^ 2)
 
 section Call
 variable (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n : ℕ}
@@ -90,3 +90,5 @@ theorem radRow_eq (g : ThrEq ((callInputs l F kclk coef A a ha).starParams n hs)
 end Call
 
 end NearCubicWires.WireExponent3_5.PrimThrW.RadSetup
+
+end

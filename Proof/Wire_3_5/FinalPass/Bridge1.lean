@@ -1,4 +1,7 @@
-import Proof.Wire_3_5.FinalPass.SeamsHalves
+import Proof.Wire_3_5.FinalPass.AssemblyDock2
+import Proof.Wire_3_5.FinalPass.SeamsBank2Base
+import Proof.Wire_3_5.FinalPass.SeamsProg3Base
+import Proof.Wire_3_5.Primitive.Writers.DockW
 
 /-! # BridgeT, part 1: the seeds phase's bank layout (P3:3170-3181)
 

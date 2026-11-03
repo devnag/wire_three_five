@@ -1,4 +1,21 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.SBLay
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.SBCar
+import Proof.Wire_3_5.Primitive.Writers.SBIdent
+import Proof.Wire_3_5.Primitive.Writers.SBTypes
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.SBRunBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # SB, part (3b): SB's machine run and exit state
 
@@ -37,9 +54,6 @@ noncomputable def sbCost (l : Literals) (F : GateFree l) (P : Shared.StarParams)
     SBField.fieldCost cap (ellOf P.n) ((SBField.eraseL FsB).map fun i => i.val) + 1 +
     SBInv.clearAllCost cap (List.finRange NRB).length
 
-theorem pow_two_mul (N D : ℕ) : (N + 2) ^ D ≤ 2 ^ D * (N + 1) ^ D := by
-  rw [← mul_pow]; exact Nat.pow_le_pow_left (by omega) D
-
 /-- **SB's run.** -/
 theorem sb_run (l : Literals) (hR : SBIdent.StarRStmt l) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1)
     (r : FReq l F kclk coef A a ha) (σ : WState nsB NRB)
@@ -59,7 +73,7 @@ theorem sb_run (l : Literals) (hR : SBIdent.StarRStmt l) (F : GateFree l) (kclk 
   have hrP' : (Pof r).r = Ledger.rowBr F.cr (Pof r).n := hrP
   obtain ⟨t1, t2, t3, t4, t5, t6, t7, hpw, hcS, hcP, hcN, hlam, hwl, hcn, hc0, hc1, hnc, hE6, hE7, hfl, hcar⟩ :=
     need_parts l F.cr F.filterErrDeg (Pof r) r.1.mode _ _ _ _ cap hcap
-  -- 1: the carrier pipeline, docked
+  -- 1: X6's carrier pipeline, docked
   obtain ⟨τx, m1, hm1, hstep1, hcnt, h6, hkeep, hres, hτs, hτv, hτc⟩ :=
     SBCar.carRunS l F kclk coef A a ha r ⟨fun i => σ.sh (fsX i), fun i => σ.st (fsX i), fun q => σ.val (frX q), σ.cell⟩
       hin (fun i => hsh _) (fun i hi => hbl _ (fun e => hi (fsX_inj e))) (fun q => hv _) hc cap hcar
@@ -167,3 +181,5 @@ theorem sb_run (l : Literals) (hR : SBIdent.StarRStmt l) (F : GateFree l) (kclk 
   · intro q; exact c3in q (List.mem_finRange q)
 
 end NearCubicWires.WireExponent3_5.PrimAsm.SBAsm
+
+end

@@ -1,4 +1,7 @@
 import Proof.Supplier.RowTupleColdEnumeration
+import Proof.Hierarchy.HierarchyFixedWord
+import Proof.MachineModel.ClockInitialKey
+import Proof.Supplier.EquationScalarArithmetic
 
 /-! Construct the tuple loop's terminal field and its paid extent from the
 runtime unary product. Both fields were supplied to the earlier cold loop. -/

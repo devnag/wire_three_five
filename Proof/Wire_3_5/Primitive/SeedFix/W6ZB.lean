@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.W6ZA
+import Proof.Packets.PhysicalStepSupport
 
 /-! # W6, part 28: the numbers machine on its ports
 

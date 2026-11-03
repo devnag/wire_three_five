@@ -1,3 +1,4 @@
+import Proof.CaseAnalysis.RowsEstimatorPrepare
 import Proof.CaseAnalysis.RowsEstimatorMetadataBatch
 import Proof.MachineModel.Layout
 

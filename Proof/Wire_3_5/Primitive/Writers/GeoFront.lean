@@ -1,9 +1,10 @@
-import Proof.Rows.CapReader
 import Proof.Wire_3_5.Primitive.Writers.DockW
-import Proof.Wire_3_5.Primitive.Writers.Emit
 import Proof.Wire_3_5.Primitive.Writers.StarNums
-import Proof.Wire_3_5.Primitive.Writers.WriterIfaceJ
+import Proof.Wire_3_5.Primitive.Writers.Emit
 import Proof.Wire_3_5.UnionMachine.FrontFill
+import Proof.Wire_3_5.Lists.ListMachineRowLoad
+import Proof.Wire_3_5.Primitive.Writers.WriterIfaceJBase
+import Proof.Rows.CapReader
 
 /-! # PA (d): a register-language writer on the request word (the geometry writers' common front)
 

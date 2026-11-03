@@ -1,4 +1,6 @@
 import Proof.MachineModel.OrdinaryMemoryScan
+import Proof.MachineModel.OrdinaryRecordLoad
+import Proof.MachineModel.OrdinaryCompare
 
 /-! Actual advancing-stream record loading and cell equality for the memory
 checker. Equal field widths reuse the existing loader. Since the stream is

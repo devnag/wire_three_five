@@ -1,4 +1,8 @@
+import Proof.Hierarchy.HierarchyReductionReady
+import Proof.MachineModel.ClockFloorLog
+import Proof.MachineModel.ClockTotalCanonical
 import Proof.MachineModel.UEmissionLanguageComplete
+import Proof.PCP.VerifierDecodingRun
 
 /-! The hierarchy encoding is the literal word produced by the paid
 padding machine. Its independent allocation coefficient never changes the

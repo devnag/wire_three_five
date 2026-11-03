@@ -1,5 +1,8 @@
+import Proof.Amplification.RecoveryFocusDock
+import Proof.Hierarchy.CompetitorMonomialEntry
 import Proof.Hierarchy.CompetitorSelectedDimensions
 import Proof.Hierarchy.CompetitorSourceValidity
+import Proof.PCP.ProjectionNormalizationDriverAtoms
 
 /-! Completeness uses the same faithful source's honest auxiliary proof and
 the whole joint occurrence mean. A radius zeta pays the actual validity,

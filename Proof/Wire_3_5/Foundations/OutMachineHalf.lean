@@ -1,7 +1,7 @@
-import Proof.Wire_3_5.Foundations.OutMachineIface
+import Proof.Wire_3_5.Foundations.OutMachineIfaceBase
 import Proof.Wire_3_5.UnionMachine.BinW
 
-/-! # The output machine: halving a framed binary word in place (`A := a / 2`)
+/-! # X6: halving a framed binary word in place (`A := a / 2`)
 
 The out machine's gcd (P1–P3, `Out.Ph1`–`Ph3`, P3:3175-3178: "polynomial time") divides its `W`-bit words by `2`.
 The word kits (`Tm.mapPass`, the `RegRat` ops) have no halving: a forward pass writes bit `i` from

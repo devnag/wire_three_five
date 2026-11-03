@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CaseTwoSelected
+import Proof.Amplification.RecoveryCaseOneBooleanOutput
 
 /-! The selected Case2 singleton is framed by the existing Boolean worker.
 Two fresh empty tapes supply its output and private rewind log. -/

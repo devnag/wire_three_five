@@ -18,4 +18,7 @@ theorem boundWord_fits (N B : ℕ) (hB : B≤limit N) : (ClockBinary.word B).len
   have hwidth := (width_bounds N).1
   exact ClockBinary.length_bound B (width N) (by omega)
 
+def input (N B : ℕ) : Fin 12 → List Bool :=
+  ClockBoundGuard.input (width N) (ClockBinary.word B) (limitWord N)
+
 end NearCubicWires.RepairOrdinary.ClockUniversalBound

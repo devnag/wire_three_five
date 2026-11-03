@@ -1,4 +1,13 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.UnionEventual
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.UnionCodecBase
+import Proof.Wire_3_5.UnionMachine.UnionSchedule
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The union machine's atom test at the transfer level, and completeness at the honest guesses
 
@@ -45,3 +54,5 @@ theorem CompleteForEventually.ok {S : UnionSetup I} {P : FusedPrimitive I} {M : 
 end Ok
 
 end NearCubicWires.WireExponent3_5.Transfer
+
+end

@@ -1,4 +1,6 @@
+import Proof.Rows.NativeCircuitPrepare
 import Proof.Rows.NativeCircuitCount
+import Proof.Rows.NativeGateLoop
 
 /-! Actual native circuit payload to its complete flag block: read the count,
 skip TOP, evaluate every original bottom gate, then emit the true target flag.
@@ -20,6 +22,9 @@ def payload {q : Nat} (gs : List (NormalizedThresholdGate q)) (top : List Bool) 
 
 def flags {q : Nat} (gs : List (NormalizedThresholdGate q)) (live : Finset (Fin q)) (x : BitInput q) :=
  gs.map (fun g=>residualConstant g live x)++[true]
+
+def budget (n B q t : Nat) :=PCJ45bee56da9f34d5a_NativeCircuitPrepare.budget n (U B q (B+1)) t+
+ PCJ45bee56da9f34d5a_NativeGateLoop.budget n B q+3
 
 end
 end PCJ45bee56da9f34d5a_NativeCircuitFlags

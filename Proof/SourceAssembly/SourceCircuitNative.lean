@@ -1,4 +1,5 @@
 import Proof.SourceAssembly.SourceTopNative
+import Proof.CaseAnalysis.RowsSupportTyped
 
 /- Execute the original compact-circuit parser and native supplier. A one-bit
 paid boot handles its arity sentinel; recorded execution rewinds the actual

@@ -1,4 +1,6 @@
 import Proof.PCP.VerifierDecodingUnary
+import Proof.Foundations.OrdinaryComposition
+import Proof.Foundations.OrdinaryTapeRenaming
 
 /-! The actual two-count producer at the verifier header. Both count tapes
 begin blank. The original framed code is retained, and its cursor stops

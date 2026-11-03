@@ -1,4 +1,6 @@
 import Proof.MachineModel.BankEmittedAtomLoop
+import Proof.MachineModel.BankScheduleDiagonal
+import Proof.MachineModel.PreserveRightProgram
 
 /-!
 # The frame-lowering adapter of the bank-framed emitter

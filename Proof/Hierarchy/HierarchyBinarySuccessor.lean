@@ -1,4 +1,5 @@
 import Proof.Hierarchy.HierarchyBinaryPower
+import Proof.MachineModel.OrdinaryFramedIncrement
 
 /-! A fixed-width successor with its reset capacity generated on the actual
 input tapes. The caller supplies no free zero workspace. -/

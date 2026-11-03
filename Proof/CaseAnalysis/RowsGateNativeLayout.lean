@@ -1,6 +1,7 @@
 import Proof.CaseAnalysis.RowsGateNativePrefix
 import Proof.CaseAnalysis.RowsGateSupportAppend
 import Proof.CaseAnalysis.RowsStrictNative
+import Proof.PCP.PCPPNativeFrame
 
 /-! One request cursor joins the paid arity, the same supported weights,
 and the actual strict threshold. Work banks are disjoint; only their input

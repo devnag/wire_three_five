@@ -1,7 +1,8 @@
-import Proof.Amplification.RecoveryPrefixDriverSeal
-import Proof.Amplification.RecoveryPrefixOutputWhole
 import Proof.Amplification.RecoveryPrefixPrepare
 import Proof.Amplification.RecoveryPrefixSearchReady
+import Proof.Amplification.RecoveryPrefixDriverSeal
+import Proof.Amplification.RecoveryPrefixOutputWhole
+import Proof.MachineModel.UInputFields
 
 /-! The cold canonical prefix search's fixed five-call program. Original
 outer framing is removed once; actual capacity preparation, oracle iteration,

@@ -1,4 +1,5 @@
-import Proof.Wire_3_5.UnionMachine.FrontSemSUE
+import Proof.Wire_3_5.UnionMachine.FrontCapsBase
+import Proof.Wire_3_5.UnionMachine.FrontSemRunBase
 
 /-! # C6 front, the semantic core (8): the width is logarithmic (P3:3632-3655)
 

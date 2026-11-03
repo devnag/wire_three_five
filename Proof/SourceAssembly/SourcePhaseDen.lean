@@ -1,4 +1,5 @@
 import Proof.SourceAssembly.SourcePhaseCoeff
+import Proof.CaseAnalysis.FinalModeNativeEnvelope
 
 section
 set_option autoImplicit false

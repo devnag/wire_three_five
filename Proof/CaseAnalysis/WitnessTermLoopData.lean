@@ -1,4 +1,5 @@
-import Proof.CaseAnalysis.WitnessTermChoice
+import Proof.CaseAnalysis.WitnessTermEnvironment
+import Proof.CaseAnalysis.RowsFamilyLoop
 
 /-! The counted loop addresses the same canonical term fields and exact
 mass prefixes. Only accepted prefixes reach a later physical iteration. -/

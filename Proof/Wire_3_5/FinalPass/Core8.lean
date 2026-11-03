@@ -1,4 +1,19 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.Core7
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S5Core, part 8: the request's facts the core needs (P3:3044-3048, 3083-3086)
 
@@ -109,3 +124,5 @@ theorem fpDen_ltR (r : FReq l F kclk coef A a ha) :
 end Family
 
 end NearCubicWires.WireExponent3_5.FinalPass.Sd.R
+
+end

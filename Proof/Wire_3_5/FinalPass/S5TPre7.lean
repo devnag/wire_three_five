@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.FinalPass.S5TChC
+import Proof.Wire_3_5.FinalPass.S5TChCBase
 
 /-! # S5-THR, part 26: the prelude with the top power erased (P3:3170-3181)
 

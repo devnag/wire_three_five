@@ -1,3 +1,4 @@
+import Proof.Circuits.CanonicalBalancedCall
 import Proof.MachineModel.CanonicalBooleanNodeValidationProgram
 
 namespace NearCubicWires.CanonicalBooleanNodeBatchProgram

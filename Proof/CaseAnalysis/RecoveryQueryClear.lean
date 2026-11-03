@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoveryQueryAppend
+import Proof.Circuits.DecompositionCountPosition
 
 namespace NearCubicWires.RepairOrdinary.RecoveryBoundedQueryClear
 open LocalBitMultitape RepairRepresentation RecoveryRootRound Composition

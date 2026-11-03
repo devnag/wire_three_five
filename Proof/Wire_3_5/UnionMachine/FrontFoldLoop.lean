@@ -1,5 +1,6 @@
-import Proof.Wire_3_5.UnionMachine.CWEnvSem
 import Proof.Wire_3_5.UnionMachine.FrontFoldRound
+import Proof.Wire_3_5.UnionMachine.CWEnvSem
+import Proof.Wire_3_5.UnionMachine.CWRoundA
 
 /-! # C6 front, U5, the writers' fold (b): every variable
 

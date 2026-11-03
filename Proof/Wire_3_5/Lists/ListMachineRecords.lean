@@ -27,6 +27,20 @@ open NearCubicWires.RepairOrdinary.StablePartition.Workspace (overlay overlay_wr
 
 namespace CopyOpen
 
+def action (state : Fin 3) (sourceMove : HeadMove) (output : Option Bool) (outMove : HeadMove) : Action 2 3 :=
+  ⟨state, fun i => if i.val = 1 then output else none, fun i => if i.val = 1 then outMove else sourceMove⟩
+
+/-- Tape 0 holds a framed word at its cursor; tape 1 receives its pairs at its cursor. At the terminator it halts
+without writing, the source head on the terminator. -/
+def machine : Machine 2 3 where
+  descriptionBits := 0
+  start := 0
+  halted := fun state => state.val == 2
+  rule := fun state scanned => if state.val = 0 then
+      (if scanned 0 then some (action 1 .right (some true) .right) else some (action 2 .stay none .stay))
+    else if state.val = 1 then some (action 0 .right (some (scanned 0)) .right)
+    else none
+
 end CopyOpen
 
 /-! ## The full copy that steps past the terminator -/
@@ -166,9 +180,16 @@ namespace ProdInner
 
 
 
+/-- The cost of one inner pass. -/
+def bodyCost (ma mb : List Bool) : ℕ := 1 + 1 + (2 * (2 * ma.length + 1) + 2) + 1 + (2 * mb.length + 1)
+
 end ProdInner
 
 /-! ## Record streams -/
+
+/-- The cost of the inner pass of a monomial with bits `ma` over the records of `q`. -/
+def innerCost (q : List (List ℕ)) (ma : List Bool) : ℕ :=
+  ((List.range q.length).map fun i => ProdInner.bodyCost ma (monoBits (q.getD i [])) + 2).sum + 1
 
 namespace ProdInner
 

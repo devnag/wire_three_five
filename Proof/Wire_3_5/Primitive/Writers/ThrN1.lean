@@ -1,4 +1,6 @@
 import Proof.Wire_3_5.Primitive.Writers.HashNum
+import Proof.Wire_3_5.Primitive.Writers.SymDecP1
+import Proof.Wire_3_5.Primitive.Writers.SymDecReq2
 
 /-! # c4 THR block, numbers part 1: the THR call's request and data items
 

@@ -1,3 +1,6 @@
+import Proof.CaseAnalysis.RowsCapacityDriver
+import Proof.CaseAnalysis.RowsPolynomial
+import Proof.CaseAnalysis.RowsPreparationInput
 import Proof.CaseAnalysis.RowsRawLoad
 
 /-! The enclosing family controller has one fixed head pattern and one

@@ -20,6 +20,8 @@ open NearCubicWires.SourceSkeleton.FirstW NearCubicWires.SourceStart.EntryW
 noncomputable section
 
 section site
+variable (selector : CyclicChoice.Laws) (compiler : Packets.CompilerLaws) (xtra : NearCubicWires.SourceSkeleton.Fill.XtraW selector)
+  (G7 : FirstW.G7W selector xtra)
 
 set_option hygiene false in
 local notation "CODE" => skelFamilyR mask packets rows (FillV5.resPV5 selector mask packets rows)
@@ -34,6 +36,12 @@ local notation "denI" => (𝔉).capIndex sources gamma hg hh p + 1
 set_option hygiene false in
 local notation "modeI" => PCJ374c44bb8b7f47d9_.S.mode sources p (denI) (Nat.succ_pos _) (kSite selector xtra mask packets rows sources gamma hg hh p)
   (rSite selector xtra mask packets rows sources gamma hg hh p) (scrSite selector mask packets rows sources gamma hg hh p) n x bits hp
+
+/-- **The site's phase entry lists** (`EFFam`): the clause entries at the live scale `LW`. -/
+def EFSite (mask : MaskProducer) (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector) (rows : PCJc4297ab269d8423a_Source.RowLibrary selector) :
+    EFFam mask packets rows (FillV5.resPV5 selector mask packets rows) (ParamsV4.fPW selector xtra mask packets rows) (CODE) :=
+  fun sources gamma hg hh p n x bits hp => fun ph' =>
+    phaseE sources p (denI) (kSite selector xtra mask packets rows sources gamma hg hh p) x bits (modeI) ph' (ParamsV4.LW selector mask packets rows sources gamma hg hh p)
 
 end site
 

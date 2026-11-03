@@ -10,6 +10,8 @@ set_option maxHeartbeats 250000
 set_option maxRecDepth 120000
 set_option warningAsError true
 
+def port (i : Fin 110) : Fin 114 := (work i).castAdd 1
+def ports : List (Fin 114) := (List.finRange 110).map port
 
 theorem written_apply {t : ℕ} (fields : Fin t→List Bool) (C : ℕ)
     (js : List (Fin t)) (data : Fin t→List Bool) (i : Fin t) :

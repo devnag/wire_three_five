@@ -1,4 +1,5 @@
 import Proof.Assembly.Row
+import Proof.CaseAnalysis.RowsDegreeLoop
 
 /-! The exact external-row family, with one fixed row body and a paid runtime
 repeat driver. Each normalized packet family is consumed once; the descriptor
@@ -26,6 +27,8 @@ noncomputable section
 variable {q L t : Nat} (printer : WilliamsAlgorithm) (c : Row.Code printer t)
   (a : DecompositionAlgorithm) (F : Packets.Family q L) (g : Packets.Geometry F)
   (layout : Packets.Layout a F g) (facts : ∀ r ∈ F.rows, Packets.PacketFacts a F g r)
+
+abbrev machine := CloseoutRowsDegreeLoop.machine (PCJ38fbfed565f64139_Row.machine c)
 
 def rawWord (r : Packets.Row F.occurrences L) :=
   (Packets.packets a F g r).flatMap P1CompactNativeFamily.rawWord
@@ -78,6 +81,11 @@ def rowConfig (j : Nat) (out : List Bool) :=
   (⟨(PCJ38fbfed565f64139_Row.machine c).start,s.heads j out,s.tapes j out⟩ : Configuration t _)
 
 def entry := RepeatMachine.cfg 0 (rowConfig printer c s 0 []) F.rows.attach.length 1
+def exit := RepeatMachine.cfg 3
+  (rowConfig printer c s F.rows.attach.length ((dataList a F g layout facts).flatMap
+    (P1TopDownPaidReusable.Datum.word printer))) F.rows.attach.length 1
+
+def budget := F.rows.attach.length*(s.rowFuel+3)+3
 
 end
 end PCJ38fbfed565f64139_Family

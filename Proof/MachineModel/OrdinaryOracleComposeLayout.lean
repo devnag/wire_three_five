@@ -1,5 +1,6 @@
 import Proof.MachineModel.OrdinaryOracleComposeReady
 import Proof.PCP.PCPFieldMoves
+import Proof.Amplification.RecoveryScratchErase
 
 /-! Fixed five-phase wiring for arbitrary two ordinary-oracle programs.
 The two source banks identify only their query tapes. All transfer logs and

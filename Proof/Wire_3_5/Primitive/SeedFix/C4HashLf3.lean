@@ -1,8 +1,37 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.C4HashLf2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.C4ThrClosed
+import Proof.Wire_3_5.FinalPass.HashFree
+import Proof.Wire_3_5.FinalPass.HashFree2
+import Proof.Wire_3_5.FinalPass.HashFreeBuild
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.C3ReqIface3
+import Proof.Wire_3_5.Primitive.Writers.C3W3Leaf
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.HashLeaf
+import Proof.Wire_3_5.Primitive.Writers.HashSetH2
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.ThrLf1
+import Proof.Wire_3_5.Primitive.SeedFix.C4HashLf
+import Proof.Wire_3_5.Primitive.SeedFix.C4HkJ
+import Proof.Wire_3_5.Primitive.SeedFix.C4KIface
+import Proof.Wire_3_5.Primitive.SeedFix.C4LeafA
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTypes
+import Proof.Wire_3_5.Primitive.SeedFix.TS4O
+import Proof.Wire_3_5.Primitive.SeedFix.TS4W
+import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPoly
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.SeedFix.C4HashLf2Base
 
-/-! # The HASH part of C4Leaf, v2 (amended; the finding at): the cell's `Bm` bounded
 
-`HashStepsAt` quantifies over every `Bm` with `CellFit`, but `CellFit` bounds `Bm` only from below and the setup's
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # The HASH part of C4Leaf, v2: the cell's `Bm` bounded
+
+`HashStepsAt` (M77) quantifies over every `Bm` with `CellFit`, but `CellFit` bounds `Bm` only from below and the setup's
 cost grows with `Bm` (the cell's `popsCost`), so it is unprovable. v2 (new types; M77 untouched; `Sm` is bounded above
 by `CellFit` itself):
 * **`HashSideAt2`**: `HashSideAt` with `∃ Bm Sm, CellFit … ∧ Bm ≤ 2·2^{capExp2 C_c n} + 2`;
@@ -49,3 +78,5 @@ section Call
 end Call
 
 end NearCubicWires.WireExponent3_5.PrimT.C4HL
+
+end

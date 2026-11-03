@@ -1,4 +1,22 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SdR5
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.FpInLen
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdI8
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.FinalPass.SdR3
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.S5SeamB
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SdR2Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S4 v2, part R8: the seeds phase's constants at the v2 constants
 
@@ -89,3 +107,4 @@ end Family
 
 end NearCubicWires.WireExponent3_5.FinalPass.Sd.R
 
+end

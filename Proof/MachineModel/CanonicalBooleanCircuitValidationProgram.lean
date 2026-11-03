@@ -1,5 +1,8 @@
 import Proof.MachineModel.CanonicalBooleanNodeListValidationProgram
+import Proof.MachineModel.CanonicalNatValidationProgram
 import Proof.MachineModel.CanonicalTaggedTupleProgram
+import Proof.MachineModel.PreserveRightProgram
+import Proof.Foundations.VerifiedLinker
 
 /-!
 # Canonical Boolean-circuit validation

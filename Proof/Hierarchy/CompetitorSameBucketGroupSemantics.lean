@@ -1,4 +1,5 @@
 import Proof.Hierarchy.CompetitorSameBucketKeys
+import Proof.Hierarchy.CompetitorPlaneLoop
 
 /-! Literal signed-key grouping domain. Natural positive and negative totals
 remain separate until the existing modular table consumer. A cell is keyed

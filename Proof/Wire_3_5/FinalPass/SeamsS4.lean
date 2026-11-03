@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.FinalPass.SeamsProg2
+import Proof.Wire_3_5.FinalPass.SeamsProg2Base
 
 /-! # S4's word-level seam: the seeds phase as one word program (plan: one WM program, one bridge)
 
@@ -17,7 +17,7 @@ file fixes the bridge's input so that the bridge and the program can be built in
   every head at `0` and every register `0` (a register's value is its tape's head in `wenc`, and NumDenOut asks for
   every head at `0`), `fpNum < 2^W`.
 
-The program's own inner seams (per-point step, the center/sample loops, the seed loop) stay inside the component.
+The program's own inner seams (per-point step, the center/sample loops, the seed loop) stay inside this program.
 Paper quantities: the printed numerator `fpNum = Σ_c Σ_e Σ_ℓ M·Σ R̂` and denominator (P3:3044-3048), the seeds
 phase's cost `|E|·tab + (|centers|·|E|·Q)·pt + ov`. -/
 
@@ -30,7 +30,7 @@ open NearCubicWires.WireExponent3_5.FinalPass.Tm NearCubicWires.WireExponent3_5.
 open NearCubicWires.RepairOrdinary.SignedSortKey (binary)
 
 section Family
-variable (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) (Sw : SymWords)
+variable (l : Literals) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) (Sw : SymWords)
 
 /-- **S4's word layout.** -/
 structure SdLay where

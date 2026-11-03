@@ -1,4 +1,6 @@
 import Proof.Wire_3_5.Primitive.SeedFix.C4Geo
+import Proof.Wire_3_5.FinalPass.SampleRef
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixSampler
 
 /-! # SEEDFIX C4.L: two stage interfaces built by C6
 

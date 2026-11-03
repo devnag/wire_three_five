@@ -1,4 +1,7 @@
 import Proof.Assembly.FixedCore
+import Proof.MachineModel.ClosureBinaryPool
+import Proof.CaseAnalysis.FinalModeNativeStageFields
+
 set_option autoImplicit false
 set_option maxHeartbeats 4000000
 set_option maxRecDepth 120000
@@ -75,6 +78,65 @@ def residualAssignment {q : Nat} (occ : List (SupportedNormalizedGate q)) (I : F
 def symOffsets (r : FourfoldRequest NormalizedSymmetricThresholdCircuit)
     (I : Finset (Fin r.q)) (x : BitInput r.q) : Fin r.circuits.length → Nat :=
   fun i => constantCount (symmetricFourfoldOccurrences r) I x (symmetricCircuitMask r i)
+
+def symRow (r : FourfoldRequest NormalizedSymmetricThresholdCircuit)
+    (I : Finset (Fin r.q)) (den : Nat) (x : BitInput r.q)
+    (sample : Seed (symmetricFourfoldOccurrences r) I den) : Bool :=
+  evaluateStructuralGF2 (residualAssignment (symmetricFourfoldOccurrences r) I x)
+    (symPolynomial false r I den sample (symOffsets r I x))
+
+def thrSelectionRow (a : DecompositionAlgorithm)
+    (r : FourfoldRequest NormalizedThresholdThresholdCircuit)
+    (I : Finset (Fin r.q)) (den : Nat) (x : BitInput r.q)
+    (sel : ThresholdRows.Selection a r) {cutoff : Nat} (prime : PrimeIndex cutoff)
+    (sample : Seed (thresholdFourfoldOccurrences r) I den) : Bool :=
+  evaluateStructuralGF2 (residualAssignment (thresholdFourfoldOccurrences r) I x)
+    (thrPolynomial false a r I den sel prime.val
+      (modularOffset (thresholdFourfoldOccurrences r) I x (ThresholdRows.equation a r sel) prime.val)
+      sample)
+
+def symNumerator (r : FourfoldRequest NormalizedSymmetricThresholdCircuit) (L target : Nat) : Nat :=
+  let I := CyclicChoice.live (symmetricFourfoldOccurrences r) L
+  let den := symmetricListDenominator r target
+  ∑ e : Seed (symmetricFourfoldOccurrences r) I den, ∑ x : BitInput r.q,
+    (symRow r I den x e).toNat
+
+def symDenominator (r : FourfoldRequest NormalizedSymmetricThresholdCircuit) (L target : Nat) : Nat :=
+  Fintype.card (Seed (symmetricFourfoldOccurrences r) (CyclicChoice.live (symmetricFourfoldOccurrences r) L)
+    (symmetricListDenominator r target)) * 2^r.q
+
+def thrNumerator (a : DecompositionAlgorithm) (r : FourfoldRequest NormalizedThresholdThresholdCircuit)
+    (L target : Nat) : Nat :=
+  let I := CyclicChoice.live (thresholdFourfoldOccurrences r) L
+  let den := CloseoutFinalC10ThresholdRows.listDenominator a r target
+  let cutoff := CloseoutFinalC10ThresholdRows.primeCutoff a r target
+  ∑ sel : ThresholdRows.Selection a r, ∑ p : PrimeIndex cutoff,
+    ∑ e : Seed (thresholdFourfoldOccurrences r) I den, ∑ x : BitInput r.q,
+      (thrSelectionRow a r I den x sel p e).toNat
+
+def thrDenominator (a : DecompositionAlgorithm) (r : FourfoldRequest NormalizedThresholdThresholdCircuit)
+    (L target : Nat) : Nat :=
+  Fintype.card (PrimeIndex (CloseoutFinalC10ThresholdRows.primeCutoff a r target)) *
+    Fintype.card (Seed (thresholdFourfoldOccurrences r) (CyclicChoice.live (thresholdFourfoldOccurrences r) L)
+      (CloseoutFinalC10ThresholdRows.listDenominator a r target)) * 2^r.q
+
+/-- Only these two fixed numerical suppliers occur in actual mode calls. -/
+def fraction (sources : EightSources) (L target : Nat) (mode : Bool)
+    {q : Nat} {circuit : BooleanCircuit q} {pcpp : PointwisePCPP circuit}
+    (atoms : List (C10TotalDecode.Atom pcpp)) : Nat × Nat :=
+  if mode then
+    let r : FourfoldRequest NormalizedSymmetricThresholdCircuit :=
+      ⟨q, atoms.map C10NaturalModeAtoms.nativeSymmetricAtom⟩
+    (symNumerator r L target, symDenominator r L target)
+  else
+    let r : FourfoldRequest NormalizedThresholdThresholdCircuit :=
+      ⟨q, atoms.map C10NaturalModeAtoms.nativeThresholdAtom⟩
+    (thrNumerator (decompositionOf sources) r L target, thrDenominator (decompositionOf sources) r L target)
+
+def supplier (sources : EightSources) (L target : Nat) (mode : Bool)
+    {q : Nat} {circuit : BooleanCircuit q} {pcpp : PointwisePCPP circuit}
+    (atoms : List (C10TotalDecode.Atom pcpp)) : Rat :=
+  ((fraction sources L target mode atoms).1 : Rat) / (fraction sources L target mode atoms).2
 
 end
 end LiveRows

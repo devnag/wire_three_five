@@ -1,4 +1,5 @@
 import Proof.Hierarchy.CompetitorCountBanksBounds
+import Proof.Hierarchy.CompetitorFinalTableNative
 import Proof.Hierarchy.CompetitorRowCountMeaning
 
 /-! Reuse the accepted final159 machine beside the actual both-bank program.

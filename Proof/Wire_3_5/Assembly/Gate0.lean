@@ -1,10 +1,31 @@
+import Lean
+import Proof.Wire_3_5.Assembly.Split
 import Proof.Wire_3_5.Recovery.RecoveryLedgerAt
+import W3.Proof.Foundations.SourceRegistry
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Transfer.LiteralSources
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Foundations.RecoveryScheduleEnvelope
+import Proof.PCP.PCPPSubstitutionRequest
+import Proof.Wire_3_5.Foundations.Contracts
+import Proof.Wire_3_5.Foundations.SkeletonBase
+import Proof.Wire_3_5.Ledger.LedgerBudget
+import Proof.Wire_3_5.Recovery.RecoveryBudgetBase
+import Proof.Wire_3_5.Stars.StarSelectionChoice
+import Proof.Wire_3_5.Transfer.TransferSeedCalls
+import Proof.Wire_3_5.UnionMachine.UnionCodecBase
+import Proof.Wire_3_5.UnionMachine.UnionSchedule
+
+
+noncomputable section
+
 
 /-! # The concrete gate `gate0`
 
-The constants, fixed from the literals wherever a leaf has already stated what
+The freeze gate's constants, fixed from the literals wherever a leaf has already stated what
 it reads, and left as explicit parameters (`GateFree`) where only the primitive's assembly (PA) can fix them:
-* recovery (`GateRel`): `A_pad = p₀ + 6` (the normalized PCP's proof exponent, P3:3637-3644); the
+* recovery (the `GateRel`): `A_pad = p₀ + 6` (the normalized PCP's proof exponent, P3:3637-3644); the
   row-B caps `a_T = a_S = 1`, `C_par = 2`, `β⁻¹ = ⌈100/ε⌉` (the completeness constants of the pinned setup); the sparse
   count `s(q) = rowBSparse … 2 (gateCδ1 l)` at the setup's `ζ` (so `C_Λ = 2`); `nameCount = 2`, `kDeg = 2`,
   `descDeg = carrierDeg = 26`;
@@ -96,7 +117,7 @@ theorem one_le_betaInv : 1 ≤ gateBetaInv l := by
 
 /-- **The gate relation holds at `gate0`**, for every choice of the free constants. -/
 theorem gateRel_gate0 (F : GateFree l) : GateRel l (gate0 l F) where
-  apad := le_refl _
+  apad := rfl
   sp := rfl
   cpar := rfl
   betaInv := one_le_betaInv l
@@ -109,3 +130,5 @@ theorem gateRel_gate0 (F : GateFree l) : GateRel l (gate0 l F) where
   carrier := le_refl _
 
 end NearCubicWires.WireExponent3_5.Split
+
+end

@@ -1,4 +1,5 @@
 import Proof.MachineModel.TopDownWorkspaceSelectedEntryReady
+import Proof.CaseAnalysis.RowsOriginalClauseLoop
 
 /-! The actual initialized source count drives the existing clause Repeat.
 Its final false cell is retained physically. The local body layout and its
@@ -13,8 +14,69 @@ open RepairSource CloseoutWitness RepairSource.CloseoutFinal RepairSource.Verifi
 open WorkspaceSelectedEntry (size)
 noncomputable section
 
+theorem template_run {B s : Nat} (p : Machine B s) (N cost : Nat)
+    (H : Nat→Fin B→Nat) (A : Nat→Fin B→List Bool)
+    (hround : ∀j<N,Step p cost (H j) (A j) (H (j+1)) (A (j+1))) :
+    Step (RepeatMachine.machine p (fun _ _=>true)) (N*(cost+3)+3)
+      (Fin.addCases (H 0) (fun _ : Fin 1=>1))
+      (Fin.addCases (A 0) (fun _ : Fin 1=>UnaryTemplate.tape N))
+      (Fin.addCases (H N) (fun _ : Fin 1=>1))
+      (Fin.addCases (A N) (fun _ : Fin 1=>UnaryTemplate.tape N)) := by
+  let cap : Fin (B+1)→Nat:=Fin.addCases (fun _ : Fin B=>0) (fun _ : Fin 1=>N+2)
+  have word : ZeroPadding.pad (N+2) (CompareMachine.word N)=UnaryTemplate.tape N := by
+    simp [ZeroPadding.pad,CompareMachine.word,UnaryTemplate.tape]
+  have eq (bank : Fin B→List Bool) :
+      (fun i=>ZeroPadding.pad (cap i) (Fin.addCases bank (fun _ : Fin 1=>CompareMachine.word N) i))=
+        Fin.addCases bank (fun _ : Fin 1=>UnaryTemplate.tape N) := by
+    funext i
+    refine Fin.addCases (fun j=>?_) (fun j=>?_) i
+    · simp only [cap,Fin.addCases_left,ZeroPadding.pad_zero]
+    · simpa only [cap,Fin.addCases_right] using word
+  exact ((CloseoutRowsOriginalClauseLoop.run p N cost H A hround).pad cap).congr_in rfl (eq (A 0)) |>.congr rfl (eq (A N))
+
 def slots {t B : Nat} (body : Fin B→Fin t) (driver : Fin t) : Fin (B+1)→Fin t :=
   Fin.addCases body (fun _ : Fin 1=>driver)
+
+theorem slots_injective {t B : Nat} (body : Fin B→Fin t) (driver : Fin t)
+    (hi : Function.Injective body) (hd : ∀i,body i≠driver) : Function.Injective (slots body driver) := by
+  intro i
+  refine Fin.addCases (fun a=>?_) (fun a=>?_) i
+  · intro j
+    refine Fin.addCases (fun b=>?_) (fun b=>?_) j
+    · intro he
+      simp only [slots,Fin.addCases_left] at he
+      exact congrArg (Fin.castAdd 1) (hi he)
+    · intro he
+      simp only [slots,Fin.addCases_left,Fin.addCases_right] at he
+      exact False.elim (hd a he)
+  · intro j
+    refine Fin.addCases (fun b=>?_) (fun b=>?_) j
+    · intro he
+      simp only [slots,Fin.addCases_left,Fin.addCases_right] at he
+      exact False.elim (hd b he.symm)
+    · intro _he
+      exact congrArg (Fin.natAdd B) (Subsingleton.elim a b)
+
+theorem run_at {t B s : Nat} (p : Machine B s) (body : Fin B→Fin t) (driver : Fin t)
+    (hi : Function.Injective body) (hd : ∀i,body i≠driver) (N cost : Nat)
+    (H : Nat→Fin B→Nat) (A : Nat→Fin B→List Bool)
+    (hin : Fin t→Nat) (tin : Fin t→List Bool)
+    (hhead : ∀i,hin (body i)=H 0 i) (htape : ∀i,tin (body i)=A 0 i)
+    (hdriver : hin driver=1) (hword : tin driver=UnaryTemplate.tape N)
+    (hround : ∀j<N,Step p cost (H j) (A j) (H (j+1)) (A (j+1))) :
+    Step (RecoveryFocus.machine (slots body driver) (RepeatMachine.machine p (fun _ _=>true)))
+      (N*(cost+3)+3) hin tin
+      (dockH (slots body driver) hin (Fin.addCases (H N) (fun _ : Fin 1=>1)))
+      (install (slots body driver) tin (Fin.addCases (A N) (fun _ : Fin 1=>UnaryTemplate.tape N))) := by
+  apply (template_run p N cost H A hround).dock (slots body driver) (slots_injective body driver hi hd)
+  · intro i
+    refine Fin.addCases (fun j=>?_) (fun j=>?_) i
+    · simpa only [slots,Fin.addCases_left] using hhead j
+    · simpa only [slots,Fin.addCases_right] using hdriver
+  · intro i
+    refine Fin.addCases (fun j=>?_) (fun j=>?_) i
+    · simpa only [slots,Fin.addCases_left] using htape j
+    · simpa only [slots,Fin.addCases_right] using hword
 
 
 end

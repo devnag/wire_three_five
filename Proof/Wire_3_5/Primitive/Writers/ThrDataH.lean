@@ -1,5 +1,5 @@
 import Proof.Wire_3_5.Primitive.Writers.ThrBigS
-import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4Base
 
 /-! # c4 THR block, the THR stage's data stage and hash bits at one call
 

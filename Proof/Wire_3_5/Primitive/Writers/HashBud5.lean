@@ -1,9 +1,43 @@
-import Proof.Wire_3_5.Primitive.Writers.HashBud4
+import Lean
+import Proof.Wire_3_5.Primitive.Writers.HashBud2
+import Proof.Wire_3_5.Primitive.SeedFix.C4HashLf2Base
 import Proof.Wire_3_5.Primitive.Writers.HashLfV3
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.HashFree
+import Proof.Wire_3_5.FinalPass.HashFree2
+import Proof.Wire_3_5.FinalPass.HashSz1
+import Proof.Wire_3_5.FinalPass.HashSz2
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.C3ReqIface3
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.HashBud3
+import Proof.Wire_3_5.Primitive.Writers.HashBud4
+import Proof.Wire_3_5.Primitive.Writers.HashFit3
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.ThrB7
+import Proof.Wire_3_5.Primitive.Writers.ThrBud2
+import Proof.Wire_3_5.Primitive.Writers.ThrLf2
+import Proof.Wire_3_5.Primitive.Writers.ThrSide1
+import Proof.Wire_3_5.Primitive.SeedFix.C4GateThrB
+import Proof.Wire_3_5.Primitive.SeedFix.C4HashLf2
+import Proof.Wire_3_5.Primitive.SeedFix.C4HashLf3
+import Proof.Wire_3_5.Primitive.SeedFix.C4HashLf4
+import Proof.Wire_3_5.Primitive.SeedFix.C4LeafA
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymNB
+import Proof.Wire_3_5.Primitive.SeedFix.TS4L
+import Proof.Wire_3_5.Primitive.SeedFix.TS4W
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.HashSetH2Base
+import Proof.Wire_3_5.Primitive.Writers.KWT2
 
-/-! # c4 HASH budget and obligations, v3: T-c at `qCost2`
 
-`hash_steps_gen` against `HashStepsAt3` (the setup's cost `hashC0Q`, the copy `1^{Q'}` at `qCost2 = 14q + 14`):
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2 c4 HASH budget and obligations, v3: T-c at `qCost2`
+
+`hash_steps_gen` (M66) against `HashStepsAt3` (the setup's cost `hashC0Q`, the copy `1^{Q'}` at `qCost2 = 14q + 14`):
 the only change is the rate-1 extras' constant (`2·pre + cpZ + qCost2 ≤ (730·2^{C_c} + 76)·2^{⌊n/8⌋}`); and `hobl3`,
 exactly `c4Leaf_of_obl3`'s `hobl`.
 * **`hash_steps_gen2`**, **`hobl3`**.
@@ -257,3 +291,5 @@ noncomputable def hobl3 (Wk : PrimT.C4KW.KWW) : ∀ (l : Literals) (fe CDs K3 D3
         (PrimT.C4Hk.famUH UnionMachine.TailAsm.asmStage (PrimT.C4LeafA.waOf l)).T⟩
 
 end NearCubicWires.WireExponent3_5.PrimAsm.HashBud
+
+end

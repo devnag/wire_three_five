@@ -1,4 +1,19 @@
+import Lean
 import Proof.Wire_3_5.Foundations.OutMachineSlot1P
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.CoreIfaceMJ
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Foundations.OutMachineSAShell
+import Proof.Wire_3_5.Foundations.OutMachineSlot1W
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Foundations.OutMachineSlot1GenBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # SA's slot 1, part 4: the writer, and SA from slot 0
 
@@ -16,9 +31,6 @@ open NearCubicWires NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdina
 open NearCubicWires.WireExponent3_5.Split NearCubicWires.WireExponent3_5.FinalPass
 open NearCubicWires.WireExponent3_5.FinalPass.Tm NearCubicWires.WireExponent3_5.FinalPass.PlanFP
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.FinalPass.Finish
-
-/-- The output stream as a one-word embedding. -/
-def sOut1 : Fin 1 ↪ Fin 3 := ⟨fun _ => O, fun a b _ => Subsingleton.elim a b⟩
 
 /-- **The sample word's writer** (S4's word 1). -/
 noncomputable def slot1W (l : Literals) : CoreWordsMJ l 1 (SA.slot1Ws l) where
@@ -68,3 +80,5 @@ noncomputable def saOf (l : Literals) (slot0 : CoreWordsMJ l 1 (slot0Ws l)) : S4
   saOf2 l slot0 (Slot1.slot1W l)
 
 end NearCubicWires.WireExponent3_5.FinalPass.Out.SA
+
+end

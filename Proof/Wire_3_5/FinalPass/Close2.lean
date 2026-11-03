@@ -1,17 +1,32 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.Close
 import Proof.Wire_3_5.Foundations.OutMachineGen
 import Proof.Wire_3_5.UnionMachine.SymSize2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.Asm1
+import Proof.Wire_3_5.FinalPass.Asm2
+import Proof.Wire_3_5.FinalPass.S5TInst
+import Proof.Wire_3_5.FinalPass.S6Iface
+import Proof.Wire_3_5.FinalPass.SeamsHalves
+import Proof.Wire_3_5.FinalPass.Stage1
+import Proof.Wire_3_5.Primitive.Writers.S6Fit
+import Proof.Wire_3_5.FinalPass.Close2Base
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-!
 # The final pass's closure join, step 2
 
 `finalPassClose` with two more of its producers supplied by verified code: the out machine
-(the output machine: `Out.Gen.outOfPhases` with phases `P4.ph4`, `P5.ph5`, … m7) and the SYM size polynomial
-(`SymSize.symSize_poly`). The producers still open, one binder each:
+(X6: `Out.Gen.outOfPhases` with phases `P4.ph4`, `P5.ph5` … m7) and the SYM size polynomial
+(C6b: `SymSize.symSize_poly`). The producers still open, one binder each:
 
-* `mCore`, `core`: the core half (`coreGen` over the pool writers SA/SB/NW/SW, -M);
-* `h1`, `h2`, `h3`: S6's size bounds N1–N3 (`PrimAsm.S6Fit`);
-* `hU`: the uniformity bundle at these parts (the output machine).
+* `mCore`, `core`: the core half (the `coreGen` over the pool writers SA/SB/NW/SW);
+* `h1`, `h2`, `h3`: S6's size bounds N1–N3 (C6b, `PrimAsm.S6Fit`);
+* `hU`: the uniformity bundle at these parts (X6).
 
 Paper quantity of the main type: `FinalPassLeaf l`, the final pass of `lem:primitive` (P3:3044-3048, 3170-3181).
 -/
@@ -25,7 +40,7 @@ open NearCubicWires.WireExponent3_5.FinalPass.Seams NearCubicWires.WireExponent3
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.FinalPass.Finish
 open NearCubicWires.WireExponent3_5.FinalPass.Close
 
-/-- The out machine at its verified phases (the output machine). -/
+/-- The out machine at its verified phases (X6). -/
 noncomputable abbrev outG : Bank.OutGen Out.mOut :=
   Out.Gen.outOfPhases Out.P1.ph1 Out.P2.ph2 Out.P3.ph3 Out.P4.ph4 Out.P5.ph5 Out.ph6
 
@@ -43,3 +58,5 @@ noncomputable def finalPassClose2
   finalPassClose UnionMachine.SymSize.symSize_poly mCore core Out.P4.ph4 Out.P5.ph5 Out.Gen.outOfPhases h1 h2 h3 hU
 
 end NearCubicWires.WireExponent3_5.FinalPass.Close2
+
+end

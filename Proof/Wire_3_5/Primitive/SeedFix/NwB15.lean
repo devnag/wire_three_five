@@ -1,11 +1,39 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.NwB14
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.FpInLen
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.S5TJoin2
+import Proof.Wire_3_5.FinalPass.S5TNum3
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.SymNeed
+import Proof.Wire_3_5.Primitive.SeedFix.GeoPack
+import Proof.Wire_3_5.Primitive.SeedFix.NwBT
+import Proof.Wire_3_5.Primitive.SeedFix.TS4K
+import Proof.Wire_3_5.Primitive.SeedFix.TS4N
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDecQ5
+import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPoly
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.NumsPh2
+import Proof.Wire_3_5.UnionMachine.NumsPh3
+import Proof.Wire_3_5.Primitive.SeedFix.NwB15Base
 
-/-! # NW phase (b), part 15: **the phase-(b) term** `phB x l hx hV hN : NumsPh3.PhB x l`
+
+noncomputable section
+set_option maxRecDepth 120000
+
+
+/-! # T3 NW phase (b), part 15: **the phase-(b) term** `phB x l hx hV hN : NumsPh3.PhB x l`
 
 At a THR request of a call on the star, from (c)'s exit (`AfterC`): the machine `bM` at the gate's constants runs the
-register programs at the virtual capacity `c₀ = K_b(F)·X^{D_b(f_e)} ≤ cap` (every need from `NeedB` atoms,
+register programs at the virtual capacity `c₀ = K_b(F)·X^{D_b(f_e)} ≤ cap` (every need from X6's `NeedB` atoms,
 `cap_le`), the docks at `cap`, within `C_s(F)·X^{D_s(f_e)}` (`b_cost_le`), and exits at `AfterV` with
-`rV = vB = vOf` (`VLinkB`), the word streams blank, every head `0`, the residue by the step count
+`rV = vB = vOf` (X6's `VLinkB`), the word streams blank, every head `0`, the residue by the step count
 (`Shell.Step.len`).
 
 Paper quantity of the main type: the final pass's unshifted denominator `V = |PrimeIndex(cut)|·|E|·Q` at the THR
@@ -23,14 +51,6 @@ open NearCubicWires.WireExponent3_5.PrimAsm NearCubicWires.WireExponent3_5.PrimA
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.SupplierPipeline
 open NearCubicWires.ExtDecompositionBatch NearCubicWires.RepairOrdinary.RecoveryExecution
 open NearCubicWires.RepairOrdinary.RecoveryRootRound
-
-theorem add4 (p a b c : ℕ) : a + b + c ≤ p + a + b + c := by omega
-theorem add4' (p a b c : ℕ) : p ≤ p + a + b + c := by omega
-
-theorem tv_aux (len p26 n capT ncar PC U c₀ c : ℕ) (hl : len + 1000 ≤ U) (hp : p26 ≤ c) (hn : n + 1000 ≤ U)
-    (hcT : capT ≤ c) (hnc : ncar ≤ 2) (hPC : PC ≤ U * U) (hcU : c ≤ U) (hU : U * U + 60 * U + 60 ≤ c₀) :
-    len + p26 + n + 40 + PC + n + capT + ncar + 42 ≤ c₀ := by
-  omega
 
 section Term
 variable (x : ℕ) (l : Literals) (hx : ThrDecF.dX (ThrDecF.TW l) (ThrDecF.NW l) ≤ x) (hN : NeedB l)
@@ -247,7 +267,7 @@ theorem run_b (hV : VLinkB l) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤
     simp only [List.length_map]
     exact hV F kclk coef A a ha n a' ha' Cs carriers translation hc hs
 
-/-- **The phase-(b) term** (`NumsPh3.PhB x l`) from `VLinkB l` and `NeedB l`. -/
+/-- **The phase-(b) term** (the `NumsPh3.PhB x l`) from X6's `VLinkB l` and `NeedB l`. -/
 noncomputable def phB (hV : VLinkB l) : UnionMachine.NumsPh3.PhB x l where
   s := _
   M := bMF x l hx
@@ -262,3 +282,5 @@ noncomputable def phB (hV : VLinkB l) : UnionMachine.NumsPh3.PhB x l where
 end Term
 
 end NearCubicWires.WireExponent3_5.PrimT.NwB
+
+end

@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.ScheduleReusable
+import Proof.Amplification.RecoveryScratchErase
 
 /-! Fixed physical bank for the canonical schedule iteration. Only the
 index, input length, retained best, true erase driver and reset log survive

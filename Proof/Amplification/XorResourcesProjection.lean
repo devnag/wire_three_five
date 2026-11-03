@@ -1,4 +1,5 @@
 import Proof.Amplification.XorResources
+import Proof.Foundations.CircuitRestriction
 
 /-! Full literal-projection closure at the physical retained-support wire budget.
 Constants become threshold offsets, and repeated signed variables are collected

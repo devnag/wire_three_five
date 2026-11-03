@@ -1,17 +1,19 @@
-import Proof.Wire_3_5.Transfer.TransferUnionSound
-import Proof.Wire_3_5.UnionMachine.UnionEventual
+import Proof.Wire_3_5.UnionMachine.UnionCodecBase
+import Proof.Wire_3_5.UnionMachine.UnionSchedule
+import Proof.Wire_3_5.Transfer.TransferUnionSoundBase
+import Proof.MachineModel.UAcceptanceCarrier
 
 /-! # C6, part 1: the weak machine of a worker (P3:3669-3697)
 
 The union weak machine is base's `OrdinaryWeakMachine` whose verifier is a WORKER machine followed by base's
 acceptance gate (`UAcceptanceCarrier.verifier`: two steps, accepting iff the worker's result cell is set), exactly the
-shape of the Theorem 2.5 repository's union machine (`CloseoutWitness.Weak.machine`). Unlike base's `Weak.machine`, the worker is required to
+shape of v8's union machine (`CloseoutWitness.Weak.machine`). Unlike base's `Weak.machine`, the worker is required to
 halt only on the refuter's witnesses (`⌊N/16⌋` bits, P3:3675-3680), not on every bit list.
 
 * `WitnessRun p ht result fuel meaning`: on every input and every `⌊N/16⌋`-bit witness the worker halts within
   `fuel N` steps with its result cell set iff `meaning N x w`;
 * **`weakOf`**, **`weakOf_accepts`**: the weak machine accepts `x` iff some witness has the meaning;
-* the useless inhabitants (the 's controls): `rejectAll` (never accepts) and `acceptAll` (accepts every input of
+* the useless inhabitants (controls): `rejectAll` (never accepts) and `acceptAll` (accepts every input of
   positive length); **`rejectAll_not_complete`**: it is not eventually complete for a setup with accepting guesses at
   arbitrarily large lengths; **`acceptAll_not_oneSided`**: it is not one-sided for a language with no-instances at
   arbitrarily large lengths. -/

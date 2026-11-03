@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.UnionMachine.WalkRun
+import Proof.Wire_3_5.UnionMachine.TailAsm
 
 /-! # C6 tail, item 3: the walk-bank producer, the `WalkBankProducer`
 

@@ -1,5 +1,6 @@
 import Proof.Hierarchy.CompetitorNumeratorWiden
 import Proof.MachineModel.OrdinaryMatrixTemplateEntries
+import Proof.MachineModel.OrdinaryWilliamsUnaryProduct
 
 /-! The fixed coefficients one, two and 4096 of the scalar-width/capacity
 formula are printed by the actual finite program before its unary calls. -/

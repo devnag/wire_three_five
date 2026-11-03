@@ -1,3 +1,4 @@
+import Proof.Supplier.RowCommonSize
 import Proof.MachineModel.ClosureRadix
 
 /-! Produce the compact metadata scale from independently measured cache

@@ -1,5 +1,5 @@
+import Proof.Hierarchy.CompetitorDenominator
 import Proof.Amplification.RecoveryScratchErase
-import Proof.Hierarchy.CompetitorCountProducer
 
 /-! Bounded reusable scalar workspace for the validity-list consumer.
 Padding records actual retained zero cells; the local machine executes the
@@ -14,6 +14,61 @@ set_option maxRecDepth 120000
 set_option warningAsError true
 
 def capacity (b : ℕ) := 4096*(b+1)^2
+def padding (b : ℕ) (i : Fin 67) := if i.val=6 then 0 else capacity b
+def paddedInput (b : ℕ) (nums : Fin 4 → ℕ) (d e : ℕ) : Fin 67 → List Bool :=
+  fun i => ZeroPadding.pad (padding b i) (CompetitorRationalProducts.input (width b) b nums d e i)
+
+theorem input_support (b : ℕ) (nums : Fin 4 → ℕ) (d e : ℕ) (i : Fin 67) :
+    (CompetitorRationalProducts.input (width b) b nums d e i).length≤capacity b := by
+  have hw : 2*width b+1≤capacity b := by unfold width capacity; nlinarith
+  have hb : 2*b+1≤capacity b := by unfold capacity; nlinarith
+  have hw' : width b≤capacity b := by omega
+  simp only [CompetitorRationalProducts.input]
+  split
+  · simpa using hw
+  · split
+    · simpa using hb
+    · split
+      · simpa using hb
+      · split
+        · simpa using hw'
+        · simp
+
+theorem padded_decision_run (b : ℕ) (nums : Fin 4 → ℕ) (d e : ℕ)
+    (hn : ∀ i,nums i<2^b) (hd : d<2^b) (he : e<2^b) (hdpos : 0<d) (hepos : 0<e) :
+    ∃ out,ClockJoin.ReadyRun machine (2000*(b+1)^2) (paddedInput b nums d e) out ∧
+      (∀ i,(out i).length≤capacity b) ∧
+      out 6=List.replicate (width b) true ∧
+      (readTapeBit (out 65) 0=true ↔
+        ((nums 2 : ℚ)-nums 3)/e≤((nums 0 : ℚ)-nums 1)/d) := by
+  obtain ⟨raw,hraw,hshared,hflag⟩ := rational_decision_run b nums d e hn hd he hdpos hepos
+  obtain ⟨base,hr,ht,hh,hs⟩ := hraw
+  have hsupport := RecoveryTapeSupport.run_support machine _ _ base hr (capacity b) 0
+    (by intro i; exact Nat.zero_le _) (by
+      intro i
+      exact (input_support b nums d e i).trans (Nat.le_max_left _ _))
+  have hbound (i : Fin 67) : (base.final.tapes i).length≤capacity b := by
+    have hm : base.steps+1≤capacity b := by
+      have hp : 0<(b+1)^2 := by positivity
+      unfold capacity
+      omega
+    simpa only [Nat.zero_add,max_eq_left hm] using hsupport i
+  obtain ⟨r,hrun,hf,hsteps,_⟩ := ZeroPadding.run_config machine (padding b) _ _ base hr
+  have hi : ZeroPadding.config (padding b)
+      (initialConfiguration machine (CompetitorRationalProducts.input (width b) b nums d e))=
+      initialConfiguration machine (paddedInput b nums d e) := rfl
+  rw [hi] at hrun
+  refine ⟨r.final.tapes,⟨r,hrun,rfl,?_,hsteps.trans_le hs⟩,?_,?_,?_⟩
+  · intro i
+    rw [hf]
+    exact hh i
+  · intro i
+    rw [hf]
+    simp only [ZeroPadding.config,ZeroPadding.pad_length]
+    exact max_le (by unfold padding; split <;> omega) (hbound i)
+  · have h6 : raw 6=List.replicate (width b) true := hshared 6
+    simpa [hf,ZeroPadding.config,padding,ht] using h6
+  · simpa only [hf,ZeroPadding.config,ZeroPadding.read_pad,ht] using hflag
 
 theorem bounded_focused_run {t u s time : ℕ} (slot : Fin t → Fin u)
     (hi : Function.Injective slot) (p : Machine t s)

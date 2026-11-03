@@ -1,4 +1,6 @@
+import Proof.Circuits.CanonicalBalancedCall
 import Proof.MachineModel.CanonicalSupplierCompressedGateProgram
+import Proof.Circuits.CanonicalWitnessCodec
 
 namespace NearCubicWires.CanonicalSupplierGateBatchProgram
 

@@ -1,5 +1,6 @@
 import Proof.Wire_3_5.Compiler.MachineOrder
 import Proof.Wire_3_5.Compiler.MachinePoolContract
+import Proof.Supplier.RowBinLiftCuts
 
 /-! # C3 v2: the printer request of the compiler stages, as a reference (P3:1916-1936, 1707-1738)
 

@@ -1,5 +1,7 @@
 import Proof.Wire_3_5.Primitive.ThresholdWriter.TopFront
+import Proof.Wire_3_5.Primitive.Writers.Records
 import Proof.Wire_3_5.Primitive.Writers.Enum
+import Proof.Wire_3_5.FinalPass.Words
 
 /-! # The RADIX row's digit populations as a word program: the type `DigsW` (P3:2596-2618, W17)
 

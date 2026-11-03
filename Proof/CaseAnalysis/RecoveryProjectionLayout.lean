@@ -1,5 +1,7 @@
 import Proof.Amplification.RecoveryPCPFormulaResumeScalars
 import Proof.CaseAnalysis.RecoveryRowRandomReset
+import Proof.PCP.ProjectionNormalizationDriverAtoms
+import Proof.MachineModel.UWalkUnary
 
 /-! Cold layout for the original projector bank. The four input words are
 the original binary dimensions, actual normalized queries and paid B driver.

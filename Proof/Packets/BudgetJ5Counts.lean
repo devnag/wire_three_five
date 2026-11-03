@@ -1,4 +1,7 @@
-import Proof.SourceAssembly.SourcePhaseFuel
+import Proof.Packets.BudgetJ5Compose
+import Proof.CaseAnalysis.FinalClauseBitsUniform
+import Proof.CaseAnalysis.FinalModeNativeSchedule
+import Proof.CaseAnalysis.SourceCounts
 
 section
 set_option autoImplicit false
@@ -27,7 +30,15 @@ open NearCubicWires.RepairOrdinary.PCPPSubstitution NearCubicWires.RepairOrdinar
 end req
 
 section reqAt
+variable (sources : EightSources) (k : ℕ) {gamma : Real} (p : Parameters sources gamma)
 
+def reqC : ℕ := Classical.choose (CloseoutSourceCounts.shortRequest_polynomial (CloseoutLanguage.selectedPCPP sources)
+    (SelectedRecoveryIntegration.fixedProjection sources).coefficient
+    (SelectedRecoveryIntegration.fixedProjection sources).degrees.queries p.degree)
+def reqE : ℕ := Classical.choose (Classical.choose_spec (CloseoutSourceCounts.shortRequest_polynomial
+    (CloseoutLanguage.selectedPCPP sources)
+    (SelectedRecoveryIntegration.fixedProjection sources).coefficient
+    (SelectedRecoveryIntegration.fixedProjection sources).degrees.queries p.degree))
 
 end reqAt
 

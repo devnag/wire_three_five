@@ -1,5 +1,6 @@
-import Proof.CaseAnalysis.RowsGateFieldsMeaning
 import Proof.Wire_3_5.Foundations.Carrier
+import Proof.CaseAnalysis.CloseoutWitnessTraversal
+import Proof.CaseAnalysis.RowsGateFieldsMeaning
 
 /-! # The carrier code's format (P3:3071-3086)
 

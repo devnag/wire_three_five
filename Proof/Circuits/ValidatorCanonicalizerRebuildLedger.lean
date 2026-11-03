@@ -1,6 +1,6 @@
 import Batteries.Tactic.OpenPrivate
-import Proof.Circuits.ValidatorCircuitWidthLedger
 import Proof.MachineModel.CanonicalBalancedMidpointRebuildProgram
+import Proof.Circuits.ValidatorCircuitWidthLedger
 import Proof.MachineModel.CanonicalNatDecodeFoldProgram
 
 /-!

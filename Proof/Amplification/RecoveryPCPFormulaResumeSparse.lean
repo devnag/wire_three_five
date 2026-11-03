@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryPCPFormulaResumeSerialize
+import Proof.MachineModel.OrdinaryZeroUnpadding
 
 /-! Run the same complete original formula machine with initially blank
 false-only scratch. The existing inverse-padding simulation preserves every

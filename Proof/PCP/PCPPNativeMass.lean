@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeOracleScalars
+import Proof.PCP.PCPSerializerMassReady
 
 /-! Paid byte measurement on the original hierarchy query stream, with
 the original actual R*Q count. The existing scan restores both cursors. -/

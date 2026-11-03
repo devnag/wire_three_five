@@ -1,7 +1,10 @@
-import Mathlib
-import Proof.Packets.PacketsMetaStageRun
-import Proof.Rows.RowsInitLoopTable
-import Proof.Rows.RowsPartsFill
+import Proof.Rows.RowsInitThrWork
+import Proof.Rows.RowsInitHdrSpec
+import Proof.CaseAnalysis.FinalCompareDockLit
+import Proof.PCP.ProjectionNormalizationDriverAtoms
+import Proof.Packets.PacketsMetaMaps
+import Proof.Rows.RowsInitCount
+import Proof.Rows.RowsInitHeaderWords
 
 /-! # Rows initializer: the global stages on the whole row bank (work phase docked, Frame writer, counter, Header / bump)
 
@@ -30,13 +33,23 @@ open NearCubicWires NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdina
 open NearCubicWires.ExtDecompositionBatch NearCubicWires.RepairRepresentation NearCubicWires.SupplierPipeline
 open PCJ9eff70d512234a4c_Fixed PCJd4d1d9d7d1fa4313_Production RowsConstruction RowsConstruction.BaseLayout
 open NearCubicWires.PacketsGlue.RequestMeta NearCubicWires.RepairOrdinary.RecoveryRootRound NearCubicWires.PacketFamilyParent
+open RowsInit.ThrLoop (wp wp_val rw_eq)
+open RowsInit.ThrWork (port_cases stop_run cell0_rep)
 attribute [local irreducible] P1TopDownPaidPayload.tapes
 noncomputable section
 
 /-! ## 1. The global ports -/
 
 section Ports
+variable (printer : WilliamsAlgorithm) (NI : ℕ)
 
+def wS (k : Fin (2 + rowsWork NI)) : Fin (rowTapes printer (rowsWork NI) + 1) :=
+  (PCJ45bee56da9f34d5a_RowState.workSlot printer (rowsWork NI) k).castSucc
+def hS (k : Fin 440) : Fin (rowTapes printer (rowsWork NI) + 1) :=
+  (PCJ38fbfed565f64139_Ready.headerSlots printer (rowWork (rowsWork NI)) k).castSucc
+def fS (k : Fin (P1TopDownPaidPayload.tapes printer + 2)) : Fin (rowTapes printer (rowsWork NI) + 1) :=
+  (PCJ38fbfed565f64139_Ready.frameSlots printer (rowWork (rowsWork NI)) k).castSucc
+def cS : Fin (rowTapes printer (rowsWork NI) + 1) := Fin.last _
 
 
 
@@ -79,7 +92,12 @@ end Counter
 /-! ## 7. The Header writer (typed `HdrSpec`) and the empty-family bump, docked -/
 
 section Hdr
+variable (selector : CyclicChoice.Laws) (a : DecompositionAlgorithm) (printer : WilliamsAlgorithm) (NI oH : ℕ)
+  (H : RowsInit.Hdr.HdrSpec selector a printer)
 
+/-- The final global head vector: `1` on the word tape and on Header 277. -/
+def hFin (x : Fin (rowTapes printer (rowsWork NI) + 1)) : ℕ :=
+  if x = cS printer NI ∨ x = hS printer NI 277 then 1 else 0
 
 
 end Hdr

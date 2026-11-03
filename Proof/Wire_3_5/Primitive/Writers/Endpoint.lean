@@ -1,4 +1,17 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.CaseAnalysis.RawRowsThresholdSize
+import W3.Proof.Foundations.SourceRegistry
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Transfer.LiteralSources
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.EndpointBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # PA.g7: the THR endpoint exponent (census G7'), the residual `EndpointLeaf`
 
@@ -38,42 +51,6 @@ noncomputable def gateAlg : RepairRepresentation.DecompositionAlgorithm :=
 noncomputable def endpointExp : ℕ := 112 * (gateAlg l).degree + 4 * (gateAlg l).coefficient + 7
 
 theorem endpointExp_ge : 1 + 2 ≤ endpointExp l := by unfold endpointExp; omega
-
-/-- `8n ≤ (n+2)^3`. -/
-theorem eight_mul_le (n : ℕ) : 8 * n ≤ (n + 2) ^ 3 := by
-  have h4 : 4 * n ≤ (n + 2) ^ 2 := by nlinarith
-  calc 8 * n = 4 * n * 2 := by ring
-    _ ≤ (n + 2) ^ 2 * (n + 2) := Nat.mul_le_mul h4 (by omega)
-    _ = (n + 2) ^ 3 := by ring
-
-/-- **The arithmetic of G7'**: `8n·(c·((n+1)^{26}+2)^d + 1)^4 ≤ (n+2)^{112d+4c+7}`. -/
-theorem count_le_pow (n c d : ℕ) :
-    8 * n * (c * ((n + 1) ^ 26 + 2) ^ d + 1) ^ 4 ≤ (n + 2) ^ (112 * d + 4 * c + 7) := by
-  have h2 : 2 ≤ n + 2 := by omega
-  have hA : (n + 1) ^ 26 + 2 ≤ (n + 2) ^ 28 := by
-    have e1 : (n + 1) ^ 26 ≤ (n + 2) ^ 26 := Nat.pow_le_pow_left (by omega) _
-    have e2 : 4 ≤ (n + 2) ^ 2 := by nlinarith
-    have e3 : 1 ≤ (n + 2) ^ 26 := Nat.one_le_pow _ _ (by omega)
-    calc (n + 1) ^ 26 + 2 ≤ (n + 2) ^ 26 * 4 := by omega
-      _ ≤ (n + 2) ^ 26 * (n + 2) ^ 2 := Nat.mul_le_mul_left _ e2
-      _ = (n + 2) ^ 28 := by rw [← pow_add]
-  have hB : ((n + 1) ^ 26 + 2) ^ d ≤ (n + 2) ^ (28 * d) := by
-    rw [pow_mul]; exact Nat.pow_le_pow_left hA d
-  have hX : 1 ≤ (n + 2) ^ (28 * d) := Nat.one_le_pow _ _ (by omega)
-  have hc : c + 1 ≤ (n + 2) ^ c := le_trans Nat.lt_two_pow_self (Nat.pow_le_pow_left h2 c)
-  have hC : c * ((n + 1) ^ 26 + 2) ^ d + 1 ≤ (n + 2) ^ (c + 28 * d) := by
-    calc c * ((n + 1) ^ 26 + 2) ^ d + 1 ≤ c * (n + 2) ^ (28 * d) + (n + 2) ^ (28 * d) :=
-          Nat.add_le_add (Nat.mul_le_mul_left _ hB) hX
-      _ = (c + 1) * (n + 2) ^ (28 * d) := by ring
-      _ ≤ (n + 2) ^ c * (n + 2) ^ (28 * d) := Nat.mul_le_mul_right _ hc
-      _ = (n + 2) ^ (c + 28 * d) := by rw [← pow_add]
-  have hD : (c * ((n + 1) ^ 26 + 2) ^ d + 1) ^ 4 ≤ (n + 2) ^ (4 * c + 112 * d) := by
-    calc (c * ((n + 1) ^ 26 + 2) ^ d + 1) ^ 4 ≤ ((n + 2) ^ (c + 28 * d)) ^ 4 := Nat.pow_le_pow_left hC 4
-      _ = (n + 2) ^ (4 * c + 112 * d) := by rw [← pow_mul]; congr 1; ring
-  calc 8 * n * (c * ((n + 1) ^ 26 + 2) ^ d + 1) ^ 4 ≤ (n + 2) ^ 3 * (n + 2) ^ (4 * c + 112 * d) :=
-        Nat.mul_le_mul (eight_mul_le n) hD
-    _ = (n + 2) ^ (4 * c + 112 * d + 3) := by rw [← pow_add]; congr 1; ring
-    _ ≤ (n + 2) ^ (112 * d + 4 * c + 7) := Nat.pow_le_pow_right (by omega) (by omega)
 
 /-- **G7' at every call**: for every free constants whose endpoint exponent is `fe`, every clock, coefficient and
 source work, `|𝒢|·2^{−errExp} ≤ n^{−D}/8` at every THR call. -/
@@ -129,3 +106,5 @@ noncomputable def endpointLeaf : EndpointLeaf l :=
   ⟨endpointExp l, endpointExp_ge l, fun F hF kclk coef A a ha => endpoint l F hF kclk coef A a ha⟩
 
 end NearCubicWires.WireExponent3_5.PrimAsm.Endpoint
+
+end

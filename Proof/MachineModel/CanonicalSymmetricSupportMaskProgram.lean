@@ -1,3 +1,4 @@
+import Proof.Circuits.CanonicalBalancedBuilder
 import Proof.MachineModel.CanonicalTouchingSweepRoundProgram
 
 /-!

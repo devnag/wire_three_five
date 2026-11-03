@@ -1,4 +1,6 @@
+import Proof.Wire_3_5.Recovery.CertCostA
 import Proof.Wire_3_5.Recovery.CaseTwoFold
+import Proof.CaseAnalysis.ScheduleClauseWidth
 
 /-! # The Case-2 widths of the selected slice (P3:3637-3640, 3665-3667; D1.6 A3b)
 

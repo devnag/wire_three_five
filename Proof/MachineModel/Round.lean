@@ -1,6 +1,7 @@
-import Proof.MachineModel.FrameCopy
 import Proof.MachineModel.Layout
+import Proof.MachineModel.FrameCopy
 import Proof.MachineModel.Totals
+import Proof.Amplification.RecoveryScratchErase
 
 /-! P25: one complete occurrence round.
 

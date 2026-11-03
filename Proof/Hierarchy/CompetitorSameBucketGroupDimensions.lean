@@ -1,4 +1,6 @@
 import Proof.Hierarchy.CompetitorSameBucketGroupDense
+import Proof.MachineModel.ClockUnarySum
+import Proof.Hierarchy.CompetitorDimensions
 
 /-! Cold production of the grouping capacity from actual raw W,p,M tapes.
 The accepted polynomial dimension producer avoids a second scale machine. -/

@@ -1,5 +1,5 @@
-import Proof.Wire_3_5.Compiler.MachineC3aDecBound
 import Proof.Wire_3_5.Primitive.Writers.C3WCostPoly
+import Proof.Wire_3_5.Compiler.MachineC3aDecBound
 
 /-! # C3 request writer, part 18: C3a′'s steps at a call's pool request
 

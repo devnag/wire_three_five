@@ -1,6 +1,15 @@
 import Mathlib.Data.Nat.Choose.Lucas
-import Proof.MachineModel.Encoding
-import Proof.MachineModel.Layout
+import Proof.CaseAnalysis.RowsDegreeAdvance
+import Proof.CaseAnalysis.RowsFamilyBudget
+import Proof.CaseAnalysis.RowsModeElementary
+import Proof.CaseAnalysis.RowsModeWindowBinomial
+import Proof.CaseAnalysis.RowsModeWindowScalar
+import Proof.Circuits.ValidatorPolynomialDomination
+import Proof.MachineModel.CanonicalFourfoldRowProgram
+import Proof.MachineModel.OrdinaryFramedIncrement
+import Proof.MachineModel.OrdinarySignedSortKey
+import Proof.MachineModel.OrdinaryZeroUnpadding
+import Proof.Supplier.RowTupleTerms
 
 /-! One Toeplitz output bit scans the original lower diagonals backwards
 and upper diagonals forwards. No row matrix or reversed seed is supplied. -/

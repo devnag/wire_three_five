@@ -1,8 +1,11 @@
-import Proof.Circuits.CanonicalForkCall
 import Proof.MachineModel.CanonicalBalancedLookupProgram
+import Proof.MachineModel.CanonicalBalancedNatSumProgram
 import Proof.MachineModel.CanonicalBalancedTraversalParityProgram
+import Proof.Circuits.CanonicalForkCall
 import Proof.MachineModel.CanonicalFourfoldRowProgram
 import Proof.MachineModel.CanonicalNativeCallProgram
+import Proof.MachineModel.CanonicalTaggedParityProgram
+import Proof.MachineModel.TaggedProgramChoice
 
 /-!
 # Executing structural `𝔽₂` polynomials on the oracle machine

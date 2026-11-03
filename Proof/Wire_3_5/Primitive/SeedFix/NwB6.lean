@@ -1,5 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.NwB5
-import Proof.Wire_3_5.Primitive.SeedFix.NwBT
+import Proof.Wire_3_5.Primitive.SeedFix.NwBTBase
 
 /-! # NW phase (b), part 6: the value `V = #primes·2^{sb}·Q` in a register
 

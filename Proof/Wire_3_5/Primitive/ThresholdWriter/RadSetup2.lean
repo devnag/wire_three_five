@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.Primitive.ThresholdWriter.RadSetup
+import Proof.Wire_3_5.Primitive.ThresholdWriter.RadSetupBase
 
 /-! # THR, W7 seam v2: the RADIX setup's entry with `ncar` and `cap_T` (`RsIn2`, `RadSetupSpec2`)
 

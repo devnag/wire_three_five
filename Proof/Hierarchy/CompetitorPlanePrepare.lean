@@ -1,4 +1,5 @@
 import Proof.Hierarchy.CompetitorPlaneClear
+import Proof.Hierarchy.CompetitorUnaryWidthCopy
 
 /-! The enclosing plane-cell preparation begins with three independent
 stream cursors, retained factor/widths and bounded local scratch. It clears

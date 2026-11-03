@@ -56,4 +56,15 @@ theorem envelope (C k c N : ℕ) (hC : 3*C≤2^k) :
         _≤2^(k+c)*(N+ClockDyadicLedger.limit N+1)*q N^c :=
           Nat.mul_le_mul_right _ (Nat.mul_le_mul_left _ (by omega))
 
+theorem exponent_bound (k c N : ℕ) : exponent k c N+3≤(c+k+4)*q N^2 := by
+  have hw := (ClockDyadicLedger.width_bounds N).2
+  have hh : logWidth N≤ell N := Nat.clog_le_of_le_pow (Nat.succ_le_of_lt Nat.lt_two_pow_self)
+  have hq : 1≤q N := by simp [q]
+  have he : ell N≤q N := by simp [q]
+  have hq2 : q N≤q N^2 := by nlinarith
+  have hch : c*logWidth N≤c*(q N^2) := Nat.mul_le_mul_left _ (hh.trans (he.trans hq2))
+  have hk : k≤k*q N^2 := by nlinarith
+  dsimp only [exponent,ClockDyadicLedger.width] at *
+  nlinarith
+
 end NearCubicWires.RepairOrdinary.ClockEnvelope

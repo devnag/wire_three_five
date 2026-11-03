@@ -1,4 +1,5 @@
 import Proof.Rows.Plan
+import Proof.MachineModel.ClockUnaryProduct
 
 set_option autoImplicit false
 set_option maxHeartbeats 500000

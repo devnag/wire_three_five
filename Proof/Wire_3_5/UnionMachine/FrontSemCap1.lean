@@ -1,11 +1,21 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.FrontSemGate
+import Proof.Wire_3_5.UnionMachine.FrontSemPathBase
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.UnionCheck
+import Proof.Wire_3_5.UnionMachine.FrontSemTW
+import Proof.Wire_3_5.UnionMachine.FrontSemCap1Base
+
+
+noncomputable section
+
 
 /-! # C6 front, the semantic core (12): a guess's size envelope and its call table (P3:3485-3491, 3669-3691)
 
 **`GEnv g Λ K`**: every size of the guess `g` the front's capacities read is at most `K` (the width, the variable
 count, `2^{cb}`, the grid, the mass, the PCPP size bound, the atoms' and the carriers' codes, the translation).
 From it: every scheduled call's request word (**`word_le`**, PA's `word_length`), every entry word, and the call
-table's words (**`twWords_le`**: the schedule's length, `length_schedule_le`, times an entry's length).
+table's words (**`twWords_le`**: the schedule's length, the `length_schedule_le`, times an entry's length).
 
 Paper quantity of the main types: the guess's call table (its requests and coefficients) against the width. -/
 
@@ -18,18 +28,6 @@ open NearCubicWires.WireExponent3_5.Cost
 open NearCubicWires.RepairRepresentation (natWord natListWord)
 open NearCubicWires.WireExponent3_5.UnionMachine.FrontSemTW (nvG twWords)
 open NearCubicWires.WireExponent3_5.UnionMachine.FrontFoldSem (foldOf)
-
-theorem natWord_le (x : ℕ) : (natWord x).length ≤ 2 * x + 3 := PrimAsm.CallSize.natWord_len_le_self x
-
-theorem natWord_bits (x : ℕ) : (natWord x).length = 2 * natBitLength x + 1 := Bindings.Williams14.natWord_length x
-
-theorem frame_len (w : List Bool) : (RepairOrdinary.frame w).length = 2 * w.length + 1 := by
-  induction w with
-  | nil => rfl
-  | cons b w ih => show (true :: b :: RepairOrdinary.frame w).length = _; simp only [List.length_cons, ih]; ring
-
-theorem flatMap_le {α β : Type} (l : List α) (f : α → List β) (k : ℕ) (h : ∀ x ∈ l, (f x).length ≤ k) :
-    (l.flatMap f).length ≤ l.length * k := PrimAsm.CallSize.flatMap_length_le l f k h
 
 section Env
 variable {kclk : ℕ} {E : Envelope} {B : TimeBudget kclk E} {I : PrimitiveInputs B} {S : UnionSetup I} {N : ℕ}
@@ -46,44 +44,13 @@ structure GEnv (g : UnionGuess S z) (Λ K : ℕ) : Prop where
   lam1 : 1 ≤ Λ
   lam : Λ ≤ K
   mass : (g.checkData g.translation).mass = Λ
-  kp : S.pcppAlg.coefficient * ((S.request z g.oracle).circuit.size + 1) ^ S.pcppAlg.degree ≤ K
+  kp : S.pcppAlg.coefficient * ((S.request z g.pair).circuit.size + 1) ^ S.pcppAlg.degree ≤ K
   circ : ∀ a : g.AtomIx, (natWord (g.mode.code (g.circ a))).length ≤ K
   cw : ∀ X, X < nvG g → (CodeWriters.codesWord g.mode ((foldOf (g.checkData g.translation)).atoms X)).length ≤ K
   car : ∀ X : PcppVar g.pcpp, natBitLength (Stars.Carrier.code (g.carrier X)) ≤ K
   tr : (natListWord g.translation).length ≤ K
   trl : g.translation.length ≤ K
   cst : (natWord (CWConst.constCode g.mode)).length ≤ K
-
-/-- **A tuple request's word.** -/
-theorem word_le (m : Mode) (q : ℕ) {α : Type} (circ : α → m.Circuit q) (t : Fin 4 → α) (cs : List (Stars.Carrier q))
-    (tr : List ℕ) (K : ℕ) (hc : ∀ k, (natWord (m.code (circ (t k)))).length ≤ K) (hcs : cs.length ≤ 2)
-    (hcar : ∀ X ∈ cs, natBitLength (Stars.Carrier.code X) ≤ K) (htr : (natListWord tr).length ≤ K) :
-    (tupleRequest m q circ t cs tr).word.length ≤ 2 * q + 9 * K + 24 := by
-  rw [PrimAsm.Codec.word_length]
-  have h1 := natWord_le q
-  have h2 : (natWord 4).length ≤ 11 := natWord_le 4
-  have h3 : ((PrimAsm.Codec.codeList (tupleRequest m q circ t cs tr)).flatMap natWord).length ≤ 4 * K := by
-    have := flatMap_le (PrimAsm.Codec.codeList (tupleRequest m q circ t cs tr)) natWord K (fun c hc' => by
-      unfold PrimAsm.Codec.codeList at hc'
-      obtain ⟨i, rfl⟩ := List.mem_ofFn.mp hc'
-      exact hc i)
-    rwa [PrimAsm.Codec.codeList, List.length_ofFn] at this
-  have h4 : (natListWord (PrimAsm.Codec.carrierCodes (tupleRequest m q circ t cs tr))).length ≤ 4 * K + 9 := by
-    unfold natListWord PrimAsm.Codec.carrierCodes
-    rw [List.length_append, List.length_map]
-    have e1 := natWord_le cs.length
-    have e2 := flatMap_le (cs.map Stars.Carrier.code) natWord (2 * K + 1) (fun c hc' => by
-      obtain ⟨X, hX, rfl⟩ := List.mem_map.mp hc'
-      rw [natWord_bits]; have := hcar X hX; omega)
-    rw [List.length_map] at e2
-    have e3 : cs.length * (2 * K + 1) ≤ 2 * (2 * K + 1) := Nat.mul_le_mul_right _ hcs
-    show (natWord (tupleRequest m q circ t cs tr).carriers.length).length +
-      ((tupleRequest m q circ t cs tr).carriers.map Stars.Carrier.code |>.flatMap natWord).length ≤ _
-    show (natWord cs.length).length + ((cs.map Stars.Carrier.code).flatMap natWord).length ≤ _
-    omega
-  have h5 : (natListWord (tupleRequest m q circ t cs tr).translation).length ≤ K := htr
-  show (natWord q).length + 1 + (natWord 4).length + _ + _ + _ ≤ _
-  omega
 
 variable {g : UnionGuess S z} {Λ K : ℕ}
 
@@ -113,12 +80,6 @@ theorem call_word_le (hG : GEnv g Λ K) (t : ℚ × PrimRequest)
       rcases List.mem_cons.1 hX with e | hX'
       · subst e; exact hG.car _
       · have e := List.mem_singleton.1 hX'; subst e; exact hG.car _)
-
-/-- An entry word's length bound. -/
-def EW (K : ℕ) : ℕ := 2 * (K + K) ^ 4 + 22 * K + 54
-
-/-- The call count bound. -/
-def CN (K : ℕ) : ℕ := 24 * K * (1 + 2 * K * (K + 1)) ^ 4
 
 theorem entry_le (hG : GEnv g Λ K) (hsg : (g.checkData g.translation).signsOk = true) (k : Fin 3)
     (t : ℚ × PrimRequest)
@@ -153,12 +114,12 @@ theorem twWords_le (hG : GEnv g Λ K) (hsg : (g.checkData g.translation).signsOk
     unfold CN
     have h1 := hG.kp
     have h2 : g.s ≤ K := hG.s
-    have h3 : 1 + 2 * (S.pcppAlg.coefficient * ((S.request z g.oracle).circuit.size + 1) ^ S.pcppAlg.degree) *
+    have h3 : 1 + 2 * (S.pcppAlg.coefficient * ((S.request z g.pair).circuit.size + 1) ^ S.pcppAlg.degree) *
         (g.s + 1) ≤ 1 + 2 * K * (K + 1) := by
       have := Nat.mul_le_mul (Nat.mul_le_mul_left 2 h1) (show g.s + 1 ≤ K + 1 by omega)
       omega
-    calc 24 * (S.pcppAlg.coefficient * ((S.request z g.oracle).circuit.size + 1) ^ S.pcppAlg.degree) *
-          (1 + 2 * (S.pcppAlg.coefficient * ((S.request z g.oracle).circuit.size + 1) ^ S.pcppAlg.degree) *
+    calc 24 * (S.pcppAlg.coefficient * ((S.request z g.pair).circuit.size + 1) ^ S.pcppAlg.degree) *
+          (1 + 2 * (S.pcppAlg.coefficient * ((S.request z g.pair).circuit.size + 1) ^ S.pcppAlg.degree) *
             (g.s + 1)) ^ 4 ≤ 24 * K * (1 + 2 * K * (K + 1)) ^ 4 :=
           Nat.mul_le_mul (Nat.mul_le_mul_left 24 h1) (Nat.pow_le_pow_left h3 4)
       _ = 24 * K * (1 + 2 * K * (K + 1)) ^ 4 := rfl
@@ -177,3 +138,5 @@ theorem twWords_le (hG : GEnv g Λ K) (hsg : (g.checkData g.translation).signsOk
 end Env
 
 end NearCubicWires.WireExponent3_5.UnionMachine.FrontSemCap1
+
+end

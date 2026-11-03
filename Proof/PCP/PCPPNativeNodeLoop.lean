@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeNodeStep
+import Proof.PCP.VerifierDecodingRepeat
 
 /-! The original-node loop is driven by an actual sentinel count tape.
 Each body is the checked reusable node substitution plus position advance;

@@ -5,6 +5,71 @@ namespace NearCubicWires.SupplierCapacity
 open NearCubicWires.PolynomialSchedule
 open NearCubicWires.SourceInterfaces
 
+/-- Any fixed multiple of the canonical logarithm eventually fits below the
+source arity.  This is the sole logarithmic-capacity onset used by the
+supplier: it reduces the claim to the already-audited
+polynomial-versus-exponential theorem and exposes the resulting finite
+threshold. -/
+theorem coefficient_mul_logScale_eventually_le (coefficient : ℕ) :
+    ∃ onset, ∀ q, onset ≤ q →
+      coefficient * logScale q ≤ q := by
+  let positiveCoefficient := coefficient + 1
+  have hcoefficient : 0 < positiveCoefficient := by
+    dsimp only [positiveCoefficient]
+    omega
+  let envelope : ℕ → ℕ :=
+    fun n => positiveCoefficient * (n + 2) + 2
+  have henvelope : PolynomiallyBounded envelope := by
+    refine ⟨2 * positiveCoefficient + 2, 1, by omega, ?_⟩
+    intro n
+    dsimp only [envelope]
+    simp only [pow_one]
+    nlinarith
+  rcases polynomiallyBounded_eventually_le_sixteenth_exponential
+      henvelope with
+    ⟨exponentialOnset, hexponential⟩
+  refine ⟨positiveCoefficient * (exponentialOnset + 1), ?_⟩
+  intro q hq
+  let quotient := q / positiveCoefficient
+  have hquotientLower : quotient * positiveCoefficient ≤ q := by
+    apply (Nat.le_div_iff_mul_le hcoefficient).mp
+    exact le_rfl
+  have hquotientOnset : exponentialOnset + 1 ≤ quotient := by
+    apply (Nat.le_div_iff_mul_le hcoefficient).2
+    simpa [Nat.mul_comm] using hq
+  have hquotientPositive : 0 < quotient := by omega
+  have hquotientUpper :
+      q < (quotient + 1) * positiveCoefficient := by
+    apply (Nat.div_lt_iff_lt_mul hcoefficient).mp
+    omega
+  have henvelopeBound :=
+    hexponential (quotient - 1) (by omega)
+  have hargument :
+      quotient - 1 + 2 = quotient + 1 := by omega
+  have hexponent :
+      quotient - 1 + 1 = quotient := by omega
+  have hqEnvelope : q + 2 ≤ envelope (quotient - 1) := by
+    dsimp only [envelope]
+    rw [hargument, Nat.mul_comm]
+    omega
+  have hqPower : q + 2 ≤ 2 ^ quotient := by
+    rw [hexponent] at henvelopeBound
+    exact hqEnvelope.trans
+      (henvelopeBound.trans (Nat.div_le_self _ _))
+  have hlog : logScale q ≤ quotient := by
+    unfold logScale
+    exact Nat.clog_le_of_le_pow hqPower
+  calc
+    coefficient * logScale q ≤
+        positiveCoefficient * logScale q := by
+      apply Nat.mul_le_mul_right
+      dsimp only [positiveCoefficient]
+      omega
+    _ ≤ positiveCoefficient * quotient :=
+      Nat.mul_le_mul_left positiveCoefficient hlog
+    _ = quotient * positiveCoefficient := Nat.mul_comm _ _
+    _ ≤ q := hquotientLower
+
 /-- Every fixed polynomial in the canonical binary logarithm is eventually
 sublinear in the source arity.  This packages the recurring conversion from a
 polynomial seed/branch ledger to one finite source-size onset. -/

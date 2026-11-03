@@ -1,4 +1,5 @@
 import Proof.Foundations.RecoverySourceContracts
+import Proof.Foundations.CaseOnePadding
 
 /-! Immediate and enclosing recovery consumers of the corrected source.
 One ordinary hierarchy and one selected PCP supply the canonical Case-1 table.

@@ -1,7 +1,29 @@
-import Proof.Wire_3_5.Primitive.Writers.CallSize
-import Proof.Wire_3_5.UnionMachine.FrontLedger
+import Lean
 import Proof.Wire_3_5.UnionMachine.FrontOutRef
+import Proof.Wire_3_5.UnionMachine.FrontLedger
 import Proof.Wire_3_5.UnionMachine.UnionCallCount
+import Proof.Wire_3_5.Primitive.Writers.CallSize
+import Proof.Wire_3_5.Recovery.RecoveryLedger
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Recovery.RecoveryLanguage
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Recovery.RecoverySetupTwo
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Assembly.Free
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.UnionCheck
+import Proof.Wire_3_5.UnionMachine.UnionCodec
+import Proof.Wire_3_5.UnionMachine.PlanW2
+import Proof.Wire_3_5.UnionMachine.PlanW3
+import Proof.Wire_3_5.UnionMachine.UnionSetup
+import Proof.Wire_3_5.UnionMachine.FrontCapsBase
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-! # C6 front, F2: the table's sizes and the capacities at the pinned setup (P3:3622, 3669-3691, 3797-3811)
 
@@ -10,7 +32,7 @@ in the witness, eventually in `N`, at the pinned setup `S₂` (`Split.setupF`, `
 * the setup's grid and width: `S2_gridSize` (`s(q) = sp(q)`), `S2_gridMass` with `gridMassOf_le` (`Λ̄(q) ≤ s(q)`),
   `S2_width` (the padded width is the ledger's `q(N)` eventually), `gridFacts_SUE` (`Λ̄ ≥ 1` natural, `s ≥ 1`);
 * the PCPP's clause count `2^{clauseBits} ≤ K₀(q+1)^{D₀}` (`clause_le_of`, `S2_clause`; the substituted circuit's size, as
-  in `calls_le_of`);
+  in the `calls_le_of`);
 * every term's scaled coefficient `|c·s⁴| ≤ 2(Λ̄+s)⁴` (`BdForm`, `coeff_scaled_abs`, `CheckB.terms_mag`; `c = κ_j∏F`,
   `|κ_j| ≤ 2`, every factor `|F|·s ≤ Λ̄ + s` since the grid signs are in `{−1,0,1}`), every request at `q`
   (`CheckB.terms_n`), the table's entries (`mem_tableAll`), the accumulators' start (`accStart_le`);
@@ -46,86 +68,82 @@ variable (l : Literals) (G : Split.Gate) (kclk coef A a : ℕ) (ha : a ≤ kclk 
 theorem S2_gridSize : (unionSetupS2 l G kclk coef A a ha L hL).gridSize = G.row.sp := by
   by_cases h : L = recL l kclk
   · subst h; rw [unionSetupS2_recL]; rfl
-  · rw [UnionCallCount.unionSetupS2_ne l G kclk coef A a ha L hL h]; rfl
+  · rw [UnionCallCount.unionSetupS2_ne l G coef A a kclk ha L hL h]; rfl
 
 theorem S2_gridMass : (unionSetupS2 l G kclk coef A a ha L hL).gridMass = gridMassOf (gateCδ1 l) G.row.sp := by
   by_cases h : L = recL l kclk
   · subst h; rw [unionSetupS2_recL]; rfl
-  · rw [UnionCallCount.unionSetupS2_ne l G kclk coef A a ha L hL h]; rfl
-
-theorem gridMassOf_le (Cδ : ℕ) (sp : ℕ → ℕ) (q : ℕ) : gridMassOf Cδ sp q ≤ (sp q : ℚ) := by
-  unfold gridMassOf
-  have h1 : Nat.sqrt (sp q / Cδ) ≤ sp q := (Nat.sqrt_le_self _).trans (Nat.div_le_self _ _)
-  exact_mod_cast h1
-
-theorem S2_width (hApad : (gateSource l).degrees.proofLog + 6 ≤ G.Apad) :
-    ∀ᶠ N in atTop, (unionSetupS2 l G kclk coef A a ha L hL).pcp.nativeWidth N = (G.budget kclk coef A a ha).q N := by
-  by_cases h : L = recL l kclk
-  · subst h
-    rw [unionSetupS2_recL]
-    obtain ⟨N₀, hN₀⟩ := recSetup2_width l G kclk coef A a ha hApad
-    exact eventually_atTop.2 ⟨N₀, hN₀⟩
-  · rw [UnionCallCount.unionSetupS2_ne l G kclk coef A a ha L hL h]
-    obtain ⟨N₀, hN₀⟩ := unionSetupS1_width l G kclk coef A a ha L hL hApad
-    exact eventually_atTop.2 ⟨N₀, hN₀⟩
+  · rw [UnionCallCount.unionSetupS2_ne l G coef A a kclk ha L hL h]; rfl
 
 end Setup
+
+section Width
+variable (l : Literals) (G : Split.Gate) (coef A a : ℕ) (ha : a ≤ Transfer.kclk + 1) (L : Language)
+  (hL : InNTIME (fun n => n ^ (Transfer.kclk + 2)) L)
+
+/-- **The live setup's width is the ledger's `q(N)`** (at the gate's `A_pad`); the dead setup is never live. -/
+theorem S2_width (hApad : G.Apad = gateApad l) (N : ℕ)
+    (hlive : (unionSetupS2 l G Transfer.kclk coef A a ha L hL).live = true) :
+    (unionSetupS2 l G Transfer.kclk coef A a ha L hL).width N = (G.budget Transfer.kclk coef A a ha).q N := by
+  by_cases h : L = recL l Transfer.kclk
+  · subst h
+    rw [unionSetupS2_recL]
+    exact recSetup2_width l G coef A a ha hApad N
+  · rw [UnionCallCount.unionSetupS2_ne l G coef A a Transfer.kclk ha L hL h] at hlive ⊢
+    rw [unionSetupS1_live] at hlive
+    exact absurd hlive (by decide)
+
+end Width
 
 /-! ## The clause count -/
 
 section Clause
 variable {kclk : ℕ} {E : Envelope} {B : TimeBudget kclk E} {I : PrimitiveInputs B}
 
-/-- **The PCPP's clause count at one setup** (the first half of `calls_le_of`): from the PCP's query bound
-and the width `w(N) = q(N)` eventually, every guess with an oracle within `q^G` has `2^{clauseBits} ≤ K₀(q+1)^{D₀}`. -/
-theorem clause_le_of (S : UnionSetup I) (qN : ℕ → ℕ) (CH eQ : ℕ)
-    (hQ : ∀ N, S.pcp.queryCount N ≤ CH * (S.pcp.nativeWidth N + 1) ^ eQ)
-    (hw : ∀ᶠ N in atTop, S.pcp.nativeWidth N = qN N) :
-    ∃ K₀ D₀ : ℕ, ∀ᶠ N in atTop, ∀ (z : BitInput N) (g : UnionGuess S z),
-      g.oracle.size ≤ oracleSizeBound S.G (S.pcp.nativeWidth N) → ∀ tr : List ℕ,
-        2 ^ (g.checkData tr).pcpp.clauseBits ≤ K₀ * (qN N + 1) ^ D₀ := by
-  obtain ⟨h1, h3, h0⟩ := UnionCallCount.sigmaH_ge eQ S.G
-  refine ⟨S.pcppAlg.coefficient * (3 * CH + 24 * CH ^ 3 + S.pcppAlg.minimumArity + 3) ^ S.pcppAlg.degree,
-    unionSigmaH eQ S.G * S.pcppAlg.degree, ?_⟩
-  filter_upwards [hw] with N hwN
-  intro z g hsize tr
-  have hos := oracleSize_le S.G (S.pcp.nativeWidth N) g.oracle.size hsize
-  have hsz := UnionCallCount.requestSize_le_of S z g.oracle CH eQ _ (unionSigmaH eQ S.G) (hQ N) hos h1 h3 h0
-  rw [hwN] at hsz
+/-- **The PCPP's clause count at one setup** (Lemma H.7(b) and (58)): at a size cap below `(w+1)^G`, every guess
+passing the outer step's guards has `2^{clauseBits} ≤ K₀(q+1)^{D₀}`. -/
+theorem clause_le_of (S : UnionSetup I) (Gc : ℕ) (hcap : ∀ o w, o ≤ oracleSizeBound S.G w → o + 1 ≤ (w + 1) ^ Gc) :
+    ∃ K₀ D₀ : ℕ, ∀ N (z : BitInput N) (g : UnionGuess S z), UnionGuards S z g → ∀ tr : List ℕ,
+        2 ^ (g.checkData tr).pcpp.clauseBits ≤ K₀ * (g.q + 1) ^ D₀ := by
+  obtain ⟨Ks, hKs⟩ := UnionCallCount.hsize_le S Gc hcap
+  refine ⟨S.pcppAlg.coefficient * Ks ^ S.pcppAlg.degree, UnionCallCount.eHS S Gc * S.pcppAlg.degree, ?_⟩
+  intro N z g hg tr
+  have hsz := hKs N z g hg
   have hM : 2 ^ (g.checkData tr).pcpp.clauseBits ≤
-      S.pcppAlg.coefficient * ((S.request z g.oracle).circuit.size + 1) ^ S.pcppAlg.degree :=
-    S.pcppAlg.clauseCountBound (S.request z g.oracle)
+      S.pcppAlg.coefficient * ((S.request z g.pair).circuit.size + 1) ^ S.pcppAlg.degree :=
+    S.pcppAlg.clauseCountBound (S.request z g.pair)
   calc 2 ^ (g.checkData tr).pcpp.clauseBits ≤ _ := hM
-    _ ≤ S.pcppAlg.coefficient * ((3 * CH + 24 * CH ^ 3 + S.pcppAlg.minimumArity + 3) *
-          (qN N + 1) ^ unionSigmaH eQ S.G) ^ S.pcppAlg.degree :=
+    _ ≤ S.pcppAlg.coefficient * (Ks * (g.q + 1) ^ UnionCallCount.eHS S Gc) ^ S.pcppAlg.degree :=
         Nat.mul_le_mul_left _ (Nat.pow_le_pow_left hsz _)
-    _ = S.pcppAlg.coefficient * (3 * CH + 24 * CH ^ 3 + S.pcppAlg.minimumArity + 3) ^ S.pcppAlg.degree *
-          (qN N + 1) ^ (unionSigmaH eQ S.G * S.pcppAlg.degree) := by
+    _ = S.pcppAlg.coefficient * Ks ^ S.pcppAlg.degree * (g.q + 1) ^ (UnionCallCount.eHS S Gc * S.pcppAlg.degree) := by
         rw [mul_pow, ← pow_mul]; ring
 
 end Clause
 
 section ClauseS2
-variable (l : Literals) (G : Split.Gate) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) (L : Language)
-  (hL : InNTIME (fun n => n ^ (kclk + 2)) L)
+variable (l : Literals) (G : Split.Gate) (coef A a : ℕ) (ha : a ≤ Transfer.kclk + 1) (L : Language)
+  (hL : InNTIME (fun n => n ^ (Transfer.kclk + 2)) L)
 
 /-- **The clause count at `S₂`.** -/
-theorem S2_clause (hApad : (gateSource l).degrees.proofLog + 6 ≤ G.Apad) :
-    ∃ K₀ D₀ : ℕ, ∀ᶠ N in atTop, ∀ (z : BitInput N) (g : UnionGuess (unionSetupS2 l G kclk coef A a ha L hL) z),
-      g.oracle.size ≤ oracleSizeBound (unionSetupS2 l G kclk coef A a ha L hL).G
-        ((unionSetupS2 l G kclk coef A a ha L hL).pcp.nativeWidth N) → ∀ tr : List ℕ,
-        2 ^ (g.checkData tr).pcpp.clauseBits ≤ K₀ * ((G.budget kclk coef A a ha).q N + 1) ^ D₀ := by
-  by_cases h : L = recL l kclk
-  · subst h
-    rw [unionSetupS2_recL]
-    obtain ⟨N₀, hN₀⟩ := recSetup2_width l G kclk coef A a ha hApad
-    exact clause_le_of (recSetup2 l G kclk coef A a ha) _ _ (gateSource l).degrees.queries
-      (fun N => UnionCallCount.hierQuery_le l kclk (refH l kclk) N _ (le_max_left _ _)) (eventually_atTop.2 ⟨N₀, hN₀⟩)
-  · rw [UnionCallCount.unionSetupS2_ne l G kclk coef A a ha L hL h]
-    obtain ⟨N₀, hN₀⟩ := unionSetupS1_width l G kclk coef A a ha L hL hApad
-    exact clause_le_of (unionSetupS1 l G kclk coef A a ha L hL) _ _ (gateSource l).degrees.queries
-      (fun N => UnionCallCount.hierQuery_le l kclk (hierarchyOf hL) N _ (le_max_left _ _))
-      (eventually_atTop.2 ⟨N₀, hN₀⟩)
+theorem S2_clause (hApad : G.Apad = gateApad l) :
+    ∃ K₀ D₀ : ℕ, ∀ᶠ N in atTop, ∀ (z : BitInput N)
+      (g : UnionGuess (unionSetupS2 l G Transfer.kclk coef A a ha L hL) z),
+      UnionGuards (unionSetupS2 l G Transfer.kclk coef A a ha L hL) z g → ∀ tr : List ℕ,
+        2 ^ (g.checkData tr).pcpp.clauseBits ≤ K₀ * ((G.budget Transfer.kclk coef A a ha).q N + 1) ^ D₀ := by
+  obtain ⟨K₀, D₀, h⟩ := clause_le_of (unionSetupS2 l G Transfer.kclk coef A a ha L hL) (capExp l)
+    (fun o w ho => by
+      have e : (unionSetupS2 l G Transfer.kclk coef A a ha L hL).G = recOracleDeg l := by
+        by_cases hr : L = recL l Transfer.kclk
+        · subst hr; rw [unionSetupS2_recL]; rfl
+        · rw [UnionCallCount.unionSetupS2_ne l G coef A a Transfer.kclk ha L hL hr]; rfl
+      rw [e] at ho
+      exact oracleSize_le l w o ho)
+  refine ⟨K₀, D₀, Filter.Eventually.of_forall (fun N z g hg tr => ?_)⟩
+  have hq : g.q = (G.budget Transfer.kclk coef A a ha).q N := by
+    rw [q_eq_width _ g hg.2.1 hg.2.2.1]
+    exact S2_width l G coef A a ha L hL hApad N hg.1
+  rw [← hq]
+  exact h N z g hg tr
 
 end ClauseS2
 
@@ -134,137 +152,7 @@ end ClauseS2
 section Mag
 open NearCubicWires.WireExponent3_5.UnionMachine.Bridge
 
-/-- A form whose values times `s` are at most `K` in absolute value. -/
-def BdForm {α : Type} (s K : ℕ) (w : α → ℚ) : Prop := ∀ a, |w a| * (s : ℚ) ≤ (K : ℚ)
-
-/-- **Scaled coefficients are small**: `|κ_j| ≤ 2` and every factor within `K` give `|c·s⁴| ≤ 2K⁴`. -/
-theorem coeff_scaled_abs {α : Type} (s K : ℕ) (P : Poly4Q α) (hκ : ∀ j, |P.κ j| ≤ 2)
-    (hF : ∀ j k, BdForm s K (P.F j k)) (j : Fin 4) (t : Fin 4 → α) :
-    |P.coeff j t * (s : ℚ) ^ 4| ≤ 2 * (K : ℚ) ^ 4 := by
-  unfold Poly4Q.coeff
-  rw [Fin.prod_univ_four]
-  have e : |P.κ j * (P.F j 0 (t 0) * P.F j 1 (t 1) * P.F j 2 (t 2) * P.F j 3 (t 3)) * (s : ℚ) ^ 4| =
-      |P.κ j| * ((|P.F j 0 (t 0)| * s) * (|P.F j 1 (t 1)| * s) * (|P.F j 2 (t 2)| * s) *
-        (|P.F j 3 (t 3)| * s)) := by
-    simp only [abs_mul, abs_pow, Nat.abs_cast]; ring
-  rw [e]
-  have h0 := hF j 0 (t 0)
-  have h1 := hF j 1 (t 1)
-  have h2 := hF j 2 (t 2)
-  have h3 := hF j 3 (t 3)
-  have hk := hκ j
-  calc |P.κ j| * ((|P.F j 0 (t 0)| * s) * (|P.F j 1 (t 1)| * s) * (|P.F j 2 (t 2)| * s) * (|P.F j 3 (t 3)| * s))
-      ≤ 2 * ((K : ℚ) * K * K * K) := by gcongr
-    _ = 2 * (K : ℚ) ^ 4 := by ring
-
 namespace CheckB
-variable (D : UnionCheckData)
-
-theorem sign_abs (hsg : D.signsOk = true) (Y : PcppVar D.pcpp) (b : Fin D.s) : |(D.sign Y b : ℚ)| ≤ 1 := by
-  have h := of_decide_eq_true hsg Y b
-  simp only [Finset.mem_insert, Finset.mem_singleton] at h
-  rcases h with h | h | h <;> rw [h] <;> norm_num
-
-theorem wS_bd (Λ : ℕ) (hm : D.mass = Λ) (hs : 1 ≤ D.s) (hsg : D.signsOk = true) (X : PcppVar D.pcpp) :
-    BdForm D.s (Λ + D.s) (D.wS X) := by
-  intro a
-  have hs0 : (0 : ℚ) < D.s := by exact_mod_cast hs
-  rcases a with u | (⟨Y, b⟩ | Y)
-  · simp [UnionCheckData.wS] <;> positivity
-  · by_cases h : Y = X
-    · subst h
-      simp only [UnionCheckData.wS, ↓reduceIte, hm]
-      have hb := sign_abs D hsg Y b
-      have e : |(Λ : ℚ) / D.s * (D.sign Y b : ℚ)| * D.s = Λ * |(D.sign Y b : ℚ)| := by
-        rw [abs_mul, abs_div, Nat.abs_cast, Nat.abs_cast]; field_simp
-      rw [e]
-      have hΛ : (0 : ℚ) ≤ Λ := Nat.cast_nonneg Λ
-      calc (Λ : ℚ) * |(D.sign Y b : ℚ)| ≤ Λ * 1 := by gcongr
-        _ ≤ ((Λ + D.s : ℕ) : ℚ) := by push_cast; linarith
-    · simp [UnionCheckData.wS, h] <;> positivity
-  · simp [UnionCheckData.wS] <;> positivity
-
-theorem wOne_bd (Λ : ℕ) : BdForm D.s (Λ + D.s) D.wOne := by
-  intro a
-  rcases a with u | (p | Y)
-  · simp [UnionCheckData.wOne] <;> positivity
-  · simp [UnionCheckData.wOne] <;> positivity
-  · simp [UnionCheckData.wOne] <;> positivity
-
-theorem wE_bd (Λ : ℕ) (X : PcppVar D.pcpp) : BdForm D.s (Λ + D.s) (D.wE X) := by
-  intro a
-  rcases a with u | (p | Y)
-  · simp [UnionCheckData.wE] <;> positivity
-  · simp [UnionCheckData.wE] <;> positivity
-  · by_cases h : Y = X
-    · simp [UnionCheckData.wE, h] <;> positivity
-    · simp [UnionCheckData.wE, h] <;> positivity
-
-theorem polyV_abs (Λ : ℕ) (hm : D.mass = Λ) (hs : 1 ≤ D.s) (hsg : D.signsOk = true)
-    (pos : Fin (2 ^ D.pcpp.clauseBits) × Fin 2) (j : Fin 4) (t : Fin 4 → D.AtomIx) :
-    |(D.polyVAt pos).coeff j t * (D.s : ℚ) ^ 4| ≤ 2 * ((Λ + D.s : ℕ) : ℚ) ^ 4 := by
-  refine coeff_scaled_abs D.s (Λ + D.s) _ ?_ ?_ j t
-  · intro j; unfold UnionCheckData.polyVAt polyVQ
-    split_ifs <;> fin_cases j <;> norm_num
-  · intro j k; unfold UnionCheckData.polyVAt polyVQ
-    have hS := wS_bd D Λ hm hs hsg (posVar D.pcpp pos.1 pos.2)
-    have hO := wOne_bd D Λ
-    have hE := wE_bd D Λ (posVar D.pcpp pos.1 pos.2)
-    split_ifs <;> fin_cases j <;> fin_cases k <;> simpa
-
-theorem polyQ_abs (Λ : ℕ) (hm : D.mass = Λ) (hs : 1 ≤ D.s) (hsg : D.signsOk = true)
-    (pos : Fin (2 ^ D.pcpp.clauseBits) × Fin 2) (j : Fin 4) (t : Fin 4 → D.AtomIx) :
-    |(D.polyQAt pos).coeff j t * (D.s : ℚ) ^ 4| ≤ 2 * ((Λ + D.s : ℕ) : ℚ) ^ 4 := by
-  refine coeff_scaled_abs D.s (Λ + D.s) _ ?_ ?_ j t
-  · intro j; unfold UnionCheckData.polyQAt polyQQ
-    fin_cases j <;> norm_num
-  · intro j k; unfold UnionCheckData.polyQAt polyQQ
-    have hS := wS_bd D Λ hm hs hsg (posVar D.pcpp pos.1 pos.2)
-    have hO := wOne_bd D Λ
-    fin_cases j <;> fin_cases k <;> simpa
-
-theorem polyMu_abs (Λ : ℕ) (hm : D.mass = Λ) (hs : 1 ≤ D.s) (hsg : D.signsOk = true)
-    (i : Fin (2 ^ D.pcpp.clauseBits)) (j : Fin 4) (t : Fin 4 → D.AtomIx) :
-    |(D.polyMuAt i).coeff j t * (D.s : ℚ) ^ 4| ≤ 2 * ((Λ + D.s : ℕ) : ℚ) ^ 4 := by
-  refine coeff_scaled_abs D.s (Λ + D.s) _ ?_ ?_ j t
-  · intro j; unfold UnionCheckData.polyMuAt polyMuQ
-    generalize posNeg D.pcpp i 0 = n0
-    generalize posNeg D.pcpp i 1 = n1
-    cases n0 <;> cases n1 <;> fin_cases j <;> norm_num [litAQ, litBQ]
-  · intro j k; unfold UnionCheckData.polyMuAt polyMuQ
-    have hX := wS_bd D Λ hm hs hsg (posVar D.pcpp i 0)
-    have hY := wS_bd D Λ hm hs hsg (posVar D.pcpp i 1)
-    have hO := wOne_bd D Λ
-    fin_cases j <;> fin_cases k <;> simpa
-
-/-- **Every term's scaled coefficient is at most `2(Λ̄+s)⁴`**, as a natural number. -/
-theorem terms_mag (Λ : ℕ) (hm : D.mass = Λ) (hs : 1 ≤ D.s) (hsg : D.signsOk = true) (t : ℚ × PrimRequest)
-    (ht : t ∈ D.termsV ∨ t ∈ D.termsQ ∨ t ∈ D.termsMu) :
-    (scaledZ D.s t.1).natAbs ≤ 2 * (Λ + D.s) ^ 4 := by
-  have hq : |t.1 * (D.s : ℚ) ^ 4| ≤ 2 * ((Λ + D.s : ℕ) : ℚ) ^ 4 ∧ IsIntQ (t.1 * (D.s : ℚ) ^ 4) := by
-    rcases ht with ht | ht | ht
-    · obtain ⟨pos, j, u, -, rfl⟩ := (D.mem_termsV t).1 ht
-      exact ⟨polyV_abs D Λ hm hs hsg pos j u, CheckData.polyV_int D Λ hm hs pos j u⟩
-    · obtain ⟨pos, j, u, -, rfl⟩ := (D.mem_termsQ t).1 ht
-      exact ⟨polyQ_abs D Λ hm hs hsg pos j u, CheckData.polyQ_int D Λ hm hs pos j u⟩
-    · obtain ⟨i, j, u, -, rfl⟩ := (D.mem_termsMu t).1 ht
-      exact ⟨polyMu_abs D Λ hm hs hsg i j u, CheckData.polyMu_int D Λ hm hs i j u⟩
-  have e := hq.2.num_eq
-  have h2 : ((scaledZ D.s t.1).natAbs : ℚ) ≤ ((2 * (Λ + D.s) ^ 4 : ℕ) : ℚ) := by
-    have e2 : ((scaledZ D.s t.1).natAbs : ℚ) = |t.1 * (D.s : ℚ) ^ 4| := by
-      rw [Nat.cast_natAbs, Int.cast_abs]; unfold scaledZ; rw [e]
-    rw [e2]
-    have h3 := hq.1
-    push_cast at h3 ⊢
-    exact h3
-  exact_mod_cast h2
-
-/-- The terms' requests are at the check data's arity. -/
-theorem terms_n (t : ℚ × PrimRequest) (ht : t ∈ D.termsV ∨ t ∈ D.termsQ ∨ t ∈ D.termsMu) : t.2.n = D.q := by
-  rcases ht with ht | ht | ht
-  · obtain ⟨pos, j, u, -, rfl⟩ := (D.mem_termsV t).1 ht; rfl
-  · obtain ⟨pos, j, u, -, rfl⟩ := (D.mem_termsQ t).1 ht; rfl
-  · obtain ⟨i, j, u, -, rfl⟩ := (D.mem_termsMu t).1 ht; rfl
 
 end CheckB
 
@@ -274,28 +162,6 @@ end Mag
 
 section Entries
 open NearCubicWires.WireExponent3_5.UnionMachine.Bridge NearCubicWires.WireExponent3_5.UnionMachine.DecisionBridge
-variable {kclk : ℕ} {E : Envelope} {B : TimeBudget kclk E} {I : PrimitiveInputs B}
-
-theorem mem_tableAll (s : ℕ) (TV TQ TM : List (ℚ × PrimRequest)) (hV : ∀ t ∈ TV, I.Call t.2)
-    (hQ : ∀ t ∈ TQ, I.Call t.2) (hM : ∀ t ∈ TM, I.Call t.2) (x : Sched.TEntry I)
-    (hx : x ∈ tableAll s TV TQ TM hV hQ hM) :
-    ∃ (k : Fin 3) (t : ℚ × PrimRequest), (t ∈ TV ∨ t ∈ TQ ∨ t ∈ TM) ∧ x.e = entryOf k s t ∧ x.req.1 = t.2 := by
-  unfold tableAll tableOfTerms at hx
-  rcases List.mem_append.1 hx with hx | hx
-  · rcases List.mem_append.1 hx with hx | hx
-    · obtain ⟨t, ht, rfl⟩ := List.mem_pmap.1 hx
-      exact ⟨0, t, Or.inl ht, rfl, rfl⟩
-    · obtain ⟨t, ht, rfl⟩ := List.mem_pmap.1 hx
-      exact ⟨1, t, Or.inr (Or.inl ht), rfl, rfl⟩
-  · obtain ⟨t, ht, rfl⟩ := List.mem_pmap.1 hx
-    exact ⟨2, t, Or.inr (Or.inr ht), rfl, rfl⟩
-
-theorem foldr_max_le (l : List ℕ) (b : ℕ) (h : ∀ a ∈ l, a ≤ b) : l.foldr max 0 ≤ b := by
-  induction l with
-  | nil => simp
-  | cons c l ih =>
-    simp only [List.foldr_cons]
-    exact max_le (h c List.mem_cons_self) (ih fun a ha => h a (List.mem_cons_of_mem c ha))
 
 end Entries
 
@@ -304,27 +170,6 @@ end Entries
 section Acc
 open NearCubicWires.WireExponent3_5.UnionMachine.Bridge NearCubicWires.WireExponent3_5.UnionMachine.DecisionBridge
 variable {kclk : ℕ} {E : Envelope} {B : TimeBudget kclk E} {I : PrimitiveInputs B}
-
-theorem floor_natAbs_le (x : ℚ) (Z : ℕ) (h : |x| ≤ Z) : (⌊x⌋).natAbs ≤ Z + 1 := by
-  have h1 := Int.floor_le x
-  have h2 := Int.lt_floor_add_one x
-  have h3 : |(⌊x⌋ : ℚ)| ≤ Z + 1 := by
-    rw [abs_le] at h ⊢; constructor <;> linarith [h.1, h.2]
-  have h4 : ((⌊x⌋).natAbs : ℚ) ≤ Z + 1 := by rw [Nat.cast_natAbs, Int.cast_abs]; exact h3
-  exact_mod_cast h4
-
-theorem ceil_natAbs_le (x : ℚ) (Z : ℕ) (h : |x| ≤ Z) : (⌈x⌉).natAbs ≤ Z + 1 := by
-  have h1 := Int.le_ceil x
-  have h2 := Int.ceil_lt_add_one x
-  have h3 : |(⌈x⌉ : ℚ)| ≤ Z + 1 := by
-    rw [abs_le] at h ⊢; constructor <;> linarith [h.1, h.2]
-  have h4 : ((⌈x⌉).natAbs : ℚ) ≤ Z + 1 := by rw [Nat.cast_natAbs, Int.cast_abs]; exact h3
-  exact_mod_cast h4
-
-theorem threshAcc_le (TV TQ TM : ℤ) (Z : ℕ) (hV : TV.natAbs ≤ Z) (hQ : TQ.natAbs ≤ Z) (hM : TM.natAbs ≤ Z)
-    (i : Fin 6) : threshAcc TV TQ TM i ≤ Z := by
-  fin_cases i <;> simp only [threshAcc, Fin.zero_eta, Fin.isValue, Matrix.cons_val_zero, Fin.mk_one,
-    Matrix.cons_val_one, Matrix.cons_val, Fin.reduceFinMk] <;> omega
 
 /-- The masked verifier's constants, rounded up: `⌈|v₀|⌉ + ⌈|τ|⌉ + 1`. -/
 noncomputable def vcOf (S : UnionSetup I) : ℕ := ⌈|S.params.v0|⌉₊ + ⌈|S.params.threshold|⌉₊ + 1
@@ -375,102 +220,11 @@ end Acc
 
 section PQ
 
-/-- `f` is at most `c·(q+1)^d`. -/
-def PQ (f : ℕ → ℕ) : Prop := ∃ c d : ℕ, ∀ q, f q ≤ c * (q + 1) ^ d
-
-theorem PQ.const (c : ℕ) : PQ fun _ => c := ⟨c, 0, fun q => by simp⟩
-
-theorem PQ.var : PQ fun q => q := ⟨1, 1, fun q => by simp⟩
-
-theorem PQ.add {f g : ℕ → ℕ} (hf : PQ f) (hg : PQ g) : PQ fun q => f q + g q := by
-  obtain ⟨c1, d1, h1⟩ := hf
-  obtain ⟨c2, d2, h2⟩ := hg
-  refine ⟨c1 + c2, max d1 d2, fun q => ?_⟩
-  have e1 := Nat.mul_le_mul_left c1 (Nat.pow_le_pow_right (by omega : 1 ≤ q + 1) (le_max_left d1 d2))
-  have e2 := Nat.mul_le_mul_left c2 (Nat.pow_le_pow_right (by omega : 1 ≤ q + 1) (le_max_right d1 d2))
-  have := h1 q
-  have := h2 q
-  show f q + g q ≤ _
-  rw [Nat.add_mul]
-  omega
-
-theorem PQ.mul {f g : ℕ → ℕ} (hf : PQ f) (hg : PQ g) : PQ fun q => f q * g q := by
-  obtain ⟨c1, d1, h1⟩ := hf
-  obtain ⟨c2, d2, h2⟩ := hg
-  refine ⟨c1 * c2, d1 + d2, fun q => ?_⟩
-  calc f q * g q ≤ (c1 * (q + 1) ^ d1) * (c2 * (q + 1) ^ d2) := Nat.mul_le_mul (h1 q) (h2 q)
-    _ = c1 * c2 * (q + 1) ^ (d1 + d2) := by rw [pow_add]; ring
-
-theorem PQ.pow {f : ℕ → ℕ} (hf : PQ f) (n : ℕ) : PQ fun q => f q ^ n := by
-  obtain ⟨c, d, h⟩ := hf
-  refine ⟨c ^ n, d * n, fun q => ?_⟩
-  calc f q ^ n ≤ (c * (q + 1) ^ d) ^ n := Nat.pow_le_pow_left (h q) n
-    _ = c ^ n * (q + 1) ^ (d * n) := by rw [mul_pow, pow_mul]
-
-/-- Decompose a polynomial expression in `q`. -/
-syntax "c6pq" : tactic
-macro_rules
-  | `(tactic| c6pq) => `(tactic| first
-      | with_reducible assumption
-      | with_reducible exact PQ.const _
-      | with_reducible exact PQ.var
-      | ((with_reducible refine PQ.add ?_ ?_) <;> c6pq)
-      | ((with_reducible refine PQ.mul ?_ ?_) <;> c6pq)
-      | ((with_reducible refine PQ.pow ?_ _) <;> c6pq))
-
 end PQ
 
 /-! ## The valid branch's sizes, eventually -/
 
 section Bounds
-
-/-- The grid's bound `C_sp·(q+1)³` (`s(q)⁸ ≤ C_sp L³`). -/
-def SB (Csp q : ℕ) : ℕ := Csp * (q + 1) ^ 3
-
-/-- The magnitudes' bound `2·(2·SB)⁴`. -/
-def MB (Csp q : ℕ) : ℕ := 2 * (SB Csp q + SB Csp q) ^ 4
-
-/-- The accumulators' start bound. -/
-def AB (Csp K₀ D₀ V q : ℕ) : ℕ :=
-  SB Csp q ^ 4 * (4 * (q + 1)) * (K₀ * (q + 1) ^ D₀ * 2) * (2 * V + (1 + SB Csp q) ^ 4) + 1
-
-/-- **Everything the capacity must exceed besides `8·callBudget`.** -/
-def needCap (Csp K₀ D₀ V wc wd ucd q : ℕ) : ℕ :=
-  2 * (wc * (q + 1) ^ wd) + MB Csp q + 2 + (8 * (4 * (q + 1)) + 32) +
-    (AB Csp K₀ D₀ V q + ((q + 1) ^ ucd + 2) * (MB Csp q * (8 * (4 * (q + 1))))) +
-    40 * (MB Csp q + wc * (q + 1) ^ wd + 2) + MB Csp q * (160 * (4 * (q + 1)) + 11) + 100 * (4 * (q + 1)) + 2200
-
-theorem needCap_pq (Csp K₀ D₀ V wc wd ucd : ℕ) : PQ (needCap Csp K₀ D₀ V wc wd ucd) := by
-  unfold needCap MB AB SB
-  c6pq
-
-theorem two_pow_unionBits (q : ℕ) : 2 ^ unionBits q ≤ 4 * (q + 1) := by
-  unfold unionBits
-  have h1 := Nat.pow_pred_clog_lt_self (b := 2) (by norm_num) (show 1 < q + 2 by omega)
-  have hpos : 1 ≤ Nat.clog 2 (q + 2) := Nat.clog_pos (by norm_num) (by omega)
-  have e : 2 ^ Nat.clog 2 (q + 2) = 2 * 2 ^ (Nat.clog 2 (q + 2)).pred := by
-    rw [← pow_succ']; congr 1
-  omega
-
-theorem unionBits_le (q : ℕ) : unionBits q ≤ q + 1 := by
-  unfold unionBits
-  exact Nat.clog_le_of_le_pow (by
-    have := Nat.lt_two_pow_self (n := q + 1)
-    rw [pow_succ] at this ⊢; omega)
-
-theorem sp_le_SB (Csp : ℕ) (sp : ℕ → ℕ) (hsp : ∀ q, sp q ^ 8 ≤ Csp * Lq q ^ 3) (q : ℕ) : sp q ≤ SB Csp q := by
-  unfold SB
-  have h1 : sp q ≤ sp q ^ 8 := by
-    rcases Nat.eq_zero_or_pos (sp q) with h | h
-    · rw [h]; simp
-    · exact Nat.le_self_pow (by norm_num) _
-  have h2 : Lq q ≤ q + 1 := by
-    unfold Lq
-    exact Nat.clog_le_of_le_pow (by
-      have := Nat.lt_two_pow_self (n := q + 1)
-      rw [pow_succ] at this ⊢; omega)
-  have h3 : Csp * Lq q ^ 3 ≤ Csp * (q + 1) ^ 3 := Nat.mul_le_mul_left _ (Nat.pow_le_pow_left h2 3)
-  exact h1.trans ((hsp q).trans h3)
 
 end Bounds
 
@@ -486,12 +240,12 @@ checks, the rounding precision is `unionBits q`, every entry's request is at `q`
 and accumulators' start are within the polynomial bounds. -/
 theorem valid_atoms_of (S : UnionSetup I) (hF : GridFacts S) (sp : ℕ → ℕ) (Csp : ℕ)
     (hsp : ∀ q, sp q ^ 8 ≤ Csp * Lq q ^ 3) (hgs : S.gridSize = sp) (hgm : ∀ q, S.gridMass q ≤ (sp q : ℚ))
-    (qN : ℕ → ℕ) (hq : Tendsto qN atTop atTop) (hw : ∀ᶠ N in atTop, S.pcp.nativeWidth N = qN N) (K₀ D₀ : ℕ)
+    (qN : ℕ → ℕ) (hq : Tendsto qN atTop atTop) (hw : ∀ N, S.live = true → S.width N = qN N) (K₀ D₀ : ℕ)
     (hcl : ∀ᶠ N in atTop, ∀ (z : BitInput N) (g : UnionGuess S z),
-      g.oracle.size ≤ oracleSizeBound S.G (S.pcp.nativeWidth N) → ∀ tr : List ℕ,
+      UnionGuards S z g → ∀ tr : List ℕ,
         2 ^ (g.checkData tr).pcpp.clauseBits ≤ K₀ * (qN N + 1) ^ D₀)
     (ucd : ℕ) (hcalls : ∀ᶠ N in atTop, ∀ (z : BitInput N) (g : UnionGuess S z),
-      g.oracle.size ≤ oracleSizeBound S.G (S.pcp.nativeWidth N) → ∀ tr : List ℕ,
+      UnionGuards S z g → ∀ tr : List ℕ,
         (g.checkData tr).schedule.length ≤ qN N ^ ucd)
     (wc wd : ℕ) (hword : ∀ r : PrimRequest, I.Call r → r.word.length ≤ wc * (r.n + 1) ^ wd) :
     ∀ᶠ N in atTop, ∀ (x : BitInput N) (g : UnionGuess S x) (hg : GoodG S g),
@@ -501,12 +255,11 @@ theorem valid_atoms_of (S : UnionSetup I) (hF : GridFacts S) (sp : ℕ → ℕ) 
       (goodOut S hF g hg.2.2.2 0 0 0).Wm ≤ wc * (qN N + 1) ^ wd ∧
       (goodOut S hF g hg.2.2.2 0 0 0).table.length ≤ (qN N + 1) ^ ucd ∧
       ∀ i, (goodOut S hF g hg.2.2.2 0 0 0).acc0 i ≤ AB Csp K₀ D₀ (vcOf S) (qN N) := by
-  filter_upwards [hw, hcl, hcalls, hq.eventually_ge_atTop (max 1 S.pcppAlg.minimumArity)] with N hwN hclN hcN hqN
+  filter_upwards [hcl, hcalls, hq.eventually_ge_atTop (max 1 S.pcppAlg.minimumArity)] with N hclN hcN hqN
   intro x g hg
   have harity : g.q = qN N := by
-    show (S.request x g.oracle).arity = _
-    rw [UnionCallCount.request_arity_of, hwN]
-    exact max_eq_left (by omega)
+    rw [q_eq_width S g hg.1.2.1 hg.1.2.2.1]
+    exact hw N hg.1.1
   obtain ⟨Λ, hΛ1, hΛ⟩ := hF.mass g.q
   have hm : (g.checkData g.translation).mass = Λ := hΛ
   have hs1 : 1 ≤ (g.checkData g.translation).s := hF.size g.q
@@ -669,7 +422,7 @@ theorem good_facts (hcoef : 1 ≤ coef) (P : FusedPrimitive (IUE l F e coef A)) 
           (goodOut (SUE l F e coef A L hL) hF g hg.2.2.2 0 0 0).p (RQ l F e coef A ((BU l F e coef A).q N)) + 2 ≤
         KfC l F * ((BU l F e coef A).q N + 1) ^ (Split.callDegMargin - 1) *
           (BU l F e coef A).callBudget ((BU l F e coef A).q N) := by
-  obtain ⟨K₀, D₀, hcl⟩ := S2_clause l (Split.gate0 l F) (kE l e) coef A (aE l e) (haE l e) L hL
+  obtain ⟨K₀, D₀, hcl⟩ := S2_clause l (Split.gate0 l F) coef A (aE l e) (haE l e) L hL
     (Split.gateRel_gate0 l F).apad
   obtain ⟨wc, wd, -, hwb⟩ := PrimAsm.CallSize.wordBound_poly
   have hword : ∀ r : PrimRequest, (IUE l F e coef A).Call r → r.word.length ≤ wc * (r.n + 1) ^ wd := fun r h =>
@@ -681,11 +434,11 @@ theorem good_facts (hcoef : 1 ≤ coef) (P : FusedPrimitive (IUE l F e coef A)) 
       rw [show (SUE l F e coef A L hL).gridMass = gridMassOf (gateCδ1 l) (Split.gate0 l F).row.sp from
         S2_gridMass l (Split.gate0 l F) (kE l e) coef A (aE l e) (haE l e) L hL]
       exact gridMassOf_le _ _ q)
-    (BU l F e coef A).q hq (S2_width l (Split.gate0 l F) (kE l e) coef A (aE l e) (haE l e) L hL
-      (Split.gateRel_gate0 l F).apad) K₀ D₀ hcl (Split.unionCallDeg l)
-    (UnionCallCount.setupF_calls_le l (kE l e) coef A (aE l e) (haE l e) F L hL) wc wd hword
+    (BU l F e coef A).q hq (fun N hlive => S2_width l (Split.gate0 l F) coef A (aE l e) (haE l e) L hL
+      (Split.gateRel_gate0 l F).apad N hlive) K₀ D₀ hcl (unionCallDeg l)
+    (UnionCallCount.setupF_calls_le l coef A (aE l e) (haE l e) F L hL) wc wd hword
   obtain ⟨c, d, hneed⟩ := needCap_pq (Split.gate0 l F).row.Csp K₀ D₀ (vcOf (SUE l F e coef A L hL)) wc wd
-    (Split.unionCallDeg l)
+    (unionCallDeg l)
   have hup := hq.eventually (callBudget_upper l F e coef A)
   have hsm := hq.eventually (two_pow_small l F e coef A c d)
   obtain ⟨N₁, hN₁⟩ := eventually_atTop.1 (hat.and (hup.and hsm))
@@ -711,7 +464,7 @@ theorem good_facts (hcoef : 1 ≤ coef) (P : FusedPrimitive (IUE l F e coef A)) 
     omega
   have hcap2 : capv = 32 * (coef * T) + T := by rw [hcapT]; ring
   have hsplit : 8 * cb + needCap (Split.gate0 l F).row.Csp K₀ D₀ (vcOf (SUE l F e coef A L hL)) wc wd
-      (Split.unionCallDeg l) q ≤ capv := by omega
+      (unionCallDeg l) q ≤ capv := by omega
   clear_value capv T m
   have hnc := hsplit
   unfold needCap at hnc
@@ -720,7 +473,7 @@ theorem good_facts (hcoef : 1 ≤ coef) (P : FusedPrimitive (IUE l F e coef A)) 
   have hcapA : ∀ i, o.acc0 i + (o.table.length + 2) * (o.Mm * (8 * 2 ^ o.p)) ≤ capv := by
     intro i
     have hmul : (o.table.length + 2) * (o.Mm * (8 * 2 ^ o.p)) ≤
-        ((q + 1) ^ Split.unionCallDeg l + 2) * (MB (Split.gate0 l F).row.Csp q * (8 * (4 * (q + 1)))) :=
+        ((q + 1) ^ unionCallDeg l + 2) * (MB (Split.gate0 l F).row.Csp q * (8 * (4 * (q + 1)))) :=
       Nat.mul_le_mul (by omega) (Nat.mul_le_mul hMm (Nat.mul_le_mul_left 8 h2p))
     have := hacc i
     omega
@@ -904,3 +657,5 @@ theorem outRef_fields (hcoef : 1 ≤ coef) (P : FusedPrimitive (IUE l F e coef A
 end Fields
 
 end NearCubicWires.WireExponent3_5.UnionMachine.FrontCaps
+
+end

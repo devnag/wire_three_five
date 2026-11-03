@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.FinalTotalDecode
+import Proof.CaseAnalysis.FinalOnset
+import Proof.CaseAnalysis.FinalPipeline
 
 /-! Paper C.10 tests the two validity estimates and C.10.1 the acceptance mean.
 The existing decision bridge proves these facts from a decoded, pinned verdict.

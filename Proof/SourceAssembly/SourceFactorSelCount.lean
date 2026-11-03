@@ -1,5 +1,9 @@
 import Proof.SourceAssembly.SourceFactorSelDesc
 import Proof.SourceAssembly.SourceRequestMonomialSpec
+import Proof.MachineModel.ClockUnarySum
+import Proof.MachineModel.ClockUnaryProduct
+import Proof.PCP.ProjectionDimensionTemplate
+import Proof.Hierarchy.HierarchyFixedWord
 
 set_option autoImplicit false
 set_option maxRecDepth 120000
@@ -109,6 +113,8 @@ def mulM {U : Nat} (a b d l : Fin U) :=
 /-- Docked unary→word `![a, dst, log]` (`+ x.toNat`). -/
 def wordM {U : Nat} (x : Bool) (a d l : Fin U) :=
   RecoveryFocus.machine (![a, d, l] : Fin 3 → Fin U) (DimensionTemplate.machine x)
+/-- Docked constant `1` `![dst, log]`. -/
+def oneM {U : Nat} (d l : Fin U) := RecoveryFocus.machine (![d, l] : Fin 2 → Fin U) (HierarchyFixedWord.machine [true])
 
 theorem sum_step {U : Nat} (a b d l : Fin U) (h1 : a ≠ b) (h2 : a ≠ d) (h3 : a ≠ l) (h4 : b ≠ d)
     (h5 : b ≠ l) (h6 : d ≠ l) (r s Qa Qb S C : Nat) (hC : r + s + 2 ≤ C)
@@ -223,19 +229,81 @@ theorem word0_step {U : Nat} (a d l : Fin U) (h1 : a ≠ d) (h2 : a ≠ l) (h3 :
 
 /-! ## The moment phase: `N = JL·JL` -/
 
+def momentM := Composition.machine (wordM false (0 : Fin 23) 6 5)
+  (Composition.machine (mulM (0 : Fin 23) 6 7 5) (wordM false (7 : Fin 23) 4 5))
+
+def momentCost (J : Nat) : Nat := 2 * J + 8 + 1 + (2 * (J * (2 * J + 3) + 2) + 2 + 1 + (2 * (J * J) + 8))
+
 /-! ## The clause phase: `N = a + (b + a·b)`, `a = JL + [nL]`, `b = JR + [nR]` -/
+
+def clauseM := Composition.machine (sumM (0 : Fin 23) 2 6 5) (Composition.machine (sumM (1 : Fin 23) 3 7 5)
+  (Composition.machine (wordM false (7 : Fin 23) 8 5) (Composition.machine (mulM (6 : Fin 23) 8 9 5)
+  (Composition.machine (sumM (7 : Fin 23) 9 10 5) (Composition.machine (sumM (6 : Fin 23) 10 11 5)
+  (wordM false (11 : Fin 23) 4 5))))))
+
+def clauseCost (a b : Nat) : Nat :=
+  2 * a + 6 + 1 + (2 * b + 6 + 1 + (2 * b + 8 + 1 + (2 * (a * (2 * b + 3) + 2) + 2 + 1 +
+    (2 * (b + a * b) + 6 + 1 + (2 * (a + (b + a * b)) + 6 + 1 + (2 * (a + (b + a * b)) + 8))))))
 
 /-! ## The penalty phase: one side, `penLen s J`, switched on the auxiliary flag
 
 Side universe `Fin 10`: `0` `1^J` · `1` aux flag `[!s]` · `2` `word J` · `3` `J²` · `4` `word J²` (aux) / `1` (sys) ·
 `5` `J³` · `6` `J²·J²` · `7` partial sum · `8` result · `9` log. -/
 
+/-- Systematic side: `1 + (J + J·J)`. -/
+def sideSys := Composition.machine (wordM false (0 : Fin 10) 2 9) (Composition.machine (mulM (0 : Fin 10) 2 3 9)
+  (Composition.machine (sumM (0 : Fin 10) 3 7 9) (Composition.machine (oneM (4 : Fin 10) 9) (sumM (4 : Fin 10) 7 8 9))))
+
+/-- Auxiliary side: `J·J + (J·J·J + J·J·(J·J))`. -/
+def sideAux := Composition.machine (wordM false (0 : Fin 10) 2 9) (Composition.machine (mulM (0 : Fin 10) 2 3 9)
+  (Composition.machine (mulM (3 : Fin 10) 2 5 9) (Composition.machine (wordM false (3 : Fin 10) 4 9)
+  (Composition.machine (mulM (3 : Fin 10) 4 6 9) (Composition.machine (sumM (5 : Fin 10) 6 7 9)
+  (sumM (3 : Fin 10) 7 8 9))))))
+
+/-- One side: aux flag set → auxiliary polynomial, else systematic. -/
+def side := CloseoutRowsOriginalSwitch.machine sideAux sideSys (1 : Fin 10)
+
+def sysCost (J : Nat) : Nat :=
+  2 * J + 8 + 1 + (2 * (J * (2 * J + 3) + 2) + 2 + 1 + (2 * (J + J * J) + 6 + 1 +
+    (2 * 1 + 2 + 1 + (2 * (1 + (J + J * J)) + 6))))
+
+def auxCost (J : Nat) : Nat :=
+  2 * J + 8 + 1 + (2 * (J * (2 * J + 3) + 2) + 2 + 1 + (2 * (J * J * (2 * J + 3) + 2) + 2 + 1 +
+    (2 * (J * J) + 8 + 1 + (2 * (J * J * (2 * (J * J) + 3) + 2) + 2 + 1 +
+    (2 * (J * J * J + J * J * (J * J)) + 6 + 1 + (2 * (J * J + (J * J * J + J * J * (J * J))) + 6))))))
+
+def sideCost (aux : Bool) (J : Nat) : Nat := if aux then auxCost J + 2 else sysCost J + 2
+
 theorem read_flag (Q : Nat) (b : Bool) : readTapeBit (ZeroPadding.pad Q [b]) 0 = b := by
   simp [ZeroPadding.pad, readTapeBit]
 
+/-- The left side's ports in the stage universe. -/
+def slL : Fin 10 → Fin 23 := ![0, 2, 6, 7, 8, 9, 10, 11, 12, 5]
+/-- The right side's ports in the stage universe. -/
+def slR : Fin 10 → Fin 23 := ![1, 3, 13, 14, 15, 16, 17, 18, 19, 5]
 
+
+def penaltyM := Composition.machine (RecoveryFocus.machine slL side)
+  (Composition.machine (RecoveryFocus.machine slR side)
+  (Composition.machine (sumM (12 : Fin 23) 19 20 5) (wordM false (20 : Fin 23) 4 5)))
+
+def penaltyCost (aL aR : Bool) (JL JR : Nat) : Nat :=
+  sideCost aL JL + 1 + (sideCost aR JR + 1 +
+    (2 * (SourceRequest.MonomialSpec.penLen (!aL) JL + SourceRequest.MonomialSpec.penLen (!aR) JR) + 6 + 1 +
+    (2 * (SourceRequest.MonomialSpec.penLen (!aL) JL + SourceRequest.MonomialSpec.penLen (!aR) JR) + 8)))
 
 /-! ## The per-phase stage at `siteLen` -/
+
+/-- **One fixed machine per phase.** -/
+def machine : Phase → (Σ s, Machine 23 s)
+  | .penalty => ⟨_, penaltyM⟩
+  | .moment => ⟨_, momentM⟩
+  | .clause => ⟨_, clauseM⟩
+
+def cost : Phase → Bool → Bool → Bool → Bool → Nat → Nat → Nat
+  | .penalty, sL, sR, _, _, JL, JR => penaltyCost (!sL) (!sR) JL JR
+  | .moment, _, _, _, _, JL, _ => momentCost JL
+  | .clause, _, _, nL, nR, JL, JR => clauseCost (JL + nL.toNat) (JR + nR.toNat)
 
 /-! ## At the consumer's quantity -/
 

@@ -1,4 +1,5 @@
 import Proof.MachineModel.CanonicalFourfoldListDenominatorProgram
+import Proof.MachineModel.CanonicalFourfoldRowTailProgram
 import Proof.MachineModel.CanonicalStructuralGF2EvaluationProgram
 
 /-!

@@ -1,6 +1,9 @@
 import Proof.Rows.ExpandedThresholdStream
-import Proof.Rows.NativeCircuitCount
+import Proof.Rows.NativeScaleEquation
+import Proof.Rows.PowerBank
 import Proof.Rows.PowerFactorAway
+import Proof.Rows.TopChildReady
+import Proof.Rows.NativeCircuitPrepare
 
 /-! Selected-child locator and scaled coefficient mapper share source65,
 arity91, and U cap/log62/63. The growing coefficient stream stays at64. -/
@@ -14,6 +17,7 @@ open NearCubicWires.ExtDecompositionBatch NearCubicWires.RepairOrdinary.Recovery
 open NearCubicWires.RepairRepresentation NearCubicWires.RepairSource.VerifierDecoding
 open NearCubicWires.RepairSource.CloseoutFinal
 noncomputable section
+attribute [local irreducible] PCJ45bee56da9f34d5a_TopChildReady.machine
 
 def caps (U : Nat) (i : Fin 94):=if i=65 ∨ i=91 then U else 0
 def core (a B p w F U n : Nat) (bits out : List Bool) (i : Fin 94):=

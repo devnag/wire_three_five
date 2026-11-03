@@ -388,6 +388,25 @@ noncomputable def gradedToeplitzPoweredWalkListCertificate
 
 /-! ## Canonical parameter closure -/
 
+/-- A ceiling base-two logarithm expands to at most twice its positive
+argument.  Keeping this arithmetic lemma local makes every later structural
+enumeration bound independent of implementation details of `Nat.clog`. -/
+theorem two_pow_clog_two_le_two_mul (value : ℕ) (hvalue : 0 < value) :
+    2 ^ Nat.clog 2 value ≤ 2 * value := by
+  by_cases hone : value = 1
+  · subst value
+    norm_num [Nat.clog_one_right]
+  · have hvalueTwo : 1 < value := by omega
+    have hpower :
+        2 ^ (Nat.clog 2 value - 1) < value :=
+      Nat.pow_pred_clog_lt_self (by omega) hvalueTwo
+    have hclog : 0 < Nat.clog 2 value :=
+      Nat.clog_pos (by omega) hvalueTwo
+    conv_lhs => rw [show Nat.clog 2 value =
+      (Nat.clog 2 value - 1) + 1 by omega]
+    rw [Nat.pow_succ]
+    omega
+
 /-- Smallest binary depth that discharges the terminal `1 / 128` sparsity
 condition. -/
 def canonicalGradedDepth (activeBound : ℕ) : ℕ :=

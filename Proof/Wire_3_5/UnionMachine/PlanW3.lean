@@ -1,10 +1,27 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.PlanW2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Assembly.Free
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.UnionCheck
+import Proof.Wire_3_5.UnionMachine.UnionCodec
+import Proof.Wire_3_5.UnionMachine.UnionEventual
+import Proof.Wire_3_5.UnionMachine.Plan
+import Proof.Wire_3_5.UnionMachine.Slack
+import Proof.Wire_3_5.UnionMachine.PlanW2Base
+
+
+noncomputable section
+
 
 /-! # C6: leaf U's enclosing application with the paper's atom test
 
-"The weak machine guesses one size-`q^G` general oracle, a class tag, and one sparse grid sum for each distinct PCPP
-variable. It rejects malformed descriptions, oversized atoms, and coefficients outside the fixed grid" (P3:3669-3671).
-The plan of `Proof.Wire_3_5.UnionMachine.PlanW2` with ONE correction to the worker's meaning: past its onset the
+"The weak machine guesses the two circuits `Γ_src` and `Γ_pf` above, a class tag, and one sparse grid sum for each
+distinct PCPP variable. It rejects malformed descriptions, oversized atoms, and coefficients outside the fixed grid, and
+it rejects unless `Γ_src` passes the source check" (paper v2, §H.5).
+The plan of `WireExponent3_5UnionMachinePlanW2` with ONE correction to the worker's meaning: past its onset the
 union machine accepts a witness only if EVERY decoded atom is within the description envelope the paper fixes
 (**`atomsOk`**: `descriptionBits ≤ (q+1)^descDeg`, the envelope of `PrimitiveInputs.Call`), before it selects the common
 star translation. Without it the selection's input (every positive-weight variable's carrier, zero-sign atoms included)
@@ -83,7 +100,7 @@ theorem soundForSlack (W : WorkerAt3 S P) : SoundForSlack S P unionBits W.machin
 
 /-- **`tr:soundness`**: the worker's machine is one-sided for the setup's language. -/
 theorem oneSided (W : WorkerAt3 S P) {L : Language} (hF : SetupFacts S L) : OneSided W.machine L := by
-  have h := oneSided_of_soundForSlack S P unionBits W.machine W.soundForSlack hF.hη hF.hw hF.hD
+  have h := oneSided_of_soundForSlack S P unionBits W.machine W.soundForSlack hF.hw hF.hD
   rwa [hF.lang] at h
 
 /-- **`tr:time`**: the worker's machine meets the ledger's split. -/
@@ -142,7 +159,7 @@ structure FrontAtW3 (S : UnionSetup I) {d : ℕ} (c1 : C1At d) (Af Kf N₀ : ℕ
   costAcc : ∀ N, B.onset ≤ N → onset ≤ N → cost N ≤ Af * (N + 1) ^ B.a +
     Kf * (B.q N + 1) ^ (callDegMargin - 1) * (B.callBudget (B.q N) + c1.budgetAt B (B.q N))
   len : ∀ N (x : BitInput N) (w : List Bool), w.length = N / 16 → onset ≤ N → (out N x w).table ≠ [] → ∃ g : UnionGuess S x,
-    g.oracle.size ≤ oracleSizeBound S.G (S.pcp.nativeWidth N) ∧
+    UnionGuards S x g ∧
       (out N x w).table.length ≤ (g.checkData g.translation).schedule.length
   perCall : ∀ N (x : BitInput N) (w : List Bool), w.length = N / 16 → onset ≤ N → (out N x w).table ≠ [] →
     Sched.loopCost (out N x w).Mm (out N x w).Wm (B.callBudget (B.q N)) (out N x w).p (out N x w).R + 2 ≤
@@ -218,7 +235,7 @@ length, bounded by the count (`hcount`), and absorbed into `q^{callDeg}` by `Gat
 theorem worker_timeW3 (fr : FrontAtW3 P S c1 Af Kf N₀) (dc : DecideAt P Kd) (hKd : ∀ cap, dc.cost cap ≤ Kd * (cap + 1))
     (d : ℕ) (hA : Af + 2 * Kd + 8 ≤ B.A)
     (hcount : ∀ N, N₀ ≤ N → ∀ (z : BitInput N) (g : UnionGuess S z),
-      g.oracle.size ≤ oracleSizeBound S.G (S.pcp.nativeWidth N) → ∀ tr : List ℕ,
+      UnionGuards S z g → ∀ tr : List ℕ,
         (g.checkData tr).schedule.length ≤ B.q N ^ d)
     (habs : ∀ N, N₀ ≤ N → Kf * (3 + Kd) * (B.q N + 1) ^ (d + (callDegMargin - 1)) ≤ B.q N ^ E.callDeg)
     (hsel : ∀ N, N₀ ≤ N → c1.budgetAt B (B.q N) ≤ B.callBudget (B.q N)) :
@@ -323,7 +340,7 @@ noncomputable def workerOfE3 (e : ℕ) (F : GateFree l) (coef A : ℕ) (P : Fuse
     (fr : FrontAtW3 P (SUE l F e coef A L hL) c1 Af Kf N₀) (dc : DecideAt P Kd)
     (hA : Af + 2 * Kd + 8 ≤ A)
     (hcount : ∀ N, N₀ ≤ N → ∀ (z : BitInput N) (g : UnionGuess (SUE l F e coef A L hL) z),
-      g.oracle.size ≤ oracleSizeBound (SUE l F e coef A L hL).G ((SUE l F e coef A L hL).pcp.nativeWidth N) →
+      UnionGuards (SUE l F e coef A L hL) z g →
         ∀ tr : List ℕ, (g.checkData tr).schedule.length ≤
           ((gate0 l F).budget (kE l e) coef A (aE l e) (haE l e)).q N ^ unionCallDeg l)
     (habs : ∀ N, N₀ ≤ N → Kf * (3 + Kd) * (((gate0 l F).budget (kE l e) coef A (aE l e) (haE l e)).q N + 1) ^
@@ -361,3 +378,5 @@ noncomputable def workers_of_stagesE3 (c1 : C1Impl) (dec : DecideF) (e : ℕ)
 end LeafB
 
 end NearCubicWires.WireExponent3_5.UnionMachine.PlanW3
+
+end

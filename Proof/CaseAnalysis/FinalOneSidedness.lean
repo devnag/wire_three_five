@@ -1,5 +1,6 @@
-import Proof.CaseAnalysis.Language
 import Proof.CaseAnalysis.WitnessSoundness
+import Proof.CaseAnalysis.Language
+import Proof.Assembly.SelectedRecoveryIntegration
 
 /-! Paper C.10 one-sidedness, at the consumer.
 

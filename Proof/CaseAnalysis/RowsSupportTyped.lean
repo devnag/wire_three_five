@@ -1,5 +1,6 @@
 import Proof.CaseAnalysis.RowsSupportFamily
 import Proof.CaseAnalysis.RowsSupportMeaning
+import Proof.CaseAnalysis.RowsCircuitMeaning
 
 /-! The actual retained bytes bind to precisely the same original gate
 carrier as the native circuit segment. This includes selected THR bottom

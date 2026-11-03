@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.NwB6
+import Proof.Wire_3_5.Primitive.Writers.GapNums
 
 /-! # NW phase (b), part 7: W6's four numbers and `2^{sb}` in registers
 

@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.SeedFixJLink
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixFetch
 
 /-! # (c′) (B): the degenerate call's padded batch (mode-generic)
 

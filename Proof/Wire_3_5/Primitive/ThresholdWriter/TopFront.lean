@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.Writers.ThrDataIface
+import Proof.Assembly.Production
 
 /-! # THR, the THR front end on ports: `TopFrontPort`, each circuit's native word and top children
 

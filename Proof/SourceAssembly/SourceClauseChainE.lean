@@ -17,7 +17,16 @@ open NearCubicWires.SourceSkeleton
 noncomputable section
 attribute [local irreducible] P1TopDownPaidPayload.tapes
 
+/-- The family step's entry-emitter words at call `j` (`_hrefill`'s `outA`'s `enc` part). -/
+abbrev encWOf {Atom : Type} {U : Nat} (b : Nat) (vd : RCFive.Source.CallValues Atom U) (j : Nat) :=
+  e_bank b ⟨vd.coefficient j, vd.total j, vd.denominator j⟩ (vd.D j) (vd.cap j)
+    (ZeroPadding.pad (vd.D j) (Stream.entryWord b ⟨vd.coefficient j, vd.total j, vd.denominator j⟩))
+
 section seam
+variable (mask : MaskProducer) {selector : CyclicChoice.Laws}
+  (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector)
+  (rows : PCJc4297ab269d8423a_Source.RowLibrary selector) (sources : EightSources)
+  (res : Nat) (hres : 19 ≤ res) {gamma : Real} (p : Parameters sources gamma) (k r : Nat)
 
 set_option hygiene false in
 local notation "𝔇" => dimsOf mask packets rows sources res p k r

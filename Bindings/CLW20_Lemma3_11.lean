@@ -1,4 +1,5 @@
 import Proof.Foundations.RepresentationSourceContracts
+import Statement
 
 /-!
 # Binding: CLW20 Lemma 3.11 (the two-query PCPP, from [CW19, VW20]) → `PointwisePCPPSource`

@@ -18,6 +18,10 @@ attribute [local irreducible] P1TopDownPaidPayload.tapes WorkspaceSelectedAdmiss
 
 /-! ## 1. Clause-ordered concatenation -/
 
+/-- The clause-ordered concatenation of the first `j` clauses' entries. -/
+def prefixEntries {m : Nat} (E : Fin m → List Stream.Entry) (j : Nat) : List Stream.Entry :=
+  ((List.ofFn E).take j).flatten
+
 /-! ## 2. The phase fields -/
 
 section phase

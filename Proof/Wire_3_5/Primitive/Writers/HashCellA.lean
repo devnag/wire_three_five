@@ -1,4 +1,7 @@
 import Proof.Wire_3_5.Primitive.Writers.HashNum
+import Proof.Wire_3_5.Primitive.Writers.Emit
+import Proof.Wire_3_5.Primitive.Writers.DataSetup
+import Proof.Wire_3_5.Primitive.Writers.UnaryArith
 import Proof.Wire_3_5.Primitive.Writers.NumsX
 
 /-! # HASH setup (C), P2b part 1: the cell's decode and its unary counts

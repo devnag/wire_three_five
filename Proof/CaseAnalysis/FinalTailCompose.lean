@@ -1,6 +1,8 @@
-import Proof.CaseAnalysis.FinalTailFeed
-import Proof.CaseAnalysis.FinalTailVerdict
 import Proof.CaseAnalysis.FinalWorkerDockSeam
+import Proof.CaseAnalysis.FinalTailSlots
+import Proof.CaseAnalysis.FinalTailVerdict
+import Proof.CaseAnalysis.FinalTailFeed
+import Proof.Foundations.OrdinaryRewind
 
 namespace NearCubicWires.RepairSource.CloseoutFinal.C10TailCompose
 
@@ -23,6 +25,29 @@ set_option warningAsError true
 `Rewind.machine p` logs one mark per transition of `p` on a fresh tape and then
 consumes the marks, moving every head of `p` left once per mark.  Nothing here
 is new: it is `Rewind.reset_run`, restated as a `Step`. -/
+
+theorem step_reset {t s : ℕ} {p : Machine t s} {n : ℕ} {tin : Fin t → List Bool}
+    {hout : Fin t → ℕ} {tout : Fin t → List Bool}
+    (h : Step p n (fun _ => 0) tin hout tout) :
+    ∃ counter : List Bool,
+      Step (Rewind.machine p) (2*n+2) (fun _ => 0)
+        (Fin.addCases tin (fun _ : Fin 1 => []))
+        (fun _ => 0) (Fin.addCases tout (fun _ : Fin 1 => counter)) := by
+  obtain ⟨r, hr, hh, ht, hs⟩ := h
+  have hrun : run p n tin = some r := hr
+  obtain ⟨r', hr', htapes, hheads, hsteps, _⟩ := Rewind.reset_run p n tin r hrun
+  refine ⟨r'.final.tapes ((0 : Fin 1).natAdd t), ?_⟩
+  have hfuel : 2*r.steps+2 ≤ 2*n+2 := by omega
+  refine (Step.of_run (r := r') ?_ ?_ ?_).enlarge hfuel
+  · exact hr'
+  · funext i; exact hheads i
+  · funext i
+    refine Fin.addCases (m := t) (n := 1) (fun j => ?_) (fun j => ?_) i
+    · rw [Fin.addCases_left]
+      exact (htapes j).trans (congrFun ht j)
+    · have hj : j = 0 := Fin.eq_zero j
+      subst hj
+      rw [Fin.addCases_right]
 
 /-! ## §2 The gate's exit tapes, named -/
 

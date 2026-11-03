@@ -1,11 +1,23 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.PreLink
-import Proof.Wire_3_5.Primitive.Writers.ComposeEnv
+import Proof.Wire_3_5.Primitive.Writers.ComposeEnvBase
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.WriterIfaceJ
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.WritersJoinBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The writers' join: three separately built writers give the writer node's target
 
 The writer node's target `PreLink.WriterLeafJ2` bundles the SYM, THR and HASH writers (`WritersAtJ`) at ONE floor
-envelope `E_W`, one load-constant floor `CD_W` and one coefficient `c_W`. The three writers are built by three components, each
-with its own floors and coefficient. This file fixes each component's deliverable type and proves the join:
+envelope `E_W`, one load-constant floor `CD_W` and one coefficient `c_W`. The three writers are built separately, each
+with its own floors and coefficient. This file fixes each writer's type and proves the join:
 
 * **`SymLeafJ2`**, **`ThrLeafJ2`**, **`HashLeafJ2`**: one writer each, in `WriterLeafJ2`'s order of choice (`fe`, then
   `E_W`, `CD_W`, then `F`, then `c_W`);
@@ -29,25 +41,6 @@ open NearCubicWires.WireExponent3_5.PrimAsm.WriterIfaceJ NearCubicWires.WireExpo
 open NearCubicWires.WireExponent3_5.PrimAsm.ComposeEnv
 
 /-! ## Monotonicity -/
-
-/-- A writer's run within `B` steps is a run within any larger bound. -/
-theorem writerRun_mono {t s : ℕ} {M : Machine t s} {B B' : ℕ} {i o : Fin t} {w v : List Bool}
-    (h : WriterRun M B i o w v) (hB : B ≤ B') : WriterRun M B' i o w v := by
-  obtain ⟨J, hJ, hR⟩ := h
-  exact ⟨J, fun j => (hJ j).trans hB, ClockJoin.enlarge M B B' _ _ hR hB⟩
-
-/-- Every call length with the star hypotheses is at least `1`. -/
-theorem one_le_of_starAt {kclk : ℕ} {E : Envelope} {B : TimeBudget kclk E} {I : PrimitiveInputs B} {n : ℕ}
-    (hs : I.StarAt n) : 1 ≤ n := by
-  have h1 := hs.2.1
-  have h2 := hs.2.2.1
-  omega
-
-/-- The writers' budget is monotone in the floor envelope and the coefficient. -/
-theorem budget_mono {EW EW' : Envelope} {cW cW' : ℕ} (h : ClassLE EW EW') (hc : cW ≤ cW') {n : ℕ} (hn : 1 ≤ n)
-    (k psi : ℕ) :
-    cW * classBound EW .preprocessing n k psi ≤ cW' * classBound EW' .preprocessing n k psi :=
-  Nat.mul_le_mul hc (classBound_mono h .preprocessing n k psi hn (fun h => by cases h))
 
 section Mono
 variable {l : Literals} {F : GateFree l} {EW EW' : Envelope} {cW cW' kclk coef A a : ℕ} {ha : a ≤ kclk + 1}
@@ -75,7 +68,7 @@ def hashMono (W : HashWriterAtJ l F EW cW kclk coef A a ha) (h : ClassLE EW EW')
 
 end Mono
 
-/-! ## Each component's deliverable -/
+/-! ## Each writer's type -/
 
 /-- **The SYM writer's deliverable**, in `WriterLeafJ2`'s order of choice. -/
 def SymLeafJ2 (l : Literals) : Type :=
@@ -94,21 +87,6 @@ def HashLeafJ2 (l : Literals) : Type :=
 
 /-! ## The join -/
 
-theorem classLE_max3_1 (E₁ E₂ E₃ : Envelope) : ClassLE E₁ (envMax (envMax E₁ E₂) E₃) :=
-  classLE_trans (classLE_envMax_left E₁ E₂) (classLE_envMax_left _ E₃)
-
-theorem classLE_max3_2 (E₁ E₂ E₃ : Envelope) : ClassLE E₂ (envMax (envMax E₁ E₂) E₃) :=
-  classLE_trans (classLE_envMax_right E₁ E₂) (classLE_envMax_left _ E₃)
-
-theorem classLE_max3_3 (E₁ E₂ E₃ : Envelope) : ClassLE E₃ (envMax (envMax E₁ E₂) E₃) :=
-  classLE_envMax_right _ E₃
-
-theorem le_max3_1 (a b c : ℕ) : a ≤ max (max a b) c := by omega
-
-theorem le_max3_2 (a b c : ℕ) : b ≤ max (max a b) c := by omega
-
-theorem le_max3_3 (a b c : ℕ) : c ≤ max (max a b) c := by omega
-
 /-- **The writers' join**: three separately built writers give the writer node's target. -/
 noncomputable def writerLeafJ2_of (l : Literals) (S : SymLeafJ2 l) (T : ThrLeafJ2 l) (H : HashLeafJ2 l) :
     WriterLeafJ2 l :=
@@ -123,3 +101,5 @@ noncomputable def writerLeafJ2_of (l : Literals) (S : SymLeafJ2 l) (T : ThrLeafJ
           hash := hashMono (h.2 kclk coef A a ha) (classLE_max3_3 _ _ _) (le_max3_3 _ _ _) }⟩⟩
 
 end NearCubicWires.WireExponent3_5.PrimAsm.WritersJoin
+
+end

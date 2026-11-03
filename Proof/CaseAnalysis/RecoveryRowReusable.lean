@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoveryRowResetBank
+import Proof.MachineModel.OrdinaryMatrixBucketRootPower
 
 /-! The complete original verifier row, its saved result, and its paid
 reusable bank. The next original row only needs its freshly produced addresses. -/

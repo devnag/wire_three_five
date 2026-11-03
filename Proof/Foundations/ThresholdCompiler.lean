@@ -130,9 +130,31 @@ the explicit zero sentinel, permits a zero quotient, and expands complemented
 literals only after constructing the nonnegative crossing equation.
 -/
 
+/-- An exact integer equation over `n` Boolean variables. -/
+structure ExactEquation (n : ℕ) where
+  weights : Fin n → ℤ
+  target : ℤ
+
 namespace ExactEquation
 
+def Holds {n : ℕ} (equation : ExactEquation n) (x : Fin n → Bool) : Prop :=
+  (∑ i, equation.weights i * bitInt (x i)) = equation.target
+
+instance {n : ℕ} (equation : ExactEquation n) (x : Fin n → Bool) :
+    Decidable (equation.Holds x) := by
+  unfold Holds
+  infer_instance
+
 end ExactEquation
+
+def magnitude (weight : ℤ) : ℕ := weight.natAbs
+
+def negativeMass {n : ℕ} (weights : Fin n → ℤ) : ℤ :=
+  ∑ i, if weights i < 0 then (magnitude (weights i) : ℤ) else 0
+
+def acceptanceCount {n : ℕ}
+    (children : List (ExactEquation n)) (x : Fin n → Bool) : ℕ :=
+  (children.map fun child => if child.Holds x then 1 else 0).sum
 
 @[simp] theorem bitInt_eq_toNat (b : Bool) : bitInt b = b.toNat := by
   cases b <;> rfl

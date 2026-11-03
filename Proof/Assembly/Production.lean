@@ -131,5 +131,21 @@ structure PacketWriter (selector : CyclicChoice.Laws) (a : DecompositionAlgorith
   ordinary : RewoundWordFunction Request (Request.input a) (Request.raw selector a)
     (packetBudget a coefficient degree)
 
+/-- The caller surrounds the actual packet machine with its two paid input
+and output joins. Slots and code are fixed before a runtime request. -/
+structure SeedCode {selector : CyclicChoice.Laws} {a : DecompositionAlgorithm}
+    (p : PacketWriter selector a) (U : Nat) where
+  slots : Fin p.ordinary.program.tapeCount → Fin U
+  injective : Function.Injective slots
+  loadStates : Nat
+  load : Machine U loadStates
+  tailStates : Nat
+  tail : Machine U tailStates
+
+def SeedCode.machine {selector : CyclicChoice.Laws} {a : DecompositionAlgorithm}
+    {p : PacketWriter selector a} {U : Nat} (c : SeedCode p U) :=
+  Composition.machine c.load
+    (Composition.machine (RecoveryFocus.machine c.slots p.ordinary.program.machine) c.tail)
+
 end
 end PCJd4d1d9d7d1fa4313_Production

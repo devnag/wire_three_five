@@ -1,4 +1,5 @@
 import Proof.PCP.VerifierDecodingTableGuardLayout
+import Proof.PCP.VerifierDecodingTableRun
 
 /-! Counted record validation uses the actual e counter produced by the
 table guard. The retained start-state field is outside this static focus. -/

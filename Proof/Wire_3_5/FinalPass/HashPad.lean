@@ -1,5 +1,20 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.HashPre1
-import Proof.Wire_3_5.FinalPass.SymCost5
+import Proof.Wire_3_5.FinalPass.SymCost5Base
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.HashSz1
+import Proof.Wire_3_5.FinalPass.HashSz2
+import Proof.Wire_3_5.FinalPass.SymCost4
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.HashPadBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The HASH stage's pad and its request's numbers (`HashEAt`'s `hR`, `Q' ≤ pr`, `1 ≤ h`)
 
@@ -149,11 +164,8 @@ theorem hQp_hash (c : SymC) (hdH : 1 ≤ c.dH) (hdD : 1 ≤ c.dD) (hdP : 3 * c.d
     _ ≤ (FreeGen.freeProgH (hashK2 c)).val (FinalPass.HashFr.hashX (callInputs l F kclk coef A a ha) (gate0 l F).alg Cs carriers hs) 3 * (FreeGen.freeProgH (hashK2 c)).val (FinalPass.HashFr.hashX (callInputs l F kclk coef A a ha) (gate0 l F).alg Cs carriers hs) 2 * hashDF c (FinalPass.HashFr.hashX (callInputs l F kclk coef A a ha) (gate0 l F).alg Cs carriers hs) := Nat.mul_le_mul (Nat.mul_le_mul_right _ h1) h2
     _ ≤ _ := h
 
-/-- **`1 ≤ h`** at the HASH request. -/
-theorem one_le_h_hash (c : SymC) (hdH : 1 ≤ c.dH) (x : FreeIn) : 1 ≤ (FreeGen.freeProgH (hashK2 c)).val x 3 := by
-  show 1 ≤ c.dH * (x.n + 1) ^ c.eH
-  exact Nat.mul_le_mul hdH (Nat.one_le_pow _ _ (by omega))
-
 end Gate
 
 end NearCubicWires.WireExponent3_5.FinalPass.HashFr
+
+end

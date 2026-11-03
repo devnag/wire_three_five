@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.WitnessDAGFields
+import Proof.PCP.PCPPNativeHeader
 
 /-! The actual hierarchy arity and the same literal traversal count supply
 the original oracle's native header. Reuse the total existing header writer;

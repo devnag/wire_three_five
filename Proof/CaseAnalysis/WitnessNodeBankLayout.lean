@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.WitnessDAGBounds
+import Proof.CaseAnalysis.RowsMetadataCopy
 
 /-! The initial node bank is physically cleared once and its four retained
 metadata words are copied into the resulting backing. The raw field stream

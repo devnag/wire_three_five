@@ -1,4 +1,7 @@
 import Proof.Wire_3_5.Transfer.FoldLoop
+import Proof.Hierarchy.HierarchyBinaryPower
+import Proof.Amplification.RecoveryScratchErase
+import Proof.MachineModel.OrdinaryZeroPadding
 
 /-! # One round of the uniform XOR fold with a reused bank (P3:3729-3733, 3758-3771; D1.6b)
 

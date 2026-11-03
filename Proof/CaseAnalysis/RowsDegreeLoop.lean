@@ -1,4 +1,4 @@
-import Proof.CaseAnalysis.RowsLoopBoundary
+import Proof.CaseAnalysis.RowsDegreeBody
 
 /-! The literal Q driver executes only the required degree transitions.
 Exhaustion includes its physical rewind; no body call at degree Q is
@@ -63,5 +63,9 @@ theorem loop_run {t s : ℕ} (body : Machine t s)
   rw [Nat.add_sub_of_le hbound] at more
   exact ⟨r,more,hf,hs.le.trans hbound⟩
 
+noncomputable def entry {s n : ℕ} (body : Machine 112 s) (gs : List (ExactThresholdGate n))
+    (p F w j C : ℕ) (rows : List (List Bool)) (out : List Bool) : Configuration 112 s :=
+  ⟨body.start,inputHeads gs p F w j rows out,inputTapes gs p F w j C rows out⟩
+def budget (Q C : ℕ) := Q*(40*C+103)+3
 
 end NearCubicWires.RepairOrdinary.CloseoutRowsDegreeLoop

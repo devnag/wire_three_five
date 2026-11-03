@@ -1,6 +1,8 @@
-import Proof.CaseAnalysis.FinalLengthGate
 import Proof.CaseAnalysis.FinalRealizes
-import Proof.MachineModel.CacheRewind
+import Proof.CaseAnalysis.FinalLengthGate
+import Proof.CaseAnalysis.RowsEstimatorCoefficientsLoop
+import Proof.Hierarchy.CompetitorSumLoop
+import Proof.CaseAnalysis.RowsOriginalClauseLoop
 
 /-! # W1 -- the C.10 worker chain, anchored at the PCPP clause addresses
 
@@ -74,7 +76,64 @@ set_option warningAsError true
 
 /-! ## §1 One record is one AND-four supplier call -/
 
+/-- **One physical record = one AND-four supplier call for one monomial.**
+The record carries the monomial's rational coefficient in its `coefficient`
+field and the supplier's answer as the `count / denominator` pair: exactly
+`Entry.estimate_value`'s two factors.  Paper C.10.1, "expanding it into
+AND-four supplier calls". -/
+structure Calls {Atom : Type} (supplier : List Atom → ℚ)
+    (monomial : CircuitMonomial Atom 4) (entry : Entry) : Prop where
+  /-- The record's rational coefficient is the monomial's coefficient. -/
+  coefficient : entry.coefficient.value = monomial.coefficient
+  /-- The record's `count / denominator` is the supplier's answer to the
+  monomial's factor list. -/
+  answer : ((entry.count : ℚ) / (entry.denominator : ℚ)) = supplier monomial.factors
+
 /-! ## §2 The record stream's exact value -/
+
+/-- The per-record contribution values, read off the calls. -/
+theorem entries_map_estimate_value {Atom : Type} (supplier : List Atom → ℚ)
+    (monomials : List (CircuitMonomial Atom 4)) (entries : List Entry)
+    (hcalls : List.Forall₂ (Calls supplier) monomials entries) :
+    entries.map (fun entry => entry.estimate.value) =
+      monomials.map (fun monomial => monomial.coefficient * supplier monomial.factors) := by
+  induction hcalls with
+  | nil => rfl
+  | @cons monomial entry monomials entries hcall _ inductionHypothesis =>
+      simp only [List.map_cons, inductionHypothesis]
+      congr 1
+      rw [Entry.estimate_value, hcall.coefficient, hcall.answer]
+
+/-- **C.10.1, as an identity.**  The corpus's own exact signed-rational fold of
+the record stream has value `polynomial.estimatedMean supplier` -- the paper's
+`mu` expanded into AND-four supplier calls.  No approximation enters here; the
+supplier's error is P3b's business. -/
+theorem folded_value_eq_estimatedMean {Atom : Type} (supplier : List Atom → ℚ)
+    (width : ℕ) (polynomial : CircuitPolynomial Atom 4) (entries : List Entry)
+    (hcalls : List.Forall₂ (Calls supplier) polynomial.monomials entries)
+    (hvalid : ∀ estimate ∈ contributions entries,
+      CompetitorValidity.Estimate.Valid estimate width) :
+    (((CompetitorSumFold.folded CompetitorSumWidth.zero
+        (contributions entries)).value : ℚ) : ℝ) =
+      polynomial.estimatedMean supplier := by
+  have hfold := CompetitorSumFold.folded_value
+    (CompetitorSumWidth.width (contributions entries).length width)
+    CompetitorSumWidth.zero (contributions entries)
+    (CompetitorSumWidth.uniform_trace width (contributions entries) hvalid)
+  have hzero : CompetitorSumWidth.zero.value = 0 := by
+    norm_num [CompetitorSumWidth.zero, CompetitorValidity.Estimate.value]
+  have hmap : (contributions entries).map CompetitorValidity.Estimate.value =
+      polynomial.monomials.map
+        (fun monomial => monomial.coefficient * supplier monomial.factors) := by
+    rw [contributions, List.map_map]
+    exact entries_map_estimate_value supplier polynomial.monomials entries hcalls
+  rw [hfold, hzero, zero_add, hmap, ratListSum_cast, List.map_map,
+    CircuitPolynomial.estimatedMean]
+  refine congrArg List.sum (List.map_congr_left ?_)
+  intro monomial _
+  simp only [Function.comp_apply]
+  push_cast
+  ring
 
 /-! ## §3 The clause-address decomposition -/
 

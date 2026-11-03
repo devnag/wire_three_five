@@ -1,5 +1,6 @@
-import Proof.CaseAnalysis.FinalCompareDockCmp
 import Proof.CaseAnalysis.FinalTailSlots
+import Proof.CaseAnalysis.FinalCompareDockCmp
+import Proof.Hierarchy.CompetitorThresholdDecision
 
 /-! **Decision tail, stage 2b-ii(prep) — the facts the comparator feed needs.**
 

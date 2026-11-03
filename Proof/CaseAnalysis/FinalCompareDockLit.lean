@@ -1,4 +1,8 @@
 import Proof.CaseAnalysis.FinalCompareDock
+import Proof.Amplification.RecoveryRootRoundTapes
+import Proof.Hierarchy.HierarchyFixedWord
+import Proof.MachineModel.ClockNormalize
+import Proof.MachineModel.Runs
 import Proof.MachineModel.Layout
 
 /-! **Decision tail, stage 2a-i — the two constant stages, as `Step`s.**

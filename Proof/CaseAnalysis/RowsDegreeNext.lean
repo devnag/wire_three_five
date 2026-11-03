@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.RowsDegreeAdvance
+import Proof.Amplification.RecoveryRowLookupTapes
+import Proof.Hierarchy.HierarchyAllocation
 
 /-! Between degree calls, physically reset the retained lookup bound and
 advance both k templates and j. All native row heads, including the output

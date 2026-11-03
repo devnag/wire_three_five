@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryCaseOneEvaluatorReady
+import Proof.PCP.ProjectionRealization
 
 /-! The constructed request belongs to the selected global outer PCP.
 Its constant-input serialization view has exactly the same formula, case

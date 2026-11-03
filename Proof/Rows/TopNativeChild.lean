@@ -1,0 +1,20 @@
+import Proof.Rows.TopChildCursor
+
+set_option autoImplicit false
+set_option maxHeartbeats 500000
+set_option maxRecDepth 120000
+set_option warningAsError true
+namespace PCJ45bee56da9f34d5a_TopNativeChild
+open NearCubicWires NearCubicWires.LocalBitMultitape
+open NearCubicWires.RepairOrdinary NearCubicWires.ExtDecompositionBatch
+open NearCubicWires.RepairOrdinary.RecoveryRootRound
+open NearCubicWires.RepairRepresentation NearCubicWires.RepairSource.VerifierDecoding
+open NearCubicWires.RepairSource.CloseoutFinal
+noncomputable section
+
+def locate:=TapeEmbedding.machine 4 PCJ45bee56da9f34d5a_TopChildCursor.machine
+def copy:=RecoveryFocus.machine C10ThresholdSelectedChild.selectedSlots C10ThresholdSelectedChild.machine
+def machine:=Composition.machine locate copy
+
+end
+end PCJ45bee56da9f34d5a_TopNativeChild

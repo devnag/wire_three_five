@@ -17,6 +17,7 @@ open NearCubicWires.SourceSkeleton.StartC
 open NearCubicWires.SourceSkeleton.KeptW NearCubicWires.SourceSkeleton.GuardG NearCubicWires.SourceStart.EntryW
 open NearCubicWires.SourceSkeleton.ClassR NearCubicWires.SourceSkeleton.Params NearCubicWires.SourceSkeleton.ClassV4
 open NearCubicWires.SourceSkeleton.ParamsV4
+open NearCubicWires.SourceSkeleton.Fill (XtraW)
 open NearCubicWires.SourceSkeleton.FillV5 NearCubicWires.SourceSkeleton.FirstW
 open NearCubicWires.SourceRequest NearCubicWires.SourceRequest.FactorLoop
 open NearCubicWires.SourceConstruction.Rest NearCubicWires.SourceConstruction.Bridge NearCubicWires.SourceSteps
@@ -25,6 +26,9 @@ noncomputable section
 attribute [local irreducible] P1TopDownPaidPayload.tapes
 
 section site
+variable (selector : CyclicChoice.Laws) (xtra : XtraW selector) (mask : MaskProducer)
+  (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector) (rows : PCJc4297ab269d8423a_Source.RowLibrary selector)
+  (sources : EightSources) (gamma : Real) (hg : 0 < gamma) (hh : gamma < 1/2) (p : Parameters sources gamma)
 
 set_option hygiene false in
 local notation "𝔨" => kSite selector xtra mask packets rows sources gamma hg hh p

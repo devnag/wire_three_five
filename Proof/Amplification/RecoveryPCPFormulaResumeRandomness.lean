@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryProjectionRowsRewind
+import Proof.MachineModel.OrdinaryFramedIncrement
 
 /-! The same physical randomness field advances in the original formula's
 little-endian allBitInputs order. Both local heads return to zero, and the

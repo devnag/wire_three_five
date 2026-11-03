@@ -1,6 +1,8 @@
-import Proof.Wire_3_5.Foundations.OutMachineCarIface
+import Proof.Wire_3_5.Foundations.OutMachineCarIfaceBase
+import Proof.Wire_3_5.Primitive.Writers.DataRun
+import Proof.Wire_3_5.MachineModel.BlockJoin
 
-/-! # The output machine carrier phase, part 1: the outer layout and the masked dock
+/-! # X6 carrier phase, part 1: the outer layout and the masked dock
 
 The carrier phase runs PA's data programs (`Data.setupW`, `Data.carT`, on `WM DS DR`) whose input head is left where
 the parse stopped. A `CoreWordsM` run must end with every head at `0`, so each such stage runs under base's masked

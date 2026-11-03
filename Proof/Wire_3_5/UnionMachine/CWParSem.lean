@@ -1,9 +1,11 @@
 import Proof.Wire_3_5.UnionMachine.CWParCore
+import Proof.Wire_3_5.UnionMachine.UnionAtoms
 
 /-! # C6 front, U5, the code writers: the parity writer writes the parity atom's code
 
 "Constants, complemented atoms, and the systematic encoding parity are permitted at the same fixed description
-envelope" (P3:3092-3094): the union setup's encoding parity of a variable with support `S` is `unionParityAtom m q S`. On the bitmap of `S` the parity writer's core writes
+envelope" (P3:3092-3094): the union setup's encoding parity of a variable with support `S` is T's
+`unionParityAtom m q S`. On the bitmap of `S` the parity writer's core writes
 `sufCode (accOf (WLv l) (P3v l) k) k topv tagv`; this module identifies it with the atom's code in each class mode:
 * the shared codes: `WLv_eq` (the bottoms' weight list), `SBv_eq` (their support list);
 * **`codeB_eq`**: the `j`-th bottom's code is base's `encodeSupportedNormalizedGate (thresholdParityBottomGate S j)`;

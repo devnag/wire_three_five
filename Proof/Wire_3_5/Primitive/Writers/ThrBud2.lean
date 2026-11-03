@@ -1,8 +1,27 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.ThrBud1
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.CallSize
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.ThrB7
+import Proof.Wire_3_5.Primitive.Writers.ThrSide1
+import Proof.Wire_3_5.Primitive.Writers.ThrSide2
+import Proof.Wire_3_5.Primitive.SeedFix.C4GateThrB
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymNB
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.ThrBud2Base
 
-/-! # c4 THR block, piece 8 part 2: `thr_steps_gen` (the THR stage's `hBd`)
 
-The THR twin of `sym_steps_gen` (C4BudF): at every THR call where the numbers fit the capacity v2 (`ThrFitAt` at
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2 c4 THR block, piece 8 part 2: `thr_steps_gen` (the THR stage's `hBd`)
+
+The THR twin of the `sym_steps_gen` (C4BudF): at every THR call where the numbers fit the capacity v2 (`ThrFitAt` at
 `M = 2^{capExp2 C_c n}`, `thr_fits2`), the THR stage's steps (`thr_stage_of_big`'s `hBd`: the setup at the THR
 input `req.word ++ hbF`, the data stage `S.cost3`, the hash bits, the numbers machine `thrBigCost`, the strip's C3
 budget `thrB`, the loop over any child family whose cells fit the pad, the finisher) are within `c₄·seedClasses E₄`,
@@ -84,7 +103,7 @@ theorem w_le (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ} (ha' : a' 
   rw [List.length_append]
   refine ⟨by omega, by omega, by omega, by omega, by omega, by omega⟩
 
-/-- **The front at rate `1`** (`front_ex` at the strip polynomial's bound). -/
+/-- **The front at rate `1`** (the `front_ex` at the strip polynomial's bound). -/
 theorem front_le (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ} (ha' : a' ≤ 4)
     (Cs : Fin a' → NormalizedThresholdThresholdCircuit n) (carriers : List (Carrier n)) (translation : List ℕ)
     (hcall : (callInputs l F kclk coef A a ha).Call (thrReq n a' ha' Cs carriers translation))
@@ -159,11 +178,6 @@ theorem nsq_le (l : Literals) (Cnw Dnw c2 n : ℕ) (hnw : PrimT.C4GateSym.needW 
     _ ≤ (Cnw + ThrSide.stripC l + 12) * (Cnw + ThrSide.stripC l + 12) * (2 ^ c2 * 2 ^ (n / 8)) :=
         Nat.mul_le_mul_left _ q
     _ = _ := by ring
-
-/-- `a ≤ 460Q + 40020`, `Q ≤ cX`, `1 ≤ X` give `a ≤ (460c + 40020)X`. -/
-theorem lin_le {a Q c X : ℕ} (h1 : a ≤ 460 * Q + 40020) (h2 : Q ≤ c * X) (hX : 1 ≤ X) : a ≤ (460 * c + 40020) * X := by
-  have e : (460 * c + 40020) * X = 460 * (c * X) + 40020 * X := by ring
-  omega
 
 /-- **The hash bits' steps and the strip's own inputs** below `460·N² + 40020`. -/
 theorem hbx_le (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ} (ha' : a' ≤ 4)
@@ -314,12 +328,6 @@ theorem nf_le (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ} (ha' : a'
       16 * (2 ^ Cc * Xv) := by ring
   omega
 
-/-- **The strip's own steps** at values below `M`. -/
-theorem y_le (cs pr wl h Q m M : ℕ) (h5 : pr + 1 ≤ M) (h3 : h + 1 ≤ M) (h2 : Q + 1 ≤ M) (h4 : m + 1 ≤ M)
-    (hw : wl + 1 ≤ M) : ThrStrip.thrB 0 cs pr wl h Q m ≤ 28 * M + 2 * cs + 51 := by
-  unfold ThrStrip.thrB bigCost
-  omega
-
 /-- **The modulus length is linear in `n`.** -/
 theorem lin_ell (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ} (ha' : a' ≤ 4)
     (Cs : Fin a' → NormalizedThresholdThresholdCircuit n) (carriers : List (Carrier n)) (translation : List ℕ)
@@ -330,23 +338,6 @@ theorem lin_ell (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ} (ha' : 
   have e : 2 * (ThrSide.eQT l F.filterErrDeg + 1) * PrimT.C4Cap.bsq n =
       2 * (ThrSide.eQT l F.filterErrDeg + 1) * (natBitLength n + 1) ^ 2 := rfl
   have e2 : (Kq + 1) * (n + 1) = Kq * n + Kq + n + 1 := by ring
-  omega
-
-/-- The pad's exponent at rate `1` (`ρ + 1 ≤ M`). -/
-theorem rho_le (Cc n r : ℕ) (h : r + 1 ≤ (2 ^ PrimT.C4Cap.capExp2 Cc n)) : r ≤ 2 ^ Cc * 2 ^ (n / 8) := by
-  have hM : (2 ^ PrimT.C4Cap.capExp2 Cc n) = 2 ^ Cc * 2 ^ (n / 8) := by unfold PrimT.C4Cap.capExp2; rw [pow_add, mul_comm]
-  omega
-
-/-- The strip's own steps at rate `1`. -/
-theorem y_le' (cs pr wl h Q m Cc n KH : ℕ) (h5 : pr + 1 ≤ (2 ^ PrimT.C4Cap.capExp2 Cc n)) (h3 : h + 1 ≤ (2 ^ PrimT.C4Cap.capExp2 Cc n))
-    (h2 : Q + 1 ≤ (2 ^ PrimT.C4Cap.capExp2 Cc n)) (h4 : m + 1 ≤ (2 ^ PrimT.C4Cap.capExp2 Cc n)) (hw : wl + 1 ≤ (2 ^ PrimT.C4Cap.capExp2 Cc n))
-    (hcs : cs ≤ KH * 2 ^ (n / 8)) : ThrStrip.thrB 0 cs pr wl h Q m ≤ (28 * 2 ^ Cc + 2 * KH + 51) * 2 ^ (n / 8) := by
-  have h1 := y_le cs pr wl h Q m _ h5 h3 h2 h4 hw
-  have hM : (2 ^ PrimT.C4Cap.capExp2 Cc n) = 2 ^ Cc * 2 ^ (n / 8) := by unfold PrimT.C4Cap.capExp2; rw [pow_add, mul_comm]
-  have hX : 1 ≤ 2 ^ (n / 8) := Nat.one_le_two_pow
-  rw [hM] at h1
-  have e : (28 * 2 ^ Cc + 2 * KH + 51) * 2 ^ (n / 8) = 28 * (2 ^ Cc * 2 ^ (n / 8)) + 2 * (KH * 2 ^ (n / 8)) +
-      51 * 2 ^ (n / 8) := by ring
   omega
 
 end Gate
@@ -441,3 +432,5 @@ theorem thr_steps_gen (l : Literals) (F : GateFree l) (Kp Dp : ℕ) (Fp : FreePr
     (hpad kclk coef A a ha n a' ha' Cs carriers translation hcall hs) (hK1 n) hK2 le_rfl hEc hEa hAt
 
 end NearCubicWires.WireExponent3_5.PrimAsm.ThrBud
+
+end

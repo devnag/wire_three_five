@@ -1,4 +1,15 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.Top
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.PlanFPBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The final pass: the plan by phases (P3:3046-3048, 3170-3181)
 
@@ -26,22 +37,6 @@ open NearCubicWires NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdina
 open NearCubicWires.ExtDecompositionBatch
 open NearCubicWires.WireExponent3_5.Cost NearCubicWires.WireExponent3_5.Split NearCubicWires.WireExponent3_5.Primitive
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan
-
-/-- **One phase**: one machine for every request, its per-request cost, and its `Step` from the entry bank
-`(H₀ r, A₀ r)` to its exit bank `(H r, A r)`. -/
-structure Phase (Req : Type) (t : ℕ) (H₀ : Req → Fin t → ℕ) (A₀ : Req → Fin t → List Bool) where
-  s : ℕ
-  M : Machine t s
-  cost : Req → ℕ
-  H : Req → Fin t → ℕ
-  A : Req → Fin t → List Bool
-  run : ∀ r, Step M (cost r) (H₀ r) (A₀ r) (H r) (A r)
-
-/-- Two phases in sequence: base's `Step.seq` (one paid bridge step). -/
-def Phase.seq {Req : Type} {t : ℕ} {H₀ : Req → Fin t → ℕ} {A₀ : Req → Fin t → List Bool}
-    (p : Phase Req t H₀ A₀) (q : Phase Req t p.H p.A) : Phase Req t H₀ A₀ :=
-  ⟨p.s + q.s, Composition.machine p.M q.M, fun r => p.cost r + 1 + q.cost r, q.H, q.A,
-    fun r => Step.seq (p.run r) (q.run r)⟩
 
 section Family
 variable (l : Literals) (F : GateFree l) (E₅ : Envelope) (c₅ kclk coef A a : ℕ) (ha : a ≤ kclk + 1)
@@ -119,3 +114,5 @@ noncomputable def fpPlan (E₅ : (l : Literals) → ℕ → Envelope) (CD₅ : (
       (fits l fe F hF hE hCD kclk coef A a ha)
 
 end NearCubicWires.WireExponent3_5.FinalPass.PlanFP
+
+end

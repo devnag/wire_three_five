@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.UnionMachine.EwKit
+import Proof.Wire_3_5.FinalPass.ListEvalRef
 
 /-! # C6, e/W_j, part 2: one level's window and its power
 

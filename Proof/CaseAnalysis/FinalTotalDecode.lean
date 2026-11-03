@@ -1,5 +1,7 @@
-import Proof.CaseAnalysis.FinalResidualLeaves
 import Proof.CaseAnalysis.FinalTailVerdictUniform
+import Proof.CaseAnalysis.FinalResidualLeaves
+import Proof.CaseAnalysis.FinalOnset
+import Proof.CaseAnalysis.FinalPipeline
 
 /-! Paper A.8: "Systematic code coordinates are compiled as native parity atoms,
 so no half-arity supplier call is required." The systematic constructor evaluates

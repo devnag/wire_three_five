@@ -1,5 +1,6 @@
-import Proof.Amplification.RecoveryTimedExecution
 import Proof.MachineModel.ClockJoin
+import Proof.MachineModel.OrdinarySignedSortKey
+import Proof.Amplification.RecoveryTimedExecution
 
 /-! The GF(2)-linear row transform `φ` as a proved four-tape machine.
 

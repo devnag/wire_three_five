@@ -1,4 +1,5 @@
 import Proof.Foundations.CanonicalBinary
+import Statement
 
 /-!
 # Compact balanced CNF query codec

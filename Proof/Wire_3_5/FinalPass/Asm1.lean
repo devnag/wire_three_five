@@ -1,13 +1,33 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.Front1
 import Proof.Wire_3_5.FinalPass.S5TInst
 import Proof.Wire_3_5.FinalPass.S6Iface
 import Proof.Wire_3_5.FinalPass.SdI11
 import Proof.Wire_3_5.Primitive.SeedFix.S3Big12
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.AssemblyDock3
+import Proof.Wire_3_5.FinalPass.Bridge3
+import Proof.Wire_3_5.FinalPass.SdI3
+import Proof.Wire_3_5.FinalPass.SeamsHalves
+import Proof.Wire_3_5.FinalPass.SeamsOut2
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.FinalPass.ThrSz6
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.S5SeamB2
+import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPoly
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.Asm1Base
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-! # The final pass's assembly: the parts on `finalPass_of3` (P3:3044-3048, 3170-3181)
 
-The finish term's parts from the open producers (SYM size `hS`; the core half `core : CoreHalfGen2`; the out
-machine `outG : OutGen mOut`, the output machine), at the SYM words `Sw0` (`symPtEval`) and S4's tables producers `F5`:
+The finish term's parts from the open producers (SYM size `hS`, #124; the core half `core : CoreHalfGen2`, PA2; the out
+machine `outG : OutGen mOut`, X6), at the SYM words `Sw0` (the `symPtEval`) and S4's tables producers `F5`:
 
 * **`Xf`**: S4 (`Sd.seedsWS2Of`) at the size polynomials (`symOK` from `hS`; `thrOK` from `ThrSz.thrSize_poly`); the
   parts below are generic in S4 `X` (S4's constants are rebased on `CallIndexR` in S4 v2);
@@ -29,9 +49,6 @@ open NearCubicWires NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdina
 open NearCubicWires.WireExponent3_5 NearCubicWires.WireExponent3_5.Split
 open NearCubicWires.WireExponent3_5.FinalPass.Seams NearCubicWires.WireExponent3_5.FinalPass.PlanFP
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan
-
-/-- The SYM words (the evaluator). -/
-noncomputable abbrev Sw0 : SymWords := SymPtEval2.toWords PrimT.S3.symPtEval
 
 section Sizes
 variable (hS : ∀ l : Literals, ∃ Dsz : ℕ, ∀ F : GateFree l, ∃ Csz : ℕ, ∀ (kclk coef A a : ℕ) (ha : a ≤ kclk + 1),
@@ -199,3 +216,5 @@ noncomputable def finalPassAsm2
 end Parts
 
 end NearCubicWires.WireExponent3_5.FinalPass.Finish
+
+end

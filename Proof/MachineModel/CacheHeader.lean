@@ -1,4 +1,5 @@
 import Proof.MachineModel.FinalUnary
+import Proof.PCP.PCPPNativeNaturalAppend
 
 /-! Print exactly one native total-count header from the physically produced
 raw count. All private heads return, while the cache append cursor is retained. -/

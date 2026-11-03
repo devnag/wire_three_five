@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.CaseTwoFieldNative
+import Proof.MachineModel.OrdinaryMaskedReset
+import Proof.PCP.PCPSerializerTapeSupport
 
 /-! Reusable original-field appending with one paid reset.  The native
 descriptor cursor stays live; all work heads return to zero within the

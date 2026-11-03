@@ -1,5 +1,6 @@
 import Proof.MachineModel.OrdinaryAmplifierReplayBounds
 import Proof.MachineModel.OrdinaryOracleComposeGraph
+import Proof.Foundations.RecoverySourceContracts
 
 /-! Literal selected-amplifier replay in the ordinary oracle interface.
 The imported ordinary constructor is actually executed; the raw schema is

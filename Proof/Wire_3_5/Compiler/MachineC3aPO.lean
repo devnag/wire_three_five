@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Compiler.MachineC3aOut
+import Proof.Wire_3_5.Compiler.MachinePoolRunCost
 
 /-! # C3a machine, the pool and its output word (P3:1636-1664)
 

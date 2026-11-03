@@ -1,4 +1,5 @@
 import Proof.MachineModel.BlockPlatform
+import Proof.CaseAnalysis.RowsDegreeLoop
 
 namespace NearCubicWires.BlockPlatform
 open LocalBitMultitape RepairOrdinary RepairOrdinary.RecoveryExecution
@@ -19,20 +20,6 @@ def congrExit (b : Block t) {H : Fin t → ℕ} {A : Fin t → List Bool}
 
 @[simp] theorem congrExit_cost (b : Block t) {H : Fin t → ℕ} {A : Fin t → List Bool}
     (hH : b.exitH = H) (hA : b.exitA = A) : (congrExit b hH hA).cost = b.cost := rfl
-
-/-- Extension by `e` fresh tapes carrying `eh`/`et` throughout. -/
-def embedded (b : Block t) (eh : Fin e → ℕ) (et : Fin e → List Bool) : Block (t+e) where
-  states := b.states
-  machine := TapeEmbedding.machine e b.machine
-  cost := b.cost
-  entryH := Fin.addCases b.entryH eh
-  entryA := Fin.addCases b.entryA et
-  exitH := Fin.addCases b.exitH eh
-  exitA := Fin.addCases b.exitA et
-  run := b.run.embed eh et
-
-@[simp] theorem embedded_cost (b : Block t) (eh : Fin e → ℕ) (et : Fin e → List Bool) :
-    (embedded b eh et).cost = b.cost := rfl
 
 /-- The paid clear-and-restore. Selected ports return to head zero; the added
 tape is the reset workspace. Cost is `2*cost+2`, as `MaskedReset` charges. -/

@@ -1,5 +1,5 @@
-import Proof.Wire_3_5.UnionMachine.NumsN2
-import Proof.Wire_3_5.FinalPass.SymFront6
+import Proof.Wire_3_5.UnionMachine.NumsN2Base
+import Proof.Wire_3_5.FinalPass.SymFront6Base
 
 /-! # SWn, part 3: the eighteen numbers' registers, the three per-circuit phases
 

@@ -1,4 +1,5 @@
 import Proof.Packets.PacketsMetaStageRun
+import Proof.Wire_3_5.Primitive.PrimitiveThr
 import Proof.Wire_3_5.Primitive.ThresholdWriter.TopFront
 
 /-! # W6 part 1: `|𝒢|` and the magnitude exponent by proof 1's PacketsMeta program (`metaC`, `metaE`)

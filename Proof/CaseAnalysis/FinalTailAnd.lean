@@ -1,5 +1,7 @@
 import Proof.CaseAnalysis.FinalLengthGate
 import Proof.CaseAnalysis.FinalSelectorCellSetter
+import Proof.MachineModel.Runs
+import Proof.MachineModel.Layout
 
 /-! **Decision tail, stage 2b-iii(a) — the AND of the three verdicts.**
 

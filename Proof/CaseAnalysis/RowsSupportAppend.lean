@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RowsSupportSideStream
+import Proof.CaseAnalysis.RowsCircuitAppendFocus
 
 /-! Append a declared bitmap on the unchanged bottom-retention guard. The
 new output is outside the original bank; every original tape is restored. -/

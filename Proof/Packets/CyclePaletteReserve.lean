@@ -14,6 +14,7 @@ open NearCubicWires.RepairSource.ProjectionNormalization NearCubicWires.RepairSo
 open NearCubicWires.RepairSource.VerifierDecoding
 open Completion
 noncomputable section
+attribute [local irreducible] worker1 worker2 worker3 worker4 worker5 worker6 worker7 worker8
 
 attribute [local irreducible] List.replicate Nat.pow
 

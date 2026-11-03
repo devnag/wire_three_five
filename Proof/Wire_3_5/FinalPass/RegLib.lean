@@ -33,6 +33,10 @@ theorem setv_same (σ : RState ns nr) (r : Fin nr) : σ.setv r (σ.val r) = σ :
 theorem setv_setv (σ : RState ns nr) (r : Fin nr) (x y : ℕ) : (σ.setv r x).setv r y = σ.setv r y :=
   RState.eq rfl (by simp) rfl
 
+theorem setv_comm (σ : RState ns nr) {r r' : Fin nr} (x y : ℕ) (h : r ≠ r') :
+    (σ.setv r x).setv r' y = (σ.setv r' y).setv r x :=
+  RState.eq rfl (by simp [Function.update_comm h]) rfl
+
 /-! ## Moving and clearing registers -/
 
 /-- `b += a; a := 0`. -/
@@ -110,6 +114,9 @@ def RM.rewind (i : Fin (ns + 1)) (c : Fin nr) : RM ns nr := .whr c (.seq (.dec c
 theorem fwdC_spec (i : Fin (ns + 1)) (c : Fin nr) (σ : RState ns nr) (hc : σ.val c < cap) :
     RExec inp cap (RM.fwdC i c) σ ((σ.seth i (σ.sh i + 1)).setv c (σ.val c + 1)) 5 :=
   RExec.seq (RExec.fwd i σ) (RExec.inc c _ hc)
+
+theorem seth_seth (σ : RState ns nr) (i : Fin (ns + 1)) (x y : ℕ) : (σ.seth i x).seth i y = σ.seth i y :=
+  RState.eq (by simp) rfl rfl
 
 @[simp] theorem seth_sh_self (σ : RState ns nr) (i : Fin (ns + 1)) (x : ℕ) : (σ.seth i x).sh i = x := by simp
 

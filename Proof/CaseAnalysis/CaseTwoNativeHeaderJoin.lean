@@ -1,4 +1,6 @@
 import Proof.PCP.PCPPNativeClauseDescriptorForward
+import Proof.Assembly.AppendFrameKernel
+import Proof.PCP.PCPPNativeRequestSchema
 
 /-! Print the original native arity/count header from the physically
 retained counters, then copy the measured native node/output word once. -/

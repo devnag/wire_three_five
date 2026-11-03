@@ -1,4 +1,5 @@
-import Proof.Wire_3_5.Foundations.OutMachineSlot1W
+import Proof.Wire_3_5.Foundations.OutMachineSlot1WBase
+import Proof.Wire_3_5.Primitive.SeedFix.CarWM
 
 /-! # SA's slot 1, part 2: copying frames out of the framed input
 

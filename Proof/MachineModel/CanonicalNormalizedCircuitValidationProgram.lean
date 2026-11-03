@@ -1,4 +1,12 @@
+import Proof.MachineModel.CanonicalBalancedValidationMapProgram
+import Proof.MachineModel.CanonicalBoolListValidationProgram
+import Proof.MachineModel.CanonicalNativeCallProgram
+import Proof.MachineModel.CanonicalNativeEqualityProgram
+import Proof.MachineModel.CanonicalNatValidationProgram
 import Proof.MachineModel.CanonicalSupportedGateRelationProgram
+import Proof.MachineModel.CanonicalTaggedTupleProgram
+import Proof.MachineModel.PreserveRightProgram
+import Proof.MachineModel.TaggedProgramChoice
 
 /-!
 # Total normalized-circuit validation

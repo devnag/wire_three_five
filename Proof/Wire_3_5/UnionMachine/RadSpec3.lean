@@ -1,4 +1,5 @@
-import Proof.Wire_3_5.UnionMachine.RadSpec
+import Proof.Wire_3_5.Primitive.Writers.WriteNat
+import Proof.Wire_3_5.UnionMachine.RadSpecBase
 
 /-! # RADIX, Route B: the block writer on streams that are read in place (`RadBlockW3`)
 

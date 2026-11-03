@@ -1,5 +1,6 @@
-import Proof.Circuits.ValidatorCompositeLeafBounds
 import Proof.PCP.PaddedProjectionPresentedPCP
+import Proof.Circuits.ValidatorCompositeLeafBounds
+import Proof.Circuits.ValidatorPolynomialDomination
 
 namespace NearCubicWires.PaddedRunnerBudgetDomination
 

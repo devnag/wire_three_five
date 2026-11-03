@@ -1,5 +1,28 @@
+import Lean
+import Proof.Wire_3_5.FinalPass.DigsIface
+import Proof.Wire_3_5.FinalPass.SeamsProg2Base
+import Proof.Wire_3_5.Primitive.Writers.BudgetIface2
+import Proof.Wire_3_5.Primitive.Writers.PlanBase
+import Proof.Wire_3_5.Primitive.Writers.ThrDataIface3
+import Proof.Wire_3_5.Primitive.Writers.WritersJoinBase
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4Base
+import Proof.Wire_3_5.Primitive.ThresholdWriter.RadSetup2
+import Proof.Wire_3_5.Primitive.ThresholdWriter.ShellIface
+import Proof.Wire_3_5.UnionMachine.FiltSetupIface5
+import Proof.Wire_3_5.UnionMachine.RadSetupB3
+import Proof.Wire_3_5.UnionMachine.RadSpecBase
+import Proof.Wire_3_5.UnionMachine.ThrDecIfaceBase
 import Proof.Wire_3_5.Primitive.Writers.SymDecEmit
-import Proof.Wire_3_5.UnionMachine.ThrUnitIface3
+import Proof.Wire_3_5.UnionMachine.ThrDecIface
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # THRTAIL, part 1: the THR tape is the writer loop's units
 
@@ -49,3 +72,5 @@ theorem thr_loop_tape (b : ℕ) (hb : UnionMachine.ThrDec.thrTOT l F kclk coef A
 end Call
 
 end NearCubicWires.WireExponent3_5.PrimAsm.ThrTail
+
+end

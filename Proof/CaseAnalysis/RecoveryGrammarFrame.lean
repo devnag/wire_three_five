@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoveryGrammarContinue
+import Proof.MachineModel.OrdinaryRankScalar
 
 /-! Produce each grammar prototype's unary field from its actual scalar.
 The existing doubled-unary loop writes its payload; the existing fixed-word

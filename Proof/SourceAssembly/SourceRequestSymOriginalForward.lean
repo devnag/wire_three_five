@@ -295,9 +295,62 @@ theorem snat70 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRow
 theorem snat71 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.Symmetric.machine) (1688 : Fin 1704) :=
   snat70
 
+/-- `NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.append` at tape 1059. -/
+theorem ssup0 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.append) (1059 : Fin 1060) :=
+  (CursorRestore.focus_forward _ (by decide) _ (1 : Fin 3) RecoveryPCPFormulaResumeForward.field_append)
+
+/-- `NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.choice` at tape 1059. -/
+theorem ssup1 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.choice Bool.false) (1059 : Fin 1060) :=
+  (pair_forward _ _ _ _ (halt_forward _ _ (fun _ _ => rfl)) ssup0)
+
+/-- `NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.prefixMachine` at tape 1059. -/
+theorem ssup2 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.prefixMachine Bool.false) (1059 : Fin 1060) :=
+  (CursorRestore.composition_forward _ _ _ (EquationRowRaw.embedded_extra_forward _ (0 : Fin 1)) ssup1)
+
+/-- `NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.round` at tape 1059. -/
+theorem ssup3 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.round Bool.false) (1059 : Fin 1060) :=
+  (CursorRestore.composition_forward _ _ _ ssup2 (EquationRowRaw.embedded_extra_forward _ (0 : Fin 1)))
+
+/-- `NearCubicWires.RepairOrdinary.CloseoutRowsDegreeLoop.machine` at tape 1059. -/
+theorem ssup4 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsDegreeLoop.machine
+  (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.round Bool.false)) (1059 : Fin 1061) :=
+  (CursorRestore.repeat_forward _ _ (1059 : Fin 1060) ssup3)
+
+/-- `NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.loop` at tape 1059. -/
+theorem ssup5 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.loop Bool.false) (1059 : Fin 1061) :=
+  ssup4
+
+/-- `NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.Dock.machine` at tape 1703. -/
+theorem ssup6 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.Dock.machine Bool.false) (1703 : Fin 1704) :=
+  (CursorRestore.focus_forward _ CloseoutRowsSupportStream.Dock.slots_injective _ (1059 : Fin 1061) ssup5)
+
+/-- `NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.Dock.returned` at tape 1703. -/
+theorem ssup7 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.Dock.returned Bool.false) (1703 : Fin 1704) :=
+  (CursorRestore.composition_forward _ _ _ ssup6 (EquationRowRaw.embedded_extra_forward _ (0 : Fin 1)))
+
+/-- `NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.tail` at tape 1703. -/
+theorem ssup8 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.tail Bool.false) (1703 : Fin 1704) :=
+  (pair_forward _ _ _ _ ssup7 (EquationRowRaw.embedded_extra_forward _ (0 : Fin 1)))
+
+/-- `NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.body` at tape 1703. -/
+theorem ssup9 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.body Bool.false) (1703 : Fin 1704) :=
+  (CursorRestore.composition_forward _ _ _ (EquationRowRaw.embedded_extra_forward _ (0 : Fin 1)) ssup8)
+
+/-- `Sigma.snd` at tape 1703. -/
+theorem ssup10 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.Symmetric.program.snd) (1703 : Fin 1704) :=
+  (pair_forward _ _ _ _ (EquationRowRaw.embedded_extra_forward _ (0 : Fin 1)) ssup9)
+
+/-- `NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.Symmetric.machine` at tape 1703. -/
+theorem ssup11 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.Symmetric.machine) (1703 : Fin 1704) :=
+  ssup10
+
 /-- **The original SYM writer's native cursor (tape 1688) never moves left.** -/
 theorem native_forward :
     CursorRestore.NoLeft CloseoutRowsSupportStream.Symmetric.machine (1688 : Fin 1704) := snat71
+
+/-- **The original SYM writer's support cursor (tape 1703) never moves left.** -/
+theorem support_forward :
+    CursorRestore.NoLeft CloseoutRowsSupportStream.Symmetric.machine (1703 : Fin 1704) := ssup11
 
 end NearCubicWires.SourceRequest.SymOriginalForward
 

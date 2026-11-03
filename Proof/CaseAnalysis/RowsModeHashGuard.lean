@@ -1,5 +1,5 @@
-import Proof.CaseAnalysis.RowsModeHashCell
 import Proof.CaseAnalysis.RowsModeHashReady
+import Proof.CaseAnalysis.RowsModeHashCell
 
 /-! A paid actual hash-cell scan returns the bitmap and original level
 heads. Its three physical flags remain available to the literal Pair writer. -/

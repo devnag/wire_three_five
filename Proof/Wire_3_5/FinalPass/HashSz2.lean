@@ -1,6 +1,21 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.HashSz1
 import Proof.Wire_3_5.FinalPass.ThrSz3
+import Proof.Wire_3_5.FinalPass.SymCap2Base
+import Proof.Wire_3_5.Primitive.Writers.BShape1
 import Proof.Wire_3_5.Primitive.SeedFix.C4HD
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.HashSz1Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The HASH call's sizes, part 2: the field, the weights, the aux seeds, the pool (F-free)
 
@@ -234,3 +249,5 @@ theorem G_le (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ} (ha' : a' 
 end Gate
 
 end NearCubicWires.WireExponent3_5.FinalPass.HashFr
+
+end

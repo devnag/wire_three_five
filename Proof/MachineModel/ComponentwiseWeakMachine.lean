@@ -1,3 +1,4 @@
+import Proof.Foundations.ComponentwiseValidity
 import Proof.Foundations.ComponentwiseVerifierParameters
 
 /-!

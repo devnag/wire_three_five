@@ -1,8 +1,27 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.ThrTB2
 import Proof.Wire_3_5.Primitive.SeedFix.ThrDecQ7
 import Proof.Wire_3_5.UnionMachine.ThrDimG
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.ThrDimIface
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDecQ5
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.ThrDecIface
+import Proof.Wire_3_5.UnionMachine.ThrDimC
+import Proof.Wire_3_5.UnionMachine.ThrDimN
+import Proof.Wire_3_5.UnionMachine.ThrUnitIface5
+import Proof.Wire_3_5.UnionMachine.ThrUnitMeas
+import Proof.Wire_3_5.Primitive.SeedFix.ThrTB3Base
 
-/-! # THRTAIL T-B, part 3: the THR dimension at a call
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # T3 THRTAIL T-B, part 3: the THR dimension at a call
 
 T-A's stage `thrDimStageG l F K_L K_f` at the call's star parameters `P`: its dimension `m_T P` lies
 between `k + L + K_L·L² + K_f·Ψ_T` and `k + L + K_L·L² + 8K_f·Ψ_T` (`m_ge`, `m_le`; `mOf P = 2k_h + L = k + L`,
@@ -25,9 +44,6 @@ open NearCubicWires.WireExponent3_5.Primitive NearCubicWires.SupplierPipeline Ne
 /-- The dimension's `L²` coefficient (from `(l, f_e, D₀)`). -/
 noncomputable def kLT (l : Literals) (fe D0 : ℕ) : ℕ :=
   D0 + ThrDecF.aE l fe + 2 * ThrDecF.dT l + ThrMeas.KR l + 8
-
-/-- The dimension's load multiplier (from `D₀`). -/
-def kFT (D0 : ℕ) : ℕ := D0 + 1
 
 /-- The loop's coefficient (from `F`): `11·Q_F² + 1`. -/
 noncomputable def cLT (l : Literals) (F : GateFree l) : ℕ := 11 * (ThrDecF.qF l F * ThrDecF.qF l F) + 1
@@ -192,3 +208,5 @@ theorem w_le_dim (fe D0 : ℕ) :
 end Cover
 
 end NearCubicWires.WireExponent3_5.PrimT.ThrTB
+
+end

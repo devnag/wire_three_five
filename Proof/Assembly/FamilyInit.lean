@@ -1,4 +1,15 @@
+import Proof.Amplification.RecoveryScratchErase
 import Proof.Assembly.Generator
+import Proof.Assembly.NativeNativeSelected
+import Proof.Assembly.NativeValues
+import Proof.CaseAnalysis.FinalModeNativeStageFields
+import Proof.CaseAnalysis.FinalSupplierAccuracyChain
+import Proof.CaseAnalysis.RowsSupportTyped
+import Proof.CaseAnalysis.RowsTupleSeekDock
+import Proof.CaseAnalysis.RowsTupleSeekFamilyRewind
+import Proof.CaseAnalysis.WitnessPaddedReset
+import Proof.MachineModel.CacheRewind
+import Proof.MachineModel.Encoding
 
 /-! A concrete two-stage generator: descriptor/scalar production followed by
 one blank-bank initializer. The initializer is uniform in runtime values.
@@ -29,6 +40,19 @@ structure Scalars where
   b : Nat
   v : Nat
   N : Nat
+
+@[irreducible] noncomputable def initTapes (a : WilliamsAlgorithm) : Nat := r_tapes a+7
+
+def drivers (m : Scalars) : Fin 7 → List Bool :=
+  ![CompareMachine.word m.S, CompareMachine.word m.R,
+    CompareMachine.word m.B, CompareMachine.word m.b,
+    CompareMachine.word m.v, CompareMachine.word m.N,
+    CompareMachine.word (m.N*m.b)]
+
+/-- A fixed linear allowance for all blank allocation, copies, framing and
+head restoration. It is charged once per whole generated family. -/
+noncomputable def initFuel (a : WilliamsAlgorithm) (m : Scalars) : Nat :=
+  1000*(r_tapes a+1)*(m.S+m.R+m.B+m.b+m.v+m.N+m.N*m.b+1)
 
 /-- Prefix code starts at the actual nine-word Input bank. Its result carries
 semantic fields and its complete physical exit, before initialization. -/

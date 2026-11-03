@@ -1,5 +1,5 @@
-import Proof.CaseAnalysis.RowsEstimatorPaidOwned
 import Proof.MachineModel.TopDownPaidPayload
+import Proof.CaseAnalysis.RowsEstimatorPaidPost
 
 /-! Apply the existing paid retirement/backing parent before extracting the
 already-computed count. No scan of an old false-tail length is introduced.

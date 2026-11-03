@@ -1,3 +1,5 @@
+import Proof.Wire_3_5.UnionMachine.UnionSchedule
+import Proof.Wire_3_5.UnionMachine.UnionAtoms
 import Proof.Wire_3_5.UnionMachine.FrontKit
 
 /-! # C6 front, U5: the canonical code writers' interface (the portable tail pool)
@@ -9,7 +11,7 @@ of its encoding parity, `UnionCheckData.carrier`), and the canonical codes `Mode
 setup supplies: the encoding parity of each systematic support ("Systematic parities are constructed from the PCPP
 output", P3:3672) and the constant. This module fixes the three writers' types; whoever builds them fills these
 structures (base `PCPPRequestPair` / `PCPPRequestTaggedCons` / `PCPPRequestCircuitTag` / `DecompositionSignedPair`,
-the Theorem 2.5 repository's balanced-list serializer, PA's codec kit).
+v8's balanced-list serializer, PA's codec kit).
 
 Each writer is a clean word-to-word machine (**`WordStage`**): from `frame u` on its input tape, every other tape
 blank and every head at `0`, it halts with `frame u` kept, `frame v` on its output tape, every other tape blank and
@@ -17,9 +19,10 @@ every head at `0`, within `K·(|u| + q + 1)^d` steps (`K`, `d` fixed by the writ
 writer once per PCPP variable on the same tapes.
 
 * **`CarrierWriter m`** (`carrier_ready`): `u` = the codes `natWord (m.code c)` of a list of circuits `cs`, `v` =
-  `natWord (Carrier.code ((cs.map m.gates).flatten))`; at `cs = carrierAtoms D X` this is the code of `D.carrier X` (**`carrier_eq`**).
+  `natWord (Carrier.code ((cs.map m.gates).flatten))`; at `cs = carrierAtoms D X` this is the code of T's
+  `D.carrier X` (**`carrier_eq`**).
 * **`ParityWriter m`** (`parity_ready`): `u` = the support's bitmap over `Fin q`, `v` = `natWord (m.code
-  (unionParityAtom m q S))` (LANE T's `D.parity X` at `S = D.support X`, **`parity_eq`**).
+  (unionParityAtom m q S))` (`D.parity X` at `S = D.support X`, **`parity_eq`**).
 * **`ConstWriter m`** (`const_ready`): `u = 1^q`, `v` = `natWord (m.code (unionConstAtom m q))` (`D.const`).
 
 Paper quantity of the main types: the codes of the calls' named carriers and of the setup's atoms. -/

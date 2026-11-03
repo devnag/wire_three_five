@@ -1,5 +1,7 @@
-import Proof.CaseAnalysis.RowsEstimatorDriverBounds
 import Proof.CaseAnalysis.RowsEstimatorDriverPorts
+import Proof.CaseAnalysis.RowsEstimatorDriverBounds
+import Proof.Hierarchy.CompetitorCrossRequestHeaders
+import Proof.MachineModel.ClockUnarySum
 
 /-! Fixed physical call graph for the estimator reset driver.
 All constants depend only on the Williams algorithm; d,p,G,C are tape inputs. -/
@@ -13,6 +15,9 @@ set_option warningAsError true
 
 noncomputable abbrev e (a : WilliamsAlgorithm) := CompetitorCrossScheduler.exponent a
 noncomputable def tapes (a : WilliamsAlgorithm) := 99+2*e a
+noncomputable def input (a : WilliamsAlgorithm) (d p G C : ℕ) : Fin (tapes a) → List Bool :=
+  fun i => if i.val=0 then List.replicate d true else if i.val=1 then List.replicate p true
+    else if i.val=2 then List.replicate G true else if i.val=3 then List.replicate C true else []
 
 noncomputable def source0 (a : WilliamsAlgorithm) : Fin 2 → Fin (tapes a) := ![⟨0,by dsimp [tapes];omega⟩,⟨1,by dsimp [tapes];omega⟩]
 noncomputable def slots0 (a : WilliamsAlgorithm) : Fin (4) → Fin (tapes a) :=

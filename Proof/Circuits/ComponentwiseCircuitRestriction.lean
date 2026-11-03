@@ -1,5 +1,6 @@
-import Proof.Circuits.CanonicalWitnessCodec
 import Proof.Foundations.CircuitRestriction
+import Proof.Circuits.CanonicalWitnessCodec
+import Proof.Foundations.SupplierPipeline
 
 /-!
 # Canonical occurrence restrictions for normalized supplier atoms

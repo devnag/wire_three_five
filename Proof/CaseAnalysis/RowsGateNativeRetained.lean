@@ -1,3 +1,4 @@
+import Proof.Amplification.RecoveryFocusRetained
 import Proof.CaseAnalysis.RowsGateSourceRequest
 
 /-! Original native weights and the original support bitmap are read-only

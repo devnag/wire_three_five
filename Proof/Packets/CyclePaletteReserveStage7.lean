@@ -1,5 +1,4 @@
-import Proof.CaseAnalysis.CapacityPower
-import Proof.Packets.UnaryAffine
+import Proof.Packets.CyclePaletteReserveStage6
 
 /-! A fixed 80-tape program physically generates the shared reset reserve
 2^102*(B+1)^20*2^(40*w) from the measured pool and chosen width templates.
@@ -15,10 +14,14 @@ open NearCubicWires.RepairSource.ProjectionNormalization NearCubicWires.RepairSo
 open NearCubicWires.RepairSource.VerifierDecoding
 open Completion
 noncomputable section
+attribute [local irreducible] worker1 worker2 worker3 worker4 worker5 worker6 worker7 worker8
 
 attribute [local irreducible] List.replicate Nat.pow
 
+def slots7 : Fin 4→Fin 80 := ![46,72,76,77]
+def phase7 := RecoveryFocus.machine slots7 worker7
 
+def joined7 := Composition.machine joined6 phase7
 
 end
 end Theorem25Completion.CyclePaletteReserve

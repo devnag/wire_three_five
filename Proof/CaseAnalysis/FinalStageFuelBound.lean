@@ -1,4 +1,7 @@
 import Proof.CaseAnalysis.FinalFuelMajorant
+import Proof.MachineModel.OrdinarySignedSortKey
+import Proof.Hierarchy.CompetitorWitnessTripleSemantics
+import Proof.CaseAnalysis.WitnessOracleParameter
 
 /-! # `StageBlock.hfuel`: what it actually demands, and where the demand comes from
 
@@ -60,9 +63,96 @@ set_option maxRecDepth 120000
 set_option warningAsError true
 noncomputable section
 
+variable (sources : EightSources) (k : ℕ) {gamma : ℝ} (p : Parameters sources gamma)
+  (S : StageData sources k p)
+
 /-! ## §1 The closed form: `actualFuel` is the call counts and nothing else -/
 
+/-- **The stage's demanded fuel, as a function of the input length and the three
+per-phase CALL COUNTS.**  Every summand is one of the corpus's own budgets at
+`S.stageFuel ph n`, `S.entryWidth n` and `c ph`; the gate charge is the soundness
+cutoff.  There is no `Nat` subtraction and no `Nat.log` anywhere in it. -/
+def fuelAt (n : ℕ) (c : Phase → ℕ) : ℕ :=
+  workerBudget (Soundness.cutoff (constantsOf sources))
+    (fun _ => C10ComposeWidths.innerFuel
+      (fun ph => stagedFuel (S.stageFuel ph)
+        (fun _ => CloseoutFinalC10WorkerEmitLoader.emitFuel
+          (joinScalarWidth (S.entryWidth n) (c ph)))
+        (S.entryWidth n) (c ph) n)
+      (fun ph => joinScalarWidth (S.entryWidth n) (c ph))
+      C10TailVerdictUniform.tbud) n
+
+/-- The fold's scalar width is the join width at the call count. -/
+theorem widthOf_eq {n : ℕ} (x : BitInput n) (bits : List Bool) (ph : Phase) :
+    widthOf sources k p S x bits ph
+      = joinScalarWidth (S.entryWidth n) (records sources k p S x bits ph).length := by
+  unfold widthOf
+  exact foldWidth_eq_joinScalarWidth (S.entryWidth n) _
+
+/-- **`actualFuel` depends on the witness ONLY through the three call counts.** -/
+theorem actualFuel_eq {n : ℕ} (x : BitInput n) (bits : List Bool) :
+    actualFuel sources k p S x bits
+      = fuelAt sources k p S n (fun ph => (records sources k p S x bits ph).length) := by
+  have hF : phaseFuel sources k p S x bits
+      = fun ph => stagedFuel (S.stageFuel ph)
+          (fun _ => CloseoutFinalC10WorkerEmitLoader.emitFuel
+            (joinScalarWidth (S.entryWidth n) (records sources k p S x bits ph).length))
+          (S.entryWidth n) (records sources k p S x bits ph).length n := by
+    funext ph
+    rfl
+  have hW : widthOf sources k p S x bits
+      = fun ph => joinScalarWidth (S.entryWidth n) (records sources k p S x bits ph).length := by
+    funext ph
+    exact widthOf_eq sources k p S x bits ph
+  unfold actualFuel fuelAt
+  rw [hF, hW]
+
 /-! ## §2 Monotone up, bounded below: the exact satisfiability criterion -/
+
+theorem lengths_mono {W W' : Phase → ℕ} (h : ∀ ph, W ph ≤ W' ph) (j : Fin 6) :
+    C10ComposeWidths.lengths W j ≤ C10ComposeWidths.lengths W' j := by
+  unfold C10ComposeWidths.lengths
+  have hj := h (C10WidthCopies.phaseOf j)
+  split
+  · exact hj
+  · unfold CompetitorRationalDecision.width
+    omega
+
+theorem widthCopies_budget_mono {V V' : Fin 6 → ℕ} (h : ∀ j, V j ≤ V' j) :
+    C10WidthCopies.budget V ≤ C10WidthCopies.budget V' := by
+  unfold C10WidthCopies.budget C10WidthCopies.charge
+  have h0 := h 0
+  have h1 := h 1
+  have h2 := h 2
+  have h3 := h 3
+  have h4 := h 4
+  have h5 := h 5
+  omega
+
+theorem maxWidth_mono {W W' : Phase → ℕ} (h : ∀ ph, W ph ≤ W' ph) :
+    C10ComposeWidths.maxWidth W ≤ C10ComposeWidths.maxWidth W' := by
+  unfold C10ComposeWidths.maxWidth
+  exact max_le_max (h Phase.penalty) (max_le_max (h Phase.moment) (h Phase.clause))
+
+theorem innerFuel_mono {F F' W W' : Phase → ℕ} (hF : ∀ ph, F ph ≤ F' ph)
+    (hW : ∀ ph, W ph ≤ W' ph) :
+    C10ComposeWidths.innerFuel F W C10TailVerdictUniform.tbud ≤
+      C10ComposeWidths.innerFuel F' W' C10TailVerdictUniform.tbud := by
+  unfold C10ComposeWidths.innerFuel C10ComposeWidths.bodyFuel
+  have h1 := C10FuelMajorant.bodyThreeFuel_mono hF
+  have h2 := widthCopies_budget_mono (fun j => lengths_mono hW j)
+  have h3 := C10TailVerdictUniform.tbud_mono (maxWidth_mono hW)
+  omega
+
+/-- **The demanded fuel is monotone in the call counts** -- the direction the
+consumer needs, since `hfuel` is an UPPER bound on `actualFuel`. -/
+theorem fuelAt_mono (n : ℕ) {c c' : Phase → ℕ} (h : ∀ ph, c ph ≤ c' ph) :
+    fuelAt sources k p S n c ≤ fuelAt sources k p S n c' := by
+  unfold fuelAt
+  refine workerBudget_mono _ _ _ n ?_
+  exact innerFuel_mono
+    (fun ph => C10FuelMajorant.stagedFuel_mono (S.stageFuel ph) (S.entryWidth n) n (h ph))
+    (fun ph => joinScalarWidth_mono (S.entryWidth n) (h ph))
 
 /-! ## §3 The decoded oracle: the RAW decoder is free, and the gate is what
 bounds it -/

@@ -1,5 +1,5 @@
 import Proof.PCP.PCPPNativeCounterNodes
-import Proof.PCP.PCPPNativeHierarchyCountersLayout
+import Proof.PCP.PCPPNativeHierarchyCountersDock
 
 /-! The same literal original hierarchy fields feed the complete counted
 node emitter; its workspace is fresh and its counters execute once. -/

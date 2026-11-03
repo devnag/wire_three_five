@@ -1,6 +1,7 @@
-import Proof.Hierarchy.CompetitorSameBucketGroupCompare
-import Proof.Hierarchy.CompetitorSameBucketGroupEntry
+import Proof.Hierarchy.CompetitorSameBucketGroupArithmeticFields
 import Proof.Hierarchy.CompetitorSameBucketGroupFlush
+import Proof.Hierarchy.CompetitorSameBucketGroupEntry
+import Proof.Hierarchy.CompetitorSameBucketGroupCompare
 
 /-! Fixed shared physical bank for the signed grouping scan. The public cold
 source and width inputs occupy 0..3; raw dense output is appended on 4.

@@ -42,6 +42,12 @@ theorem output_records (K I inner a b : ℕ) (mask : Bool) (records : List KeyLo
     KeyLoop.output K I inner a b mask records = recordsBits (generated K I inner a b mask records) := by
   simp [KeyLoop.output, generated, recordsBits, recordBits, key, frame, List.flatMap_map]
 
+def request (K I inner a b : ℕ) (mask : Bool) (records : List KeyLoop.Record) : SortCarrier.Request :=
+  DominanceSort.fixedRequest (generated K I inner a b mask records) (I + K + 1) (by
+    intro r hr
+    obtain ⟨e, _, rfl⟩ := List.mem_map.mp hr
+    exact key_width _ _ _ _ _)
+
 theorem coordinate_index {Gates Buckets : ℕ} (gate : Fin Gates) (bucket : Fin Buckets) :
     (finProdFinEquiv (gate, bucket)).val = gate.val * Buckets + bucket.val := by
   change bucket.val + Buckets * gate.val = _

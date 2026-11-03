@@ -1,6 +1,25 @@
-import Proof.Wire_3_5.Primitive.SeedFix.C4CapD
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.C4SymKB
+import Proof.Wire_3_5.Primitive.SeedFix.C4CapD
+import Proof.Wire_3_5.Primitive.Writers.SymFamBase
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.CallSize
+import Proof.Wire_3_5.Primitive.Writers.HashFam
+import Proof.Wire_3_5.Primitive.Writers.Plan
 import Proof.Wire_3_5.Primitive.Writers.SymFam
+import Proof.Wire_3_5.Primitive.Writers.SymHelp
+import Proof.Wire_3_5.Primitive.Writers.SymNeed
+import Proof.Wire_3_5.Primitive.SeedFix.C4GateSymB
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Assembly.Split
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # C4.K SYM item (b), part 1: the numbers front's needs at every SYM call (the discharge, at any cap)
 
@@ -282,3 +301,5 @@ theorem sym_needs (l : Literals) (F : GateFree l) (kclk coef A a0 : ℕ) (ha0 : 
   · show (cyOf Cs).getD 3 0 ≤ cap; have := hy 3; omega
 
 end NearCubicWires.WireExponent3_5.PrimT.C4SymN
+
+end

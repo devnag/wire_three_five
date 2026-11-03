@@ -1,4 +1,5 @@
 import Proof.MachineModel.NativeAllocation
+import Proof.CaseAnalysis.RowsCapacityDriver
 
 /-! The six actual native dimensions produce the exact preparation scale
 and exponent. The mode exponent w is separate from the native field width. -/

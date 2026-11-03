@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryMatrixScoreWeightLayout
+import Proof.Amplification.RecoveryScratchErase
 
 /-! Existing scalar kernels on the literal reusable grouping workspace.
 Every returned padding byte is accounted for; the caller executes the

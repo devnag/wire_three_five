@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.UnionMachine.FrontSemSize
+import Proof.Wire_3_5.UnionMachine.FrontSemSizeBase
 
 /-! # C6 front, the semantic core (11): a carrier's gates are bounded by its code (P3:3409-3410, 3673)
 

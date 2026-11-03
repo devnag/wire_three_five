@@ -1,5 +1,6 @@
 import Proof.PCP.PCPPNativeClauseDescriptorSource
 import Proof.PCP.PCPPNativeHierarchyNodesForward
+import Proof.PCP.PCPSerializerCapacityBounds
 
 /-! Fixed-degree costs of the actual measured C/F/G producer and original
 query loop. The carrier is the shared measured native resource value. -/

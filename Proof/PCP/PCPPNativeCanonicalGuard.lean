@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeCanonicalGuardLayout
+import Proof.Amplification.RecoveryFocusDock
 
 /-! Total cold guard for an arbitrary canonical tagged pair. The exact same
 ordinary extractor serves circuit and legal-sum headers, preserving both

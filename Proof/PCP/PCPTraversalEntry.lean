@@ -1,4 +1,5 @@
 import Proof.PCP.PCPTraversalLayout
+import Proof.Amplification.RecoveryCursorCalls
 
 /-! The serializer's actual cold capacity and count calls, inside its fixed
 finite traversal controller. No mass, width, capacity or current-count tape

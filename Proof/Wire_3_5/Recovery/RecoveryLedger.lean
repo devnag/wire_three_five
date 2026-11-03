@@ -1,5 +1,9 @@
-import Proof.Wire_3_5.Recovery.RecoverySlice
-import Proof.Wire_3_5.Recovery.RecoveryLanguage
+import Proof.CaseAnalysis.CaseOneHardness
+import Proof.CaseAnalysis.CaseTwoDirect
+import Proof.Wire_3_5.Recovery.RecoveryFamily
+import Proof.Wire_3_5.UnionMachine.UnionCodecBase
+import Proof.Wire_3_5.UnionMachine.UnionSchedule
+import Proof.Wire_3_5.Recovery.RecoveryLanguageBase
 
 /-! # The recovery's ledger conditions hold eventually (P3:3399-3430, 3616-3626, 3669-3697; D1.5)
 

@@ -1,5 +1,6 @@
 import Proof.Amplification.RecoveryEncodedNPVerifier
 import Proof.MachineModel.OrdinarySourceSATLiftRequest
+import Proof.Foundations.HierarchySourceContract
 
 /-! Derive the physical lifted-refuter budget from the selected source and
 its actual polynomial clock; no runtime bound is a new input premise. -/

@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.FinalPass.SeamsProg
+import Proof.Wire_3_5.FinalPass.SeamsProgBase
 
 /-! # The per-point seam with a blank cell at entry
 

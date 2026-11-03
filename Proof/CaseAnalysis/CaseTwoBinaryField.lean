@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CaseTwoSliceFrame
+import Proof.MachineModel.OrdinaryMatrixUnaryTemplate
 
 /-! One real binary address field produces its exact unary query index.
 The width and offset are paid input scalars. The original slice/framer and

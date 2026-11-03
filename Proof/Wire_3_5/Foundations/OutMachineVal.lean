@@ -1,6 +1,6 @@
-import Proof.Wire_3_5.Foundations.OutMachineIface
+import Proof.Wire_3_5.Foundations.OutMachineIfaceBase
 
-/-! # The output machine: the values of the out machine's gcd (P1–P3)
+/-! # X6: the values of the out machine's gcd (P1–P3)
 
 "This takes polynomial time without evaluating a monomial expansion" (P3:3175-3178): the out machine reduces
 `Num/Den` (P3:3044-3048) by a binary gcd with FIXED round counts, so its cost is a polynomial in `W` with no

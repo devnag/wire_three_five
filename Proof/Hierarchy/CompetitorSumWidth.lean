@@ -1,4 +1,4 @@
-import Proof.Hierarchy.CompetitorRationalSum
+import Proof.Hierarchy.CompetitorReusableSum
 
 /-! A single polynomial scalar width for every prefix of the literal signed
 rational fold. Multiplication is performed at local width 2B+2; the crop to
@@ -77,5 +77,10 @@ theorem trace_from_bound (n k j : ℕ) (a : Estimate) (xs : List Estimate)
       (step_bound (2^k) j a c ha hc.positive.le hc.negative.le hc.denominator.le hc.denominatorPositive)
     intro d hd
     exact hxs d (by simp [hd])
+
+theorem uniform_trace (k : ℕ) (xs : List Estimate) (hxs : ∀ c∈xs,c.Valid k) :
+    Trace (width xs.length k) zero xs := by
+  apply trace_from_bound xs.length k 0 zero xs (by omega) _ hxs
+  constructor <;> simp [zero]
 
 end NearCubicWires.RepairOrdinary.CompetitorSumWidth

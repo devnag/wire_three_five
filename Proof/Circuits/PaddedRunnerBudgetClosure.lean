@@ -105,6 +105,16 @@ theorem sourcePoly_id : SourcePoly (fun n => n) :=
     rw [Nat.one_mul, Nat.pow_one]
     omega
 
+/-- **The clock is a polynomial.**  This is the ledger's only genuine
+arithmetic input. -/
+theorem sourcePoly_pairClock (clockDepth : ℕ) :
+    SourcePoly (fun n => pairClock clockDepth n) :=
+  sourcePoly_of_le 1 (2 ^ clockDepth) fun n => by
+    have hclock := pairIter_add_one_le_pow clockDepth n
+    rw [Nat.one_mul]
+    change pairIter clockDepth n ≤ (n + 1) ^ 2 ^ clockDepth
+    omega
+
 theorem sourcePoly_pow {charge : ℕ → ℕ} (h : SourcePoly charge)
     (exponent : ℕ) : SourcePoly (fun n => charge n ^ exponent) := by
   obtain ⟨degree, coefficient, hbound⟩ := h

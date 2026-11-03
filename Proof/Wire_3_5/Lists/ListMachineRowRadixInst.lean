@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Lists.ListMachineRowRadixSem
+import Proof.Wire_3_5.Lists.ListMachineRowPopContract
 
 /-! # C2 rows, part 24: the RADIX row's digit lists, instantiated (P3:2598-2614)
 

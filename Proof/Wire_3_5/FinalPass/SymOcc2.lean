@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.FinalPass.SymOcc
+import Proof.Wire_3_5.FinalPass.SymPool
 
 /-! # The printer's gate budget at a SYM call, part 2: the pool's and the expression's sizes
 

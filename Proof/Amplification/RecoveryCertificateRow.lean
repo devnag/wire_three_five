@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryCertificateField
+import Proof.MachineModel.OrdinaryBoundedCounter
 
 /-! A physical row is retained as its four fixed-width fields in one frame.
 One existing bounded field read therefore parses an entire row. Scalar

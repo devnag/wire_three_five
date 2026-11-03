@@ -1,5 +1,4 @@
-import Proof.Supplier.RowTupleCommonEquation
-import Proof.Supplier.RowTupleCursorReady
+import Proof.Supplier.RowTupleCursorEquation
 
 /-! Paid per-tuple cleanup clears only the coordinate counter, occurrence
 stream and occurrence count, and restores their consumer heads. All other

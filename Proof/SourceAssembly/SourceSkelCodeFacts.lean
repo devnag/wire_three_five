@@ -17,6 +17,10 @@ noncomputable section
 attribute [local irreducible] P1TopDownPaidPayload.tapes
 
 section code
+variable (mask : MaskProducer) {selector : CyclicChoice.Laws}
+  (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector)
+  (rows : PCJc4297ab269d8423a_Source.RowLibrary selector) (sources : EightSources)
+  (res : Nat) (hres : 19 ≤ res) {gamma : Real} (p : Parameters sources gamma) (k r : Nat)
 
 set_option hygiene false in
 local notation "𝔇" => dimsOf mask packets rows sources res p k r

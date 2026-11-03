@@ -1,5 +1,6 @@
-import Proof.CaseAnalysis.RowsIntegerListMeaning
 import Proof.CaseAnalysis.RowsIntegerPrefix
+import Proof.CaseAnalysis.RowsIntegerListMeaning
+import Proof.Circuits.DecompositionCountPosition
 
 /-! One paid head-positioning step enters the already checked counted
 integer loop on the exact cold-produced stream, count and reusable bank. -/

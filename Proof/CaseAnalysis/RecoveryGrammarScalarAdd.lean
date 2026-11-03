@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.RecoveryGrammarNodeRow
+import Proof.PCP.PCPUnaryCopy
+import Proof.MachineModel.ClockUnarySum
 
 /-! Paid in-place addition of two retained unary grammar scalars. The
 existing sum, erase and copy machines restore all heads and both logs. -/

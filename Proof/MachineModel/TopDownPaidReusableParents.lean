@@ -1,5 +1,5 @@
-import Proof.CaseAnalysis.FinalThresholdEstimateRowJoin
 import Proof.MachineModel.TopDownPaidReusableFamily
+import Proof.CaseAnalysis.FinalThresholdEstimateRowJoin
 
 /-! Apply the completed physical hrow to both existing family consumers.
 The list-to-payload equality is the explicit upstream semantic contract;

@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.UnionMachine.RadFields
+import Proof.Wire_3_5.Primitive.Writers.UnaryArith
 
 /-! # RADIX, stage 4 (2): the contribution field `fieldsU (consFrom M p 2 0 τ)` (P3:2608-2618)
 
@@ -280,6 +281,7 @@ theorem hbW_spec (a : Fin 24) (ha3 : a ≠ 3) (ha6 : a ≠ 6) (ha16 : a ≠ 16) 
       Nat.mul_le_mul_left _ (by nlinarith)
     simp only [WState.setv_val, Function.update_self]
     omega
+
 
 theorem posE_neg (p m w : ℕ) : posE p m (p - w) = negE p m w := rfl
 

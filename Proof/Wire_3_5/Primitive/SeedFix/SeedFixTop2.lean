@@ -1,5 +1,18 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTop
 import Proof.Wire_3_5.Primitive.Writers.PreLink
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.WriterIfaceJ
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTypes
+import Proof.Wire_3_5.Primitive.Writers.PreLinkBase
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTopBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # SEEDFIX: the enclosing term with the writers' load-constant floor
 
@@ -42,3 +55,5 @@ noncomputable def seedFixLeaf_of2 (l : Literals) (w : WriterLeafJ2 l) (c4 : C4Le
         (envMax (w fe).1 (c4 fe).1) (classLE_envMax_left _ _) (classLE_envMax_right _ _)⟩⟩
 
 end NearCubicWires.WireExponent3_5.PrimT.SeedFixTop2
+
+end

@@ -1,3 +1,5 @@
+import Proof.MachineModel.BankRefuterWordFrameProgram
+import Proof.MachineModel.BankScheduleDiagonal
 import Proof.MachineModel.RuntimeCaseTwoSubstitutedEncodingClosure
 
 /-!

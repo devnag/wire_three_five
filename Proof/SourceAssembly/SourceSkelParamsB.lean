@@ -1,9 +1,4 @@
-import Proof.Packets.BudgetFirst3
-import Proof.Packets.BudgetReaderCaps
-import Proof.SourceAssembly.SourceFirstCore3
-import Proof.SourceAssembly.SourceInitLayout
-import Proof.SourceAssembly.SourceRequestCurComp
-import Proof.SourceAssembly.SourceSkelFillB
+import Proof.SourceAssembly.SourceSkelParams
 
 section
 set_option autoImplicit false
@@ -18,6 +13,12 @@ open PCJc4297ab269d8423a_Source
 open NearCubicWires.SourceConstruction NearCubicWires.SourceConstruction.InitRun
 namespace NearCubicWires.SourceSkeleton.Params
 noncomputable section
+
+structure ParamIn2 (selector : CyclicChoice.Laws) extends ParamIn selector where
+  polyC : (mask : MaskProducer) → PCJc4297ab269d8423a_Source.PacketLibrary selector →
+    PCJc4297ab269d8423a_Source.RowLibrary selector → SourceBudget.ParNat
+  polyE : (mask : MaskProducer) → PCJc4297ab269d8423a_Source.PacketLibrary selector →
+    PCJc4297ab269d8423a_Source.RowLibrary selector → SourceBudget.ParNat
 
 end
 end NearCubicWires.SourceSkeleton.Params

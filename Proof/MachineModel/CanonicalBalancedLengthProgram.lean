@@ -1,4 +1,6 @@
+import Proof.Circuits.CanonicalBalancedTraversal
 import Proof.MachineModel.CanonicalSupplierSupportCompressionProgram
+import Proof.Foundations.VerifiedLinker
 
 namespace NearCubicWires.CanonicalBalancedLengthProgram
 

@@ -1,4 +1,5 @@
 import Proof.Hierarchy.CompetitorCrossTableBounds
+import Proof.MachineModel.OrdinaryMatrixScorePower
 
 /-! Cold request headers and the actual U=2^d producer at reusable endpoints.
 Only the existing header and power machines execute, each with its paid reset. -/

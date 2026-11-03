@@ -1,0 +1,21 @@
+import Proof.SourceAssembly.SourceFactorSelSlot
+
+set_option autoImplicit false
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedVariables false
+
+namespace NearCubicWires.SourceFactorSel.SlotDock
+open NearCubicWires LocalBitMultitape ExtDecompositionBatch RepairOrdinary RepairOrdinary.RecoveryRootRound
+open NearCubicWires.SourceFactorSel.Slot NearCubicWires.SourceRequest.TermReader
+noncomputable section
+
+section
+open RepairRepresentation SupplierPipeline SourceInterfaces SupplierEstimator NearCubicWires.RepairSource
+open NearCubicWires.RepairSource.CloseoutFinal NearCubicWires.SourceRequest
+open NearCubicWires.SourceFactorSel.Modes (kindOf bmOf bitsOf)
+
+end
+end
+end NearCubicWires.SourceFactorSel.SlotDock
+

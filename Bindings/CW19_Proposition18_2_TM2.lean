@@ -1,5 +1,6 @@
-import Bindings.CW19_Proposition18_2
 import Bindings.TuringBridge.Budget
+import Bindings.CW19_Proposition18_2
+import Statement
 
 /-!
 # Tier 2 binding: CW19 Proposition 18(2), the construction in Mathlib's standard model

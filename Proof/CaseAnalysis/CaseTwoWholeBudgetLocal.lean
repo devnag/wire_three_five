@@ -1,5 +1,7 @@
 import Proof.CaseAnalysis.CaseTwoWholeBlockReset
+import Proof.PCP.PCPPNativeCanonicalBounds
 import Proof.Circuits.PaddedRunnerBudgetClosure
+import Proof.CaseAnalysis.ScheduleBounds
 
 /-! Coarse bounds for the original Case 2 occurrence worker. The same PCPP
 source bounds every actual clause and assignment index. -/

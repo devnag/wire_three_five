@@ -1,4 +1,6 @@
 import Proof.Circuits.InverseTotalScheduledRowStageClosure
+import Proof.Circuits.SelectorDrivenRegisterTargetChainBase
+import Proof.Circuits.UniformTargetTotalRun
 
 /-! # Total direct selector Case-one chain -/
 

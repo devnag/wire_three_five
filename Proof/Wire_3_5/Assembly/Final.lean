@@ -1,34 +1,29 @@
-import Batteries.Tactic.OpenPrivate
 import Lean
-import Lean.Elab.Tactic.Omega
-import Mathlib
-import Mathlib.Algebra.Order.Floor.Semifield
-import Mathlib.Data.Fin.Basic
-import Mathlib.Data.Fintype.Fin
-import Mathlib.Data.List.Dedup
-import Mathlib.Data.List.GetD
-import Mathlib.Data.List.Induction
-import Mathlib.Data.List.Nodup
-import Mathlib.Data.List.OfFn
-import Mathlib.Data.List.Sort
-import Mathlib.Data.List.Sublists
-import Mathlib.Data.Nat.Choose.Bounds
-import Mathlib.Data.Nat.Choose.Lucas
-import Mathlib.Data.Nat.Log
-import Mathlib.Data.Nat.Pairing
-import Mathlib.Tactic
-import Mathlib.Tactic.Linarith
-import Std.Tactic
+import Proof.Wire_3_5.Assembly.HStepR
+import Proof.Wire_3_5.Assembly.HStepM
+import Proof.Wire_3_5.Assembly.HStepL
+import Proof.Wire_3_5.Assembly.HStepQ
 import Proof.Wire_3_5.Assembly.HStepV
+import Proof.Wire_3_5.Assembly.HStepT
+import Proof.Wire_3_5.Assembly.HStepP
+import Proof.Wire_3_5.Assembly.HStepS
+import Proof.Wire_3_5.Assembly.HStepN
+import Proof.Wire_3_5.Assembly.HRootC
+import Proof.Wire_3_5.Transfer.LiteralSources
 
-/-! # The assembled proof of row B
 
-`rowB_closed` is the assembled proof term: row B from the nine literal hypotheses, bundled as `Literals`.
-`MainTheorem_Wire_3_5.lean` states it with the nine hypotheses as separate arguments. -/
+/-! # Row B of Theorem 1.1 from the nine literal hypotheses, input 6 = the Murray–Williams short PCP
+
+`rowB_closed` is the assembled proof term (Theorem 1.1, row B; `thm:tradeoff`): row B (the unchanged statement
+`NearCubicWires.WireExponent3_5.rowB`) from the nine literal hypotheses bundled as `Literals` (whose sixth field is the
+Murray–Williams oracle-circuit short PCP, §H.1 item 1; the eighth and ninth are CLW20 Theorem 1.13 at the clocks
+`n^(k+2)` and CLW20 Lemma 3.9 at `S(n) ≥ n^c`). **`rowB_from_literature`** states it with the nine hypotheses as
+separate arguments, in order. -/
 
 set_option autoImplicit false
 set_option maxRecDepth 120000
 set_option linter.unusedVariables false
+
 
 namespace NearCubicWires.WireExponent3_5.Assembly
 set_option maxHeartbeats 4000000 in
@@ -124,3 +119,8 @@ theorem rowB_closed
     ))
   )
 end NearCubicWires.WireExponent3_5.Assembly
+
+namespace NearCubicWires.WireExponent3_5
+
+end NearCubicWires.WireExponent3_5
+

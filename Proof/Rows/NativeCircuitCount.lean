@@ -1,4 +1,5 @@
 import Proof.Rows.NativeGateLoop
+import Proof.Rows.TopArity
 
 /-! The original circuit's actual first nat header produces the bottom-loop
 count. Reader scratch and its capacity/log reuse the existing gate bank. -/
@@ -13,6 +14,7 @@ open NearCubicWires.P1Closure NearCubicWires.RepairRepresentation NearCubicWires
 open NearCubicWires.RepairSource.VerifierDecoding
 open PCJ45bee56da9f34d5a_FramedGateBank
 noncomputable section
+attribute [local irreducible] PCJ45bee56da9f34d5a_TopArity.machine
 
 def bank {q : Nat} (live : Finset (Fin q)) (x : BitInput q) (w H R U : Nat)
  (source fields framed out count : List Bool) (Q : Nat) : Fin 124→List Bool :=

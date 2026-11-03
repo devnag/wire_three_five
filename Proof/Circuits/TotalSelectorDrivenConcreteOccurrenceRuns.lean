@@ -1,3 +1,4 @@
+import Proof.Circuits.TotalSelectorDrivenAtomStreamRuns
 import Proof.Circuits.TotalSelectorDrivenOccurrenceClosure
 
 /-! # Concrete total selector occurrence chain -/

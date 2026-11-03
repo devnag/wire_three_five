@@ -9,4 +9,7 @@ set_option maxHeartbeats 250000
 set_option maxRecDepth 120000
 set_option warningAsError true
 
+def initial (source : List Bool) (M : ℕ) : Data :=
+  ⟨source,0,M-1,0,false,false,false,true⟩
+
 end NearCubicWires.RepairOrdinary.RowTupleFilterMeaning

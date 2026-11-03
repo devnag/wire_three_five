@@ -1,5 +1,28 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.ShellT2
-import Proof.Wire_3_5.Primitive.Writers.ThrTail1
+import Proof.Wire_3_5.FinalPass.DigsIface
+import Proof.Wire_3_5.FinalPass.SeamsProg2Base
+import Proof.Wire_3_5.Primitive.Writers.BudgetIface2
+import Proof.Wire_3_5.Primitive.Writers.PlanBase
+import Proof.Wire_3_5.Primitive.Writers.SymDecEmit
+import Proof.Wire_3_5.Primitive.Writers.ThrDataIface3
+import Proof.Wire_3_5.Primitive.Writers.WritersJoinBase
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4Base
+import Proof.Wire_3_5.Primitive.ThresholdWriter.RadSetup2
+import Proof.Wire_3_5.Primitive.ThresholdWriter.ShellIface
+import Proof.Wire_3_5.UnionMachine.FiltSetupIface5
+import Proof.Wire_3_5.UnionMachine.RadSetupB3
+import Proof.Wire_3_5.UnionMachine.RadSpecBase
+import Proof.Wire_3_5.UnionMachine.ThrDecIfaceBase
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Recovery.RecoverySetup
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # THRTAIL: the THR dimension stage's interface `ThrDimStage` (types only)
 
@@ -13,8 +36,8 @@ read at the star parameters `P`: `k = P.k`, `L = ⌈log₂(n+2)⌉`, the THR cap
 * `bT`, `psiT`; **`ThrDimStage l F K_L K_f D_n D_c`** (the machine, its dimension, cost and fill need, `dimOK`, the two
   dimension bounds, the need and cost within `(n+1)^{D_n}`, `(W+n+1)^{D_c}`, the exponents `D_n`, `D_c` fixed by `l`).
 
-The construction builds the instance (T-A: `NumsXT2`, the twin of SYM's `NumsXS`: star numbers, sparse count, `CapNum` at `.thr`,
-`k' = r·natBitLength(n/r+1) ∈ [k, 2k]`, `⌈√(B_T·L)⌉`, the products); builds T-B against this type.
+PA2 builds the instance (T-A: `NumsXT2`, the twin of SYM's `NumsXS`: star numbers, sparse count, `CapNum` at `.thr`,
+`k' = r·natBitLength(n/r+1) ∈ [k, 2k]`, `⌈√(B_T·L)⌉`, the products); T3 builds T-B against this type.
 
 Paper quantity of the main type: the THR writer's dimension `2^{m_T}` with `m_T = Θ(Ψ_T)` (P3:3094-3107). -/
 
@@ -61,3 +84,5 @@ structure ThrDimStage (l : Literals) (F : GateFree l) (KL Kf Dn Dc : ℕ) where
   c2_le : ∀ (W : ℕ) (P : Shared.StarParams), c2 W P ≤ Kc * (W + P.n + 1) ^ Dc
 
 end NearCubicWires.WireExponent3_5.PrimAsm.ThrDim
+
+end

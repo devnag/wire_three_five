@@ -48,4 +48,13 @@ theorem labels_value {n : Nat} (labels : Fin n→PoweredMargulisLabel) :
     simp only [FrozenWalkABI.label_cardinality]
     rfl
 
+def word {n : Nat} (rank : Nat)
+    (sample : MargulisWalkSample (2^toeplitzWalkSideBits rank) (n+1)):=
+  labelsWord (sampleTransitionLabels sample)++WalkSeedBinary.vertexWord rank sample.start
+
+theorem length {n : Nat} (rank : Nat)
+    (sample : MargulisWalkSample (2^toeplitzWalkSideBits rank) (n+1)) :
+    (word rank sample).length=160*n+2*toeplitzWalkSideBits rank := by
+  rw [word,List.length_append,labels_length,WalkSeedBinary.vertexWord_length]
+
 end Theorem25Completion.WalkSampleWord

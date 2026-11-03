@@ -1,5 +1,9 @@
+import Proof.Circuits.CanonicalBalancedCall
 import Proof.MachineModel.CanonicalBalancedLengthProgram
 import Proof.MachineModel.CanonicalBalancedValidationProgram
+import Proof.MachineModel.CanonicalNativeEqualityProgram
+import Proof.MachineModel.PreserveRightProgram
+import Proof.Foundations.VerifiedLinker
 
 /-!
 # Guarded canonical-balanced validation map

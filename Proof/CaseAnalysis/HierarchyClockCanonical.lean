@@ -1,3 +1,4 @@
+import Proof.Circuits.CanonicalBinaryOutput
 import Proof.MachineModel.OrdinaryOracleCompose
 
 /-! Canonical framed hierarchy clock from its existing positive fixed-width

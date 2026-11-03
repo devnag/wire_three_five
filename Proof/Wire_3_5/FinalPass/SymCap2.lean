@@ -1,15 +1,29 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SymCap1
 import Proof.Wire_3_5.FinalPass.SymOcc2
+import Proof.Wire_3_5.FinalPass.SymSz1Base
 import Proof.Wire_3_5.Primitive.Writers.BShape6
 import Proof.Wire_3_5.Primitive.Writers.SymSizes
 import Proof.Wire_3_5.UnionMachine.FiltPipeLe
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SymCap2Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The SYM enumeration's capacity, part 2: the SYM rows' words and the degree bound
 
-P3:3011-3016 at a SYM call: every printed SYM row's word (`sym_word_le`, BShape6) is below
+P3:3011-3016 at a SYM call: every printed SYM row's word (the `sym_word_le`, BShape6) is below
 `2^{(26L+7)D + k + 80L + 24}` (`M ≤ 4(n+1)^{26}`, the walk `w ≤ L + 4`, `|pool| ≤ 8(n+1)^{26}`, `2k_h = k`), so the batch's
 `bsz` is; and the degree bound `D = max(384·w_f + 1, 3·lbP)` of `sym_factor_count` is at most
-`384(f_e L + 1) + 1 + 3(71 + 12k + ZL)(23296⌊√B_S⌋ + 23553)` (the filter walk `w_f ≤ f_e L + 1`; `lbP_le` at
+`384(f_e L + 1) + 1 + 3(71 + 12k + ZL)(23296⌊√B_S⌋ + 23553)` (the filter walk `w_f ≤ f_e L + 1`; the `lbP_le` at
 `B' = 8192·B_S`, `B_S ≤ capK(c_r)(n+2)^Z`, `4c_r ≤ k`).
 
 * `symDg`, `nb_le`, **`symBsz_le`**, **`symDg_le`**.
@@ -27,21 +41,10 @@ open NearCubicWires.SupplierPipeline NearCubicWires.WireExponent3_5.Stars NearCu
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.PrimAsm.WriterIface
 open NearCubicWires.WireExponent3_5.FinalPass.FreeGen
 
-/-- A bit length below an exponent. -/
-theorem nb_le (x m : ℕ) (h : x ≤ 2 ^ m) : natBitLength x ≤ m + 1 := by
-  unfold natBitLength
-  have := Nat.log_mono_right (b := 2) h
-  rw [Nat.log_pow (by norm_num)] at this
-  omega
-
-/-- `(n+1)^{26} ≤ 2^{26L}`. -/
-theorem n26_le (n : ℕ) : (n + 1) ^ 26 ≤ 2 ^ (26 * Nat.clog 2 (n + 2)) :=
-  pow_mono_mul 26 (le_trans (by omega) (n2_le_L n))
-
 section Gate
 variable (l : Literals) (F : GateFree l)
 
-/-- The degree bound of the SYM rows' factors (`sym_factor_count`). -/
+/-- The degree bound of the SYM rows' factors (the `sym_factor_count`). -/
 noncomputable def symDg (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ}
     (Cs : Fin a' → NormalizedSymmetricThresholdCircuit n) (carriers : List (Carrier n)) : ℕ :=
   max (384 * ((callInputs l F kclk coef A a ha).filterParams .sym n).walkLen + 1)
@@ -177,3 +180,5 @@ theorem symDg_le (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ} (ha' :
 end Gate
 
 end NearCubicWires.WireExponent3_5.FinalPass.SymFr
+
+end

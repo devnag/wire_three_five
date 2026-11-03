@@ -1,4 +1,6 @@
 import Proof.Supplier.RowTupleMaskLoop
+import Proof.Supplier.RowMaskLookupReusable
+import Proof.Supplier.RowMaskMeaning
 
 /-! One tuple in the actual selected stream advances its retained input
 cursor and returns the occurrence stream/count to their consumer heads.
@@ -13,6 +15,7 @@ set_option warningAsError true
 
 def selected (i : Fin 13) : Bool := decide (i=2)
 noncomputable def first := MaskedReset.machine RowTupleMaskLoop.machine selected
+def capacity (N w M k : ℕ) := RowTupleMaskLoop.budget N w M k
 def slots : Fin 1→Fin 14 := fun _=>3
 noncomputable def last := RecoveryFocus.machine slots UnaryTemplate.machine
 noncomputable def machine := Composition.machine first last

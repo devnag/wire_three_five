@@ -1,3 +1,4 @@
+import Proof.Hierarchy.CompetitorResidueCell
 import Proof.Hierarchy.CompetitorPlaneClear
 
 /-! The residue cell on actually erased, reusable storage. Padding is only

@@ -1,4 +1,8 @@
+import Proof.MachineModel.CanonicalBitSerialModProgram
+import Proof.MachineModel.CanonicalBitSerialMulProgram
+import Proof.MachineModel.CanonicalNativeModProgram
 import Proof.PCP.PaddedProjectionDecisionRunner
+import Proof.MachineModel.TaggedProgramChoice
 
 /-!
 # The padded query runner

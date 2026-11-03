@@ -1,3 +1,4 @@
+import Proof.MachineModel.CanonicalBitSerialMulProgram
 import Proof.MachineModel.CanonicalSymmetricSupportMaskProgram
 
 /-!

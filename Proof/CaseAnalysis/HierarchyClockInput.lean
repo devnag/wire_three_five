@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.HierarchyClockCanonical
+import Proof.Hierarchy.HierarchyFromInput
+import Proof.Foundations.SourceCore
 
 /-! The original refuter answer alone produces its exact canonical framed
 hierarchy clock, with no bound/width input or new arithmetic program. This

@@ -1,5 +1,7 @@
 import Proof.Wire_3_5.Primitive.Writers.FiltRecW
 import Proof.Wire_3_5.Primitive.Writers.SymQM
+import Proof.Wire_3_5.Lists.ListBase
+import Proof.Wire_3_5.FinalPass.ListEvalRef
 
 /-! # PA (d)-SYM, part 4: the list level template (shared with C5's final pass)
 

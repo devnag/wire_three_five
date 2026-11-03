@@ -1,7 +1,9 @@
-import Proof.Wire_3_5.Primitive.Writers.ThrHc3
-import Proof.Wire_3_5.Primitive.SeedFix.C4SymNE
-import Proof.Wire_3_5.Primitive.Writers.HashLeaf
-import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPoly
+import Proof.Wire_3_5.Primitive.Writers.ThrDataH
+import Proof.Wire_3_5.Primitive.Writers.ThrStrip7
+import Proof.Wire_3_5.Primitive.SeedFix.C3ReqIface
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymNEBase
+import Proof.Wire_3_5.Primitive.Writers.HashLeafBase
+import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPolyBase
 
 /-! # c4 THR block, piece 3 part 1: the THR numbers machine's values are the call's
 

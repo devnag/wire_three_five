@@ -1,3 +1,4 @@
+import Proof.Wire_3_5.Primitive.Writers.UnaryArith
 import Proof.Wire_3_5.Primitive.Writers.StarNums
 
 /-! # C6 front: straight-line unary arithmetic in the register language

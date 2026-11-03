@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Recovery.CertScanLoop
+import Proof.CaseAnalysis.CloseoutRecoveryBudget
 
 /-! # The prefix's capacities (P3:3758-3759; D1.6, the prefix stage)
 

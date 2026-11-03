@@ -1,4 +1,5 @@
 import Proof.PCP.PCPSerializerCapacityPower
+import Proof.MachineModel.ClockJoin
 
 /-! Produce the field width and common traversal capacity from the two
 actual retained raw counters. Coefficients are fixed program parameters. -/

@@ -1,6 +1,8 @@
 import Proof.Wire_3_5.Primitive.Writers.HashUnit
-import Proof.Wire_3_5.Primitive.Writers.NumsXH
+import Proof.Wire_3_5.Primitive.Writers.HashFlat
+import Proof.Wire_3_5.Primitive.Writers.ThrDataIface3
 import Proof.Wire_3_5.Primitive.Writers.ShellT2
+import Proof.Wire_3_5.Primitive.Writers.NumsXH
 
 /-! # (HASH (b), (c)): the HASH unit decode at the call, and the HASH dimension stage
 

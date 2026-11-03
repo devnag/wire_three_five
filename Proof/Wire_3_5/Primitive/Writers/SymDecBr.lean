@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.Writers.SymDecP2
+import Proof.Wire_3_5.Primitive.Writers.SymFlat
 
 /-! # PA (d)-SYM decode, part 12: the unit's branch (markers, empty units, the two banks)
 

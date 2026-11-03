@@ -106,4 +106,14 @@ theorem source_bound (a : PointwisePCPPAlgorithm) (r : PCPPRequest a.minimumArit
     a.coefficient (PCPPRequestInput.budget r.circuit) (PCPPRequestSource.sourceBudget a r)
     hpos (input_source_bound r.circuit) hsrc
 
+theorem cold_source_bound (a : PointwisePCPPAlgorithm) (request : PCPPRequest a.minimumArity) :
+    ∃ r,run (PCPPRequestSource.machine a) (PCPPRequestSource.budget a request)
+      (fun i => if i.val=0 then frame
+        (PCPPRequestNodeGlobal.payload request.circuit.nodes (natWord request.circuit.output.val)) else [])=some r ∧
+      r.final.tapes (PCPPRequestSource.outputSlot a)=pcppOutput request (a.output request) ∧
+      r.final.heads (PCPPRequestSource.outputSlot a)=0 ∧
+      r.steps ≤ sourceCoefficient a*(sourceParameter request.circuit)^(sourceDegree a) := by
+  obtain ⟨r,hr,ho,hh,hs⟩ := PCPPRequestSource.cold_run a request
+  exact ⟨r,hr,ho,hh,hs.trans (source_bound a request)⟩
+
 end NearCubicWires.RepairOrdinary.PCPPRequestRuntime

@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTypes
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTypesBase
 import Proof.Wire_3_5.UnionMachine.FrontKit
 
 /-! # SEEDFIX C4 part: the front stage (the request's class mode, P3:3165-3175)

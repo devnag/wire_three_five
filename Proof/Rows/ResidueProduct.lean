@@ -1,5 +1,12 @@
-import Proof.Rows.FinalWalkStep
+import Proof.Rows.FinalNativeSignedResidue
+import Proof.Amplification.RecoveryRadixInput
+import Proof.CaseAnalysis.FinalSelectorLoadMasks
+import Proof.Circuits.DecompositionNativeMagnitude
+import Proof.Hierarchy.HierarchyAllocation
+import Proof.MachineModel.UInputFields
+import Proof.Rows.FinalPrimeCoefficientReduce
 import Proof.Rows.Plan
+import Proof.Hierarchy.HierarchyBinaryMultiply
 
 /-! A paid framed-binary product followed by physical MSB conversion and
 modular reduction. The left operand has the actual product width; a caller

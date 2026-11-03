@@ -1,5 +1,6 @@
 import Proof.Wire_3_5.FinalPass.SdB1
 import Proof.Wire_3_5.FinalPass.TabBd2
+import Proof.Wire_3_5.Primitive.Writers.ShellT2
 
 /-! # S4 (the seeds phase), part 47: the tables writer's budget, polynomial (P3:3170-3178)
 

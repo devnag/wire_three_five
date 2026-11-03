@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.WitnessNodeTag
+import Proof.MachineModel.ClockScalarFields
 
 /-! Total small-tag guard, using the existing bounded normalizer. The fixed
 three-cell driver is retained for the next field; no decoded natural is

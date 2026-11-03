@@ -1,4 +1,20 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.NumsC4
+import Proof.Wire_3_5.Primitive.Writers.CopyNat
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.NumsPh2
+import Proof.Wire_3_5.UnionMachine.NumsC5Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # NW phase (c), part 5: the front's run and `cProg`'s run at a request
 
@@ -20,9 +36,6 @@ open NearCubicWires.WireExponent3_5.PrimAsm.SymLayout NearCubicWires.WireExponen
 open NearCubicWires.WireExponent3_5.Split NearCubicWires.WireExponent3_5.PrimAsm.Plan
 open NearCubicWires.WireExponent3_5.FinalPass.PlanFP
 open NearCubicWires.RepairOrdinary.Streaming (marks)
-
-/-- The front's steps. -/
-def frontCost (n : ℕ) : ℕ := (natBitLength n + 2) * (40 * 2 ^ natBitLength n + 40) + 1 + (1 + 1 + (3 + 1))
 
 section Req
 variable (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1)
@@ -133,3 +146,5 @@ theorem cProg_run (x cap : ℕ) (r : FReq l F kclk coef A a ha) (σ : St x) (hE 
 end Req
 
 end NearCubicWires.WireExponent3_5.UnionMachine.NumsC
+
+end

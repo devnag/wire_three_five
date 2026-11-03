@@ -1,4 +1,4 @@
-import Proof.SourceAssembly.SourceDimension
+import Proof.SourceAssembly.SourceRowConst
 import Proof.SourceAssembly.SourceFinish
 
 section
@@ -12,6 +12,11 @@ open PCJ1fef9807c6954e94_Native PCJ515eaa990d75455b_FamilyInit
 namespace NearCubicWires.SourceConstruction.FinishCycle
 noncomputable section
 attribute [local irreducible] P1TopDownPaidPayload.tapes
+
+def machine (a : WilliamsAlgorithm) {U : ℕ} (cs : Fin 16 → Fin U) (fam : Fin (r_tapes a) → Fin U)
+    (drv : Fin 7 → Fin U) :=
+  Composition.machine (RecoveryFocus.machine cs RowWidth.machine)
+    (RecoveryFocus.machine (Finish.joinSlots a fam drv) (PCJ34388a2fbfa9464b_.machine a))
 
 end
 end NearCubicWires.SourceConstruction.FinishCycle

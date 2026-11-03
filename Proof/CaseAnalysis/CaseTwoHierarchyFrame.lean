@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeFrame
+import Proof.PCP.ProjectionNormalizationField
 
 /-! Physically frame the retained original hierarchy word, which contains
 exactly its two existing fields. Two original field-copy calls measure the

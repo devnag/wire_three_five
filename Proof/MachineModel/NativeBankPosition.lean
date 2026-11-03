@@ -1,4 +1,5 @@
 import Proof.MachineModel.NativeBankInputs
+import Proof.Circuits.DecompositionCountPosition
 
 /-! One actual transition places the retained native loop headers while
 leaving the source and growing output cursors in place. -/

@@ -1,4 +1,6 @@
+import Proof.MachineModel.CanonicalNatDecodeProgram
 import Proof.Supplier.FourfoldRangeAggregationComposition
+import Proof.MachineModel.TaggedProgramChoice
 
 /-!
 # The executable fourfold row tail and its envelope front end

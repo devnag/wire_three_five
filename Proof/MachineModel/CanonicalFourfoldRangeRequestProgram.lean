@@ -1,6 +1,8 @@
 import Proof.MachineModel.BitInputPrefixProgram
 import Proof.MachineModel.CanonicalBooleanRangeAggregationProgram
 import Proof.MachineModel.CanonicalFourfoldRowProgram
+import Proof.MachineModel.PreserveRightProgram
+import Proof.Foundations.VerifiedLinker
 
 namespace NearCubicWires.CanonicalFourfoldRangeRequestProgram
 

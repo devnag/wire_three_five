@@ -1,6 +1,10 @@
-import Mathlib
-import Proof.Rows.CapReader
 import Proof.Rows.RowsInitLoopWords
+import Proof.CaseAnalysis.FinalCompareDockLit
+import Proof.PCP.ProjectionNormalizationDriverAtoms
+import Proof.Packets.PacketsMetaMaps
+import Proof.Rows.RowsInitHeaderWords
+import Proof.MachineModel.OrdinaryMatrixComplement
+import Proof.CaseAnalysis.RowsGateSupportMeaning
 
 set_option autoImplicit false
 set_option maxRecDepth 120000

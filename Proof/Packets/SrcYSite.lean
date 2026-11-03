@@ -1,4 +1,9 @@
 import Proof.Packets.SrcLayRows
+import Proof.Packets.BudgetYFam
+import Proof.SourceAssembly.SourceStepsParamsV4
+import Proof.SourceAssembly.SourceStepsParamsV3
+import Proof.Packets.SrcCapsPow2
+import Proof.SourceAssembly.SourceSkelCaps
 
 section
 set_option autoImplicit false
@@ -33,6 +38,10 @@ noncomputable section
 attribute [local irreducible] P1TopDownPaidPayload.tapes
 
 section y1
+variable (mask : MaskProducer) {selector : CyclicChoice.Laws}
+  (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector)
+  (rows : PCJc4297ab269d8423a_Source.RowLibrary selector) (sources : EightSources)
+  (res : Nat) (hres : 19 ≤ res) {gamma : Real} (p : Parameters sources gamma) (k r : Nat)
 
 set_option hygiene false in
 local notation "𝔇" => dimsOf mask packets rows sources res p k r

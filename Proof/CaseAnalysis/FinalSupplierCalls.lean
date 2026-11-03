@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.FinalWorkerWidth
+import Proof.Hierarchy.CompetitorMonomialProducts
 
 /-! # S1 -- per-clause-address production of the AND-four supplier calls
 

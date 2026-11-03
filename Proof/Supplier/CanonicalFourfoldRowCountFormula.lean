@@ -1,4 +1,5 @@
 import Proof.MachineModel.CanonicalFourfoldRowTailProgram
+import Proof.MachineModel.FixedAccuracyDenominatorProgram
 
 /-!
 # The published row counts as closed natural-number arithmetic

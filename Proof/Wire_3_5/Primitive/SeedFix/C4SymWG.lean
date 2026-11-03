@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.Primitive.SeedFix.C4SymWF
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymWE
 import Proof.Wire_3_5.Primitive.SeedFix.C4CapG
 
 /-! # C4 SYM stage, the stage from the setup at capacity `2^{⌊n/8⌋ + C}` (twin of `symSetup_stage`)

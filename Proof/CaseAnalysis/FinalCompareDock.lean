@@ -1,6 +1,11 @@
-import Proof.Amplification.RecoveryPaddedCopyMeaning
 import Proof.CaseAnalysis.RowsEstimatorCoefficientsPrepare
+import Proof.Hierarchy.CompetitorMonomialFields
+import Proof.MachineModel.ClockNormalize
+import Proof.MachineModel.ClockScalarFields
+import Proof.MachineModel.OrdinarySignedSortKey
+import Proof.Amplification.RecoveryPaddedCopyMeaning
 import Proof.Supplier.EquationWidenLoop
+import Proof.Supplier.RowCachedEquationMeaning
 import Proof.Supplier.RowCoordinateIncrement
 
 /-! **Decision tail, stage 1 — the two facts the docking rests on.**

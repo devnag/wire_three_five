@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RowsCircuitBodySupport
+import Proof.CaseAnalysis.RowsCircuitBottomLoop
 
 /-! The physical published bank facts shared by the original circuit body
 and its support-retaining extension. These facts describe the same tapes. -/

@@ -1,3 +1,4 @@
+import Proof.CaseAnalysis.FinalAssembly
 import Proof.CaseAnalysis.FinalResidualLeaves
 import Proof.CaseAnalysis.FinalStageSeam
 import Proof.CaseAnalysis.FinalTailCompose

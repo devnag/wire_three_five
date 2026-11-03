@@ -1,4 +1,26 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.SBCap2
+import Proof.Wire_3_5.Primitive.Writers.SBFieldCostBase
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.FpInLen
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.SBIdent
+import Proof.Wire_3_5.Primitive.Writers.SBTypes
+import Proof.Wire_3_5.Primitive.Writers.SymNeed
+import Proof.Wire_3_5.Primitive.SeedFix.TS4N
+import Proof.Wire_3_5.Primitive.SeedFix.TS4O
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.SBCap3Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # SB: the capacity target, part 3 — **`sbCap : StarRStmt l → SBCapStmt l`**
 
@@ -19,12 +41,6 @@ open NearCubicWires.WireExponent3_5.PrimAsm.Plan
 open NearCubicWires.WireExponent3_5.PrimAsm.SBTypes NearCubicWires.WireExponent3_5.PrimAsm.WriteNat
 open NearCubicWires.WireExponent3_5.FinalPass.Out.Car NearCubicWires.WireExponent3_5.FinalPass.Out.CarBound
 
-theorem carCnt_le {n : ℕ} (cs : List (Stars.Carrier n)) (h : ∀ X ∈ cs, X.WithinEnvelope 26) (k : ℕ) :
-    carCnt cs k ≤ (n + 1) ^ 26 := by
-  unfold carCnt; split
-  · exact (h _ (List.get_mem _ _)).1
-  · exact Nat.zero_le _
-
 /-- The capacity degree (the literals only). -/
 noncomputable def DD (l : Literals) : ℕ := 26 + CallIndexR.capZR l + PrimT.TS4.spA l + PrimT.TS4.ZmL l + DtC + 3
 
@@ -35,8 +51,6 @@ noncomputable def KcF (l : Literals) (F : GateFree l) : ℕ :=
     (2 ^ 40 * CallIndexR.capK F.cr * 2 ^ PrimT.TS4.ZmL l + CapNum.cMain (gateCap l) .thr +
       CapNum.cMain (gateCap l) .sym) +
     8 * SymSizes.KLam l + (3 * SymSizes.schedJ l + 1) + 6 + 2 ^ DtC + 3 * (F.filterErrDeg + 4) + 2 * F.cr + 20
-
-theorem pow_up (N d D : ℕ) (h : d ≤ D) : (N + 1) ^ d ≤ (N + 1) ^ D := Nat.pow_le_pow_right (by omega) h
 
 /-- **SB's capacity target, proved** (from the star identification `StarRStmt`). -/
 theorem sbCap (l : Literals) (hR : SBIdent.StarRStmt l) : SBCapStmt l := by
@@ -155,3 +169,5 @@ theorem sbCap (l : Literals) (hR : SBIdent.StarRStmt l) : SBCapStmt l := by
   omega
 
 end NearCubicWires.WireExponent3_5.PrimAsm.SBAsm
+
+end

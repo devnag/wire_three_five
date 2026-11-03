@@ -16,6 +16,8 @@ def extra : Fin 6→Fin 1703:=![1691,1692,1696,1697,1701,1702]
 def scratch : Fin 1054→Fin 1703:=Fin.addCases (m:=1048) (n:=6) gate extra
 def slots : Fin 1056→Fin 1703:=Fin.addCases (m:=1054) (n:=2) scratch ![1694,1695]
 noncomputable def machine:=RecoveryFocus.machine slots (RecoveryScratchErase.resetMachine 1054)
+noncomputable def output (cap core W L : ℕ) (bits : List Bool):=
+  install slots (CloseoutRowsCircuit.input cap core W L bits) (PCPTraversal.clearedLocal 1054 cap 0)
 
 theorem scratch_old (i : Fin 1048) : scratch (i.castAdd 6)=gate i:=by
   simp only [scratch,Fin.addCases_left]
@@ -104,5 +106,8 @@ theorem prefix_outside (i : Fin 639) : ∀ j,slots j≠prefixSlots i:=by
     · change 1694=i.val at hv;omega
     · change 1695=i.val at hv;omega
 
+theorem output_other (cap core W L : ℕ) (bits : List Bool) (i : Fin 1703)
+    (hi : ∀ j,slots j≠i) : output cap core W L bits i=CloseoutRowsCircuit.input cap core W L bits i:=
+  install_other _ _ _ _ hi
 
 end NearCubicWires.RepairOrdinary.CloseoutRowsCircuitAllocate

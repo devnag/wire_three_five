@@ -1,4 +1,33 @@
 import Proof.MachineModel.ClosureRadixFamily
+import Proof.MachineModel.NativeWidth
+import Proof.MachineModel.NativeAllocation
+import Proof.MachineModel.NativeMeasured
+import Proof.MachineModel.NativeMaster
+import Proof.CaseAnalysis.RowsFamilyBudget
+import Proof.CaseAnalysis.RowsSourceMeaning
+import Proof.MachineModel.BankFields
+import Proof.MachineModel.BankMetadata
+import Proof.MachineModel.BankCountLayout
+import Proof.Hierarchy.HierarchyAllocation
+import Proof.MachineModel.BankConsumer
+import Proof.MachineModel.BankOptional
+import Proof.MachineModel.BankCountNative
+import Proof.MachineModel.BankCountConsumer
+import Proof.MachineModel.BankCountRaw
+import Proof.MachineModel.BankCountPositive
+import Proof.MachineModel.BankCountZero
+import Proof.MachineModel.BankCountBranch
+import Proof.MachineModel.BankCountOptional
+import Proof.MachineModel.NativeFanout
+import Proof.CaseAnalysis.RowsBankFields
+import Proof.MachineModel.NativeFanoutLayout
+import Proof.MachineModel.NativeTemplateExact
+import Proof.MachineModel.NativeBankInputs
+import Proof.MachineModel.NativeBankPosition
+import Proof.CaseAnalysis.RowsEstimatorBankCycle
+import Proof.MachineModel.NativeRound
+import Proof.MachineModel.NativeState
+import Proof.MachineModel.NativeFamily
 
 /-! The complete measured-cache run produces the final p=base+Q word and
 signed-field driver, retaining every shared cache/dimension field. -/

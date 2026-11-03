@@ -1,6 +1,7 @@
 import Proof.Wire_3_5.Primitive.SeedFix.HashRefM
-import Proof.Wire_3_5.Primitive.Writers.CopyNat
 import Proof.Wire_3_5.Primitive.Writers.Emit
+import Proof.Wire_3_5.Primitive.Writers.CopyNat
+import Proof.Wire_3_5.Primitive.Writers.UnaryArith
 
 /-! # C4.Hb, machine part 1: the word layer's layout and the masked word step (`filt:soft`, P3:2253-2290)
 

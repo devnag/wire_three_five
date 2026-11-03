@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.FinalPass.ThrPtRS15
+import Proof.Wire_3_5.FinalPass.WordAux
 
 /-! # S4 (the seeds phase), part 1: the binary accumulator (P3:3044-3048)
 

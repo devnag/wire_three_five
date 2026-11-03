@@ -1,5 +1,5 @@
-import Proof.SourceAssembly.SLoadMaskFrame
 import Proof.SourceAssembly.SourceParent
+import Proof.SourceAssembly.SLoadPrepared
 
 /-! # Source layout (B2) and the forced choices (B1): one concrete `CodeFamily`.
 
@@ -114,6 +114,40 @@ def scr (m : Fin 13) : Fin V :=
 
 /-! ### injectivity and the three aliases -/
 
+theorem familySlots_injective : Function.Injective (d.familySlots hV) := by
+  intro i j h
+  have hv := congrArg Fin.val h
+  have hi := i.isLt; have hj := j.isLt; have := d.hsp
+  simp only [familySlots, famV, G] at hv
+  apply Fin.ext
+  split_ifs at hv <;> omega
+theorem poolSlots_injective : Function.Injective (d.poolSlots hV) := by
+  intro i j h
+  have hv := congrArg Fin.val h
+  have hi := i.isLt; have hj := j.isLt; have := d.hdesc
+  simp only [poolSlots, poolV] at hv
+  apply Fin.ext
+  split_ifs at hv <;> omega
+theorem rewindSlots_injective : Function.Injective (d.rewindSlots hV) := by
+  intro i j h
+  have hv := congrArg Fin.val h
+  have hi := i.isLt; have hj := j.isLt; have := d.hsp
+  simp only [rewindSlots, rewV, G] at hv
+  apply Fin.ext
+  split_ifs at hv <;> omega
+theorem maskSlots_injective : Function.Injective (d.maskSlots hV) := by
+  intro i j h
+  have hv := congrArg Fin.val h
+  simp only [maskSlots, maskV, slotV] at hv
+  apply Fin.ext
+  split_ifs at hv <;> omega
+theorem pslots_injective : Function.Injective (d.pslots hV) := by
+  intro i j h
+  have hv := congrArg Fin.val h
+  have hi := i.isLt; have hj := j.isLt; have := d.hdesc; have := d.hdesc440; have := d.hout
+  simp only [pslots, pV, slotV] at hv
+  apply Fin.ext
+  split_ifs at hv <;> omega
 
 
 /-! ### every slot premise of `pool_seed_ready` and `prepared_code` -/
@@ -126,6 +160,77 @@ macro "geo" : tactic => `(tactic| (simp only [Dims.slot, Dims.maskSlots, Dims.ps
 end Dims
 
 /-! ## 2. The dimensions of the actual producers -/
+
+/-- The paper's Williams printer. -/
+abbrev printerOf (sources : EightSources) : WilliamsAlgorithm := williamsOf sources
+
+/-- The cycle's private region size: linear in the producers' own tape counts, plus the
+reserved prologue region `res`. -/
+def prepTOf (mask : MaskProducer) {selector : CyclicChoice.Laws}
+    (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector)
+    (rows : PCJc4297ab269d8423a_Source.RowLibrary selector) (sources : EightSources) (res : Nat) : Nat :=
+  (rowTapes (printerOf sources) (rows (decompositionOf sources) (printerOf sources)).privateWork + 1) +
+    410 + mask.work + (packets (decompositionOf sources)).ordinary.program.tapeCount + res
+
+/-- **Forced B1: `scratch`.** `SourceCode._hsize` fixes it as `r_tapes a + 14 + prepT`. -/
+def scratchOf (mask : MaskProducer) {selector : CyclicChoice.Laws}
+    (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector)
+    (rows : PCJc4297ab269d8423a_Source.RowLibrary selector) (sources : EightSources) (res : Nat) : Nat :=
+  r_tapes (printerOf sources) + 14 + prepTOf mask packets rows sources res
+
+def dimsOf (mask : MaskProducer) {selector : CyclicChoice.Laws}
+    (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector)
+    (rows : PCJc4297ab269d8423a_Source.RowLibrary selector) (sources : EightSources) (res : Nat)
+    {gamma : Real} (p : Parameters sources gamma) (k r : Nat) : Dims where
+  F := PCJda54a286946142d3_BranchPhases.offset sources p k r + 1155
+  rt := r_tapes (printerOf sources)
+  sp := P1TopDownPaidPayload.tapes (printerOf sources) + 1 + 2
+  R1 := rowTapes (printerOf sources) (rows (decompositionOf sources) (printerOf sources)).privateWork + 1
+  w := mask.work
+  tc := (packets (decompositionOf sources)).ordinary.program.tapeCount
+  outV := (packets (decompositionOf sources)).ordinary.program.outputTape.val
+  descV := 440 + P1TopDownPaidPayload.tapes (printerOf sources)
+  res := res
+  hsp := by simp only [r_tapes]; omega
+  hdesc := by simp only [rowTapes, rowWork, PCJ38fbfed565f64139_Ready.tapes]; omega
+  hdesc440 := by omega
+  hout0 := (packets (decompositionOf sources)).ordinary.program.outputFresh
+  hout := (packets (decompositionOf sources)).ordinary.program.outputTape.isLt
+
+theorem dims_U (mask : MaskProducer) {selector : CyclicChoice.Laws}
+    (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector)
+    (rows : PCJc4297ab269d8423a_Source.RowLibrary selector) (sources : EightSources) (res : Nat)
+    {gamma : Real} (p : Parameters sources gamma) (k r : Nat) :
+    (dimsOf mask packets rows sources res p k r).U + 1 =
+      ControllerSelectedContinuation.bodyTapes sources p k r (scratchOf mask packets rows sources res) := by
+  have ht := WorkspaceSelectedEntryReady.old_size sources p k
+  simp only [Dims.U, Dims.G, Dims.prepT, dimsOf, scratchOf, prepTOf,
+    ControllerSelectedContinuation.bodyTapes, ControllerSelectedContinuation.extra,
+    PCJda54a286946142d3_BranchPhases.offset]
+  omega
+
+/-- A phase word slot lies below the family base `offset + 1155`. -/
+theorem wordSlot_lt (sources : EightSources) {gamma : Real} (p : Parameters sources gamma)
+    (k r scratch : Nat) (ph : Phase) (i : Fin 278) :
+    (SourceParent.Wd sources p k r scratch ph i).val < PCJda54a286946142d3_BranchPhases.offset sources p k r + 1155 := by
+  have hi := i.isLt
+  simp only [SourceParent.Wd, CloseoutFinalC10RetainedPhaseFold.wordSlots]
+  split_ifs
+  · have h := C10TailSlotsUniform.widthSlotT_range ph 0
+    simp only [CloseoutFinalC10RetainedPhaseFold.tailSlots]; split_ifs <;> omega
+  · have h := C10TailSlotsUniform.widthSlotT_range ph 1
+    simp only [CloseoutFinalC10RetainedPhaseFold.tailSlots]; split_ifs <;> omega
+  · have hp := (C10TailUniformSlots.phaseIndex ph).isLt
+    dsimp only [CloseoutFinalC10RetainedPhaseFold.phaseBank]
+    split
+    · have := PCJda54a286946142d3_BranchPhases.offset_ge sources p k r
+      simp only; omega
+    · simp only
+      have e : (C10TailUniformSlots.phaseIndex ph).val - 1 ≤ 1 := by omega
+      have e2 : ((C10TailUniformSlots.phaseIndex ph).val - 1) * 278 ≤ 278 := by
+        calc ((C10TailUniformSlots.phaseIndex ph).val - 1) * 278 ≤ 1 * 278 := Nat.mul_le_mul_right _ e
+          _ = 278 := by omega
+      omega
 
 end
 end NearCubicWires.SourceConstruction

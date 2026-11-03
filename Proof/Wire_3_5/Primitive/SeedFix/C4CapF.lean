@@ -1,3 +1,5 @@
+import Proof.Wire_3_5.Primitive.SeedFix.C4CapA
+import Proof.Wire_3_5.Primitive.SeedFix.C4SJ
 import Proof.Wire_3_5.Primitive.SeedFix.C4CapD
 import Proof.Wire_3_5.Primitive.SeedFix.C4PadB
 
@@ -6,7 +8,8 @@ import Proof.Wire_3_5.Primitive.SeedFix.C4PadB
 The free numbers of a SYM call reach `2^{Θ(R√B_S·L)} = 2^{o(n)}` (the finding 6, ruling), so the numbers machine's
 capacity is `2^m` with `m` LINEAR in `n` and a small coefficient: `m = ⌊n/8⌋ + C`. Its square `2^{n/4 + 2C}` stays in the
 selection class `2^{q/2 + c_sel k}` (P3:3098-3100). The chain reads `1^n` (the front's `gN1`), writes `1^{⌊n/8⌋ + C}`
-(**`divW`**: `C` ones, then one per complete block of eight), `srcWord m` (`tsS`) and `1^{2^m}` (`srcS`), on the 39-tape layout with the output on tape `35`.
+(**`divW`**: `C` ones, then one per complete block of eight), `srcWord m` (`tsS`) and `1^{2^m}` (`srcS`), on M60's
+39-tape layout with the output on tape `35`.
 
 * `fwdN`, `divW`, `div_spec`, `divZ`, **`divS`**; `capExp2`, `capM2`, `capCost2`, **`cap_run2`**.
 

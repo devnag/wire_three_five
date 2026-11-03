@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeClauseFieldRead
+import Proof.PCP.PCPSerializerTapeSupport
 
 /-! Reuse the original literal trace on physically allocated work tapes.
 The support bound is local to blank work, independent of the source prefix. -/

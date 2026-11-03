@@ -1,4 +1,5 @@
 import Proof.Hierarchy.CompetitorSameBucketBounds
+import Proof.MachineModel.OrdinaryMatrixBatchRankReverseBounds
 import Proof.MachineModel.OrdinaryMatrixCoefficientBounds
 
 /-! Actual cold same-bucket preparation from the original Request and raw W.

@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.WitnessBoundedEncoding
+import Proof.CaseAnalysis.WitnessSourceSize
 
 /-! At one eventual dyadic onset, every actual source-dependent honest
 family fits the unchanged ordinary witness cap and preserves its exact fields. -/

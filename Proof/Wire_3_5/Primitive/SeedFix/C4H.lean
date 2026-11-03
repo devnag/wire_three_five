@@ -1,6 +1,8 @@
-import Proof.Wire_3_5.Primitive.SeedFix.C4KIface
-import Proof.Wire_3_5.Primitive.SeedFix.C4SymKB7
 import Proof.Wire_3_5.Primitive.SeedFix.HbLink
+import Proof.Wire_3_5.Primitive.SeedFix.C4WA
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymKB7Base
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTypesBase
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixHashObjective
 
 /-! # C4H: the HASH stage's contract (types only)
 
@@ -144,7 +146,7 @@ def hCoreCost (wa : RepairRepresentation.WilliamsAlgorithm) (a : RepairRepresent
     ((hbX D c p'.length (SeedFix.listNum p')).n * (Kc + 2) + 1) + 64 * ((ListMachine.Rec.exprWord (hV D p')).length + 64) +
     C4Iface.asmCost (C4Child.pre a R0) (C4Child.post a R0) (hV D p') + C4Pipe.childCost wa a (hR R0 D p') r
 
-/-- **(iv) The side conditions at a HASH call** (the reference one, instances of its batch-generic SymEAt): at the free numbers
+/-- **(iv) The side conditions at a HASH call** (C1b's, instances of its batch-generic SymEAt): at the free numbers
 `fr` (`TWd, Cap, Q', h, m, pr, ρ`), the data `D`, the capacities `c`, the Hb cell bound `Kc`, the child bound `Kch`,
 the compiler's request `R0` (the call's THR pool at `h = fr 3`, `Q' = fr 2`, `m = fr 4`, `pr = fr 5`), and `s_h`:
 the Hb printer's conditions at every child, the compiler's precondition, `Q' ≤ pr`, the cost, the exact recovery

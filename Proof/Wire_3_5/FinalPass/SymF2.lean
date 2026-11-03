@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.FinalPass.SymF1
+import Proof.Wire_3_5.Primitive.Writers.Arith
 import Proof.Wire_3_5.FinalPass.TabEmit
 
 /-! # SWf (the SYM words writer's flat tables), part 2: a unit's emission

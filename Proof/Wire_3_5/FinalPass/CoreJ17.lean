@@ -1,4 +1,22 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.CoreJ16
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.Core9
+import Proof.Wire_3_5.FinalPass.CoreIfaceMJ
+import Proof.Wire_3_5.FinalPass.CoreJ11
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.CoreJ10
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S5Core over the writers with arbitrary residues, part J17: the core half's cost below one power (P3:3170-3181)
 
@@ -84,3 +102,5 @@ theorem coreCost_leJ (r : FReq l F kclk coef A a ha) (hDc : 1 ≤ L.Dc)
 end Cost
 
 end NearCubicWires.WireExponent3_5.FinalPass.Core
+
+end

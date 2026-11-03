@@ -1,4 +1,5 @@
 import Proof.MachineModel.ClockLengthReady
+import Proof.Foundations.OrdinaryTapeRenaming
 
 /-! Actual clock phase composition at restored physical heads. This is a
 local execution lemma, not an imported realization premise. -/

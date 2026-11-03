@@ -1,5 +1,5 @@
-import Proof.Wire_3_5.FinalPass.Core18
-import Proof.Wire_3_5.FinalPass.CoreIfaceMJ
+import Proof.Wire_3_5.FinalPass.Core18Base
+import Proof.Wire_3_5.FinalPass.CoreIfaceBase
 
 /-! # S5Core over the writers with arbitrary residues, part J10: the writer's stage (P3:3170-3181)
 
@@ -132,6 +132,7 @@ theorem dock_stageJ {u ns nr m s : ℕ} (M : Machine (ns + 2 + nr) s) (sIn : Fin
   · intro y h0 ho hr
     rw [install_other _ _ _ _ (wslots_ne sIn sOut i0 out room y h0 ho (fun j _ _ => hr j) hso hne)]
     exact hA1o y (hr _) (by rw [mem_regsOf]; rintro ⟨q, hq⟩; exact hr _ hq.symm)
+
 
 open NearCubicWires NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdinary NearCubicWires.ExtDecompositionBatch
 open NearCubicWires.WireExponent3_5.FinalPass.Tm NearCubicWires.WireExponent3_5.PrimAsm.S5Seam

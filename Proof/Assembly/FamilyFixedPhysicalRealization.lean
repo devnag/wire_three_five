@@ -1,4 +1,5 @@
 import Proof.Assembly.RowFixedPhysicalRealization
+import Proof.CaseAnalysis.RowsDegreeLoop
 
 /-! The exact external-row family, with one fixed row body and a paid runtime
 repeat driver. Each normalized packet family is consumed once; the descriptor

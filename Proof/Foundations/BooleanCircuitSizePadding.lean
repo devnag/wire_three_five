@@ -75,6 +75,11 @@ theorem BooleanCircuit.arity_le_padToArity_size {n : ℕ}
   simp [BooleanCircuit.padToArity]
   omega
 
+theorem BooleanCircuit.padToArity_size_le {n : ℕ}
+    (circuit : BooleanCircuit n) :
+    circuit.padToArity.size ≤ circuit.size + n := by
+  simp [BooleanCircuit.padToArity]
+
 @[simp] theorem BooleanCircuit.padToArity_eval {n : ℕ}
     (circuit : BooleanCircuit n) (input : BitInput n) :
     circuit.padToArity.eval input = circuit.eval input := by

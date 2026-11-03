@@ -1,4 +1,28 @@
+import Lean
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Transfer.LiteralSources
 import Proof.Wire_3_5.Primitive.Writers.C3WBudgetA
+import Proof.Wire_3_5.Primitive.Writers.C3WCall
+import Proof.Wire_3_5.Primitive.Writers.C3WCostCall
+import Proof.Wire_3_5.Primitive.Writers.CallSize
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.GeoIface2
+import Proof.Wire_3_5.Assembly.Split
+import W3.Proof.Foundations.SourceRegistry
+import Proof.Wire_3_5.Primitive.Writers.C3WBudgetABase
+import Proof.Wire_3_5.Compiler.MachinePoolContract2
+import Proof.Wire_3_5.Primitive.Writers.WriterIfaceJBase
+import Proof.Wire_3_5.Primitive.SeedFix.C3ReqIface
+import Proof.Wire_3_5.Primitive.SeedFix.C4Geo
+import Proof.Wire_3_5.Primitive.SeedFix.C4GateSymB
+import Proof.Wire_3_5.Primitive.SeedFix.C4GateThrB
+import Proof.Wire_3_5.Primitive.SeedFix.GeoPack
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # C3 request writer, part 24: **`C3ReqLeaf2`**
 
@@ -40,3 +64,5 @@ noncomputable def gtAt :=
 end At
 
 end NearCubicWires.WireExponent3_5.PrimAsm.C3Leaf
+
+end

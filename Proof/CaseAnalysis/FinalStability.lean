@@ -41,6 +41,38 @@ set_option warningAsError true
 
 /-! ## §0 `Finset` presentations of the two list-shaped ledgers -/
 
+theorem ratListSum_cast (values : List ℚ) :
+    ((values.sum : ℚ) : ℝ) = (values.map fun q => ((q : ℚ) : ℝ)).sum := by
+  induction values with
+  | nil => simp
+  | cons value values inductionHypothesis => simp [inductionHypothesis]
+
+/-- The coefficient mass, in the `Finset` shape `Realizes.hmass` is stated in. -/
+theorem coefficientMass_eq_finsetSum {Atom : Type} {degree : ℕ}
+    (polynomial : CircuitPolynomial Atom degree) :
+    ∑ i : Fin polynomial.monomials.length,
+        |((polynomial.monomials[i].coefficient : ℚ) : ℝ)| =
+      ((polynomial.coefficientMass : ℚ) : ℝ) := by
+  have hcast : ((polynomial.coefficientMass : ℚ) : ℝ) =
+      (polynomial.monomials.map fun monomial =>
+        |((monomial.coefficient : ℚ) : ℝ)|).sum := by
+    rw [CircuitPolynomial.coefficientMass, ratListSum_cast, List.map_map]
+    refine congrArg List.sum (List.map_congr_left ?_)
+    intro monomial _
+    simp
+  rw [hcast, listSum_eq_finsetSum]
+
+/-- The estimated mean, in the `Finset` shape `Realizes.hvaluesum` is stated
+in. -/
+theorem estimatedMean_eq_finsetSum {Atom : Type} {degree : ℕ}
+    (estimate : List Atom → ℚ) (polynomial : CircuitPolynomial Atom degree) :
+    polynomial.estimatedMean estimate =
+      ∑ i : Fin polynomial.monomials.length,
+        ((polynomial.monomials[i].coefficient : ℚ) : ℝ) *
+          ((estimate polynomial.monomials[i].factors : ℚ) : ℝ) := by
+  rw [CircuitPolynomial.estimatedMean]
+  exact listSum_eq_finsetSum _ _
+
 /-! ## §1 The coefficient-mass ledger of the three phases -/
 
 /-! ## §2 The propagated estimation error -/

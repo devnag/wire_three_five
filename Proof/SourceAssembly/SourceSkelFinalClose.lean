@@ -1,6 +1,7 @@
-import Proof.SourceAssembly.SourceFactorSelSeamSite
-import Proof.SourceAssembly.SourceRequestSelLoopSite
+import Proof.SourceAssembly.SourceFactorSelG7W
+import Proof.SourceAssembly.SourceSkelXtraF
 import Proof.SourceAssembly.SourceStepsSite
+import Proof.SourceAssembly.SourceFactorSelOnsetFin
 
 section
 set_option autoImplicit false
@@ -17,6 +18,7 @@ namespace NearCubicWires.SourceSkeleton.Final
 noncomputable section
 
 section close
+variable (selector : CyclicChoice.Laws) (compiler : Packets.CompilerLaws)
 
 set_option hygiene false in
 local notation "𝔛" => NearCubicWires.SourceFactorSel.OnsetFin.xtraFin selector

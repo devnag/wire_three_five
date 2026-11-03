@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryMatrixPacketReuse
+import Proof.Circuits.MatrixBucketDimensionsIncrement
 
 /-! Physical initialization and two-mark advancement of the bit-offset
 sentinel. The all-plane loop keeps this single tape at head one. -/

@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryOracleComposeGraph
+import Proof.Amplification.RecoveryReadyCalls
 
 /-! The exact reusable endpoints consumed by the compositor's five calls.
 These are constructed from actual traces; tape installation only describes

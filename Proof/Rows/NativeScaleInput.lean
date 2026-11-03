@@ -1,5 +1,5 @@
-import Proof.Rows.FinalNativeResidueCallback
 import Proof.Rows.ResidueScaleCell
+import Proof.Rows.FinalNativeResidueCallback
 
 /-! The native signed field is physically reduced into the product emitter's
 right-operand master. The source cursor advances and the native reader returns

@@ -1,5 +1,20 @@
+import Lean
 import Proof.Wire_3_5.Foundations.OutMachineJoinW
 import Proof.Wire_3_5.Foundations.OutMachineCarGen
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.CoreIfaceMJ
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Foundations.OutMachineCarIface
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Foundations.OutMachineSAShellBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # SA's shell: S4's words 0–3 from their writers
 
@@ -56,9 +71,6 @@ theorem slot0Ws_eq (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) 
   · simp only [slot0Ws, frontWordsW2, frontWordsOfW2, dif_pos hs]
     rfl
 
-/-- The carrier tables: the carrier phase's words `0`, `1`. -/
-def carF : Fin 2 ↪ Fin 5 := Fin.castLEEmb (by omega)
-
 /-- **The carrier tables' writer** (`carPhaseJ l` at words `0`, `1`). -/
 noncomputable def carSub : CoreWordsMJ l 2 fun F kclk coef A a ha r k => Car.carWords l F kclk coef A a ha r (carF k) :=
   (CarGen.carPhaseJ l).sub carF
@@ -96,3 +108,5 @@ noncomputable def saOf2 (slot0 : CoreWordsMJ l 1 (slot0Ws l)) (slot1 : CoreWords
   ((slot0.join slot1).join (carSub l)).congrWs (saWords l)
 
 end NearCubicWires.WireExponent3_5.FinalPass.Out.SA
+
+end

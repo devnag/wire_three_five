@@ -1,4 +1,16 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.S5TPost2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.S5TStage
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.FinalPass.S5TScrBase
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-! # S5-THR, part 31: the THR half on the scrub's layout (P3:3170-3181)
 
@@ -28,25 +40,6 @@ open NearCubicWires.WireExponent3_5.PrimAsm.DockW (tape_cases sTape_inj sTape_ne
 section Scr
 variable (D : ℕ) (alg : RepairRepresentation.DecompositionAlgorithm) (Dexp : ℕ)
 
-/-- The stage's scratch: the cell and every stream but the input, the THR slots and the top power. -/
-def scS (x6 xt : ℕ) (j : Fin (nsL D x6 xt + 2 + nrL)) : Bool :=
-  decide (j.val = 1 ∨ (10 ≤ j.val ∧ j.val ≤ nsL D x6 xt + 1 ∧ j.val ≠ 13 + D))
-
-/-- The register tapes on the scrub's layout. -/
-def regL (x6 xt : ℕ) : List (Fin (nsL D x6 xt + 2 + nrL + 1 + 1)) :=
-  (List.finRange nrL).map (fun r => Scrub.inner (rTape (ns := nsL D x6 xt) r))
-
-theorem regL_nodup (x6 xt : ℕ) : (regL D x6 xt).Nodup := by
-  unfold regL
-  refine (List.nodup_finRange nrL).map (fun a b h => ?_)
-  have := congrArg Fin.val h
-  rw [Scrub.inner_val, Scrub.inner_val] at this
-  exact PrimAsm.DockW.rTape_inj (Fin.ext this)
-
-theorem mem_regL (x6 xt : ℕ) (j : Fin (nsL D x6 xt + 2 + nrL + 1 + 1)) :
-    j ∈ regL D x6 xt ↔ ∃ r : Fin nrL, j = Scrub.inner (rTape r) := by
-  unfold regL; simp [eq_comm]
-
 /-- **The THR half on the scrub's layout.** -/
 noncomputable def thrM (l : Literals) (cr j0 jL j1 c0 : ℕ) :=
   Composition.machine (Composition.machine
@@ -55,42 +48,6 @@ noncomputable def thrM (l : Literals) (cr j0 jL j1 c0 : ℕ) :=
       (scS D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x)))
     (Prog.seq (eraseRegs (regL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x))
       (eraseT Scrub.driverTape)).compile
-
-theorem heads_zero {t : ℕ} : Scrub.heads (t := t) (fun _ => 0) = fun _ => 0 := by
-  funext j
-  refine Scrub.cover (motive := fun j => Scrub.heads (fun _ => 0) j = 0) (fun i => ?_) ?_ ?_ j <;> simp
-
-theorem wenc_H_zero {ns nr : ℕ} (cap : ℕ) (σ : WState ns nr) (hs : ∀ i, σ.sh i = 0) (hv : ∀ r, σ.val r = 0) :
-    (wenc cap σ).H = fun _ => 0 := by
-  funext j
-  rcases tape_cases j with ⟨i, rfl⟩ | rfl | ⟨r, rfl⟩
-  · rw [wenc_H_s, hs]
-  · rw [wenc_H_c]
-  · rw [wenc_H_r, hv]
-
-theorem stream_cases (i : Fin (nsL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x + 1)) (hs : scS D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x (sTape (nr := nrL) i) = false) :
-    i = sIn D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x ∨ (∃ k, i = sSlot D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x k) ∨ i = xsN D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x D := by
-  have hi := i.isLt
-  simp only [scS, PrimAsm.DockW.sTape_val, decide_eq_false_iff_not, not_or, not_and, not_le] at hs
-  by_cases h0 : i.val = 0
-  · left; exact Fin.ext h0
-  · rw [if_neg h0] at hs
-    by_cases h9 : i.val ≤ 8
-    · right; left; exact ⟨⟨i.val - 1, by omega⟩, Fin.ext (by simp [sSlot]; omega)⟩
-    · right; right
-      apply Fin.ext
-      rw [xsN_val D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x D le_rfl]
-      have h1 := hs.1
-      have h2 := hs.2
-      by_contra hc
-      exact absurd (h2 (by omega) (by omega)) (by omega)
-
-/-- The THR half's exit bank on the scrub's layout. -/
-noncomputable def thrAf (W : ℕ) (σE : WState (nsL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x) nrL) : Fin (nsL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x + 2 + nrL + 1 + 1) → List Bool :=
-  Function.update (fun i => if i ∈ regL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x then
-      List.replicate (Scrub.bank (Scrub.blank (scS D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x) (wenc (2 * W + 2) σE).A W) W (2 * W + 3) i).length false
-    else Scrub.bank (Scrub.blank (scS D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x) (wenc (2 * W + 2) σE).A W) W (2 * W + 3) i)
-    Scrub.driverTape (List.replicate (W + 0) false)
 
 /-- **The THR half on the scrub's layout, run**: from the final pass's entry bank, given the stage's run from the
 prelude's exit within `W − 1` steps. -/
@@ -167,76 +124,8 @@ theorem thrM_step (l : Literals) (cr j0 jL j1 c0 : ℕ) (u : List Bool) (W : ℕ
   rw [hb3] at s3
   exact Step.seq (Step.seq s1 s2) s3
 
-theorem thrAf_in (W : ℕ) (σE : WState (nsL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x) nrL) :
-    thrAf D alg Dexp W σE (Scrub.inner (sTape (sIn D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x))) = σE.st (sIn D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x) := by
-  have hnr : Scrub.inner (sTape (nr := nrL) (sIn D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x)) ∉ regL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x := fun h => by
-    obtain ⟨r, hr⟩ := (mem_regL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x _).1 h
-    exact sTape_ne_r _ r (inner_inj hr)
-  unfold thrAf
-  rw [Function.update_of_ne (Scrub.inner_ne_driver _), if_neg hnr, Scrub.bank_inner]
-  simp only [Scrub.blank]
-  rw [if_neg (by simp [scS, PrimAsm.DockW.sTape_val, sIn]), wenc_A_s]
-
-theorem thrAf_slot (W : ℕ) (σE : WState (nsL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x) nrL) (k : Fin 8) :
-    thrAf D alg Dexp W σE (Scrub.inner (sTape (sSlot D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x k))) = σE.st (sSlot D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x k) := by
-  have hnr : Scrub.inner (sTape (nr := nrL) (sSlot D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x k)) ∉ regL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x := fun h => by
-    obtain ⟨r, hr⟩ := (mem_regL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x _).1 h
-    exact sTape_ne_r _ r (inner_inj hr)
-  unfold thrAf
-  rw [Function.update_of_ne (Scrub.inner_ne_driver _), if_neg hnr, Scrub.bank_inner]
-  simp only [Scrub.blank]
-  rw [if_neg (by have := k.isLt; simp [scS, PrimAsm.DockW.sTape_val, sSlot]; omega), wenc_A_s]
-
-theorem thrAf_blank (W : ℕ) (σE : WState (nsL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x) nrL) (hreg : ∀ r, σE.val r ≤ 2 * W + 2)
-    (hxD : σE.st (xsN D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x D) = List.replicate (W + 1) false) (j : Fin (nsL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x + 2 + nrL + 1 + 1))
-    (hin : j ≠ Scrub.inner (sTape (sIn D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x))) (hsl : ∀ k, j ≠ Scrub.inner (sTape (sSlot D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x k))) :
-    ∃ ℓ ≤ 2 * W + 3, thrAf D alg Dexp W σE j = List.replicate ℓ false := by
-  have hge := nsL_ge D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x
-  unfold thrAf
-  revert hin hsl
-  refine Scrub.cover (motive := fun j => j ≠ Scrub.inner (sTape (sIn D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x)) →
-    (∀ k, j ≠ Scrub.inner (sTape (sSlot D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x k))) → ∃ ℓ ≤ 2 * W + 3,
-      Function.update (fun i => if i ∈ regL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x then List.replicate (Scrub.bank (Scrub.blank (scS D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x)
-        (wenc (2 * W + 2) σE).A W) W (2 * W + 3) i).length false else Scrub.bank (Scrub.blank (scS D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x)
-        (wenc (2 * W + 2) σE).A W) W (2 * W + 3) i) Scrub.driverTape (List.replicate (W + 0) false) j =
-        List.replicate ℓ false) (fun i => ?_) ?_ ?_ j
-  · intro hi1 hi2
-    rw [Function.update_of_ne (Scrub.inner_ne_driver _)]
-    rcases tape_cases i with ⟨s, rfl⟩ | rfl | ⟨r, rfl⟩
-    · have hnr : Scrub.inner (sTape (nr := nrL) s) ∉ regL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x := fun h => by
-        obtain ⟨r, hr⟩ := (mem_regL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x _).1 h
-        exact sTape_ne_r _ r (inner_inj hr)
-      simp only [if_neg hnr, Scrub.bank_inner, Scrub.blank]
-      cases hsc : scS D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x (sTape s)
-      · rcases stream_cases D alg Dexp s hsc with h | ⟨k, h⟩ | h
-        · exact absurd (by rw [h]) hi1
-        · exact absurd (by rw [h]) (hi2 k)
-        · refine ⟨W + 1, by omega, ?_⟩
-          simp only [Bool.false_eq_true, if_false]; rw [wenc_A_s, h, hxD]
-      · exact ⟨W, by omega, by simp⟩
-    · have hnr : Scrub.inner (cTape (ns := nsL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x) (nr := nrL)) ∉ regL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x := fun h => by
-        obtain ⟨r, hr⟩ := (mem_regL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x _).1 h
-        exact cTape_ne_r r (inner_inj hr)
-      simp only [if_neg hnr, Scrub.bank_inner, Scrub.blank]
-      exact ⟨W, by omega, by simp [scS, PrimAsm.DockW.cTape_val]⟩
-    · have hr : Scrub.inner (rTape (ns := nsL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x) r) ∈ regL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x := (mem_regL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x _).2 ⟨r, rfl⟩
-      simp only [if_pos hr]
-      refine ⟨_, ?_, rfl⟩
-      rw [Scrub.bank_inner]
-      simp only [Scrub.blank]
-      rw [if_neg (by simp only [scS, PrimAsm.DockW.rTape_val, decide_eq_true_eq]; omega), wenc_A_r]
-      simp [regTape]; have := hreg r; omega
-  · intro _ _
-    have hnr : Scrub.logTape ∉ regL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x := fun h => by
-      obtain ⟨r, hr⟩ := (mem_regL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x _).1 h
-      exact Scrub.inner_ne_log _ hr.symm
-    rw [Function.update_of_ne (Ne.symm Scrub.driver_ne_log)]
-    simp only [if_neg hnr, Scrub.bank_log]
-    exact ⟨_, le_rfl, rfl⟩
-  · intro _ _
-    rw [Function.update_self]
-    exact ⟨W, by omega, by simp⟩
-
 end Scr
 
 end NearCubicWires.WireExponent3_5.FinalPass.S5T
+
+end

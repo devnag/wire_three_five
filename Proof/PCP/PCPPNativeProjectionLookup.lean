@@ -1,4 +1,6 @@
 import Proof.PCP.PCPPNativeProjectionRead
+import Proof.PCP.ProjectionNormalizationFieldList
+import Proof.PCP.PCPFieldMoves
 
 /-! Paid lookup of one raw projection code. A real unary index drives the
 skipped scan; only the selected field enters the existing binary unpair.

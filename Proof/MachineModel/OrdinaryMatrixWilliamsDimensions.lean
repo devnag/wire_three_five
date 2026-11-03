@@ -45,6 +45,11 @@ theorem count_run (d e : ℕ) : ∃ actual,
   change base.steps+1+body.steps=_
   omega
 
+def slots : Fin 12 → Fin 422 := ![400,412,413,414,415,200,416,417,418,419,420,421]
+noncomputable def first := TapeEmbedding.machine 10 MatrixWilliamsHeaderEntry.machine
+noncomputable def last := RecoveryFocus.machine slots countMachine
+noncomputable def machine := Composition.machine first last
 noncomputable def budget (r : Request) := MatrixWilliamsHeaderEntry.budget r+1+(8*r.U*r.Capacity+10*r.U+30)
+def selected : Fin 7 → Fin 422 := ![400,200,407,394,409,410,420]
 
 end NearCubicWires.RepairOrdinary.MatrixWilliamsDimensions

@@ -12,6 +12,7 @@ open LocalBitMultitape RepairOrdinary RecoveryRootRound ExtDecompositionBatch
 open RepairRepresentation RepairSource.CloseoutFinal RepairSource.VerifierDecoding
 open CloseoutRowsPoolWeight
 
+def extra : Fin 4→List Bool := ![[],[],CompareMachine.word 0,[]]
 noncomputable def worker := TapeEmbedding.machine 4 core
 noncomputable def machine := Reusable48.machine worker
 

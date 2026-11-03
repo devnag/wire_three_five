@@ -1,5 +1,7 @@
-import Proof.MachineModel.BankCountLayout
-import Proof.MachineModel.BankOptional
+import Proof.MachineModel.BankCountOptional
+import Proof.MachineModel.NativeFanout
+import Proof.MachineModel.NativeMaster
+import Proof.CaseAnalysis.RowsBankFields
 import Proof.MachineModel.NativeFanoutLayout
 
 /-! Observed bits and the proved common extent identify the exact native

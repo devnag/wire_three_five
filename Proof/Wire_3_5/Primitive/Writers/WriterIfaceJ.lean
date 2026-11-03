@@ -1,4 +1,15 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.WriterIface
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.WriterIfaceJBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # PA (d): the batch writers' interface, v2 (residues on the work tapes)
 
@@ -29,23 +40,6 @@ open NearCubicWires.WireExponent3_5.PrimAsm.Records NearCubicWires.WireExponent3
 open NearCubicWires.WireExponent3_5.PrimAsm.Enum
 open NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdinary
 open NearCubicWires.WireExponent3_5.PrimAsm.WriterIface
-
-/-- **The writers' output bank, v2**: `frame w` kept on the input tape, the tape word `v` on the output tape, the
-residue `J j` on every other tape. -/
-def outBankJ {t : ℕ} (i o : Fin t) (w v : List Bool) (J : Fin t → List Bool) : Fin t → List Bool :=
-  fun j => if j = i then frame w else if j = o then v else J j
-
-theorem outBankJ_in {t : ℕ} (i o : Fin t) (w v : List Bool) (J : Fin t → List Bool) : outBankJ i o w v J i = frame w := by
-  simp [outBankJ]
-
-theorem outBankJ_out {t : ℕ} (i o : Fin t) (hio : i ≠ o) (w v : List Bool) (J : Fin t → List Bool) :
-    outBankJ i o w v J o = v := by
-  simp [outBankJ, Ne.symm hio]
-
-/-- **A writer's run, v2**: from `inBank i w`, within `B` steps, the machine halts with every head at `0`, the input
-kept, `v` on the output tape and residues of length at most `B` elsewhere. -/
-def WriterRun {t s : ℕ} (M : Machine t s) (B : ℕ) (i o : Fin t) (w v : List Bool) : Prop :=
-  ∃ J : Fin t → List Bool, (∀ j, (J j).length ≤ B) ∧ ClockJoin.ReadyRun M B (inBank i w) (outBankJ i o w v J)
 
 section Writers
 open NearCubicWires.WireExponent3_5.Cost NearCubicWires.WireExponent3_5.Split NearCubicWires.WireExponent3_5.Primitive
@@ -101,3 +95,5 @@ structure WritersAtJ where
 end Writers
 
 end NearCubicWires.WireExponent3_5.PrimAsm.WriterIfaceJ
+
+end

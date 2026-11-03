@@ -1,5 +1,6 @@
 import Proof.Wire_3_5.UnionMachine.CWEnvChk
 import Proof.Wire_3_5.UnionMachine.CWRoundB
+import Proof.CaseAnalysis.RowsGateFieldsBudget
 
 /-! # C6 front, U5, the code writers: the envelope loop over a carrier's atoms
 

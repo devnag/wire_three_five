@@ -1,5 +1,5 @@
 import Proof.Wire_3_5.Transfer.TransferTests
-import Proof.Wire_3_5.Foundations.Skeleton
+import Proof.Wire_3_5.Foundations.SkeletonBase
 
 /-! # The tests' masks are the seed's `filt:gap` filters of the named carriers (P3:3432-3449)
 
@@ -16,7 +16,7 @@ translation, with the mode's cap `B.capOf m`) of a request naming the one carrie
 the union machine works in its guessed class mode `m` (P3:3669-3671), so every primitive call it makes is in mode
 `m`: each call for a `V` or `Q` term of `X` (one named carrier) sees exactly `G_X` (`mask_single`), and each call for
 a `μ` term of clause `i` (the two named carriers of `X(i,1)`, `X(i,2)`, with any circuits) sees exactly `M_i`
-(`mask_pair`, `clauseMask_carrierFilter`). So the tests of `Proof.Wire_3_5.Transfer.TransferTests` at these filters are the
+(`mask_pair`, `clauseMask_carrierFilter`). So the tests of `WireExponent3_5TransferTests` at these filters are the
 quantities the primitive's calls estimate. The seed space is the seed's `I.Seed m q` (finite, nonempty), and
 `tr:soundness` holds there (`seedMaskedVerifierTrace_empty`).
 -/

@@ -1,4 +1,4 @@
-import Proof.CaseAnalysis.RowsBankPacket
+import Proof.CaseAnalysis.RowsPacketOptional
 
 /-! The actual outer family loop consumes every polynomial packet once,
 including empty polynomials, and rewinds its literal family driver. -/
@@ -35,5 +35,16 @@ theorem next_word {α β : Type} (xs : List α) (default : α) (f : α→List β
   simp only [List.take_succ_eq_append_getElem hj,List.flatMap_append,List.flatMap_cons,
     List.flatMap_nil,List.append_nil,List.length_append,List.getD_eq_getElem xs default hj]
 
+noncomputable def machine := CloseoutRowsDegreeLoop.machine CloseoutRowsPacketOptional.machine
+noncomputable def stream {n : ℕ} (gs : List (ExactThresholdGate n))
+    (p F Q w C : ℕ) (bank : List (List (List Bool))) :=
+  bank.flatMap (CloseoutRowsPacketOptional.packet gs p F Q w C)
+noncomputable def entry {n : ℕ} (gs : List (ExactThresholdGate n))
+    (p F Q w C : ℕ) (bank : List (List (List Bool))) (pre tail : List Bool)
+    (j : ℕ) (out : List Bool) :=
+  (⟨CloseoutRowsPacketOptional.machine.start,
+    heads out (pre.length+(stream gs p F Q w C (bank.take j)).length),
+    tapes C out (pre++stream gs p F Q w C bank++tail)⟩ : Configuration 114 _)
+def budget (N Q C : ℕ) := N*(CloseoutRowsPacketOptional.cost Q C+3)+3
 
 end NearCubicWires.RepairOrdinary.CloseoutRowsFamilyLoop

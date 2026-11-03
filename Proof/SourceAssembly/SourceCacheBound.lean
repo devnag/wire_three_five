@@ -1,4 +1,5 @@
 import Proof.SourceAssembly.SourceCacheReady
+import Proof.MachineModel.ClosureLocalSupport
 
 /- Actual cache-program support bounds, independent of retained zero reserve.
 The bound excludes allocation and prior clearing; it is a maximum with the old

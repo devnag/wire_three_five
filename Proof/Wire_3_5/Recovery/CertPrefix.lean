@@ -1,4 +1,7 @@
 import Proof.Wire_3_5.Recovery.CertPrefixPrep
+import Proof.CaseAnalysis.CloseoutScheduleColdCapacity
+import Proof.CaseAnalysis.CapacityBudget
+import Proof.CaseAnalysis.ScheduleGuardedRun
 
 /-! # The prefix of the `E^NP` program: `2^{a(n)}` from the input word (P3:3738-3741, 3758-3759; D1.6)
 

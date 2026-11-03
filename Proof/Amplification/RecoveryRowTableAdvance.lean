@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryRowReadChecked
+import Proof.Amplification.RecoveryEraseWidth
 
 /-! Actual increment of the checked-prior-row unary driver. Entry and exit
 positioning are paid, and every unrelated cursor remains at its position. -/

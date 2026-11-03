@@ -1,5 +1,6 @@
-import Proof.Wire_3_5.Primitive.Writers.GapNums
 import Proof.Wire_3_5.Primitive.Writers.SymDecCounts
+import Proof.Wire_3_5.Primitive.Writers.GapNums
+import Proof.Wire_3_5.Primitive.Writers.CapNum
 
 /-! # PA (d)-SYM decode, part 3: the call's star numbers, sparse count and cap in the cell's registers
 

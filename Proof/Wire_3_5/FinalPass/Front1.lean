@@ -1,4 +1,23 @@
-import Proof.Wire_3_5.FinalPass.Bridge3
+import Lean
+import Proof.Wire_3_5.FinalPass.Bridge1
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.AssemblyDock3
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.FinalPass.SeamsOut2
+import Proof.Wire_3_5.FinalPass.SeamsProg
+import Proof.Wire_3_5.FinalPass.SeamsProg2
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.FinalPass.SeamsPt
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.S5Seam2
+import Proof.Wire_3_5.Primitive.Writers.S5SeamB
+import Proof.Wire_3_5.Primitive.Writers.S5SeamB2
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The front phase from the two halves (P3:3105-3115, 3170-3181)
 
@@ -95,3 +114,5 @@ noncomputable def frontOfHalves : FrontPh3 l F kclk coef A a ha Sw Y where
 end Front
 
 end NearCubicWires.WireExponent3_5.FinalPass.Bridge
+
+end

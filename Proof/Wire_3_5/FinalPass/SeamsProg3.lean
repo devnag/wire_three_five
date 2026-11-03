@@ -1,5 +1,23 @@
-import Proof.Wire_3_5.FinalPass.SeamsWS
-import Proof.Wire_3_5.Primitive.Writers.S5SeamB2
+import Lean
+import Proof.Wire_3_5.FinalPass.SeamsS4
+import Proof.Wire_3_5.FinalPass.SeamsProg2Base
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.FinalPass.SeamsProg
+import Proof.Wire_3_5.FinalPass.SeamsProg2
+import Proof.Wire_3_5.FinalPass.SeamsPt
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.S5Seam2
+import Proof.Wire_3_5.Primitive.Writers.S5SeamB
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SeamsProg3Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S4's words, v3: the filter's parameters carried to the seeds phase
 
@@ -35,51 +53,7 @@ open NearCubicWires.SupplierWalk (majorityThreshold)
 
 /-! ## The words -/
 
-/-- **S4's small numbers, v2**: `s4Small`, then the filter's parameters `len`, `cap`, `errExp`. -/
-def s4Small2 (P : StarParams) {n : ℕ} (carriers : List (Carrier n)) (FP : GapParams) : List ℕ :=
-  s4Small P carriers FP ++ [FP.len, FP.cap, FP.errExp]
-
-/-- **S4's own words, v2**: `s4Core` with slot `7` the numbers `s4Small2`. -/
-def s4Core2 (P : StarParams) (σ : P.Translation) (smp : CallSample P) (carriers : List (Carrier P.n))
-    (FP : GapParams) (i : Fin 8) : List Bool :=
-  if i.val = 7 then PrimAsm.Data.unaryList (s4Small2 P carriers FP) else s4Core P σ smp carriers FP i
-
 section Req
-variable {kc : ℕ} {E : Envelope} {B : TimeBudget kc E} (I : PrimitiveInputs B)
-  (alg : RepairRepresentation.DecompositionAlgorithm) (Sw : SymWords)
-
-/-- **The front's words at a request, v3**: `frontWordsOfW` with S4's words `s4Core2`. -/
-def frontWordsOfW2 : PrimRequest → Fin (17 + Sw.nw) → List Bool
-  | ⟨n, .sym, a, ha, Cs, carriers, translation⟩ => fun i =>
-      if hs : I.StarAt n then
-        if h8 : i.val < 8 then
-          s4Core2 (I.starParams n hs) ((I.starParams n hs).translationOfCodes translation)
-            ((SeedFix.greedySampler I alg).symS Cs carriers translation hs) carriers (I.filterParams .sym n) ⟨i.val, h8⟩
-        else if i.val < 16 then []
-        else if h : i.val - 16 < Sw.nw then Sw.words (symCallOf I hs ha Cs carriers) ⟨i.val - 16, h⟩
-        else PrimAsm.Data.unaryList (List.ofFn (Sw.nums (symCallOf I hs ha Cs carriers)))
-      else []
-  | ⟨n, .thr, a, ha, Cs, carriers, translation⟩ => fun i =>
-      if hs : I.StarAt n then
-        if h8 : i.val < 8 then
-          s4Core2 (I.starParams n hs) ((I.starParams n hs).translationOfCodes translation)
-            ((SeedFix.greedySampler I alg).thrS Cs carriers translation hs) carriers (I.filterParams .thr n) ⟨i.val, h8⟩
-        else if h15 : i.val < 15 then thrWords (thrCallOf I alg hs ha Cs carriers translation) ⟨i.val - 8, by omega⟩
-        else if i.val = 15 then
-          PrimAsm.Data.unaryList (List.ofFn (thrNums (thrCallOf I alg hs ha Cs carriers translation)))
-        else []
-      else []
-
-theorem s4Core2_agree (P : StarParams) (σ : P.Translation) (smp : CallSample P) (carriers : List (Carrier P.n))
-    (FP : GapParams) (i : Fin 8) (hi : i.val ≠ 7) : s4Core2 P σ smp carriers FP i = s4Core P σ smp carriers FP i :=
-  if_neg hi
-
-/-- **Every slot but `7` agrees with `frontWordsOfW`.** -/
-theorem frontWordsOfW2_agree (req : PrimRequest) (i : Fin (17 + Sw.nw)) (hi : i.val ≠ 7) :
-    frontWordsOfW2 I alg Sw req i = frontWordsOfW I alg Sw req i := by
-  obtain ⟨n, mode, a, ha, Cs, carriers, translation⟩ := req
-  cases mode <;> simp only [frontWordsOfW2, frontWordsOfW] <;> split_ifs <;> first | rfl |
-    exact s4Core2_agree _ _ _ _ _ _ (by simpa using hi)
 
 end Req
 
@@ -170,3 +144,5 @@ structure S5CoreB3 (L : S5Lay Sw.nw) extends S5Core3 l F kclk coef A a ha Sw L w
 end Family
 
 end NearCubicWires.WireExponent3_5.FinalPass.Seams
+
+end

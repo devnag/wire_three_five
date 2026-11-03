@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.WitnessHeaderSwitch
+import Proof.MachineModel.Runs
 
 /-! A scanned native flag selects one actual template worker. Both paid
 control transitions use the original call/stop interpreter. -/

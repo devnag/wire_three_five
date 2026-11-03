@@ -1,4 +1,12 @@
-import Proof.Wire_3_5.Primitive.Writers.HashS1
+import Proof.Wire_3_5.Primitive.Writers.HashB1Base
+import Proof.Wire_3_5.Primitive.Writers.ThrB7Base
+import Proof.Wire_3_5.Primitive.Writers.ThrBud2Base
+import Proof.Wire_3_5.Primitive.Writers.ThrDataH
+import Proof.Wire_3_5.Primitive.Writers.ThrK7Base
+import Proof.Wire_3_5.Primitive.Writers.ThrStrip7
+import Proof.Wire_3_5.Primitive.SeedFix.C3ReqIface
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymLfCBase
+import Proof.Wire_3_5.Primitive.SeedFix.TS4WBase
 
 /-! # HASH setup (C), P1: the front's copy on a fresh block
 

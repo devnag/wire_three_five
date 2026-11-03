@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryMatrixVariablePacketCapacity
+import Proof.MachineModel.ClockUnarySum
 
 /-! Physical U+1 and d+p+1 sentinels from the actual retained U/d/p.
 These feed the packet workspace capacity polynomial; no derived dimension

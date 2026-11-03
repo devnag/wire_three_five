@@ -1,3 +1,4 @@
+import Proof.PCP.PCPPNativeResources
 import Proof.PCP.PCPPNativeQueryRun
 
 /-! Physical resource output slots are shared with the cold query caller.

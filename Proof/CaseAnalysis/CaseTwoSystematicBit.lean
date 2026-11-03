@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CaseTwoParityMeaning
+import Proof.PCP.PCPPQueryCachedReaders
 
 /-! One actual SAME-cache support read followed by the physical masked
 parity scan. The source-derived capacity stays on the mask buffer; it is

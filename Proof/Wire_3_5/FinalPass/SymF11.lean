@@ -1,12 +1,25 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SymF5
 import Proof.Wire_3_5.FinalPass.SWParts
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Foundations.OutMachineJoinGBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # SWf (the SYM words writer's flat tables), part 11: the flat part's words at a SYM request
 
 At a SYM request `r = ⟨n, sym, a', Cs, carriers, …⟩` of a call family (on-star, `PrimitiveInputs.Call`), the SYM slots
 `24 … 27` of the front's exit (`SWParts.swWs l 8 4`, the words of `SWfT l`) are the list seeds' flat tables of the
 call's flat list `symListParams I n a' Cs carriers` at the population lengths `|symGates C_c|` (`0` past the tuple):
-`tablesJ (symCallOf …) c`, i.e. `flatWord`.
+the `tablesJ (symCallOf …) c`, i.e. `flatWord`.
 
 * `symPl r`, `symL r c` (the flat list and the population lengths at a request, `⟨0,0,0⟩`/`0` at THR);
 * **`swf_words`**: `swWs l 8 4 _ F … r c = flatWord (symPl r) (symL r c)` at every SYM request.
@@ -65,3 +78,5 @@ theorem swf_words (r : FReq l F kclk coef A a ha) (hm : r.1.mode = .sym) (c : Fi
 end Req
 
 end NearCubicWires.WireExponent3_5.FinalPass.SymF
+
+end

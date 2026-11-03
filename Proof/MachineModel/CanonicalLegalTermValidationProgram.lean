@@ -1,4 +1,6 @@
 import Proof.MachineModel.CanonicalRationalValidationProgram
+import Proof.MachineModel.CanonicalTaggedTupleProgram
+import Proof.MachineModel.PreserveRightProgram
 
 /-!
 # Canonical legal-term validation

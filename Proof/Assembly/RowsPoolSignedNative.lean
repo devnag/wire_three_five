@@ -1,4 +1,5 @@
 import Proof.Assembly.RowsPoolSignedFields
+import Proof.Hierarchy.HierarchyFixedWord
 
 /-! Total P/N scalar to the exact original native magnitude. Zero takes one
 fixed literal branch; positive values reuse the existing trim/native worker.

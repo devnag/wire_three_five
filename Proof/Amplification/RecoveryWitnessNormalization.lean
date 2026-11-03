@@ -1,3 +1,4 @@
+import Proof.Foundations.RecoveryPipeline
 import Proof.Amplification.RecoveryWitnessPolicy
 
 /-!

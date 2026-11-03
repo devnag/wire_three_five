@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryPCPFormulaResumeProofSource
+import Proof.MachineModel.GeneratedAmplifierCopy
 
 /-! The actual Case-1 input is its original framed dimension followed by
 the complete recovered proof table, physically unframed and appended. -/

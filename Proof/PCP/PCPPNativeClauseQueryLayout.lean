@@ -20,6 +20,7 @@ def tapes (old : Fin 278→List Bool) (fields : List Bool) (p n : ℕ) : Fin 336
   Fin.addCases (m:=278) (n:=58) (motive:=fun _=>List Bool) old (extra fields p n)
 def heads (old : Fin 278→ℕ) : Fin 336→ℕ :=
   Fin.addCases (m:=278) (n:=58) (motive:=fun _=>ℕ) old (fun _=>0)
+noncomputable def first := TapeEmbedding.machine 58 PCPPNativeQueryConjunction.machine
 
 theorem clause_data (old : Fin 278→List Bool) (fields : List Bool) (stride p n C base accumulator M : ℕ)
     (out : List Bool) (hstride : old 6=UnaryTemplate.tape stride)

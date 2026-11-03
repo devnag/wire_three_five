@@ -18,28 +18,8 @@ A stage author proves only the ports a consumer reads (inside `P`) and the cost;
 the exit bank itself is chosen, so nothing downstream can depend on it except
 through `P`. -/
 
-/-- A `Block` from an existential stage: machine, cost and entry bank are the
-given ones; the exit bank is `Classical.choose`n and satisfies `P`. -/
-def Block.ofExists {s n : ℕ} {M : Machine t s} {H : Fin t → ℕ} {A : Fin t → List Bool}
-    {P : (Fin t → ℕ) → (Fin t → List Bool) → Prop}
-    (h : ∃ H' A', Step M n H A H' A' ∧ P H' A') : Block t where
-  states := s
-  machine := M
-  cost := n
-  entryH := H
-  entryA := A
-  exitH := Classical.choose h
-  exitA := Classical.choose (Classical.choose_spec h)
-  run := (Classical.choose_spec (Classical.choose_spec h)).1
-
 section ofExists
-variable {s n : ℕ} {M : Machine t s} {H : Fin t → ℕ} {A : Fin t → List Bool}
-    {P : (Fin t → ℕ) → (Fin t → List Bool) → Prop}
-    (h : ∃ H' A', Step M n H A H' A' ∧ P H' A')
 
-@[simp] theorem Block.ofExists_cost : (Block.ofExists h).cost = n := rfl
-@[simp] theorem Block.ofExists_entryH : (Block.ofExists h).entryH = H := rfl
-@[simp] theorem Block.ofExists_entryA : (Block.ofExists h).entryA = A := rfl
 end ofExists
 
 /-! ## 2. The scrubbed layout `t+1+1` -/
@@ -264,29 +244,8 @@ end Scrub
 
 /-! ## 4. `Block.scrub` -/
 
-/-- **`Block.scrub`.** Two extra tapes (one shared log, one driver); cost
-`2*b.cost+2 + 1 + (2*R+4)`; exit exactly `List.replicate R false` on `S`. -/
-def Block.scrub (b : Block t) (reset S : Fin t → Bool) (R L : ℕ)
-    (hstart : ∀ i, reset i = true → b.entryH i = 0) (hSr : ∀ i, S i = true → reset i = true)
-    (hA : ∀ i, S i = true → (b.entryA i).length ≤ R) (hR : b.cost + 1 ≤ R) (hL : R + 1 ≤ L) :
-    Block (t+1+1) :=
-  ofStep (Scrub.step b.run reset S R L hstart hSr hA hR hL)
-
 section scrub
-variable (b : Block t) (reset S : Fin t → Bool) (R L : ℕ)
-    (hstart : ∀ i, reset i = true → b.entryH i = 0) (hSr : ∀ i, S i = true → reset i = true)
-    (hA : ∀ i, S i = true → (b.entryA i).length ≤ R) (hR : b.cost + 1 ≤ R) (hL : R + 1 ≤ L)
 
-@[simp] theorem Block.scrub_cost :
-    (b.scrub reset S R L hstart hSr hA hR hL).cost = 2*b.cost+2+1+(2*R+4) := rfl
-@[simp] theorem Block.scrub_entryH :
-    (b.scrub reset S R L hstart hSr hA hR hL).entryH = Scrub.heads b.entryH := rfl
-@[simp] theorem Block.scrub_entryA :
-    (b.scrub reset S R L hstart hSr hA hR hL).entryA = Scrub.bank b.entryA R L := rfl
-@[simp] theorem Block.scrub_exitH :
-    (b.scrub reset S R L hstart hSr hA hR hL).exitH = Scrub.heads (Scrub.rewound reset b.exitH) := rfl
-@[simp] theorem Block.scrub_exitA :
-    (b.scrub reset S R L hstart hSr hA hR hL).exitA = Scrub.bank (Scrub.blank S b.exitA R) R L := rfl
 
 end scrub
 

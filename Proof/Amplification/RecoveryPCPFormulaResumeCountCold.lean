@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryPCPFormulaResumeCount
+import Proof.MachineModel.UWalkUnary
 
 /-! Produce the actual exponential randomness and tautology drivers from
 the retained unary R field. The existing count machine and successor copy

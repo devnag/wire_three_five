@@ -1,5 +1,7 @@
-import Proof.Wire_3_5.Primitive.Writers.Codec
 import Proof.Wire_3_5.Primitive.Writers.DataRun
+import Proof.Wire_3_5.Primitive.Writers.Codec
+import Proof.Wire_3_5.Primitive.PrimitiveSymCall
+import Proof.Wire_3_5.Primitive.Threshold.PrimitiveThrCall
 
 /-! # PA (d): the request bridge (the data stage reads exactly the call's word)
 

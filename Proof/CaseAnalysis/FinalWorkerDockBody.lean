@@ -69,9 +69,59 @@ set_option warningAsError true
 
 /-! ## §1 The emitter's slots -/
 
+theorem answerSlot_val (j : Fin 29) : (answerSlot j).val = 187 + j.val := rfl
+
+theorem answerSlot_injective : Function.Injective answerSlot := by
+  intro a b h
+  have hv := congrArg Fin.val h
+  rw [answerSlot_val, answerSlot_val] at hv
+  exact Fin.ext (by omega)
+
+theorem port_eq : port = answerSlot 28 := rfl
+
+/-- **The emitter is docked, and its output port carries the record word.**
+One real execution of the corpus's record appender, docked at bank tapes
+`187 .. 215`, from a bank that carries its five operand ports.  Its cost
+depends only on the scalar width. -/
+theorem answer_step (scalarWidth : ℕ) (estimate : CompetitorValidity.Estimate)
+    (heads : Fin 218 → ℕ) (bank : Fin 218 → List Bool)
+    (hheads : ∀ j : Fin 29, heads (answerSlot j) = 0)
+    (hbank : ∀ j : Fin 29,
+      bank (answerSlot j) =
+        CloseoutRowsEstimatorCoefficients.Append.input scalarWidth estimate 1 1 j) :
+    ∃ (exitHeads : Fin 218 → ℕ) (exit : Fin 218 → List Bool),
+      Step (RecoveryFocus.machine answerSlot CompetitorCountRecordAppend.machine)
+        (CompetitorCountRecordAppend.budget scalarWidth) heads bank exitHeads exit ∧
+      exit port =
+        CloseoutRowsEstimatorCoefficients.Stream.recordWord scalarWidth estimate 1 1 := by
+  obtain ⟨receipt, hrun, _hsteps, hword⟩ := result_record_run scalarWidth estimate
+  have hstep :
+      Step CompetitorCountRecordAppend.machine
+        (CompetitorCountRecordAppend.budget scalarWidth) (fun _ => 0)
+        (CloseoutRowsEstimatorCoefficients.Append.input scalarWidth estimate 1 1)
+        receipt.final.heads receipt.final.tapes :=
+    Step.of_run hrun rfl rfl
+  have hdock := hstep.dock answerSlot answerSlot_injective heads bank hheads hbank
+  refine ⟨dockH answerSlot heads receipt.final.heads,
+    install answerSlot bank receipt.final.tapes, hdock, ?_⟩
+  rw [port_eq, install_slot answerSlot answerSlot_injective bank receipt.final.tapes 28]
+  exact hword
+
 /-! ## §2 The whole estimator body -/
 
 /-! ## §3 The body's run, as one Prop -/
+
+/-- Every contribution of the call stream is valid at the fold's scalar width. -/
+theorem contributions_valid (entryWidth : ℕ) (entries : List Entry)
+    (hentries : ∀ entry ∈ entries,
+      CloseoutRowsEstimatorCoefficients.Stream.Entry.Valid entryWidth entry) :
+    ∀ estimate ∈ contributions entries,
+      CompetitorValidity.Estimate.Valid estimate
+        (CompetitorRationalDecision.width entryWidth) := by
+  intro estimate hestimate
+  rcases List.mem_map.mp hestimate with ⟨entry, hentry, rfl⟩
+  exact CloseoutRowsEstimatorCoefficients.Stream.Entry.valid_estimate entryWidth entry
+    (hentries entry hentry)
 
 /-! ## §4 The junction, closed -/
 

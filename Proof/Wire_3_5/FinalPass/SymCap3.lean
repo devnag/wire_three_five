@@ -1,6 +1,23 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SymCap2
-import Proof.Wire_3_5.FinalPass.SymHp3
+import Proof.Wire_3_5.FinalPass.SymOcc3Base
 import Proof.Wire_3_5.Primitive.SeedFix.C4PadA
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SymHp1
+import Proof.Wire_3_5.FinalPass.SymOcc4
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.FinalPass.SymSz2
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.HashFam
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SymCap3Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The SYM enumeration's capacity, part 3: `EnumOk` at every SYM call
 
@@ -27,9 +44,6 @@ open NearCubicWires.WireExponent3_5.Shared NearCubicWires.WireExponent3_5.Cost N
 open NearCubicWires.SupplierPipeline NearCubicWires.WireExponent3_5.Stars NearCubicWires.WireExponent3_5.Split
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.PrimAsm.WriterIface
 open NearCubicWires.WireExponent3_5.FinalPass.FreeGen
-
-/-- The cell cost bound `K(n) = 2^{⌊n/16⌋ + d_C L²}` (the capacity's value). -/
-def symKn (c : SymC) (n : ℕ) : ℕ := 2 ^ (n / 16 + c.dC * (Nat.clog 2 (n + 2) * Nat.clog 2 (n + 2)))
 
 section Gate
 variable (l : Literals) (F : GateFree l)
@@ -86,11 +100,6 @@ theorem hQp_sym (c : SymC) (hdP : 2 * c.dQ ≤ c.dP) (heP : 1 ≤ c.eP) (kclk co
         Nat.mul_le_mul_left _ hkL
     _ = 2 * c.dQ * (n + 1) := by ring
     _ ≤ c.dP * (n + 1) ^ c.eP := Nat.mul_le_mul hdP h1
-
-/-- `1 ≤ h` at a SYM call (`1 ≤ d_H`). -/
-theorem one_le_h_sym (c : SymC) (hdH : 1 ≤ c.dH) (x : FreeIn) : 1 ≤ (freeProg2 (symK2 c)).val x 3 := by
-  show 1 ≤ c.dH * (x.n + 1) ^ c.eH
-  exact Nat.mul_le_mul hdH (Nat.one_le_pow _ _ (by omega))
 
 /-- **The group size bound below the capacity** at a SYM call, generic in the batch (`R ≤ 10`, rows' words below
 `2^{(26L+7)D + k + 80L + 24}`, `D` below the SYM degree bound), under the load floor. -/
@@ -205,9 +214,6 @@ theorem symHok (c : SymC) (hdT : 2 * eN l F.filterErrDeg ≤ c.dT)
     (BShape.sym_coef_pm1 _ hs Cs carriers) (symBsz_le l F kclk coef A a ha ha' Cs carriers translation hcall hs)
     (symDg_le l F kclk coef A a ha ha' Cs carriers translation hcall hs)
 
-/-- The constant row's word. -/
-theorem constRow_word : (ListMachine.Rec.exprWord PrimT.C4Pad.constRow).length ≤ 2 ^ 24 := by decide
-
 /-- **v7's `SymPadEAt.hok` at a degenerate SYM call**: the padded batch (the constant row per entry, `R′ = 1`). -/
 theorem padHok (c : SymC) (hdT : 2 * eN l F.filterErrDeg ≤ c.dT)
     (hCD : 16 * symC1 (eN l F.filterErrDeg) (eQ l F.filterErrDeg) (CallIndexR.capZR l) ≤ F.CD)
@@ -245,3 +251,5 @@ theorem padHok (c : SymC) (hdT : 2 * eN l F.filterErrDeg ≤ c.dT)
 end Gate
 
 end NearCubicWires.WireExponent3_5.FinalPass.SymFr
+
+end

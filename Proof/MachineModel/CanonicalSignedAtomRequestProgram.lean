@@ -1,5 +1,7 @@
+import Proof.MachineModel.CanonicalBalancedLookupProgram
 import Proof.MachineModel.CanonicalBitSliceProgram
 import Proof.MachineModel.CanonicalSignedGateEvaluationProgram
+import Proof.MachineModel.GeneratedBalancedRangeProgram
 
 namespace NearCubicWires.CanonicalSignedAtomRequestProgram
 

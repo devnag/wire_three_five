@@ -1,3 +1,4 @@
+import Proof.MachineModel.CanonicalTaggedNatListValidationProgram
 import Proof.Circuits.ValidatorCircuitStageWidths
 
 /-!

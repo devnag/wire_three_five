@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryPCPFormulaResumeSearchCountFrame
+import Proof.PCP.PCPPairReusable
 
 /-! The schedule needs a word of length N solely to run its native-width
 prefix. Reuse the original unary framer on the already produced template. -/

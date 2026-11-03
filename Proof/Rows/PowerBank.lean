@@ -1,4 +1,4 @@
-import Proof.Rows.NativeScaleInput
+import Proof.Rows.ScalarReplace
 
 /-! The coefficient mapper's actual bank with a retained full-width base and
 one isolated product destination. The growing coefficient output stays at64. -/

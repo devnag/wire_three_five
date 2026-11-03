@@ -1,5 +1,6 @@
 import Proof.Amplification.RecoveryFixedWidth
 import Proof.PCP.VerifierDecodingField
+import Proof.PCP.VerifierDecodingLength
 
 /-! Reuse the accepted ordinary decoder field copier. A paid initial move
 positions its width sentinel; an executed rewind restores source, output,

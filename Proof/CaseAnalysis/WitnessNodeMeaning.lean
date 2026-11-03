@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.WitnessNatNative
+import Proof.PCP.PCPPNativeCanonicalGuard
 
 /-! The node consumer checks literal native fields before any unary node
 reader. Its tag, input bound, and strict earlier-node bounds are exactly the

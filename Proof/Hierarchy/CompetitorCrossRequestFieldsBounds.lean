@@ -1,4 +1,5 @@
 import Proof.Hierarchy.CompetitorCrossRequestFields
+import Proof.MachineModel.OrdinaryMatrixCoefficientBounds
 
 /-! The full original-request dimension producer remains quadratic in U.
 Header scans, unary expansion, all copies, sums, products and resets are paid. -/

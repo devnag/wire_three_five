@@ -1,4 +1,5 @@
 import Proof.Circuits.AggregateSemanticStage
+import Proof.Circuits.ComponentwisePolynomial
 import Proof.Supplier.SupplierEstimator
 
 /-!
@@ -110,11 +111,73 @@ def polynomialSumList {Atom : Type} {degree : ℕ}
     CircuitPolynomial Atom degree where
   monomials := polynomials.flatMap fun polynomial => polynomial.monomials
 
+theorem polynomialSumList_value {Atom : Type} {degree q : ℕ}
+    (evaluate : Atom → BitInput q → Bool)
+    (polynomials : List (CircuitPolynomial Atom degree))
+    (input : BitInput q) :
+    (polynomialSumList polynomials).value evaluate input =
+      (polynomials.map fun polynomial =>
+        polynomial.value evaluate input).sum := by
+  change
+    (((polynomials.flatMap fun polynomial => polynomial.monomials).map
+        fun monomial => monomial.value evaluate input).sum) =
+      (polynomials.map fun polynomial =>
+        polynomial.value evaluate input).sum
+  induction polynomials with
+  | nil => rfl
+  | cons polynomial polynomials inductionHypothesis =>
+      simp only [List.flatMap_cons, List.map_append, List.sum_append,
+        List.map_cons, List.sum_cons, inductionHypothesis]
+      rfl
+
+theorem polynomialSumList_coefficientMass {Atom : Type} {degree : ℕ}
+    (polynomials : List (CircuitPolynomial Atom degree)) :
+    (polynomialSumList polynomials).coefficientMass =
+      (polynomials.map fun polynomial =>
+        polynomial.coefficientMass).sum := by
+  change
+    (((polynomials.flatMap fun polynomial => polynomial.monomials).map
+        fun monomial => |monomial.coefficient|).sum) =
+      (polynomials.map fun polynomial => polynomial.coefficientMass).sum
+  induction polynomials with
+  | nil => rfl
+  | cons polynomial polynomials inductionHypothesis =>
+      simp only [List.flatMap_cons, List.map_append, List.sum_append,
+        List.map_cons, List.sum_cons, inductionHypothesis]
+      rfl
+
 /-- Sum a family of polynomials over a finite index set. -/
 noncomputable def polynomialFinsetSum {Atom : Type} {degree : ℕ} {ι : Type}
     (index : Finset ι) (polynomial : ι → CircuitPolynomial Atom degree) :
     CircuitPolynomial Atom degree :=
   polynomialSumList (index.toList.map polynomial)
+
+theorem polynomialFinsetSum_value {Atom : Type} {degree q : ℕ} {ι : Type}
+    (evaluate : Atom → BitInput q → Bool) (index : Finset ι)
+    (polynomial : ι → CircuitPolynomial Atom degree) (input : BitInput q) :
+    (polynomialFinsetSum index polynomial).value evaluate input =
+      ∑ i ∈ index, (polynomial i).value evaluate input := by
+  rw [polynomialFinsetSum, polynomialSumList_value, List.map_map]
+  exact Finset.sum_map_toList index
+    (fun i => (polynomial i).value evaluate input)
+
+theorem polynomialFinsetSum_coefficientMass {Atom : Type} {degree : ℕ}
+    {ι : Type} (index : Finset ι)
+    (polynomial : ι → CircuitPolynomial Atom degree) :
+    (polynomialFinsetSum index polynomial).coefficientMass =
+      ∑ i ∈ index, (polynomial i).coefficientMass := by
+  rw [polynomialFinsetSum, polynomialSumList_coefficientMass, List.map_map]
+  exact Finset.sum_map_toList index
+    (fun i => (polynomial i).coefficientMass)
+
+theorem coefficientMass_nonneg {Atom : Type} {degree : ℕ}
+    (polynomial : CircuitPolynomial Atom degree) :
+    0 ≤ polynomial.coefficientMass := by
+  refine List.sum_nonneg ?_
+  intro value hvalue
+  rcases List.mem_map.mp hvalue with ⟨monomial, _, hcoefficient⟩
+  rw [← hcoefficient]
+  exact abs_nonneg _
 
 /-! ## §2 The expansion
 

@@ -1,5 +1,6 @@
-import Proof.PCP.PCPPNativeRequestSchema
 import Proof.PCP.PCPPRequestSourceInput
+import Proof.PCP.PCPPNativeRequestSchema
+import Proof.Hierarchy.HierarchyBinaryPower
 
 /-! The original native request descriptor is serialized to the exact
 faithful input. One paid rewind restores all heads for the following copy

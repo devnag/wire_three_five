@@ -1,4 +1,5 @@
 import Proof.Foundations.DynamicCNFBuilder
+import Statement
 
 /-!
 # Canonical Tseitin CNF for Boolean DAGs

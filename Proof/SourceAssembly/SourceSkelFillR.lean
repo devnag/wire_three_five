@@ -17,6 +17,8 @@ noncomputable section
 attribute [local irreducible] P1TopDownPaidPayload.tapes WorkspaceSelectedAdmission.originalTapes
   WorkspaceSelectedEntry.size SelectedRecoveryIntegration.outer
 
+abbrev resR (gW xR : SourceBudget.ParNat) : ResChoice := resChoiceX (restDataOf gW) xR
+
 end
 end NearCubicWires.SourceSkeleton
 end

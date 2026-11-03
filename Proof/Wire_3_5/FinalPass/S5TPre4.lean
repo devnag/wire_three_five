@@ -37,6 +37,9 @@ open NearCubicWires.WireExponent3_5.PrimAsm.DockW (tape_cases sTape_inj sTape_ne
 
 variable {ns nr : ℕ}
 
+/-- The cell `[false]`. -/
+def cellP : Prog (ns + 2 + nr) := .act (writeAt cTape false) (fun _ => .stay)
+
 /-- The prelude's slot map (the count program's streams by `fs`, its cell to the cell). -/
 def preSlots (D : ℕ) (fs : Fin (D + 4) → Fin (ns + 1)) : Fin (D + 3 + 2 + 0) → Fin (ns + 2 + nr) :=
   wslot fs Fin.elim0

@@ -1,8 +1,9 @@
 import Proof.Foundations.ComponentwiseValidity
+import Proof.Foundations.SupplierPipeline
 import Proof.Wire_3_5.Foundations.MaskedExpectation
 
 /-!
-# S7 ↔ the Theorem 2.5 repository bridge, and B8's two finite-probability statements typed on the Theorem 2.5 repository's vocabulary  `clauseValue`, `validityPenalty` and `validityRound` are the Theorem 2.5 repository's
+# S7 ↔ REL bridge, and B8's two finite-probability statements typed on REL's vocabulary  `clauseValue`, `validityPenalty` and `validityRound` are REL's
 Realizes `tr:rounding` (P3:3512-3536) and `tr:sparse` (P3:3356-3387) in the vocabulary of the Theorem 2.5
 `ComponentwiseValidity`; the paper quantities are the masked rounding loss and the sparse witness.
 `ComponentwiseValidity` definitions: the masked transfer generalizes them, it does not re-define them.
@@ -15,11 +16,11 @@ open NearCubicWires NearCubicWires.ComponentwiseValidity
 
 theorem bitR_eq_bitAsReal (b : Bool) : bitR b = bitAsReal b := rfl
 
-/-- The Theorem 2.5 repository's `booleanMean` is S7's `uMean` of the indicator (the §13.4 S7 gate: the Theorem 2.5 repository lemmas apply unchanged). -/
+/-- REL's `booleanMean` is S7's `uMean` of the indicator (the §13.4 S7 gate: REL lemmas apply unchanged). -/
 theorem booleanMean_eq_uMean {Ω : Type} [Fintype Ω] (b : Ω → Bool) :
     SupplierPipeline.booleanMean b = uMean (fun ω => bitR (b ω)) := rfl
 
-/-- `tr:rounding` (P3:3512-3536) at the Theorem 2.5 repository's types.  Positions are `Clause × Fin 2`, so the uniform position
+/-- `tr:rounding` (P3:3512-3536) at REL's types.  Positions are `Clause × Fin 2`, so the uniform position
 average is the incidence average of P3:3474-3475; masks may depend on the guess and the seed
 (P3:3509-3511).  The hypotheses are the first two thresholds of `tr:thresholds` after the numerical
 slack `ε₀ ≤ v₀` (P3:3486-3491).  `v₀ ≤ 1/24` replaces the paper's `v₀ ≤ 1/2` (Appendix D, finding F2). -/

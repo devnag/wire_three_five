@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeClauseTriple
+import Proof.PCP.PCPPNativeClauseBlock
 
 /-! The actual clause reader and three-node printer share retained references.
 Both live cursors and the two enclosing clause counters have fixed ports. -/

@@ -1,7 +1,20 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.HashFam
 import Proof.Wire_3_5.Primitive.Writers.HashReady4
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.CallSize
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.HashFam4Base
 
-/-! # The HASH writer's family budgets over the v4 data stage
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2: the HASH writer's family budgets over the v4 data stage
 
 `HashFam`'s run and budget (`hash_fam_run`, `hash_fam_cost`, at the base constants `HB`) with the v4 data stage
 (`ThrData.ThrDataStage4`): the machine `hashM4` (the v4 shell `ShellT.shellMGH4` with PA's HASH unit), the run
@@ -21,13 +34,6 @@ open NearCubicWires NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdina
 open NearCubicWires.RepairOrdinary.RecoveryRootRound NearCubicWires.BlockPlatform
 open NearCubicWires.WireExponent3_5 NearCubicWires.WireExponent3_5.Split NearCubicWires.WireExponent3_5.PrimAsm.Plan
 open NearCubicWires.SupplierPipeline
-
-/-- **The HASH writer's machine over the v4 data stage** at the base constants. -/
-noncomputable def hashM4 {alg : RepairRepresentation.DecompositionAlgorithm} {Dexp : ℕ} {capT : ℕ → ℕ}
-    (S : ThrData.ThrDataStage4 alg Dexp capT) (W : PrimT.WalkBank.WalkBankProducer) (FS : FiltSetup.FiltSetupSpec5 W)
-    (h : HB) :=
-  ShellT.shellMGH4 S W.x (CellUnit.unitM W (SymDec.hdecW W FS h.cr)) h.D h.Kr h.D2 h.C2 3 h.Cv 1 5
-    (NumsXH.numsMH 0 h.KH h.cr)
 
 section Run
 open NearCubicWires.WireExponent3_5.Filters NearCubicWires.WireExponent3_5.Primitive
@@ -675,3 +681,5 @@ theorem hash_fam_cost4
 end Cost
 
 end NearCubicWires.WireExponent3_5.PrimAsm.HashFam
+
+end

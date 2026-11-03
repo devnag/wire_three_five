@@ -12,6 +12,30 @@ set_option warningAsError true
 
 def ell (N : ℕ) : ℕ := Nat.clog 2 (N+1)
 def q (N : ℕ) : ℕ := ell N+1
+def width (N : ℕ) : ℕ := Nat.clog 2 (4*PowerSlice.limit N+4)
+
+theorem width_bounds (N : ℕ) :
+    4*PowerSlice.limit N+4 ≤ 2^width N ∧ width N ≤ 3*q N^2 := by
+  have hN : N ≤ 2^ell N := le_trans (Nat.le_succ N) (Nat.le_pow_clog (by decide) (N+1))
+  have hD : PowerSlice.degree N ≤ ell N+2 := by
+    have := Nat.factorization_le_of_le_pow hN
+    dsimp only [PowerSlice.degree]
+    omega
+  have hL : PowerSlice.limit N ≤ 2^(ell N*(ell N+2)) := by
+    calc
+      PowerSlice.limit N = N^PowerSlice.degree N := rfl
+      _ ≤ (2^ell N)^PowerSlice.degree N := Nat.pow_le_pow_left hN _
+      _ = 2^(ell N*PowerSlice.degree N) := (pow_mul _ _ _).symm
+      _ ≤ 2^(ell N*(ell N+2)) := Nat.pow_le_pow_right (by decide) (Nat.mul_le_mul_left _ hD)
+  have hb : 4*PowerSlice.limit N+4 ≤ 2^(ell N*(ell N+2)+3) := by
+    rw [pow_add]
+    have hp : 1 ≤ 2^(ell N*(ell N+2)) := Nat.one_le_pow _ _ (by decide)
+    norm_num
+    omega
+  refine ⟨Nat.le_pow_clog (by decide) _, ?_⟩
+  have hw := Nat.clog_le_of_le_pow hb
+  have he : ell N*(ell N+2)+3 ≤ 3*q N^2 := by dsimp [q]; nlinarith
+  exact le_trans hw he
 
 def events (n B m t : ℕ) : ℕ := 2*n+2*B+2+t*m
 
@@ -59,6 +83,30 @@ theorem reduced_currency (N n B m t c L w q : ℕ) (hL : 2 ≤ L)
   constructor
   · nlinarith
   · nlinarith
+
+/-- Apply the numerical ledger at its actual length-dependent widths. The
+remaining hypotheses are the explicit entry guards, not assumed phase costs. -/
+theorem guarded_bounds (N n B m t c : ℕ) (hN : 2 ≤ N)
+    (hn : n ≤ B) (hB : B ≤ PowerSlice.limit N) (hm : m ≤ B)
+    (ht : t ≤ c) (hc : c ≤ Nat.log 2 N) :
+    events n B m t < 2^(2*width N) ∧
+    N+events n B m t+1 ≤ 7*PowerSlice.limit N*q N ∧
+    width N+c+1 ≤ 4*q N^2 ∧
+    width N+B+t*m ≤ 4*PowerSlice.limit N*q N^2 := by
+  have hNL : N ≤ PowerSlice.limit N := Nat.le_self_pow (by simp [PowerSlice.degree]) N
+  have hL : 2 ≤ PowerSlice.limit N := hN.trans hNL
+  have hce : c ≤ ell N := hc.trans
+    ((Nat.log_mono_right (Nat.le_succ N)).trans (Nat.log_le_clog 2 (N+1)))
+  have heN : ell N ≤ N := by
+    apply Nat.clog_le_of_le_pow
+    exact Nat.succ_le_of_lt Nat.lt_two_pow_self
+  have hcap := record_capacity n B m t c (PowerSlice.limit N) (width N) hL hn hB hm ht
+    (hce.trans (heN.trans hNL)) (width_bounds N).1
+  have hcurrency := reduced_currency N n B m t c (PowerSlice.limit N) (width N) (q N)
+    hL hNL hn hB hm ht (by simp [q]) (by dsimp [q]; omega) (width_bounds N).2
+  exact ⟨hcap.1, hcurrency⟩
+
+def clock (C d N : ℕ) : ℕ := C*(N+PowerSlice.limit N+1)*q N^(2*d+1)
 
 /-- The padding allocation coefficient is separate from the language's
 original witness bound. Enlarging the former preserves the latter exactly. -/

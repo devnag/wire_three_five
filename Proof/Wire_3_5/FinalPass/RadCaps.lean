@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.UnionMachine.RadSpec
+import Proof.Wire_3_5.UnionMachine.RadSpecBase
 import Proof.Wire_3_5.Primitive.Writers.PopSetupMath
 import Proof.Wire_3_5.Primitive.Writers.BShape1
 
@@ -270,7 +270,8 @@ theorem caps_of (r : RadReq) (Lmax Mlab lb lw X U : ℕ) (hUX : U = 2 ^ 20 * X) 
       omega
     omega
 
-/-- **The RADIX row's Route-B capacities** (`RadCapsStmt`). -/
+
+/-- **The RADIX row's Route-B capacities** (the `RadCapsStmt`). -/
 theorem radCaps : RadCapsStmt := by
   intro r Lmax Mlab lb lw hPre hlb hdg hlw
   have hQX : (8 * Lmax + 2) ^ (3 * lb) ≤ radX r.D.M r.digs.length Lmax Mlab lb lw r.p r.b0 := by

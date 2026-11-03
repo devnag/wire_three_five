@@ -1,4 +1,20 @@
-import Proof.Wire_3_5.UnionMachine.ThrDimM
+import Lean
+import Proof.Wire_3_5.UnionMachine.ThrDimMBase
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.NumsXT2Gate
+import Proof.Wire_3_5.Primitive.Writers.SymNeed
+import Proof.Wire_3_5.Primitive.Writers.ThrDimIface
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.UnionMachine.ThrDimNBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # T-A2, part 2: the stage's fill need `needG` within `K_n·(n+1)^{D_n}`, `D_n` fixed by `l`
 
@@ -132,8 +148,6 @@ theorem yb_n (n : ℕ) : n + 2 ≤ YB l F KL Kf n := by
   calc n + 2 = (n + 2) ^ 1 := (pow_one _).symm
     _ ≤ _ := pZ l n 1 (by unfold ZY; omega)
 
-theorem clog_le (n : ℕ) : Nat.clog 2 (n + 2) ≤ n + 2 := Nat.clog_le_of_le_pow (Nat.lt_two_pow_self).le
-
 theorem yb_B (P : Shared.StarParams) : ThrDim.bT l P ≤ YB l F KL Kf P.n := by
   refine yb_ge l F KL Kf (a := 1) ?_ (by unfold cY; omega)
   rw [one_mul]
@@ -167,12 +181,6 @@ theorem yb_D (P : Shared.StarParams) :
     calc Nat.clog 2 (P.n + 2) * Nat.clog 2 (P.n + 2) ≤ (P.n + 2) * (P.n + 2) := Nat.mul_le_mul hL hL
       _ = (P.n + 2) ^ 2 := (pow_two _).symm
       _ ≤ _ := pZ l P.n _ (by unfold ZY; omega)
-  omega
-
-theorem kp_le_n (P : Shared.StarParams) : P.r * natBitLength (P.n / P.r + 1) ≤ 2 * P.n := by
-  rw [kp_eq]
-  have h1 : P.k ≤ P.n := NumsX.rs_le P
-  have h2 := P.four_r_le_n
   omega
 
 theorem yb_kp (P : Shared.StarParams) :
@@ -228,42 +236,6 @@ theorem yb_pow6 (n : ℕ) : YB l F KL Kf n ^ 6 = cY l F KL Kf ^ 6 * (n + 2) ^ (6
 end Atoms
 
 /-! ## The load term and the phases' values below `Y⁶` -/
-
-theorem tT_shape (kp L S CD Kf Y : ℕ) (hY : 1 ≤ Y) (hkp : kp + L ≤ Y) (hD : (S + 1) + L * L ≤ Y) (hCD : CD ≤ Y)
-    (hKf : Kf ≤ Y) :
-    ((((kp + L) * (kp + L)) * (((S + 1) + L * L) * CD) + kp) + L * L) * CD * Kf ≤ 3 * Y ^ 6 := by
-  have hA : (kp + L) * (kp + L) ≤ Y * Y := Nat.mul_le_mul hkp hkp
-  have hD2 : ((S + 1) + L * L) * CD ≤ Y * Y := Nat.mul_le_mul hD hCD
-  have hZ1 : ((kp + L) * (kp + L)) * (((S + 1) + L * L) * CD) ≤ Y ^ 4 :=
-    (Nat.mul_le_mul hA hD2).trans_eq (by ring)
-  have p1 : Y ≤ Y ^ 4 := by
-    calc Y = Y ^ 1 := (pow_one _).symm
-      _ ≤ Y ^ 4 := Nat.pow_le_pow_right hY (by norm_num)
-  have hZ3 : (((kp + L) * (kp + L)) * (((S + 1) + L * L) * CD) + kp) + L * L ≤ 3 * Y ^ 4 := by omega
-  have hZ4 : ((((kp + L) * (kp + L)) * (((S + 1) + L * L) * CD) + kp) + L * L) * CD * Kf ≤
-      3 * Y ^ 4 * Y * Y := Nat.mul_le_mul (Nat.mul_le_mul hZ3 hCD) hKf
-  exact hZ4.trans_eq (by ring)
-
-theorem tNeed_shape (n r m q nb kp B L X S sp CD Kf Y : ℕ) (hY : 1 ≤ Y) (hn : n ≤ Y) (hr : r ≤ Y) (hm : m ≤ Y)
-    (hq : q + 1 ≤ Y) (hnb : nb ≤ Y) (hkp : kp + L ≤ Y) (hB : B ≤ Y) (hX : X ≤ Y) (hD : (S + 1) + L * L ≤ Y)
-    (hsp : sp ≤ Y) (hCD : CD ≤ Y) (hKf : Kf ≤ Y) :
-    n + r + m + q + (q + (1)) + nb + kp + B + L + X + S + (S + (1)) + (L * L) + ((S + (1)) + (L * L)) + (((S + (1)) + (L * L)) * CD) + (kp + L) + ((kp + L) * (kp + L)) + (((kp + L) * (kp + L)) * (((S + (1)) + (L * L)) * CD)) + ((((kp + L) * (kp + L)) * (((S + (1)) + (L * L)) * CD)) + kp) + (((((kp + L) * (kp + L)) * (((S + (1)) + (L * L)) * CD)) + kp) + (L * L)) + ((((((kp + L) * (kp + L)) * (((S + (1)) + (L * L)) * CD)) + kp) + (L * L)) * CD) + (((((((kp + L) * (kp + L)) * (((S + (1)) + (L * L)) * CD)) + kp) + (L * L)) * CD) * Kf) + sp + CD + Kf + 10 ≤ 100 * Y ^ 6 := by
-  have hA : (kp + L) * (kp + L) ≤ Y ^ 2 := (Nat.mul_le_mul hkp hkp).trans_eq (by ring)
-  have hD2 : ((S + 1) + L * L) * CD ≤ Y ^ 2 := (Nat.mul_le_mul hD hCD).trans_eq (by ring)
-  have hZ1 : ((kp + L) * (kp + L)) * (((S + 1) + L * L) * CD) ≤ Y ^ 4 :=
-    (Nat.mul_le_mul hA hD2).trans_eq (by ring)
-  have p12 : Y ≤ Y ^ 2 := by
-    calc Y = Y ^ 1 := (pow_one _).symm
-      _ ≤ Y ^ 2 := Nat.pow_le_pow_right hY (by norm_num)
-  have p24 : Y ^ 2 ≤ Y ^ 4 := Nat.pow_le_pow_right hY (by norm_num)
-  have p45 : Y ^ 4 ≤ Y ^ 5 := Nat.pow_le_pow_right hY (by norm_num)
-  have p56 : Y ^ 5 ≤ Y ^ 6 := Nat.pow_le_pow_right hY (by norm_num)
-  have hZ3 : (((kp + L) * (kp + L)) * (((S + 1) + L * L) * CD) + kp) + L * L ≤ 3 * Y ^ 4 := by omega
-  have hZ4 : ((((kp + L) * (kp + L)) * (((S + 1) + L * L) * CD) + kp) + L * L) * CD ≤ 3 * Y ^ 5 :=
-    (Nat.mul_le_mul hZ3 hCD).trans_eq (by ring)
-  have hT : ((((kp + L) * (kp + L)) * (((S + 1) + L * L) * CD) + kp) + L * L) * CD * Kf ≤ 3 * Y ^ 6 :=
-    tT_shape kp L S CD Kf Y hY hkp hD hCD hKf
-  omega
 
 /-! ## The fill need -/
 
@@ -402,3 +374,5 @@ theorem need_leG (P : Shared.StarParams) (_hrP : P.r = Ledger.rowBr F.cr P.n) :
 end Need
 
 end NearCubicWires.WireExponent3_5.UnionMachine.ThrDimB
+
+end

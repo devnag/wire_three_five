@@ -1,4 +1,18 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.S5TPre7
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.S5TChA
+import Proof.Wire_3_5.FinalPass.S5TChC
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Primitive.SeedFix.TS4N
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.FinalPass.S5TStageBase
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-! # S5-THR, part 27: the THR half's stage (P3:3083-3086, 3170-3181)
 
@@ -26,15 +40,6 @@ open NearCubicWires.WireExponent3_5.PrimThrW.TopFront2 (tf2InPorts tf2OutPorts T
 open NearCubicWires.SupplierPipeline
 
 section Ite
-variable {t : ℕ}
-
-theorem ite_stepT (i : Fin t) {a b : ℕ} (p : Machine t a) (q : Machine t b) (bk c : Bank t) (n : ℕ)
-    (hb : bk.bit i = true) (h : Step p n bk.H bk.A c.H c.A) : Step (iteMachine i p q) (n + 1) bk.H bk.A c.H c.A :=
-  ite_branch_step i p q bk c n (iteL b) p (by simp [hb]) (ite_halted_L i p q) (ite_step_L i p q) h
-
-theorem ite_stepF (i : Fin t) {a b : ℕ} (p : Machine t a) (q : Machine t b) (bk c : Bank t) (n : ℕ)
-    (hb : bk.bit i = false) (h : Step q n bk.H bk.A c.H c.A) : Step (iteMachine i p q) (n + 1) bk.H bk.A c.H c.A :=
-  ite_branch_step i p q bk c n (iteR a) q (by simp [hb]) (ite_halted_R i p q) (ite_step_R i p q) h
 
 end Ite
 
@@ -49,10 +54,6 @@ noncomputable def stageM (l : Literals) (cr j0 jL j1 : ℕ) :=
       WM (nsL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x) nrL).toProg.compile
     (iteMachine (rTape (pR 6)) (thrPathM D alg Dexp l cr j0 jL j1)
       (Prog.skip : Prog (nsL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x + 2 + nrL)).compile)
-
-theorem sIn_ne_sTm : sIn D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x ≠
-    sTm D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x := fun h => by
-  have := congrArg Fin.val h; simp [sIn, sTm] at this
 
 /-- **The stage at a SYM call**: the parse, then nothing; the THR slots and every stream kept. -/
 theorem stage_sym (l : Literals) (cr j0 jL j1 : ℕ)
@@ -171,3 +172,5 @@ theorem stage_thr (l : Literals) (cr j0 jL j1 : ℕ) (hj0 : j0 ≤ D) (hjL : jL 
 end Stage
 
 end NearCubicWires.WireExponent3_5.FinalPass.S5T
+
+end

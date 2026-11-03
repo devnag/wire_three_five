@@ -1,5 +1,6 @@
-import Proof.MachineModel.OrdinaryMatrixPacketBudget
 import Proof.MachineModel.OrdinaryMatrixPacketController
+import Proof.MachineModel.OrdinaryMatrixPacketBudget
+import Proof.PCP.PCPSerializerTapeSupport
 
 /-! One global rewind closes the actual all-plane cold controller. The
 same executed run gives finite per-tape support for its caller's reuse. -/

@@ -61,6 +61,7 @@ theorem formula_injective : Function.Injective formulaSlots := by
   apply Fin.ext
   exact (formula_inverse i).symm.trans ((congrArg formulaInverse h).trans (formula_inverse j))
 
+noncomputable def first := RecoveryFocus.machine scalarSlots RecoveryPCPFormulaResumeColdScalars.machine
 noncomputable def input (p : RawProjectionPCP) (R Q : Nat) (i : Fin 785) : List Bool :=
   if i.val=0 then frame R.bits else if i.val=28 then frame Q.bits else
   if i.val=66 then QueryBytes.framedCodes (normalizedRows p R Q).flatten else

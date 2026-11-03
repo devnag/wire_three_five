@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.W6A
+import Proof.Wire_3_5.Primitive.Writers.DataRun
 
 /-! # W6, part 2: the numbers machine's fill on its layout
 

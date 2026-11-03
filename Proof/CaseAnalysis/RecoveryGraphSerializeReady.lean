@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoveryGraphSerializeLayout
+import Proof.MachineModel.OrdinaryMaskedReset
 
 /-! The unchanged cold serializer is followed by the existing paid masked
 head return on its output alone. The actual trace starts empty and is erased;

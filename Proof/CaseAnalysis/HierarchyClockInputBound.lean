@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.HierarchyClockInput
+import Proof.Hierarchy.HierarchyReductionTime
 
 /-! Sufficient fixed polynomial bound for the actual recovery clock field.
 The existing short arithmetic bound implies this C.12 envelope directly. -/

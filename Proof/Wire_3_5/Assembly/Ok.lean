@@ -1,5 +1,17 @@
+import Lean
 import Proof.Wire_3_5.Assembly.Free
 import Proof.Wire_3_5.UnionMachine.UnionAtomsOk
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.Assembly.FreeBase
+import Proof.Wire_3_5.UnionMachine.UnionCodecBase
+import Proof.Wire_3_5.UnionMachine.UnionSchedule
+
+
+noncomputable section
+
 
 /-! # The split with the union's atom test
 
@@ -44,23 +56,24 @@ variable (G : Gate) (S : G.Setup)
 /-- **Leaf U with the atom test** (B8 + C6 + C7): the clock and the source work, and the union construction with the
 atom test's completeness for every primitive coefficient. -/
 def UnionLeaf2 :=
-  Σ kclk : ℕ, Σ A : ℕ, Σ a : ℕ, Σ' ha : a ≤ kclk + 1,
-    ∀ coef : ℕ, UnionLeafAt2 (G.inputs kclk coef A a ha) (S kclk coef A a ha)
+  Σ A : ℕ, Σ a : ℕ, Σ' ha : a ≤ Transfer.kclk + 1,
+    ∀ coef : ℕ, UnionLeafAt2 (G.inputs Transfer.kclk coef A a ha) (S Transfer.kclk coef A a ha)
 
 /-- **Leaf R** (D1 + D2) for every union leaf with the atom test at the pinned setup and every primitive. -/
 def RecoveryLeaf2 :=
-  ∀ (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) (U : UnionLeafAt2 (G.inputs kclk coef A a ha) (S kclk coef A a ha))
-    (P : FusedPrimitive (G.inputs kclk coef A a ha)), Recovery U.toUnionConstruction P
+  ∀ (coef A a : ℕ) (ha : a ≤ Transfer.kclk + 1)
+    (U : UnionLeafAt2 (G.inputs Transfer.kclk coef A a ha) (S Transfer.kclk coef A a ha))
+    (P : FusedPrimitive (G.inputs Transfer.kclk coef A a ha)), Recovery U.toUnionConstruction P
 
 /-- **The split** from the three leaves (the union's with the atom test). -/
 noncomputable def parts_of_leaves2 (p : PrimitiveLeaf G) (u : UnionLeaf2 G S) (r : RecoveryLeaf2 G S) : Parts :=
-  { kclk := u.1
+  { kclk := Transfer.kclk
     envelope := G.E
-    budget := G.budget u.1 p.1 u.2.1 u.2.2.1 u.2.2.2.1
-    inputs := G.inputs u.1 p.1 u.2.1 u.2.2.1 u.2.2.2.1
-    union := (u.2.2.2.2 p.1).toUnionConstruction
-    primitive := p.2 u.1 u.2.1 u.2.2.1 u.2.2.2.1
-    recovery := r u.1 p.1 u.2.1 u.2.2.1 u.2.2.2.1 (u.2.2.2.2 p.1) (p.2 u.1 u.2.1 u.2.2.1 u.2.2.2.1) }
+    budget := G.budget Transfer.kclk p.1 u.1 u.2.1 u.2.2.1
+    inputs := G.inputs Transfer.kclk p.1 u.1 u.2.1 u.2.2.1
+    union := (u.2.2.2 p.1).toUnionConstruction
+    primitive := p.2 Transfer.kclk u.1 u.2.1 u.2.2.1
+    recovery := r p.1 u.1 u.2.1 u.2.2.1 (u.2.2.2 p.1) (p.2 Transfer.kclk u.1 u.2.1 u.2.2.1) }
 
 end Gate
 
@@ -86,3 +99,5 @@ noncomputable def literals_parts_of_leavesF2 (p : ∀ l, PrimitiveLeafF l) (u : 
   fun l => parts_of_leavesF2 l (p l) (u l) (r l)
 
 end NearCubicWires.WireExponent3_5.Split
+
+end

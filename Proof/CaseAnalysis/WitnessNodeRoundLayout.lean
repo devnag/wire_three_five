@@ -1,4 +1,7 @@
 import Proof.CaseAnalysis.WitnessNodeStorage
+import Proof.MachineModel.OrdinaryFrameLoad
+import Proof.MachineModel.OrdinaryFramedIncrement
+import Proof.Amplification.RecoveryScratchErase
 
 /-! One node round shares its load target, local workspace, arity/index
 bounds, and two live stream cursors. Only local scratch is erased. -/

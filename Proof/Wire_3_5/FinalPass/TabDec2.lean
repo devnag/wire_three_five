@@ -1,6 +1,8 @@
 import Proof.Wire_3_5.FinalPass.TabDec1
-import Proof.Wire_3_5.Primitive.Writers.DataTabs
 import Proof.Wire_3_5.Primitive.Writers.FiltSetupIface2
+import Proof.Wire_3_5.Primitive.Writers.DataSetup
+import Proof.Wire_3_5.Primitive.Writers.DataTabs
+import Proof.Wire_3_5.Primitive.Writers.ParseNat
 
 /-! # S4 (f1), the tables writer, part 4: the request's numbers into registers (P3:2036-2101)
 

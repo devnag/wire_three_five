@@ -283,6 +283,60 @@ theorem selected_lengths (rs : List Record) :
   simp only [outCells, finishedOut, List.length_append, List.length_cons, List.length_nil]
   omega
 
+theorem finish_step (pre : List Bool) (out : Bool → List Bool) :
+    step machine (config 0 (pre ++ [false]) pre.length out) =
+      some (config 8 (pre ++ [false]) pre.length (finishedOut out [])) := by
+  have hread := Streaming.read_append pre [] false
+  simp [step, machine, Configuration.scanned, config, hread]
+  apply configuration_ext
+  · rfl
+  · funext t
+    fin_cases t <;>
+      simp [applyAction, finishAction, HeadMove.apply, finishedOut, selected, recordsBits]
+  · funext t
+    fin_cases t <;>
+      simp [applyAction, finishAction, finishedOut, selected, recordsBits, Streaming.write_append]
+
+theorem records_prefix (rs : List Record) (pre : List Bool) (out : Bool → List Bool)
+    (space : ℕ) (hspace : (pre ++ stream rs).length + outCells out +
+      (recordsBits rs).length + 2 ≤ space) :
+    Prefix machine space ((recordsBits rs).length + rs.length + 1)
+      (config 0 (pre ++ stream rs) pre.length out)
+      (config 8 (pre ++ stream rs) (pre.length + (recordsBits rs).length) (finishedOut out rs)) := by
+  induction rs generalizing pre out with
+  | nil =>
+    simp only [recordsBits, List.flatMap_nil, List.length_nil, Nat.zero_add, stream,
+      List.nil_append, Nat.add_zero] at hspace ⊢
+    refine Prefix.step ?_ (by rfl) (finish_step pre out) (Prefix.refl _ ?_)
+    · simp only [config_cells]
+      omega
+    · simpa only [config_cells, finishedOut_cells, recordsBits, List.flatMap_nil,
+        List.length_nil, Nat.add_zero, Nat.add_assoc] using hspace
+  | cons r rs ih =>
+    let input := pre ++ stream (r :: rs)
+    have htailspace : ((pre ++ recordBits r) ++ stream rs).length +
+        outCells (extend r.1 (recordBits r) out) + (recordsBits rs).length + 2 ≤ space := by
+      simp only [stream, recordsBits, List.flatMap_cons, List.length_append,
+        extend_cells] at hspace ⊢
+      omega
+    have htail := ih (pre ++ recordBits r) (extend r.1 (recordBits r) out) htailspace
+    have htail' : Prefix machine space ((recordsBits rs).length + rs.length + 1)
+        (config 0 input (pre.length + (recordBits r).length) (extend r.1 (recordBits r) out))
+        (config 8 input (pre.length + (recordsBits (r :: rs)).length)
+          (finishedOut out (r :: rs))) := by
+      simpa [input, stream, recordsBits, List.append_assoc, Nat.add_assoc] using htail
+    have hrecordspace : (pre ++ recordBits r ++ stream rs).length + outCells out +
+        (recordBits r).length ≤ space := by
+      simp only [stream, recordsBits, List.flatMap_cons, List.length_append] at hspace ⊢
+      omega
+    have hfirst := record_prefix r pre (stream rs) out space hrecordspace
+    have hfirst' : Prefix machine space ((recordBits r).length + 1)
+        (config 0 input pre.length out)
+        (config 0 input (pre.length + (recordBits r).length) (extend r.1 (recordBits r) out)) := by
+      simpa [input, stream, recordsBits, List.append_assoc] using hfirst
+    have hj := hfirst'.trans htail'
+    simpa [recordsBits, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using hj
+
 theorem record_count_le (rs : List Record) : rs.length ≤ (recordsBits rs).length := by
   induction rs with
   | nil => rfl

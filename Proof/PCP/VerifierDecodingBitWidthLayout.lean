@@ -1,5 +1,5 @@
-import Proof.MachineModel.ClockLengthReady
 import Proof.PCP.VerifierDecodingUnaryFrame
+import Proof.MachineModel.ClockLengthReady
 
 /-! The state-width supplier reuses the shared actual binary length counter.
 The six-tape store retains the original unary dimension, its framed copy,

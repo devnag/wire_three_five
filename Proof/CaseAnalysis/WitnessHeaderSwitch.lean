@@ -44,5 +44,19 @@ theorem accepted (p : Machine t a) (q : Machine t b) (r : Machine t c)
   rw [Nat.add_sub_of_le bound] at more
   exact ⟨actual,more,hs.le.trans bound,by rw [hf];rfl,by rw [hf];rfl⟩
 
+theorem rejected (p : Machine t a) (q : Machine t b) (r : Machine t c)
+    (good mode : (Fin t→Bool)→Bool) (fuel : ℕ) (heads : Fin t→ℕ) (data : Fin t→List Bool)
+    (prior : ExecutionReceipt t a) (hp:runFrom p fuel ⟨p.start,heads,data⟩=some prior)
+    (hg:good prior.final.scanned=false) :
+    ∃ actual,runFrom (machine p q r good mode) (fuel+1)
+      ⟨(machine p q r good mode).start,heads,data⟩=some actual ∧
+      actual.steps ≤ fuel+1 ∧ actual.final.heads=prior.final.heads ∧ actual.final.tapes=prior.final.tapes:=by
+  obtain ⟨u,hu,trace⟩:=stop_receipt (sizes a b c) (programs p q r) 0 (next good mode) 0 fuel _ prior hp
+    (by change (if good prior.final.scanned then some (if mode prior.final.scanned then (1:Fin 3) else 2) else none)=none;rw [hg];rfl)
+  obtain ⟨actual,hr,hf,hs⟩:=trace.run (by simp [RecoveryCalls.machine,RecoveryCalls.stopped])
+  have more:=runFrom_moreFuel (machine p q r good mode) u (fuel+1-u) _ actual hr
+  rw [Nat.add_sub_of_le hu] at more
+  exact ⟨actual,more,hs.le.trans hu,by rw [hf];rfl,by rw [hf];rfl⟩
+
 end
 end NearCubicWires.RepairOrdinary.CloseoutWitness.HeaderSwitch

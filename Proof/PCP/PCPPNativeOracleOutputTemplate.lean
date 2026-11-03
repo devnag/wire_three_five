@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeOracleOutput
+import Proof.MachineModel.OrdinaryMatrixRawDimension
 
 /-! The same native footer scan accepts the physical size template from
 the original raw-size decoder. Only its inert trailing false is present. -/

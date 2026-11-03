@@ -1,6 +1,21 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.TS4K
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.SeedFix.TS4N
+import Proof.Wire_3_5.Primitive.SeedFix.TS4O
+import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPoly
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Primitive.SeedFix.TS4LBase
 
-/-! # thrStage4U, part 15: the v4 stage's time bound `cost3`, polynomial
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # T (#120, thrStage4U), part 15: the v4 stage's time bound `cost3`, polynomial
 
 P3:3071-3091 ("the preprocessing … runs in time polynomial in `n`") and P3:3114-3115: the v4 stage's time `cost3G` (the
 prep, W6's numbers machine, PA's first three phases, the hash writer, the collection, the reset) is `PolyBounded` in
@@ -26,28 +41,11 @@ open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.
 open NearCubicWires.WireExponent3_5.PrimAsm.ThrData NearCubicWires.SupplierPipeline
 open NearCubicWires.ValidatorPolynomialDomination
 
-theorem emitsCost_le : ∀ cs : List ℕ, emitsCost cs ≤ 19 * (unaryList cs).length
-  | [] => by simp [emitsCost, unaryList]
-  | c :: cs => by
-    have ih := emitsCost_le cs
-    have e : (unaryList (c :: cs)).length = c + 1 + (unaryList cs).length := by
-      rw [unaryList_cons]; simp; omega
-    simp only [emitsCost]
-    rw [e]
-    omega
-
-theorem qh_le (cs : List ℕ) (W : ℕ) (h : 2 * (unaryList cs).length ≤ 2 * W) : qhCost cs ≤ 19 * W + 4 := by
-  have := emitsCost_le cs
-  unfold qhCost; omega
-
 variable (l : Literals)
 
 /-- W6's time degree and coefficient (`numsCost_poly` at `D = 1`). -/
 noncomputable def Dw : ℕ := (W6.tf (W6.litAlg l)).Dc + 18
 noncomputable def Cw : ℕ := 2 * (W6.tf (W6.litAlg l)).Cc + 2 * 10000000000000000000000000000000000000000 + 128000 * 1 + 60
-
-/-- PA's data stage coefficient and degree (`thrCost2_le`). -/
-noncomputable def Ct : ℕ := 40 * ThrData.cTT + 80 * ThrData.cX + 70100
 
 /-- The v4 stage's time degree (the literals only). -/
 noncomputable def DcG : ℕ := Dp l + (PrimAsm.CallIndexR.capZR l + 26) * Dw l + ThrData.dD + 1
@@ -150,3 +148,5 @@ theorem cost3G_le (cr : ℕ) {n a' : ℕ} (Cs : Fin a' → NormalizedThresholdTh
   exact hfin2
 
 end NearCubicWires.WireExponent3_5.PrimT.TS4
+
+end

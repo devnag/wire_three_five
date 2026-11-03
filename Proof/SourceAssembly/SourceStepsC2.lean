@@ -19,6 +19,29 @@ attribute [local irreducible] P1TopDownPaidPayload.tapes
 
 section c2
 open Classical
+variable (mask : MaskProducer) {selector : CyclicChoice.Laws}
+  (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector)
+  (rows : PCJc4297ab269d8423a_Source.RowLibrary selector) (sources : EightSources)
+  (res : Nat) (hres : 19 ≤ res) {gamma : Real} (p : Parameters sources gamma) (k r : Nat)
+  (ph : Phase)
+  (se : PacketsGlue.RequestMeta.UnaryStage (decompositionOf sources) (PacketsGlue.RequestMeta.seedCount (decompositionOf sources)))
+  (sp : PacketsGlue.RequestMeta.UnaryStage (decompositionOf sources) (PacketsGlue.RequestMeta.primeCountOf (decompositionOf sources))) {gW : Nat}
+  (e : (dimsOf mask packets rows sources res p k r).RestExt3 se.extra sp.extra gW)
+  (g7F : Phase → Σ s, Machine (UOf mask packets rows sources res p k r) s)
+  (preFF : Phase → Σ s, Machine (UOf mask packets rows sources res p k r + 1) s)
+  (compiler : Packets.CompilerLaws) (den : Nat) (hden : 0 < den) (n : Nat) (x : BitInput n) (bits : List Bool)
+  (hp : P1Independent.CappedLegalAdmission.passed sources p
+    (ControllerCappedSelected.reference den hden k (PolynomialClock.ordinaryClock k))
+    (WorkspaceSelectedAdmission.coldCutoff sources) n x bits = true)
+  (site : Bool → Phase → Σ states, Machine (ControllerSelectedContinuation.bodyTapes sources p k r (scratchOf mask packets rows sources res)) states)
+  (L Rc Rk : Nat)
+  (layF : ∀ ci : Fin (NC sources k (PolynomialClock.ordinaryClock k) x (C10TotalDecode.oracleOf sources k (PolynomialClock.ordinaryClock k) p.degree n bits)),
+    TraceData.LayoutFamily (PCJd04de0277f804fcc_.coordinate sources k (PolynomialClock.ordinaryClock k) p den x (C10TotalDecode.oracleOf sources k (PolynomialClock.ordinaryClock k) p.degree n bits) bits) ph ci sources L (C10SupplierAccuracyChain.accuracyTargetAll (constantsOf sources) (CloseoutFinalC10StageFields.stageLimits sources p)) (PCJ374c44bb8b7f47d9_.S.mode sources p den hden k r (scratchOf mask packets rows sources res) n x bits hp) selector)
+  (K : Fin (UOf mask packets rows sources res p k r) → Prop)
+  (K0F : Fin (NC sources k (PolynomialClock.ordinaryClock k) x (C10TotalDecode.oracleOf sources k (PolynomialClock.ordinaryClock k) p.degree n bits)) → Fin (UOf mask packets rows sources res p k r) → List Bool)
+  (KH0 : Fin (UOf mask packets rows sources res p k r) → Nat)
+  (V : Nat) (dflt : P1TopDownPaidReusable.Datum)
+  (familyCost firstCost counterReserve refillCost : Nat)
 
 set_option hygiene false in
 local notation "𝔇" => dimsOf mask packets rows sources res p k r

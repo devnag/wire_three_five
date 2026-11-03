@@ -1,6 +1,21 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.S5Seam2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.FinalPass.SeamsProg
+import Proof.Wire_3_5.FinalPass.SeamsProg2
+import Proof.Wire_3_5.FinalPass.SeamsPt
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.S5SeamB
+import Proof.Wire_3_5.FinalPass.SeamsProg2Base
 
-/-! # The S5 halves over the SYM words, with their cost bounds
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2: the S5 halves over the SYM words, with their cost bounds
 
 The twin of `S5SeamB` over `S5Seam2`: the halves' targets with the preprocessing-class bound `s5Bound`
 (`C·2^{D·ψ}·(|fpIn|+1)^D`, unchanged from `S5SeamB`).
@@ -33,3 +48,5 @@ structure S5ThrB2 (L : S5Lay Sw.nw) extends S5Thr2 l F kclk coef A a ha Sw L whe
 end Family
 
 end NearCubicWires.WireExponent3_5.PrimAsm.S5Seam
+
+end

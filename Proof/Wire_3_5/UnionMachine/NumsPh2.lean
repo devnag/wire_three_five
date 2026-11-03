@@ -1,4 +1,19 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.CoreIfaceM
+import Proof.Wire_3_5.Primitive.Writers.SymLayout
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.NumsPh2Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # NW: the numbers writer `NumsM l`, phase interface v2 (types only)
 
@@ -10,7 +25,7 @@ within `C_s F·(|fpIn|+1)^{D_s fe}` steps. Since `|centers| = 2^{n−k}` while `
 denominator is split `fpDen = 2^{e}·V` with `e = n − k` (`eOf`) and `V = vOf r` (`2^{O(k)}·poly(n)`, unary-sized):
 the shift is written as zeros in binary.
 
-* **Layout v2** (the donors' bank): `WState (LNS x) LNR`, the C4 cell bank (`LNS x = 160 + x` streams,
+* **Layout v2** (#235: the donors' bank): `WState (LNS x) LNR`, the C4 cell bank (`LNS x = 160 + x` streams,
   `LNR = 512` registers; the wenc bank of `Machine (LNS x + 2 + LNR)`), `x` extra streams chosen by the assembly (so
   (b)'s port machine `Machine (21 + TI alg + 1)`, whose width depends on the algorithm, docks); streams `sIn x`,
   `sW0 x`, `sW1 x` = `sk x 150, 151, 152` (the input `fpIn`, the two words); registers `rN`, `rM` (the mode bit,
@@ -40,7 +55,7 @@ the shift is written as zeros in binary.
   * **`PhD`** (d, generic): from `T`, `e`, `v` in `rT`, `rE`, `rV`, write `frame (binary T 0)` on `sW0` and
     `frame (binary T (max (2^e·v) 1))` on `sW1` (`v` at width `T − e` followed by `e` zeros; `1` when `v = 0`), clear
     every register; steps `≤ C·(T+v+1)^D`; the word streams must be `[]` at entry (tapes never shrink). Donors: C5's
-    binary writers, the RegRat word kit (the output machine).
+    binary writers, the RegRat word kit (X6).
 * **`NumsOfPhases`**: `PhC l → PhA l → PhB l → PhD → NumsM l` (the assembly: (c); branch on `rM`
   (`BlockBranch.branchM`); (a) or (b); (d); `DenSplit`).
 
@@ -63,48 +78,6 @@ open NearCubicWires.RepairOrdinary.SignedSortKey (binary)
 /-! ## The layout -/
 
 variable (x : ℕ)
-
-/-- The writer's word states (the C4 cell bank with `x` extra streams). -/
-abbrev St : Type := WState (LNS x) LNR
-
-/-- The input stream (`frame fpIn`). -/
-def sIn : Fin (LNS x + 1) := PrimAsm.SymLayout.sk x 150
-/-- The first word (`frame (binary T_f 0)`). -/
-def sW0 : Fin (LNS x + 1) := PrimAsm.SymLayout.sk x 151
-/-- The second word (`frame (binary T_f fpDen)`). -/
-def sW1 : Fin (LNS x + 1) := PrimAsm.SymLayout.sk x 152
-
-/-- `n`. -/
-def rN : Fin LNR := ⟨505, by decide⟩
-/-- The mode bit (THR `1`, SYM `0`). -/
-def rM : Fin LNR := ⟨506, by decide⟩
-/-- The shift `e = n − k`. -/
-def rE : Fin LNR := ⟨507, by decide⟩
-/-- The width `T_f`. -/
-def rT : Fin LNR := ⟨508, by decide⟩
-/-- The unshifted value `V`. -/
-def rV : Fin LNR := ⟨509, by decide⟩
-
-/-- A `Fin 20` register block for `StarNums.starNumsM` (registers `480 … 499`). -/
-def starBlk : Fin 20 ↪ Fin LNR :=
-  ⟨fun j => ⟨480 + j.val, by have := j.isLt; show 480 + j.val < 512; omega⟩, fun i j h => by
-    have := congrArg Fin.val h
-    exact Fin.ext (by simp at this; omega)⟩
-
-theorem sIn_val : (sIn x).val = 150 := rfl
-theorem sW0_val : (sW0 x).val = 151 := rfl
-theorem sW1_val : (sW1 x).val = 152 := rfl
-
-/-- The output slots of `NumsM`. -/
-def sOutN : Fin 2 ↪ Fin (LNS x + 1) :=
-  ⟨fun i => if i.val = 0 then sW0 x else sW1 x, by
-    intro i j h
-    have hi := i.isLt
-    have hj := j.isLt
-    have e0 := sW0_val x
-    have e1 := sW1_val x
-    by_cases h0 : i.val = 0 <;> by_cases h1 : j.val = 0 <;> simp only [h0, h1, if_true, if_false] at h <;>
-      first | exact Fin.ext (by omega) | (have := congrArg Fin.val h; omega)⟩
 
 /-! ## The values -/
 
@@ -173,3 +146,5 @@ end Phases
 /-! ## The assembly's statement -/
 
 end NearCubicWires.WireExponent3_5.UnionMachine.NumsPh2
+
+end

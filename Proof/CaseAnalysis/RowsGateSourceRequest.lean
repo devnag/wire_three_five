@@ -1,5 +1,5 @@
-import Proof.CaseAnalysis.RawRowsChildLog
 import Proof.CaseAnalysis.RowsGateSourceCalls
+import Proof.CaseAnalysis.RawRowsChildLog
 
 /-! The retained-top formula depends only on its supported gate. This
 local abbreviation lets the all-raw source caller handle every accepted

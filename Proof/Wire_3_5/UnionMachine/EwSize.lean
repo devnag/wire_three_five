@@ -1,5 +1,6 @@
 import Proof.Wire_3_5.UnionMachine.EwE
 import Proof.Wire_3_5.UnionMachine.EwRecs
+import Proof.Wire_3_5.Primitive.ThresholdWriter.Joins
 
 /-! # C6, e/W_j, part 10: the stage's size bounds
 

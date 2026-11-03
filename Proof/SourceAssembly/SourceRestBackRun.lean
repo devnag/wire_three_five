@@ -1,8 +1,4 @@
-import Mathlib
-import Proof.Packets.PacketsLayout
-import Proof.SourceAssembly.SourceCyclePad
-import Proof.SourceAssembly.SourceRequestFactorLoop
-import Proof.SourceAssembly.SourceRestLayout
+import Proof.SourceAssembly.SourceRestBack
 
 section
 set_option autoImplicit false
@@ -17,6 +13,22 @@ noncomputable section
 
 /-- Close a value (in)equality: `simp`, then `omega` if anything is left. -/
 macro "vsimp" : tactic => `(tactic| (first | (simp; done) | (simp; omega) | omega))
+
+/-- The slope's cost. -/
+def slopeCost (L Mb Ms : Nat) : Nat :=
+  (1+1+1+1+1) + 1 + (((1+1+1+1+1) + 1 + (2 * (if 3 < L then Mb else Ms) + 6)) + 2)
+
+/-- The first three stages' cost. -/
+def stagesCost {a : DecompositionAlgorithm} {vE vP : Request → Nat}
+    (se : PacketsGlue.RequestMeta.UnaryStage a vE) (sp : PacketsGlue.RequestMeta.UnaryStage a vP)
+    (r : Request) : Nat :=
+  (4 * (r.input a).length + 4) + 1 + (se.cost r + 1 + sp.cost r)
+
+/-- The back half's cost. -/
+def backCost {a : DecompositionAlgorithm} {vE vP : Request → Nat}
+    (se : PacketsGlue.RequestMeta.UnaryStage a vE) (sp : PacketsGlue.RequestMeta.UnaryStage a vP)
+    (r : Request) (Rc w q L Mb Ms : Nat) : Nat :=
+  stagesCost se sp r + 1 + (Prologue.f6FullCost Rc (vE r) (vP r) w q + 1 + slopeCost L Mb Ms)
 
 section
 

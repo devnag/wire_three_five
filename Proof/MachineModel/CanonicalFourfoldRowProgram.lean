@@ -1,4 +1,6 @@
+import Proof.Circuits.CanonicalWitnessCodec
 import Proof.MachineModel.CanonicalBinaryArithmeticProgram
+import Proof.Foundations.CanonicalBinaryProgram
 import Proof.MachineModel.FixedAccuracyDenominatorProgram
 import Proof.MachineModel.FourfoldRequestEnvelopeProgram
 import Proof.Supplier.SupplierEstimator
@@ -2269,6 +2271,16 @@ def structuralCanonicalOccurrenceCoefficientRadixRow
     sample modulus offset 2
 
 /-! ## Residual variables to imported exact equations -/
+
+/-- Exact children for one physical bottom-gate occurrence.  Every occurrence
+is decomposed separately, even when two gates are definitionally equal. -/
+def occurrenceExactChildren
+    {q : ℕ} (algorithm : ExecutableExactDecompositionAlgorithm)
+    (occurrences : List (SupportedNormalizedGate q))
+    (index : Fin occurrences.length) : List (ExactThresholdGate q) :=
+  (algorithm.run
+    (CompilerSemantics.nonStrictAsStrict
+      (occurrences.get index).gate)).children
 
 /-! ## One five-field row ABI -/
 

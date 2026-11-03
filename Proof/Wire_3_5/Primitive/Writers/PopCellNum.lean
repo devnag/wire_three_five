@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.Writers.PopNums
+import Proof.Wire_3_5.Primitive.Writers.PopRecW
 
 /-! # PA (d)-SYM, part 14: the POP cell's numbers stage (one register file)
 

@@ -1,3 +1,6 @@
+import Proof.Wire_3_5.Primitive.Writers.PopCap
+import Proof.Wire_3_5.Primitive.Writers.PopNums
+import Proof.Wire_3_5.Primitive.Writers.PopParams
 import Proof.Wire_3_5.Primitive.Writers.PopSetupSpecB2
 
 /-! # PA POP setup, part 1: the POP row's block bound, the need's measure and the power scale

@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryMatrixNativeDimension
+import Proof.MachineModel.OrdinaryMatrixNaturalHeader
 
 /-! Physical raw-unary to canonical natWord header, for a positive runtime
 dimension. The value and its bit-width are produced by the existing count

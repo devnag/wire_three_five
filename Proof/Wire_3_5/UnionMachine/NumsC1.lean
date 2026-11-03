@@ -1,4 +1,6 @@
-import Proof.Wire_3_5.UnionMachine.NumsPh2
+import Proof.Wire_3_5.UnionMachine.NumsPh2Base
+import Proof.Wire_3_5.Primitive.Writers.UnaryArith
+import Proof.Wire_3_5.Primitive.Writers.StarNums
 
 /-! # NW phase (c), part 1: the register kit (a power by repeated multiplication, a list of clears)
 

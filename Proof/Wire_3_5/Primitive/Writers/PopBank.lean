@@ -1,7 +1,8 @@
-import Proof.Wire_3_5.Primitive.Writers.PopSetupIface
+import Proof.Wire_3_5.Primitive.Writers.SymDecFB
 import Proof.Wire_3_5.Primitive.Writers.SymDecRun
+import Proof.Wire_3_5.Primitive.Writers.PopSetupIface
 
-/-! # Part iii: the POP bank of the SYM decode, its register program
+/-! # PA2 (iii): the POP bank of the SYM decode, its register program
 
 At a POP unit (a circuit row `r ≥ |carriers|`, target `s`), the decoded state holds the row `r` (`H 9`), the target
 `s` (`H 12`), the cell row (`H 13`), the joint state's index `x = t mod Π` (`H 15`), the list seed's index (`H 17`),
@@ -134,6 +135,7 @@ def pMW : WM ns LNR :=
   (.seq (dbl ppG TM) (.seq (addTo dMS ppG TM) (.seq (WM.clear ppOff) (.seq (WM.clear ppL)
   (.seq (FinalPass.Hash4.wcopyR XA ppOff TM) (.seq (addTo XB ppOff TM) (.seq (dbl ppOff TM) (.seq (addTo (H 23) ppOff TM)
     (FinalPass.Hash4.wcopyR (H 22) ppL TM))))))))))))))))))
+
 
 /-- The exit state of `pA1W`. -/
 def pA1Out (σ : WState ns LNR) (r nc x m0 m1 m2 m3 : ℕ) : WState ns LNR :=

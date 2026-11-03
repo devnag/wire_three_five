@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.FinalPass.S5TChA
+import Proof.Wire_3_5.FinalPass.S5TChABase
 
 /-! # S5-THR, part 24: the payloads and the tuple's gate table (P3:2543-2558, 3083-3086)
 

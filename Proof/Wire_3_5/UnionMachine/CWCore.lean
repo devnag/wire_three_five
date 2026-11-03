@@ -1,4 +1,7 @@
 import Proof.Wire_3_5.UnionMachine.CWRoundB
+import Proof.PCP.PCPTraversalWhole
+import Proof.MachineModel.BlockUnaryCalc
+import Proof.Amplification.RecoveryScratchErase
 
 /-! # C6 front, U5, the code writers: the carrier core
 
@@ -94,6 +97,7 @@ theorem initNStage : ∃ o : Fin 3 → List Bool,
   refine ⟨o, st, ?_, ?_⟩
   · rw [show (0 : Fin 3) = Fin.castAdd 1 (0 : Fin 2) from rfl, ho]; exact e0
   · rw [show (1 : Fin 3) = Fin.castAdd 1 (1 : Fin 2) from rfl, ho]; show [τ.cell] = [false]; rw [ec]; rfl
+
 
 /-! ## The core machine's layout (913 tapes)
 
@@ -198,6 +202,7 @@ theorem miss_nat (h : t.val ≠ 859 ∧ t.val ≠ 2 ∧ t.val ≠ 1 ∧ t.val �
     have hv := congrArg Fin.val e; rw [natSl_val] at hv; fin_cases j <;> simp at hv <;> omega)
 
 end Miss
+
 
 /-! ## The erase's banks -/
 

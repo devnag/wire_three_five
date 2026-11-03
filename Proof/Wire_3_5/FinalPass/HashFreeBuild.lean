@@ -1,18 +1,45 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.HashCost4
 import Proof.Wire_3_5.FinalPass.HashFree2
+import Proof.Wire_3_5.FinalPass.SymBuild
 import Proof.Wire_3_5.Primitive.SeedFix.C4HBh
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.HashCost2
+import Proof.Wire_3_5.FinalPass.HashCost3
+import Proof.Wire_3_5.FinalPass.HashFree
+import Proof.Wire_3_5.FinalPass.HashOcc
+import Proof.Wire_3_5.FinalPass.HashPad
+import Proof.Wire_3_5.FinalPass.HashPre1
+import Proof.Wire_3_5.FinalPass.HashPre2
+import Proof.Wire_3_5.FinalPass.HashRange
+import Proof.Wire_3_5.FinalPass.HashSz1
+import Proof.Wire_3_5.FinalPass.HashSz2
+import Proof.Wire_3_5.FinalPass.SymCost4
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.HashCost3Base
+import Proof.Wire_3_5.FinalPass.HashFreeBase
+import Proof.Wire_3_5.FinalPass.SymBuildBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The HASH free numbers' builder: `HashFreeOk2` at every gate, fixed before `F`
 
-The HASH contract (`HashFreeOk2 l F wa K3 D3 Kp Dp` = `HashFreeOk` + `caps_ge`): the deliverable. The HASH constants `hashCof` (`d_Q = 8e_R + 1` for the recovery range, `d_H = coef·4^{deg} + 2`,
+The HASH contract (`HashFreeOk2 l F wa K3 D3 Kp Dp` = `HashFreeOk` + `caps_ge`): C1b's
+deliverable. The HASH constants `hashCof` (`d_Q = 8e_R + 1` for the recovery range, `d_H = coef·4^{deg} + 2`,
 `e_H = 26deg + 1`, `d_D = 4(192c_E + 385)` for the aux rows' degree, `d_P`, `e_P = e_H + 5`, `d_C = 1`,
 `d_A = dAH + e_P + 5 + ⌈log₂ c_Pad⌉`, `d_R = 0`), the load floor `C_{D,h} = occCDH + costCDH` (the printer's
 budget against `Ψ_aux` and the child's steps, P3:3094-3107), the C3 load constants `K3 = d_H + 3d_Q + 4c_T + 1 + d_P`,
 `D3 = e_H + e_P + 3` and the pad constants `Kp = 4^{d_A} + 1`, `Dp = d_A + d_R` depend on the literals and `wa` only.
 At every gate `F` with `C_{D,h} ≤ C_D` and `1 ≤ c_ψ`, the free program `freeProgH (hashK2 c)` with `dF = hashDF c`,
 `K_c = Cap = 2^{⌊n/16⌋ + d_C L²}` and `K_ch = symKch` meets every field: the program's bounds (FreeGenH2), the pad
-(`padH`), the C3 load (`c3_hash`), `side` (`HashEAt` at every THR call: `hb_cells` under `capS_hash`,
-`hpre_hash`, `hQp_hash`, `hcost_hash` with `hb_prep`, `hrange_hash`, `padHR_hash`, `fits_hash`, `one_le_h_hash`)
+(`padH`), the C3 load (`c3_hash`), `side` (`HashEAt` at every THR call: the `hb_cells` under `capS_hash`,
+`hpre_hash`, `hQp_hash`, `hcost_hash` with the `hb_prep`, `hrange_hash`, `padHR_hash`, `fits_hash`, `one_le_h_hash`)
 and `caps_ge` (`2tℓ₀ ≤ hbS ≤ Cap`).
 
 * `c3_hash`, `capsge_hash`, `hbcells_hash`, `hashCof0`, `hashCof`, `hashCDs`, **`hashFreeOk2`**.
@@ -86,7 +113,7 @@ theorem c3_hash (c : SymC) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : �
       = (c.dH + 3 * c.dQ + 4 * cT l + 1 + c.dP) * 1 * (n + 1) ^ D := by ring
     _ ≤ _ := Nat.mul_le_mul_right _ (Nat.mul_le_mul_left _ (by omega))
 
-/-- **The ruler's capacity** `2tℓ₀ ≤ Cap` (`caps_ge`). -/
+/-- **The ruler's capacity** `2tℓ₀ ≤ Cap` (the `caps_ge`). -/
 theorem capsge_hash (c : SymC) (wa : WilliamsAlgorithm) (hCDc : costCDH l (gate0 l F).alg c ≤ F.CD) (hcpsi : 1 ≤ F.E.cpsi)
     (hdA : dAH c (CompetitorCountTable.coefficient wa) (CompetitorCrossScheduler.exponent wa) ≤ c.dA) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ} (ha' : a' ≤ 4)
     (Cs : Fin a' → NormalizedThresholdThresholdCircuit n) (carriers : List (Carrier n)) (translation : List ℕ)
@@ -105,7 +132,7 @@ theorem capsge_hash (c : SymC) (wa : WilliamsAlgorithm) (hCDc : costCDH l (gate0
     exact h4.trans (Nat.le_mul_of_pos_left _ (by positivity))
   omega
 
-/-- **The Hb printer's conditions at every child** (`HashEAt`'s first clause, `hb_cells`). -/
+/-- **The Hb printer's conditions at every child** (`HashEAt`'s first clause, the `hb_cells`). -/
 theorem hbcells_hash (c : SymC) (wa : WilliamsAlgorithm) (hCDc : costCDH l (gate0 l F).alg c ≤ F.CD) (hcpsi : 1 ≤ F.E.cpsi)
     (hdA : dAH c (CompetitorCountTable.coefficient wa) (CompetitorCrossScheduler.exponent wa) ≤ c.dA) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ} (ha' : a' ≤ 4)
     (Cs : Fin a' → NormalizedThresholdThresholdCircuit n) (carriers : List (Carrier n)) (translation : List ℕ)
@@ -207,3 +234,5 @@ noncomputable def hashFreeOk2 (l : Literals) (wa : WilliamsAlgorithm) : ∀ _fe 
         capsge_hash l F (hashCof l wa) wa hCDc hcpsi hdA kclk coef A a ha ha' Cs carriers translation hcall hs }⟩
 
 end NearCubicWires.WireExponent3_5.FinalPass.HashFr
+
+end

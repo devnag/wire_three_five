@@ -1,3 +1,4 @@
+import Proof.Hierarchy.CompetitorSumEntry
 import Proof.CaseAnalysis.WitnessGcdPolicy
 
 /-! One source-policy accumulator width serves every accepted sum. The

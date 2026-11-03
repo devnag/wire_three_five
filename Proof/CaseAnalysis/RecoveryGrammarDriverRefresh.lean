@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoveryGrammarDriverInitial
+import Proof.Circuits.DecompositionCountPosition
 
 /-! Refresh only the candidate driver after the retained raw candidate has
 advanced. Its old backing is erased, the existing printer runs, and head one

@@ -1,4 +1,5 @@
 import Proof.Hierarchy.HierarchyInputLength
+import Proof.PCP.VerifierDecodingCompare
 
 /-! Print the exact sentinel unary predecessor of a framed word's bit length.
 The first logical bit is skipped, every later bit writes one mark, and even

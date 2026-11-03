@@ -1,5 +1,6 @@
 import Proof.CaseAnalysis.PairClockExact
 import Proof.CaseAnalysis.ScheduleClog
+import Proof.MachineModel.UWalkUnary
 import Proof.PCP.ProjectionDimensionPolynomialBounds
 
 /-! The exact full canonical-search cap from its actual raw width. The

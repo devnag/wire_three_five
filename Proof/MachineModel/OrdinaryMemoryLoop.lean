@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryMemoryBody
+import Proof.MachineModel.OrdinaryStreamController
 
 /-! Entire actual sorted-memory traversal. Each record costs the accepted
 body plus two controller steps; termination costs one step. Space is not

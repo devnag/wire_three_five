@@ -1,4 +1,4 @@
-import Proof.Assembly.Production
+import Proof.CaseAnalysis.FiveRowKeys
 
 /-! # Row keys in the exact `F.rows` order, for the packet family loop.
 
@@ -27,6 +27,17 @@ open PCJ9eff70d512234a4c_Fixed PCJd4d1d9d7d1fa4313_Production
 noncomputable section
 
 /-! ## The supplied instance: the checked closeout keys -/
+
+/-- SYM: seed then offset tuple; THR: selection, prime, seed, residue < prime. -/
+def rcKey (a : DecompositionAlgorithm) : Request → Type
+  | .terminal => PEmpty
+  | .sym r _ L target => RCFive.RowKeys.SymKey r L target
+  | .thr r _ L target => RCFive.RowKeys.ThrKey a r L target
+
+def rcKeys (a : DecompositionAlgorithm) : ∀ r : Request, List (rcKey a r)
+  | .terminal => []
+  | .sym r _ L target => RCFive.RowKeys.symKeys r L target
+  | .thr r _ L target => RCFive.RowKeys.thrKeys a r L target
 
 end
 end NearCubicWires.PacketFamilyParent

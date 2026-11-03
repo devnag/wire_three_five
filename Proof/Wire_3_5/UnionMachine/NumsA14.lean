@@ -1,9 +1,28 @@
-import Proof.Wire_3_5.UnionMachine.NumsA13
+import Lean
+import Proof.Wire_3_5.UnionMachine.NumsA13Base
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.FpInLen
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Primitive.Writers.HashFam
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.C4GateSymB
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.NumsA3
+import Proof.Wire_3_5.UnionMachine.NumsA4
 
-/-! # The SYM numbers' full register export with the tuple size `dA = a`
 
-`numsAtG2` / `numsBankG2`: `NumsA13`'s `numsAtG` / `numsBankG` with `numsS_spec`'s `dA = |codes| = a` kept
-(for `symFront` `vA` field and SWn's first number `a`).
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # C6b: the SYM numbers' full register export with the tuple size `dA = a`
+
+`numsAtG2` / `numsBankG2`: `NumsA13`'s `numsAtG` / `numsBankG` with the `numsS_spec`'s `dA = |codes| = a` kept
+(for the `symFront` `vA` field and SWn's first number `a`).
 
 * **`numsAtG2`**, **`numsBankG2`**.
 
@@ -259,3 +278,5 @@ theorem numsBankG2 (x : ℕ) {n a' : ℕ} (ha' : a' ≤ 4) (Cs : Fin a' → Norm
 end Gate
 
 end NearCubicWires.WireExponent3_5.UnionMachine.NumsA
+
+end

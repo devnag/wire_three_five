@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Lists.ListMachineRowRadixEnc
+import Proof.Wire_3_5.FinalPass.WordLib
 
 /-! # C2 rows, part 19: the RADIX row's two register programs (P3:2608-2614)
 
@@ -339,6 +340,7 @@ theorem writeX_mid' (K : ℕ) (ρ z : List ℕ) (j : ℕ) (hj : j ≤ K) (b : Bo
 theorem encT_snoc_zero (K : ℕ) (ρ : List ℕ) (m : ℕ) :
     encT K ρ ++ ohB K 0 ++ encT K (List.replicate m 0) = encT K (ρ ++ List.replicate (m + 1) 0) := by
   simp [List.replicate_succ, encT]
+
 
 /-! ## The odometer loop -/
 

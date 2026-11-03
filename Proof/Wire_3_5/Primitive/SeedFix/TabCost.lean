@@ -1,6 +1,8 @@
-import Proof.Rows.RowsSymBounds
-import Proof.SourceAssembly.SourceRequestSelOrigCost
+import Proof.Wire_3_5.Primitive.SeedFix.TabSym
 import Proof.Wire_3_5.Primitive.SeedFix.TabThr
+import Proof.SourceAssembly.SourceRequestSelOrigCost
+import Proof.SourceAssembly.AdmissionInput
+import Proof.Rows.RowsSymBounds
 
 /-! # The gate tables: polynomial fuel (P3:3049-3050, 1648-1650)
 

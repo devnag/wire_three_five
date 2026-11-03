@@ -1,5 +1,7 @@
 import Proof.Wire_3_5.UnionMachine.RadScan
-import Proof.Wire_3_5.UnionMachine.RadSpec
+import Proof.Wire_3_5.UnionMachine.RadSpecBase
+import Proof.Wire_3_5.Primitive.Writers.UnaryPow
+import Proof.Wire_3_5.Primitive.Writers.StarNums
 
 /-! # RADIX, stage 3 (2): Route B's numbers in registers (P3:2585-2623)
 

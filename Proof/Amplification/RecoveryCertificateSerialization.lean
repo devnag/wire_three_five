@@ -44,6 +44,7 @@ theorem readRow_pack (width : Nat) (row : Row) (h : RowFitsWidth width row) (suf
     readField_pack width payload h.2.2.2]
 
 def width (code : Nat) := natBitLength code+2
+def limit (code : Nat) := 3*(natBitLength code+1)^2
 
 theorem fields_fit (code : Nat) : code<2^width code ∧ natBitLength code<2^width code ∧ 2<2^width code := by
   have hc : code<2^natBitLength code := Nat.lt_pow_succ_log_self (by omega) _
@@ -51,5 +52,12 @@ theorem fields_fit (code : Nat) : code<2^width code ∧ natBitLength code<2^widt
   have hn : natBitLength code<2^natBitLength code := Nat.lt_two_pow_self
   have ht : 2^2≤2^width code := Nat.pow_le_pow_right (by omega) (by simp [width])
   exact ⟨hc.trans_le hp,hn.trans_le hp,by omega⟩
+
+theorem counts_fit (code : Nat) : natBitLength code≤limit code ∧
+    3*natBitLength code≤limit code ∧ 2*natBitLength code+1≤limit code := by
+  unfold limit
+  constructor
+  · nlinarith
+  constructor <;> nlinarith
 
 end NearCubicWires.RepairSource.RecoveryOracle.CompactCertificate.Serialization

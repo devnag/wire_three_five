@@ -10,6 +10,8 @@ set_option maxRecDepth 120000
 set_option warningAsError true
 
 def parameter (r : ExactDecompositionRequest) := r.arity+r.gate.encodingBits+1
+def coefficient (a : DecompositionAlgorithm) := 1024*(a.coefficient+2)^2
+def degree (a : DecompositionAlgorithm) := 2*a.degree+2
 
 theorem entry_budget_coarse (a : DecompositionAlgorithm) (r : ExactDecompositionRequest) :
     Entry.budget a r ≤ 1024*(sourceBudget a r+parameter r+1)^2 := by

@@ -1,3 +1,4 @@
+import Proof.MachineModel.ClockUnarySum
 import Proof.PCP.PCPPNativeNaturalAppend
 
 /-! Append a physically computed sum as a native field. In particular, a zero

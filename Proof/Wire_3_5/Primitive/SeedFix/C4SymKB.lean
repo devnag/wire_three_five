@@ -1,7 +1,7 @@
 import Proof.Wire_3_5.Primitive.SeedFix.C4SymKA
 import Proof.Wire_3_5.Primitive.Writers.SymDecCall
 
-/-! # C4.K SYM, the FROZEN contract of the free numbers (builds (e) + (g) to it)
+/-! # C4.K SYM, the contract of the free numbers (builds (e) + (g) to it)
 
 "`ℓ ≥ max(k, ⌈log₂(Q+1)⌉)`" and `Q` (P3:2929-2941, 2994-3000); "For each candidate child prefix, print its signed
 equation expression, reduce modulo the chosen power of two at each column, and sum the recovered integers" (P3:3034-3036:

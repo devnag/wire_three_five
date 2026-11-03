@@ -1,18 +1,29 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.Weak
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.Transfer.TransferUnionSound
+import Proof.Wire_3_5.UnionMachine.UnionCheck
+import Proof.Wire_3_5.UnionMachine.UnionCodec
+import Proof.Wire_3_5.UnionMachine.SlackBase
+
+
+noncomputable section
+
 
 /-! # C6, part 2: rounded answers and slack thresholds (P3:3484-3491)
 
 The union machine cannot do exact rational arithmetic on the primitive's printed values within `tr:time` (a value's
-word may be `callBudget` long, F1). It rounds every answer to `p` bits (`roundQ p v = ⌊2^p v⌋/2^p`) and
+word may be `callBudget` long). It rounds every answer to `p` bits (`roundQ p v = ⌊2^p v⌋/2^p`) and
 tests `tr:thresholds` with the slack `δ = (1+Λ̄)⁴·2^{−p}` of the rounding:
 `V̂' ≤ 2v₀ + δ`, `Q̂' ≤ 1+v₀+δ`, `μ̂' ≥ τ − δ`.
 
 * **Completeness is exact**: every guess with `UnionAccepts` (the split's type, unchanged) passes the slack check
   (`unionSlackCheck_of_accepts`), since the rounded estimates are within `δ` of the exact ones (`VhatV_sub` etc., from
-  `Poly4.estimate_error` and the coefficient masses `polyV_mass_le` …).
+  the `Poly4.estimate_error` and the coefficient masses `polyV_mass_le` …).
 * **Soundness via slack**: a passing slack check gives `SlackAccepts` (`slackAccepts_of_check`), which fails on a
   hierarchy no-instance once `(1+Λ̄)⁴(q^{−D} + 2^{−p}) + δ ≤ ε₀` (`not_slackAccepts`): the rounded estimates, shifted by
-  `δ`, are within `ε₀` of the masked tests (`propagated_V/Q/Mu`) and pass the exact thresholds, which `masked_soundness_real` rules out. **`oneSided_of_soundForSlack`**: `SoundForSlack` gives the split's `OneSided`.
+  `δ`, are within `ε₀` of the masked tests (the `propagated_V/Q/Mu`) and pass the exact thresholds, which T's
+  `masked_soundness_real` rules out. **`oneSided_of_soundForSlack`**: `SoundForSlack` gives the split's `OneSided`.
 * `unionSlackRun` (decode, then the slack check) with `unionSlackRun_sound` / `unionSlackRun_complete`: the executable
   specification the C6 machine computes. -/
 
@@ -26,35 +37,6 @@ open NearCubicWires.RecoveryScheduleEnvelope (oracleSizeBound)
 open Filter Topology
 
 /-! ## Rounding -/
-
-/-- **The rounded answer** `⌊2^p v⌋/2^p`. -/
-def roundQ (p : ℕ) (v : ℚ) : ℚ := (⌊v * 2 ^ p⌋ : ℚ) / 2 ^ p
-
-theorem roundQ_close_rat (p : ℕ) (v : ℚ) : |roundQ p v - v| ≤ 1 / 2 ^ p := by
-  have hp : (0 : ℚ) < 2 ^ p := by positivity
-  have h1 : (⌊v * 2 ^ p⌋ : ℚ) ≤ v * 2 ^ p := Int.floor_le _
-  have h2 : v * 2 ^ p < (⌊v * 2 ^ p⌋ : ℚ) + 1 := Int.lt_floor_add_one _
-  have e : roundQ p v - v = ((⌊v * 2 ^ p⌋ : ℚ) - v * 2 ^ p) / 2 ^ p := by
-    rw [sub_div, mul_div_cancel_right₀ _ hp.ne']; rfl
-  rw [e, abs_div, abs_of_pos hp]
-  apply div_le_div_of_nonneg_right _ hp.le
-  rw [abs_le]; constructor <;> linarith
-
-theorem roundQ_close (p : ℕ) (v : ℚ) : |(roundQ p v : ℝ) - v| ≤ 1 / 2 ^ p := by
-  have h : ((|roundQ p v - v| : ℚ) : ℝ) ≤ ((1 / 2 ^ p : ℚ) : ℝ) := Rat.cast_le.mpr (roundQ_close_rat p v)
-  push_cast at h
-  exact h
-
-/-- **The slack** of the rounding at grid mass `Λ̄`: `(1+Λ̄)⁴·2^{−p}`. -/
-def slackOf (mass : ℚ) (p : ℕ) : ℚ := (1 + mass) ^ 4 / 2 ^ p
-
-theorem slackOf_cast (mass : ℚ) (p : ℕ) : (slackOf mass p : ℝ) = (1 + (mass : ℝ)) ^ 4 * (1 / 2 ^ p) := by
-  unfold slackOf; push_cast; ring
-
-/-- **The slack check** of a parsed guess: `check` with the thresholds relaxed by `δ`. -/
-def slackCheck (D : UnionCheckData) (val : PrimRequest → ℚ) (v0 τ δ : ℚ) (callOk : PrimRequest → Bool) : Bool :=
-  D.signsOk && D.schedule.all callOk && decide (D.VhatQ val ≤ 2 * v0 + δ) && decide (D.QhatQ val ≤ 1 + v0 + δ) &&
-    decide (τ - δ ≤ D.μhatQ val)
 
 section Slack
 variable {kclk : ℕ} {E : Envelope} {B : TimeBudget kclk E} {I : PrimitiveInputs B}
@@ -187,15 +169,11 @@ theorem muCall_error (P : FusedPrimitive I) (i : Fin (2 ^ g.pcpp.clauseBits)) (t
 
 variable (P : FusedPrimitive I) (p : ℕ → ℕ)
 
-/-- The machine's answers: the primitive's values rounded to `p(q)` bits. -/
-def roundedVal (q : ℕ) : PrimRequest → ℚ := fun r => roundQ (p q) (P.value r)
-
-theorem roundedVal_close (q : ℕ) (r : PrimRequest) : |((roundedVal P p q r : ℚ) : ℝ) - P.value r| ≤ 1 / 2 ^ p q :=
-  roundQ_close _ _
-
-/-- **Slack acceptance**: grid signs, admissible calls, and `tr:thresholds` relaxed by the slack at the rounded
-answers. -/
+/-- **Slack acceptance**: the outer step's guards (`UnionGuards`: `N = 2^a` past the onset, both circuits within
+`q^G` gates, the `λ_a` guard and the source check), grid signs, admissible calls, and `tr:thresholds` relaxed by the
+slack at the rounded answers. -/
 def SlackAccepts : Prop :=
+  UnionGuards S z g ∧
   (∀ X a, g.sign X a ∈ ({-1, 0, 1} : Finset ℤ)) ∧
   (∀ pos j t, (g.polyVAt pos).coeff j t ≠ 0 → I.Call (g.vCall pos t)) ∧
   (∀ pos j t, (g.polyQAt pos).coeff j t ≠ 0 → I.Call (g.vCall pos t)) ∧
@@ -209,7 +187,7 @@ theorem slack_of_accepts (hg : UnionAccepts S P z g) :
     VhatV g (roundedVal P p g.q) ≤ 2 * (S.params.v0 : ℝ) + (slackOf (S.gridMass g.q) (p g.q) : ℝ) ∧
     QhatV g (roundedVal P p g.q) ≤ 1 + (S.params.v0 : ℝ) + (slackOf (S.gridMass g.q) (p g.q) : ℝ) ∧
     (S.params.threshold : ℝ) - (slackOf (S.gridMass g.q) (p g.q) : ℝ) ≤ μhatV g (roundedVal P p g.q) := by
-  obtain ⟨-, hsign, -, -, -, -, hV, hQ, hμ⟩ := hg
+  obtain ⟨-, -, -, -, -, -, -, hsign, -, -, -, -, hV, hQ, hμ⟩ := hg
   have hη : ∀ r, |((roundedVal P p g.q r : ℚ) : ℝ) - P.value r| ≤ 1 / 2 ^ p g.q := roundedVal_close P p g.q
   have h1 := VhatV_sub g hsign (roundedVal P p g.q) P.value _ (by positivity) hη
   have h2 := QhatV_sub g hsign (roundedVal P p g.q) P.value _ (by positivity) hη
@@ -244,14 +222,15 @@ theorem muCall_round_error (i : Fin (2 ^ g.pcpp.clauseBits)) (t : Fin 4 → g.At
     (tupleTruth g.atoms (clauseMask g.pcpp (carrierFilter I g.mode g.pcpp g.carrier g.translation) i) t)
   linarith
 
-/-- **No slack acceptance on a no-instance**: past the onsets where the outer error `N^{−10}` is at most `η` and the
-propagated error of the rounded answers plus the slack is at most `ε₀`. -/
-theorem not_slackAccepts (hN : 1 ≤ N) (hno : S.machine.accepts N z = false)
-    (hout : 1 / (N : ℝ) ^ 10 ≤ (S.params.outerError : ℝ))
+/-- **No slack acceptance on a no-instance** (Lemma H.3; Lemma H.7(c)): the guards put `N = 2^a` past the onset with
+the source check and the `λ_a` guard passed, so `H_Γ` accepts at most a `1/λ_a ≤ outerError` fraction of its inputs;
+past the point where the propagated error of the rounded answers plus the slack is at most `ε₀`, no guess is
+slack-accepted. -/
+theorem not_slackAccepts (hno : S.language N z = false)
     (hD : (1 + (S.gridMass g.q : ℝ)) ^ 4 * ((g.q : ℝ) ^ (-(I.D : ℝ)) + 1 / 2 ^ p g.q) +
       (slackOf (S.gridMass g.q) (p g.q) : ℝ) ≤ (S.params.eps0 : ℝ)) :
     ¬ SlackAccepts g P p := by
-  rintro ⟨hsign, hVcall, hQcall, hμcall, hVp, hQp, hμp⟩
+  rintro ⟨⟨-, hN, hon, -, -, hfit, hcheck⟩, hsign, hVcall, hQcall, hμcall, hVp, hQp, hμp⟩
   have hL : (0 : ℝ) ≤ (S.gridMass g.q : ℝ) := by exact_mod_cast S.gridMass_nonneg _
   have herr : (0 : ℝ) ≤ (g.q : ℝ) ^ (-(I.D : ℝ)) + 1 / 2 ^ p g.q := by positivity
   have hδ0 : (0 : ℝ) ≤ (slackOf (S.gridMass g.q) (p g.q) : ℝ) := by rw [slackOf_cast]; positivity
@@ -273,13 +252,13 @@ theorem not_slackAccepts (hN : 1 ≤ N) (hno : S.machine.accepts N z = false)
     propagated_Mu hL (g.forms hsign) (carrierFilter I g.mode g.pcpp g.carrier g.translation)
       (fun i _ t => ((roundedVal P p g.q (g.muCall i t) : ℚ) : ℝ)) _ herr
       (fun i j t hc => muCall_round_error g P p i t (hμcall i j t hc))
-  have hsound : ∀ x, ¬ (S.request z g.oracle).circuit.eval x → ∀ aux,
+  have hsound : ∀ x, ¬ (S.request z g.pair).circuit.eval x → ∀ aux,
       g.pcpp.satisfiedFraction x aux ≤ S.pcppAlg.soundness := by
     intro x hx aux
-    exact S.pcppAlg.sound (S.request z g.oracle) x (by simpa using hx) aux
-  have houter : uMean (fun x : BitInput g.q => bitR ((S.request z g.oracle).circuit.eval x)) ≤
+    exact S.pcppAlg.sound (S.request z g.pair) x (by simpa using hx) aux
+  have houter : uMean (fun x : BitInput g.q => bitR ((S.request z g.pair).circuit.eval x)) ≤
       (S.params.outerError : ℝ) :=
-    (S.outerSound N hN z hno g.oracle).trans hout
+    S.outerSound_reserve z g.pair hN hon hno hfit hcheck
   obtain ⟨hV1, hV2⟩ := abs_le.mp hV
   obtain ⟨hQ1, hQ2⟩ := abs_le.mp hQ
   obtain ⟨hμ1, hμ2⟩ := abs_le.mp hμ
@@ -299,11 +278,11 @@ open UnionGuessSlack
 
 variable {S : UnionSetup I} {N : ℕ} {z : BitInput N}
 
-/-- **The union machine's slack check on a parsed guess**: oracle size, the word bound, then the slack check at the
-answers `val` with the slack of `p(q)`-bit rounding. -/
+/-- **The union machine's slack check on a parsed guess**: the outer step's guards (`UnionGuards`), the word bound,
+then the slack check at the answers `val` with the slack of `p(q)`-bit rounding. -/
 def unionSlackCheck (S : UnionSetup I) {N : ℕ} (z : BitInput N) (g : UnionGuess S z) (tr : List ℕ)
     (callOk : PrimRequest → Bool) (val : PrimRequest → ℚ) (p : ℕ → ℕ) : Bool :=
-  decide (g.oracle.size ≤ oracleSizeBound S.G (S.pcp.nativeWidth N)) && decide (g.word.length ≤ N / 16) &&
+  decide (UnionGuards S z g) && decide (g.word.length ≤ N / 16) &&
     slackCheck (g.checkData tr) val S.params.v0 S.params.threshold (slackOf (S.gridMass g.q) (p g.q)) callOk
 
 theorem schedule_calls_iff (g : UnionGuess S z) (callOk : PrimRequest → Bool)
@@ -345,7 +324,8 @@ theorem unionSlackCheck_of_accepts (P : FusedPrimitive I) (p : ℕ → ℕ) (g :
     (hg : UnionAccepts S P z g) :
     unionSlackCheck S z g g.translation callOk (roundedVal P p g.q) p = true := by
   obtain ⟨sV, sQ, sμ⟩ := slack_of_accepts g P p hg
-  obtain ⟨hsize, hsign, hword, hV, hQ, hM, -, -, -⟩ := hg
+  obtain ⟨h1, h2, h3, h4, h5, h6, h7, hsign, hword, hV, hQ, hM, -, -, -⟩ := hg
+  have hsize : UnionGuards S z g := ⟨h1, h2, h3, h4, h5, h6, h7⟩
   rw [VhatV_eq] at sV
   rw [QhatV_eq] at sQ
   rw [μhatV_eq] at sμ
@@ -363,17 +343,17 @@ theorem slackAccepts_of_check (P : FusedPrimitive I) (p : ℕ → ℕ) (g : Unio
     (h : unionSlackCheck S z g g.translation callOk (roundedVal P p g.q) p = true) : SlackAccepts g P p := by
   unfold unionSlackCheck slackCheck at h
   simp only [Bool.and_eq_true, decide_eq_true_iff] at h
-  obtain ⟨-, ⟨⟨⟨⟨hs, hc⟩, hV⟩, hQ⟩, hμ⟩⟩ := h
+  obtain ⟨⟨hgd, -⟩, ⟨⟨⟨⟨hs, hc⟩, hV⟩, hQ⟩, hμ⟩⟩ := h
   obtain ⟨hcV, hcQ, hcM⟩ := (schedule_calls_iff g callOk hok).1 hc
   have hs' : ∀ X a, g.sign X a ∈ ({-1, 0, 1} : Finset ℤ) := by
     unfold UnionCheckData.signsOk at hs; exact decide_eq_true_iff.mp hs
-  refine ⟨hs', hcV, hcQ, hcM, ?_, ?_, ?_⟩
+  refine ⟨hgd, hs', hcV, hcQ, hcM, ?_, ?_, ?_⟩
   · rw [VhatV_eq]; exact_mod_cast hV
   · rw [QhatV_eq]; exact_mod_cast hQ
   · rw [μhatV_eq]; exact_mod_cast hμ
 
 /-- **The union machine's run on a witness**: decode it, then the slack check at the rounded answers
-(the translation `tr` a parameter, as in `unionRun`, so the run stays executable). -/
+(the translation `tr` a parameter, as in the `unionRun`, so the run stays executable). -/
 def unionSlackRun (S : UnionSetup I) {N : ℕ} (z : BitInput N) (tr : UnionGuess S z → List ℕ)
     (callOk : PrimRequest → Bool) (P : FusedPrimitive I) (p : ℕ → ℕ) (w : List Bool) : Bool :=
   match decodeGuess S z w with
@@ -392,35 +372,26 @@ theorem unionSlackRun_sound (P : FusedPrimitive I) (p : ℕ → ℕ) (callOk : P
 def SoundForSlack (S : UnionSetup I) (P : FusedPrimitive I) (p : ℕ → ℕ) (M : OrdinaryWeakMachine) : Prop :=
   ∀ N (z : BitInput N), M.accepts N z → ∃ g : UnionGuess S z, SlackAccepts g P p
 
-/-- **`OneSided` from slack soundness**: once the outer error is positive, the native width grows, and the rounded
+/-- **`OneSided` from slack soundness** (Lemma H.3, one-sidedness): once the width `q(N)` grows and the rounded
 answers' propagated error plus the slack eventually fits `ε₀`. -/
 theorem oneSided_of_soundForSlack (S : UnionSetup I) (P : FusedPrimitive I) (p : ℕ → ℕ) (M : OrdinaryWeakMachine)
-    (hS : SoundForSlack S P p M) (hη : 0 < (S.params.outerError : ℝ))
-    (hw : Tendsto (fun N => S.pcp.nativeWidth N) atTop atTop)
+    (hS : SoundForSlack S P p M) (hw : Tendsto (fun N => S.width N) atTop atTop)
     (hD : ∀ᶠ q : ℕ in atTop, (1 + (S.gridMass q : ℝ)) ^ 4 * ((q : ℝ) ^ (-(I.D : ℝ)) + 1 / 2 ^ p q) +
       (slackOf (S.gridMass q) (p q) : ℝ) ≤ (S.params.eps0 : ℝ)) :
     OneSided M S.language := by
-  have h1 : ∀ᶠ N : ℕ in atTop, 1 ≤ N ∧ 1 / (N : ℝ) ^ 10 ≤ (S.params.outerError : ℝ) := by
-    have ht : Tendsto (fun n : ℕ => 1 / (n : ℝ)) atTop (𝓝 0) := tendsto_one_div_atTop_nhds_zero_nat
-    filter_upwards [ht.eventually_le_const hη, eventually_ge_atTop 1] with N hN hN1
-    refine ⟨hN1, ?_⟩
-    have hN1' : (1 : ℝ) ≤ (N : ℝ) := by exact_mod_cast hN1
-    have : 1 / (N : ℝ) ^ 10 ≤ 1 / (N : ℝ) := by
-      apply one_div_le_one_div_of_le (by positivity)
-      calc (N : ℝ) = (N : ℝ) ^ 1 := (pow_one _).symm
-        _ ≤ (N : ℝ) ^ 10 := pow_le_pow_right₀ hN1' (by norm_num)
-    exact this.trans hN
   obtain ⟨Q₀, hQ⟩ := eventually_atTop.mp hD
-  obtain ⟨n₀, hn₀⟩ := eventually_atTop.mp (h1.and (hw.eventually_ge_atTop Q₀))
+  obtain ⟨n₀, hn₀⟩ := eventually_atTop.mp (hw.eventually_ge_atTop Q₀)
   refine ⟨n₀, fun n hn x hacc => ?_⟩
   obtain ⟨g, hg⟩ := hS n x hacc
   by_contra hL
-  have hno : S.machine.accepts n x = false := by
-    rw [← S.decides]; simpa using hL
-  exact not_slackAccepts g P p (hn₀ n hn).1.1 hno (hn₀ n hn).1.2
-    (hQ _ ((hn₀ n hn).2.trans (nativeWidth_le_q S g))) hg
+  have hno : S.language n x = false := by simpa using hL
+  have hq : g.q = S.width n := q_eq_width S g hg.1.2.1 hg.1.2.2.1
+  have hQ0 : Q₀ ≤ g.q := by rw [hq]; exact hn₀ n hn
+  exact not_slackAccepts g P p hno (hQ _ hQ0) hg
 
 end Slack
 
 
 end NearCubicWires.WireExponent3_5.UnionMachine
+
+end

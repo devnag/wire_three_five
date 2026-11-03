@@ -1,0 +1,25 @@
+import Proof.Packets.WindowProviderPorts
+import Proof.Packets.PacketsXSubstitutionCensus
+import Proof.Packets.PacketsXSubstitutionNatInvariant
+import Proof.Packets.SubstitutionOuterLoop
+import Proof.Packets.SubstitutionPrepareCopies
+import Proof.Packets.SubstitutionReusable
+import Proof.Packets.SubstitutionScratchErase
+
+/-! The reusable normalized substitution executes inside the actual provider
+arena and preserves every field except the two arithmetic operands. -/
+set_option autoImplicit false
+set_option maxHeartbeats 350000
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedSimpArgs false
+namespace PCJ9eff70d512234a4c_Fixed.Materializer.WindowProvider
+open NearCubicWires NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdinary
+open NearCubicWires.ExtDecompositionBatch NearCubicWires.CanonicalFourfoldRowProgram
+open NormalizedFiniteTransport SubstitutionCensus SubstitutionInvariant
+open Theorem25Completion.CycleBounds
+open NearCubicWires.RepairSource.VerifierDecoding
+
+noncomputable def substitute := RecoveryFocus.machine substitutionPorts SubstitutionCall.execute
+
+end PCJ9eff70d512234a4c_Fixed.Materializer.WindowProvider

@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.W6F
+import Proof.Wire_3_5.Primitive.Writers.SymQM
 
 /-! # W6, part 7: register runs and `K = 8(|𝒢|+1)n^D`
 

@@ -11,8 +11,8 @@ three consecutive tokens are checked for multi-word entries. Matching is case-in
 a banned word inside a longer ordinary word is not a hit. Every hit is reviewed by a person; nothing is
 replaced automatically.
 
-One file is exempt: the paper's source, paper/paper.tex, shipped unchanged, is skipped only while its
-SHA-256 equals the value pinned in EXEMPT. If the file changes, it is scanned like every other file.
+The two paper sources, paper/paper.tex and paper/paper_v2.tex, are skipped only while their SHA-256
+values equal the corresponding pins in EXEMPT. A changed file is scanned like every other file.
 """
 import hashlib, re, sys
 from pathlib import Path
@@ -21,7 +21,7 @@ RUN = re.compile(r'[A-Za-z0-9]+')
 CAMEL = re.compile(r'[A-Z]+(?=[A-Z][a-z])|[A-Z]?[a-z]+|[A-Z]+|[0-9]+')
 
 
-EXEMPT = {'paper/paper.tex': '70c8ada2f4554d2eda2aebb975c56fc6a35baba6d7f6eb6467632cacba702eaa'}
+EXEMPT = {'paper/paper_v2.tex': '593df5ed3c1ca2e8a4a82bf21a61d69d8c3b7e3a5dd1b5e84e607f89041e79a8', 'paper/paper.tex': '70c8ada2f4554d2eda2aebb975c56fc6a35baba6d7f6eb6467632cacba702eaa'}
 
 
 def exempt(f, root):

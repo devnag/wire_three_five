@@ -1,11 +1,22 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.PlanW3
 import Proof.Wire_3_5.UnionMachine.FrontGate
 import Proof.Wire_3_5.UnionMachine.FrontTableRef
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.UnionCheck
+import Proof.Wire_3_5.UnionMachine.UnionCodec
+import Proof.Wire_3_5.UnionMachine.Slack
+import Proof.Wire_3_5.UnionMachine.FrontOutRefBase
+
+
+noncomputable section
+
 
 /-! # C6 front, F2: the front's reference output (P3:3669-3691)
 
 What the front leaves for the schedule loop at one input `x` and witness `w` (`FrontAtW3.out`): past the onset, when
-the witness decodes to a guess `g` that passes the front's checks (**`GoodG`**: the oracle within `q^G`, every atom in
+the witness decodes to a guess `g` that passes the front's checks (**`GoodG`**: the outer step's guards `UnionGuards` —
+`N = 2^a` past the onset, `Γ_src` and `Γ_pf` within `q^G` gates, the `λ_a` guard and the source check — every atom in
 the description envelope, the grid signs in `{−1,0,1}`, every scheduled call admissible), the call table the table
 writer prints (`tableAll` over its term orders `myV`, `myQ`, `myMu`), the slack thresholds in the accumulators, the
 rounding precision `unionBits q` and the loop's capacities; otherwise the rejecting output (`FrontGate.rejOut`).
@@ -28,19 +39,12 @@ open NearCubicWires.WireExponent3_5.UnionMachine.Bridge (scaleVQ scaleMu)
 section Out
 variable {kclk : ℕ} {E : Envelope} {B : TimeBudget kclk E} {I : PrimitiveInputs B}
 
-open Classical in
-/-- **The union's admissibility test**: `callOk r := [I.Call r]`. -/
-noncomputable def callOkI : PrimRequest → Bool := fun r => decide (I.Call r)
-
-theorem callOkI_iff (r : PrimRequest) : callOkI (I := I) r = true ↔ I.Call r := by
-  unfold callOkI; simp
-
 variable (S : UnionSetup I)
 
-/-- **The front's checks on a decoded guess**: the oracle's size, the atom test, the grid signs, every scheduled
+/-- **The front's checks on a decoded guess**: the outer step's guards, the atom test, the grid signs, every scheduled
 call admissible. -/
 def GoodG {N : ℕ} {z : BitInput N} (g : UnionGuess S z) : Prop :=
-  g.oracle.size ≤ oracleSizeBound S.G (S.pcp.nativeWidth N) ∧ PlanW3.AtomsOkG g ∧
+  UnionGuards S z g ∧ PlanW3.AtomsOkG g ∧
     (g.checkData g.translation).signsOk = true ∧ (g.checkData g.translation).schedule.all (callOkI (I := I)) = true
 
 /-- The setup facts the reference reads: the grid mass is a positive integer, the grid is nonempty. -/
@@ -49,12 +53,6 @@ structure GridFacts : Prop where
   size : ∀ q, 1 ≤ S.gridSize q
 
 variable {S}
-
-theorem calls_of_all (D : UnionCheckData) (h : D.schedule.all (callOkI (I := I)) = true) :
-    (∀ t ∈ D.termsV, I.Call t.2) ∧ (∀ t ∈ D.termsQ, I.Call t.2) ∧ (∀ t ∈ D.termsMu, I.Call t.2) := by
-  have key : ∀ r ∈ D.schedule, I.Call r := fun r hr => (callOkI_iff r).1 (List.all_eq_true.1 h r hr)
-  refine ⟨fun t ht => key _ ?_, fun t ht => key _ ?_, fun t ht => key _ ?_⟩ <;>
-    exact List.mem_map_of_mem (f := Prod.snd) (by simp [ht])
 
 theorem mass_ne (hF : GridFacts S) {N : ℕ} {z : BitInput N} (g : UnionGuess S z) :
     (g.checkData g.translation).mass ≠ 0 := by
@@ -78,29 +76,9 @@ theorem my_calls (hF : GridFacts S) {N : ℕ} {z : BitInput N} (g : UnionGuess S
   exact ⟨fun t ht => hV t ((termsV_perm _ hm hs).mem_iff.2 ht), fun t ht => hQ t ((termsQ_perm _ hm hs).mem_iff.2 ht),
     fun t ht => hM t ((termsMu_perm _ hm hs).mem_iff.2 ht)⟩
 
-/-- The largest magnitude of a table. -/
-def maxMag (T : List (Sched.TEntry I)) : ℕ := (T.map fun t => t.e.mag).foldr max 0
-
-/-- The longest request word of a table. -/
-def maxW (T : List (Sched.TEntry I)) : ℕ := (T.map fun t => t.e.word.length).foldr max 0
-
-theorem le_foldr_max (l : List ℕ) (a : ℕ) (h : a ∈ l) : a ≤ l.foldr max 0 := by
-  induction l with
-  | nil => simp at h
-  | cons b l ih =>
-    rcases List.mem_cons.1 h with rfl | h
-    · exact le_max_left _ _
-    · exact (ih h).trans (le_max_right _ _)
-
-theorem mag_le (T : List (Sched.TEntry I)) : ∀ t ∈ T, t.e.mag ≤ maxMag T := fun _ ht =>
-  le_foldr_max _ _ (List.mem_map_of_mem ht)
-
-theorem word_le (T : List (Sched.TEntry I)) : ∀ t ∈ T, t.e.word.length ≤ maxW T := fun _ ht =>
-  le_foldr_max _ _ (List.mem_map_of_mem ht)
-
 variable (S)
 
-/-- The slack thresholds of a check data at precision `p` (`accStart_eq`). -/
+/-- The slack thresholds of a check data at precision `p` (the `accStart_eq`). -/
 noncomputable def accStart (D : UnionCheckData) (p : ℕ) : Fin 6 → ℕ :=
   threshAcc ⌊scaleVQ D p * (2 * S.params.v0 + slackOf D.mass p)⌋ ⌊scaleVQ D p * (1 + S.params.v0 + slackOf D.mass p)⌋
     ⌈scaleMu D p * (S.params.threshold - slackOf D.mass p)⌉
@@ -166,7 +144,7 @@ theorem outRef_sem (hF : GridFacts S) (onset : ℕ) (capF RF LgF : ℕ → ℕ) 
     unfold PlanW3.workerMeaning2 unionSlackRun
     rw [hg.1]
     simp only [unionSlackCheck]
-    have hsz : decide (g.oracle.size ≤ oracleSizeBound S.G (S.pcp.nativeWidth N)) = true :=
+    have hsz : decide (UnionGuards S x g) = true :=
       decide_eq_true hg.2.1
     have hwd : decide (g.word.length ≤ N / 16) = true :=
       decide_eq_true (word_le_of_decodeGuess hg.1 hw.le)
@@ -194,16 +172,10 @@ theorem outRef_sem (hF : GridFacts S) (onset : ℕ) (capF RF LgF : ℕ → ℕ) 
 
 /-! ## The table's length, the rejecting branch, the capacity -/
 
-theorem tableAll_length (s : ℕ) (TV TQ TM : List (ℚ × PrimRequest)) (hV : ∀ t ∈ TV, I.Call t.2)
-    (hQ : ∀ t ∈ TQ, I.Call t.2) (hM : ∀ t ∈ TM, I.Call t.2) :
-    (tableAll s TV TQ TM hV hQ hM).length = TV.length + TQ.length + TM.length := by
-  simp [tableAll, Bridge.tableOfTerms]
-  omega
-
 /-- **The table is no longer than the decoded guess's schedule.** -/
 theorem outRef_len (hF : GridFacts S) (onset : ℕ) (capF RF LgF : ℕ → ℕ) (N : ℕ) (x : BitInput N) (w : List Bool)
     (hne : (outRef S hF onset capF RF LgF N x w).table ≠ []) :
-    ∃ g : UnionGuess S x, g.oracle.size ≤ oracleSizeBound S.G (S.pcp.nativeWidth N) ∧
+    ∃ g : UnionGuess S x, UnionGuards S x g ∧
       (outRef S hF onset capF RF LgF N x w).table.length ≤ (g.checkData g.translation).schedule.length := by
   unfold outRef at hne ⊢
   split_ifs with h
@@ -238,3 +210,5 @@ theorem outRef_capPos (hF : GridFacts S) (onset : ℕ) (capF RF LgF : ℕ → �
 end Sem
 
 end NearCubicWires.WireExponent3_5.UnionMachine.FrontOutRef
+
+end

@@ -72,41 +72,6 @@ length, the register span and the public zero-divisor exit at indices `31` and
 `32` identical to the previous stage, so every caller naming those offsets
 rebuilds unchanged.
 -/
-def bitSerialModProgram : NPOracleProgram :=
-  [ .unpairLeft 0 4 1
-  , .unpairRight 0 5 2
-  , .branchZero 5 31 3
-  , .set 2 0 4
-  , .copy 4 6 5
-  , .branchZero 6 9 6
-  , .shiftRight 6 1 6 7
-  , .increment 2 8
-  , .decrement 10 5
-  , .set 3 0 10
-  , .branchZero 2 29 11
-  , .decrement 2 12
-  , .shiftLeft 3 1 3 13
-  , .testBit 4 2 8 14
-  , .add 3 8 3 15
-  , .subtract 5 3 9 16
-  , .branchZero 9 17 18
-  , .subtract 3 5 3 18
-  , .decrement 10 10
-  , .halt 0
-  , .halt 0
-  , .halt 0
-  , .halt 0
-  , .halt 0
-  , .halt 0
-  , .halt 0
-  , .halt 0
-  , .halt 0
-  , .halt 0
-  , .copy 3 0 30
-  , .halt 0
-  , .set 0 0 32
-  , .halt 0
-  ]
 
 /-! ## Exact interpreter loops -/
 

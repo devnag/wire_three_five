@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.UnionMachine.FrontSemFold
+import Proof.Wire_3_5.UnionMachine.FrontSemFoldBase
 
 /-! # C6 front, the semantic core (16): C1's carrier preparation is polynomial in the carrier's code (P3:3673)
 

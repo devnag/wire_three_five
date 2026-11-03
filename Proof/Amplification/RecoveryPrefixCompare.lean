@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryValuationCountLookup
+import Proof.MachineModel.OrdinaryCompare
 
 /-! Reusable physical comparison for the binary committed-prefix guard.
 The count and index remain binary: no loop expands either numeric value. -/

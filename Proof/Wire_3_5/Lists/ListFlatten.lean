@@ -1,4 +1,6 @@
 import Proof.Wire_3_5.Lists.ListBase
+import Proof.Wire_3_5.Filters.FilterGap
+import Proof.Supplier.SupplierWalkBridge
 
 /-! # `list:flatten` (P3:1491-1530): the amplified always-one-hot list and its integer flattening
 

@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Selection.Contract
+import Proof.MachineModel.OrdinarySignedSortKey
 
 /-! # C1.1, the selection machine's arithmetic references (P3:1337-1362)
 

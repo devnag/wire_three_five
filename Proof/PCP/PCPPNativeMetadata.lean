@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeConjunctionStart
+import Proof.PCP.PCPPNativeTemplateRawWord
 
 /-! Literal hierarchy Q and clause-count fields plus the same native
 oracle descriptor produce every raw count needed by the resource caller.

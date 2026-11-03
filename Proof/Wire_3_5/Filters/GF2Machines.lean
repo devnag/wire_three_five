@@ -1,12 +1,13 @@
 import Proof.Wire_3_5.Filters.GF2Refs
 import Proof.Wire_3_5.MachineModel.BlockWhile
 import Proof.Wire_3_5.MachineModel.BlockZip
+import Proof.MachineModel.OrdinarySignedSortKey
 
 /-! # S2: the field machines of `F₂[x]/(p)` on ℓ-bit words
 
 Paper: the generator's field `GF(2^ℓ)` is `F₂[x]/(p)` with a primitive modulus, found and implemented in
 `2^{O(ℓ)}` preprocessing time (P3:2932-2941). Its elements are `ℓ`-bit words. The machines compute exactly
-the references of `Proof.Wire_3_5.Filters.GF2Refs`, whose field meaning M1 proves (`lfsr_spec`,
+the references of `WireExponent3_5GF2Refs`, whose field meaning M1 proves (`lfsr_spec`,
 `fmulShift_spec`, `trace_masked`):
 * `lfsr_run`: one LFSR step, `a ↦ lfsr p ℓ a` (multiplication by `x`). It is an in-place shift whose
   carry-out is the top bit, then a masked in-place XOR with the modulus;

@@ -1,6 +1,6 @@
+import Proof.SourceAssembly.SourceSkelSteps
 import Proof.Packets.BudgetJ5Site
 import Proof.Packets.BudgetJ5Skel
-import Proof.SourceAssembly.SourceSkelSteps
 
 section
 set_option autoImplicit false

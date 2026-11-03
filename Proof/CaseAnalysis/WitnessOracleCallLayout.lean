@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.WitnessOracleRun
+import Proof.MachineModel.OrdinaryOracleComposeHandoff
 
 /-! Copy only the three parser inputs from the retained selected-source
 bank. The bank is preserved in full for the native PCPP continuation; the

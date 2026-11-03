@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.TabRef
+import Proof.Wire_3_5.FinalPass.WordMap
 
 /-! # The gate tables: one native number as an `h`-bit framed word (P3:1645-1650)
 
@@ -367,6 +368,7 @@ theorem cellZ_spec (hcap : 1 ≤ cap) (cy : Bool) (σ : WState ns nr) (hc : σ.v
       simp [hσ6, hσ3, hσ1, Function.update_of_ne h2]
     · simp [hσ6, hσ3, hσ1]
 
+
 /-! ## The ruler loop -/
 
 theorem loopZ_spec (hcap : 1 ≤ cap) : ∀ (z : ℕ) (cy : Bool) (σ : WState ns nr), σ.val c = 0 →
@@ -521,6 +523,8 @@ theorem wordZ_spec (hcap : 1 ≤ cap) (h : ℕ) (σ : WState ns nr) (hc : σ.val
   · rw [m2.hI, m1.hI]
   · simp [frame_eq_frameP, cmap_cpy, CompilerMachine.Pool.binary_zero']
 
+
+
 /-! ## Single moves -/
 
 theorem fwdI_mv (σ : WState ns nr) (hO : σ.sh O = (σ.st O).length) :
@@ -600,6 +604,8 @@ theorem skipNatW_spec (pre rest : List Bool) (v : ℕ) (σ : WState ns nr)
       (frame_seth _ _ τ1 I _ (Or.inl rfl)).trans (frame_setv _ _ _ c _ (Or.inl rfl))⟩
   refine m1.trans_eq m2 ?_ (by simp) m1.hR rfl m1.vf
   rw [m1.hI, natWord_length']; omega
+
+
 
 /-- **A framed `natWord` as an `h`-bit framed word** through a carry map. -/
 theorem convNatW_spec (hcap : 1 ≤ cap) (out nxt : Bool → Bool → Bool) (pre rest : List Bool) (v h : ℕ) (cy : Bool)

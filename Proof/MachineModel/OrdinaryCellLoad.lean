@@ -44,12 +44,10 @@ theorem loader_run (pre bits suffix backing : List Bool) (hb : backing.length �
   simp [ZeroPadding.cells, caps, Fin.sum_univ_succ] at hp
   omega
 
-def layout : Fin 10 ≃ Fin 10 where
-  toFun := ![9, 4, 3, 0, 1, 2, 5, 6, 7, 8]
-  invFun := ![3, 4, 5, 2, 1, 6, 7, 8, 9, 0]
-  left_inv := by intro i; fin_cases i <;> rfl
-  right_inv := by intro i; fin_cases i <;> rfl
-@[simp] theorem layout_inverse : (layout.symm : Fin 10 → Fin 10) = ![3, 4, 5, 2, 1, 6, 7, 8, 9, 0] := rfl
 
+def config {s : ℕ} (state : Fin s) (width a b rank : ℕ) (backing : List Bool) (mask : Bool)
+    (source : List Bool) (position : ℕ) (out : List Bool) : Configuration 10 s :=
+  TapeEmbedding.config (fun _ : Fin 1 => position) (fun _ => source)
+    (CellEmit.config state (LocalCell.input width a b rank backing mask) out)
 
 end NearCubicWires.RepairOrdinary.CellLoad

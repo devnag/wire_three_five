@@ -1,5 +1,6 @@
 import Proof.Wire_3_5.Primitive.SeedFix.C4Iface
 import Proof.Wire_3_5.Primitive.SeedFix.TabDock
+import Proof.Wire_3_5.Primitive.SeedFix.TabScan
 
 /-! # C6 tail, item 1: the compiler's input assembler
 

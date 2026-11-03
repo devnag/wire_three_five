@@ -1,22 +1,46 @@
-import Proof.Wire_3_5.FinalPass.SampPad
-import Proof.Wire_3_5.FinalPass.SymBF
+import Lean
+import Proof.Wire_3_5.FinalPass.SymCost4
 import Proof.Wire_3_5.FinalPass.SymCost5
+import Proof.Wire_3_5.FinalPass.SymBF
+import Proof.Wire_3_5.FinalPass.SymHr
 import Proof.Wire_3_5.Primitive.SeedFix.C4SymKB7
+import Proof.Wire_3_5.FinalPass.SampPad
+import W3.Proof.Foundations.SourceRegistry
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SymCap2
+import Proof.Wire_3_5.FinalPass.SymCap3
+import Proof.Wire_3_5.FinalPass.SymDeg
+import Proof.Wire_3_5.FinalPass.SymFr3
+import Proof.Wire_3_5.FinalPass.SymHp2
+import Proof.Wire_3_5.FinalPass.SymHp3
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.FinalPass.SymSz2
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Transfer.LiteralSources
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SymBuildBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The SYM free numbers' builder (v7): `SymFreeOk7` at every gate, fixed before `F`
 
 The C4.K contract v7 (`C4SymKB7.SymFreeOk7 l F wa K3 D3 Kp Dp`): the deliverable. For each endpoint exponent
 `f_e`, the constants `SymC` (`symCof`: `d_T = 2e_N`, `d_Q = c_S + 401`, `d_H = coef·4^{deg} + 2`, `e_H = 26deg + 1`,
 `d_D = symDD` (the linear degree bound, `SymDeg`), `d_P`, `e_P`, `d_C = symDC`, `d_A = symDAc`, `d_R = 0`), the load
-floor `C_{D,s}` (`symCDs`: the printer floor `occCD`, the capacity floor `16·symC1` and the child's-steps floor
+floor `C_{D,s}` (`symCDs`: the #148 printer floor `occCD`, the capacity floor `16·symC1` and the child's-steps floor
 `symHC`, all fixed before `F`, P3:3094-3107), the C3 load constants `K3 = c3K2`, `D3 = e_H + e_P` and the pad
 constants `Kp = 4^{d_A} + 1`, `Dp = d_A + d_R` are fixed; at every gate `F` with `F.filterErrDeg = f_e`,
 `C_{D,s} ≤ C_D` and `1 ≤ c_ψ` the free program `freeProg2 (symK2 c)` with `dF = symDF c`, `K = symKn c` (the
 capacity) and `K_ch = symKch` (`2^{n−k+d_A L−4}`) meets every field: the program's bounds (FreeGen9), the pad
 (`pad2`), the C3 load (`c3_sym2`), `side` at every SYM call with rows (the SYM batch) and `side_pad` at every
-degenerate call (the padded batch).
+degenerate call (the padded batch, #146 (c′)).
 
-The floors recorded: `occCD ≤ C_D` (the printer's budget), `16·symC1(e_N, e_Q, Z) ≤ C_D` (the
+The floors recorded (root #148): `occCD ≤ C_D` (the printer's budget), `16·symC1(e_N, e_Q, Z) ≤ C_D` (the
 enumeration's capacity), `symHC ≤ C_D` (one child's steps under the pad); `symDC ≤ d_C`, `symDAc ≤ d_A`,
 `symDD ≤ d_D` are the constants' own choices. All depend on `l` and `f_e` only (and on `wa` for `d_A`).
 
@@ -63,10 +87,6 @@ noncomputable def symCDs (l : Literals) (wa : WilliamsAlgorithm) (fe : ℕ) : �
   occCD (algL l) (symCof l wa fe) (A1 l fe 63) + 16 * symC1 (eN l fe) (eQ l fe) (CallIndexR.capZR l) +
     symHC (symCof l wa fe).dC (cDa (algL l)) (symCof l wa fe).dQ (symCof l wa fe).dD
       (coOf (A1 l fe 63) (symCof l wa fe).dQ (cDa (algL l)) (symCof l wa fe).dD) (eN l fe) (eQ l fe)
-
-/-- The small inputs are small for the free program (the four fields it reads). -/
-theorem small_of {Ds : ℕ} {x : FreeIn} (h : PrimT.C4SymW.FreeSmall Ds x) : FreeSmall Ds x :=
-  ⟨h.2.1, h.2.2.2.2.2.1, h.2.2.2.2.1, h.2.2.2.2.2.2.1⟩
 
 /-- **The SYM free numbers at every gate** (v7). -/
 noncomputable def symFreeOk (l : Literals) (wa : WilliamsAlgorithm) : ∀ fe : ℕ, Σ CDs K3 D3 Kp Dp : ℕ,
@@ -213,3 +233,5 @@ noncomputable def symFreeOk (l : Literals) (wa : WilliamsAlgorithm) : ∀ fe : �
           hcall hs }⟩
 
 end NearCubicWires.WireExponent3_5.FinalPass.SymFr
+
+end

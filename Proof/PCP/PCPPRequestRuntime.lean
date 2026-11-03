@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPRequestSourceInput
+import Proof.Circuits.DecompositionInputBudget
 
 /-! The cold canonical node stream has one fixed polynomial cost in the
 actual original descriptor length and arity. Its produced stream size is

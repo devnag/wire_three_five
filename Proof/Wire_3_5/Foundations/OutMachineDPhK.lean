@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Foundations.OutMachineP5
+import Proof.Wire_3_5.UnionMachine.BinW
 
 /-! # NW phase (d), part 1: the register kit
 

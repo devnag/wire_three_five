@@ -24,6 +24,10 @@ end Bridge
 
 /-! ## 2. The `Parts` choices: row-level ports and the Header reserve -/
 
+def reserveOf (caps : RowCaps) (k : Fin 440) : Nat := by
+  classical
+  exact if PCJ45bee56da9f34d5a_HeaderErase.retained k then 0 else 2*caps.headerFuel
+
 /-! ## 3. The row-level premises from `RowCaps.Good` -/
 
 section RowLevel

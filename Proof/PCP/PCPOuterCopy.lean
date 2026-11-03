@@ -1,4 +1,5 @@
 import Proof.PCP.PCPTraversalFocused
+import Proof.MachineModel.OrdinaryMaskedReset
 
 /-! Four literal field copies for the final balanced PCP record. Every
 handoff is a paid ordinary transition; suffixes on the four sources remain. -/

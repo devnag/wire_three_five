@@ -1,6 +1,22 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.ThrDecQ8
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SeamsUni
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDecQ5
+import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPoly
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.ThrDecIface
+import Proof.Wire_3_5.UnionMachine.ThrUnitIface
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDecQ9Base
 
-/-! # THR decode front, packaging part 9: `ThrDecFront` and its uniform family
+
+noncomputable section
+set_option maxRecDepth 120000
+
+
+/-! # T3 THR decode front, packaging part 9: `ThrDecFront` and its uniform family
 
 **`thrDecFront x hx : ThrDec.ThrDecFront x l F`** at every cell layout `x ≥ dX (TW l) (NW l)`: the machine `frontM`, the
 capacity `need n = c₀(n) = cZero (Q_F) (L²) (aE l f_e)` and the cost `bound n = fK·(c₀(n)+1)^{fD}`, both
@@ -27,20 +43,6 @@ noncomputable def nK (l : Literals) (fe : ℕ) : ℕ := (aE l fe + 2) * (3 * aE 
 noncomputable def bC (l : Literals) (F : GateFree l) : ℕ :=
   fK (TW l) (NW l) * qF l F ^ ((3 * aE l F.filterErrDeg + 21) * fD (TW l) (NW l))
 noncomputable def bK (l : Literals) (fe : ℕ) : ℕ := (aE l fe + 2) * ((3 * aE l fe + 21) * fD (TW l) (NW l))
-
-theorem qb_of_QY {Q X n i a : ℕ} (h : X ≤ QY Q (Nat.clog 2 (n + 2) * Nat.clog 2 (n + 2)) i a) :
-    PrimThrW.RadSetup.QuasiBounded X n (Q ^ i) 0 a := by
-  unfold PrimThrW.RadSetup.QuasiBounded
-  unfold QY at h
-  rw [pow_zero, mul_one, pow_two]
-  exact h
-
-theorem UQ_two (Q Y A : ℕ) (hQ : 1 ≤ Q) (hY : 1 ≤ Y) : 2 ≤ UQ Q Y A := by
-  unfold UQ QY
-  have h1 : 2 ^ 1 ≤ 2 ^ ((A + 2) * Y) := Nat.pow_le_pow_right (by norm_num) (by nlinarith)
-  have h2 : 1 ≤ Q ^ 1 := by simpa using hQ
-  calc 2 = 1 * 2 ^ 1 := by norm_num
-    _ ≤ Q ^ 1 * 2 ^ ((A + 2) * Y) := Nat.mul_le_mul h2 h1
 
 theorem need_q (l : Literals) (F : GateFree l) (n : ℕ) :
     PrimThrW.RadSetup.QuasiBounded (needT l F n) n (nC l F) 0 (nK l F.filterErrDeg) := by
@@ -109,3 +111,5 @@ noncomputable def thrDecU (l : Literals) (xF : GateFree l → ℕ) (hxF : ∀ F,
       ⟨thrDecFront (xF F) l (hxF F) F, hF ▸ decDeg_le (xF F) l (hxF F) F, le_rfl⟩⟩⟩
 
 end NearCubicWires.WireExponent3_5.PrimT.ThrDecF
+
+end

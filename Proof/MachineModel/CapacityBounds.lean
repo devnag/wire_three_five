@@ -1,4 +1,5 @@
 import Proof.MachineModel.FinalState
+import Proof.PCP.ProjectionDimensionPolynomialBounds
 
 /-! Coarse capacity estimates for the actual source round and cache header.
 These estimates are chosen before any capacity-dependent sweep. -/

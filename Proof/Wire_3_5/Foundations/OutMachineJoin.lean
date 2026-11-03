@@ -1,4 +1,7 @@
-import Proof.Wire_3_5.FinalPass.CoreIfaceMJ
+import Proof.Wire_3_5.FinalPass.CoreIfaceBase
+import Proof.Wire_3_5.Primitive.Writers.DockW
+import Proof.Wire_3_5.MachineModel.BlockJoin
+import Proof.Circuits.DecompositionSourceBounds
 
 /-! # Writer combinators: one writer from several
 

@@ -1,4 +1,13 @@
-import Proof.Wire_3_5.UnionMachine.Plan
+import Lean
+import Proof.Wire_3_5.UnionMachine.PlanBase
+import Proof.Wire_3_5.Transfer.TransferUnionComplete
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.FrontSelReqBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # C6 front, U5, the C1 dock: the union's selection request
 
@@ -19,25 +28,7 @@ open NearCubicWires NearCubicWires.WireExponent3_5.Transfer NearCubicWires.WireE
 open NearCubicWires.WireExponent3_5.Machine NearCubicWires.WireExponent3_5.Machine.S0Stub
 open NearCubicWires.WireExponent3_5.SelectionMachine (popsOf gateOf selArgmin ParamsOk starParamsOf)
 
-/-- A carrier's gate as the seed's integer gate. -/
-def toInt {n : ℕ} (gt : NormalizedThresholdGate n) : IntGate n := ⟨gt.weight, gt.threshold⟩
-
 /-! ## Flattened lists -/
-
-/-- The start of item `i`'s segment in the concatenation of `f` over `l`. -/
-def segStart {α β : Type} (f : α → List β) (l : List α) (i : ℕ) : ℕ := ((l.take i).map fun a => (f a).length).sum
-
-theorem flat_seg {α β : Type} (f : α → List β) (l : List α) (i k : ℕ) (hi : i < l.length)
-    (hk : k < (f l[i]).length) : (l.flatMap f)[segStart f l i + k]? = some (f l[i])[k] := by
-  have hs : l = l.take i ++ l[i] :: l.drop (i + 1) := by
-    conv_lhs => rw [← List.take_append_drop i l]
-    rw [List.drop_eq_getElem_cons hi]
-  have hl : ((l.take i).flatMap f).length = segStart f l i := by simp [segStart, List.length_flatMap]
-  have e : l.flatMap f = (l.take i).flatMap f ++ (f l[i] ++ (l.drop (i + 1)).flatMap f) := by
-    conv_lhs => rw [hs]
-    rw [List.flatMap_append, List.flatMap_cons]
-  rw [e, List.getElem?_append_right (by omega), hl, Nat.add_sub_cancel_left,
-    List.getElem?_append_left hk, List.getElem?_eq_getElem hk]
 
 section Req
 variable {kclk : ℕ} {E : Envelope} {B : TimeBudget kclk E} {I : PrimitiveInputs B} {S : UnionSetup I} {N : ℕ}
@@ -74,31 +65,6 @@ end Req
 /-! ## Zero-weight populations -/
 
 section Filter
-variable (P : Shared.StarParams)
-
-theorem sum_filter_zero (pops : List (ℚ × Stars.Carrier P.n)) (f : Stars.Carrier P.n → ℚ) :
-    ((pops.filter fun p => p.1 ≠ 0).map fun p => p.1 * f p.2).sum = (pops.map fun p => p.1 * f p.2).sum := by
-  induction pops with
-  | nil => rfl
-  | cons p ps ih =>
-    simp only [ne_eq, decide_not] at ih ⊢
-    by_cases h : p.1 = 0
-    · simp [List.filter_cons, h, ih]
-    · simp [List.filter_cons, h, ih]
-
-/-- **Zero-weight populations change no objective.** -/
-theorem objective_filter (σ : P.Translation) (pops : List (ℚ × Stars.Carrier P.n)) :
-    P.starObjectiveRef σ (pops.filter fun p => p.1 ≠ 0) = P.starObjectiveRef σ pops := by
-  unfold Shared.StarParams.starObjectiveRef
-  rw [sum_filter_zero P pops (fun c => (c.map fun g => ∑ u : P.Errors, ∑ v : P.Errors, (P.rowCount σ g u v : ℚ)).sum)]
-
-/-- **Zero-weight populations change no selection.** -/
-theorem selectCodes_filter (pops : List (ℚ × Stars.Carrier P.n)) :
-    P.selectCodes (pops.filter fun p => p.1 ≠ 0) = P.selectCodes pops := by
-  unfold Shared.StarParams.selectCodes
-  congr 1
-  funext l
-  exact objective_filter P _ pops
 
 end Filter
 
@@ -173,3 +139,5 @@ theorem pre_selReq (h : I.StarAt g.q) :
 end Pre
 
 end NearCubicWires.WireExponent3_5.UnionMachine.FrontSelReq
+
+end

@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.UnionMachine.C1Loop
+import Proof.Wire_3_5.UnionMachine.LoopWhile
 
 /-! # C6 front, the C1 dock: the carrier loop over every PCPP variable (P3:1326-1330, 3395-3399, 3673)
 

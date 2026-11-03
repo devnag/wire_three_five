@@ -1,4 +1,6 @@
 import Proof.MachineModel.Layout
+import Proof.Foundations.OrdinaryRewindCarrier
+import Proof.Foundations.RepresentationSourceContracts
 
 namespace NearCubicWires.RepairSource.CloseoutFinal.C10WordFunctionDock
 

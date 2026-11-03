@@ -1,5 +1,6 @@
-import Proof.Amplification.RecoveryPCPFormulaResumeCountCold
 import Proof.CaseAnalysis.RowsPreparationFits
+import Proof.Amplification.RecoveryPCPFormulaResumeCountCold
+import Proof.PCP.ProjectionDimensionPowerBounds
 
 /-! Execute the retained true capacity driver from two short native
 dimensions: a fixed fourth power and the existing binary-to-unary power

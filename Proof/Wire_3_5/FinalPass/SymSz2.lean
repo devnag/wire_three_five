@@ -1,6 +1,19 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SymSz1
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SymSz1Base
 
-/-! # The SYM free numbers, part 3: `n_T`, `Q`, `ℓ` below `2^{O(k+L)}`
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # The SYM free numbers (root #145 (ii)), part 3: `n_T`, `Q`, `ℓ` below `2^{O(k+L)}`
 
 The SYM tape's `n_T = |GapSeed|·|FlatSeed|·Π_j(m_j+1)²` states (P3:3011-3016), the sample count `Q` of `samp:q`
 (P3:2987-2988) and the seed field `ℓ = max(1, 2kh, ⌈log₂Q⌉)` (P3:2929-2941): at a SYM call each is `2^{O(k+L)}`
@@ -127,3 +140,4 @@ end Call
 
 end NearCubicWires.WireExponent3_5.FinalPass.SymFr
 
+end

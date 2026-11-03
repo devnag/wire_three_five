@@ -1,4 +1,5 @@
 import Proof.Hierarchy.CompetitorSameBucketZeroRow
+import Proof.Hierarchy.HierarchyAllocation
 
 /-! Between zero-grid rows, clear the tagged-column field, copy the retained
 native U into it, and increment the row field. Both output and U-driver

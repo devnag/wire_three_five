@@ -1,4 +1,5 @@
-import Proof.Rows.ClosureOffsetSourceGateReusable
+import Proof.Rows.ClosureOffsetSourceMeaning
+import Proof.Hierarchy.CompetitorRawScalarAppend
 import Proof.Rows.Plan
 
 /-! Eight retained words physically produce the whole reusable gate bank.
@@ -38,6 +39,24 @@ def heads (out : List Bool) (pos : Nat) : Fin 108→Nat :=
 def cold (palette : Fin 8→List Bool) (U : Nat) (out : List Bool) : Fin 108→List Bool :=
   Fin.addCases (motive:=fun _=>List Bool) (NativeFanout.reusableInput (m:=97) palette U) (fun _ : Fin 1=>out)
 def fanout := TapeEmbedding.machine 1 (NativeFanout.machine choice)
+
+theorem entry_pad (source assignment out : List Bool) (q w C D U : Nat)
+    (hC : C+1≤U) (hD : D≤U) (i : Fin 48) (hi : i≠34) :
+    ZeroPadding.pad U
+      (Fin.addCases (motive:=fun _=>List Bool)
+        (C10NaturalHardwireScoreInputs.data source assignment out w C D q 0 0)
+        OffsetSourceGate.extra i)=
+    ZeroPadding.pad U ((entryChoice i.val).elim [] (words source assignment q w C 0)) := by
+  fin_cases i <;>
+    simp [OffsetSourceGate.extra,C10NaturalHardwireScoreInputs.data,
+      C10NaturalHardwireScoreInputs.extra,C10NaturalHardwireTarget.input,
+      C10NaturalHardwireTarget.pairInput,C10NaturalHardwireTarget.pairExtra,
+      C10NaturalHardwireTarget.extra,CloseoutRowsPoolMagnitude.input,
+      entryChoice,words,MatrixScoreWeight.scalar,Fin.addCases,
+      MatrixBucketRootPower.pad_pad C U _ (by omega),
+      Rewind.Workspace.pad_zeros,Nat.max_eq_left (by omega : C≤U),
+      Nat.max_eq_left hC,Nat.max_eq_left hD] at hi ⊢
+  all_goals rfl
 
 
 end

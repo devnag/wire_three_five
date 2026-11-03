@@ -1,6 +1,7 @@
 import Proof.CaseAnalysis.RowsProjectionReset
 import Proof.MachineModel.BankMetadata
 import Proof.MachineModel.CountIndex
+import Proof.CaseAnalysis.RowsMetadataCopy
 
 /-! The same physical last-row index fills both native fields. The paid
 shared driver copies it once; all local work extents stay within that driver. -/

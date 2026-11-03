@@ -1,3 +1,4 @@
+import Proof.Amplification.RecoveryTapeSupport
 import Proof.MachineModel.Runs
 
 /-! A scratch tape's support bound depends on its own cursor, not on the

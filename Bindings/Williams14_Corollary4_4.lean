@@ -1,5 +1,6 @@
 import Bindings.Williams14_Corollary4_4_PrefixLookup
 import Proof.Foundations.RepresentationSourceContracts
+import Statement
 
 /-!
 # Binding: Williams, JACM 2014, Corollary 4.4 (= Corollary C.2) → `RepairRepresentation.WilliamsSource`

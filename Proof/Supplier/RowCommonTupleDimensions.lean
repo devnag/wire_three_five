@@ -1,4 +1,5 @@
 import Proof.Supplier.RowCommonResources
+import Proof.PCP.ProjectionDimensionTemplate
 
 /-! The common occurrence bound N*Q and output width w*N*Q are computed
 from their actual retained unary drivers. The signed-field driver p+1 is

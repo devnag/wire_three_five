@@ -30,7 +30,7 @@ set_option autoImplicit false
 namespace NearCubicWires.WireExponent3_5
 
 /-- The two class modes of `thm:tradeoff` (P3:209-216). Declared with the ledger, which holds one cap per mode
-(`tr:B`, P3:3406-3407, 3425-3430); their circuits and semantics are in `Proof.Wire_3_5.Foundations.Skeleton`. -/
+(`tr:B`, P3:3406-3407, 3425-3430); their circuits and semantics are in `WireExponent3_5.Skeleton`. -/
 inductive Mode
   | thr
   | sym
@@ -102,7 +102,7 @@ def ComponentCosts.perCall {E : Envelope} (C : ComponentCosts E) (q k psi : ℕ)
   C.sel q k psi + C.pre q k psi + C.table q k psi + C.main q k psi
 
 /-- The Ledger's fit conditions at one width (the only place `r`, through `k`, and `Ψ` meet the
-envelope). `lg` is a supplied binary-log bound, as in the Theorem 2.5 repository's `hdamp_of_ledger`. -/
+envelope). `lg` is a supplied binary-log bound, as in REL's `hdamp_of_ledger`. -/
 structure Fits (E : Envelope) (q lg k psi : ℕ) : Prop where
   hlog : q ≤ 2 ^ lg
   /-- main pass: `q^{Amain+callDeg+sigma} ≤ 2^{k/4}`; this is "A fixed before r" (P3:3808-3811). -/
@@ -113,7 +113,7 @@ structure Fits (E : Envelope) (q lg k psi : ℕ) : Prop where
   /-- the load is `o(q)` (tr:load, P3:3787-3795, B9) and `2^{O(Ψ)} ≤ 2^{νq}` (P3:3112-3114). -/
   pre : E.cpsi * psi + (E.Apre + E.callDeg + E.sigma) * lg ≤ q
 
-/-- Verbatim from the Theorem 2.5 repository's `CloseoutFinal.damp_of_pow_le` (`FinalRuntimeSplit.lean:31-38`). -/
+/-- Verbatim from REL `CloseoutFinal.damp_of_pow_le` (`FinalRuntimeSplit.lean:31-38`). -/
 theorem damp_of_pow_le {width tableExp power : ℕ} (hK : tableExp ≤ width)
     (h : width^power ≤ 2^tableExp) :
     2^(width-tableExp)*width^power ≤ 2^width := by
@@ -236,7 +236,7 @@ structure TimeBudget (kclk : ℕ) (E : Envelope) where
   A : ℕ
   a : ℕ
   ha : a ≤ kclk + 1
-  /-- the proof-table bound `2^q ≤ C·T(N)·q^d` (P3:3644; the Theorem 2.5 repository's `actual_table_bound`). -/
+  /-- the proof-table bound `2^q ≤ C·T(N)·q^d` (P3:3644; REL `actual_table_bound`). -/
   Ctab : ℕ
   d : ℕ
   hsigma : d + 1 ≤ E.sigma
@@ -289,14 +289,12 @@ theorem Runtime3.littleO {M : OrdinaryWeakMachine} {kclk : ℕ} {E : Envelope}
 
 /-! ## Counting lemmas: columns × per-column cost, before any machine
 
-These turn a per-unit contract into its class bound; they are the arithmetic every C component cites. -/
+These turn a per-unit contract into its class bound; they are the arithmetic the compiler's cost bounds cite. -/
 
 /-! ## Satisfiability: the fit premises hold at a plausible instantiation
 
 Envelope: sigma = 8, callDeg = 4, every other exponent 6, csel = 2, cpsi = 1.
 Width q = 2^40 (lg = 40). Star width k = 4·(6+4+8)·40 = 2880, i.e. `r·s` with `s ≈ 40`,
 `r = 72`. Load Ψ = q/2 (a stand-in for the `o(q)` load of `tr:load`). -/
-def satEnvelope : Envelope :=
-  { sigma := 8, callDeg := 4, Amain := 6, Atable := 6, Asel := 6, csel := 2, Apre := 6, cpsi := 1 }
 
 end NearCubicWires.WireExponent3_5.Cost

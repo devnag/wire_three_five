@@ -1,4 +1,11 @@
 import Proof.SourceAssembly.SourceCircuitNative
+import Proof.Supplier.EquationCutLayout
+import Proof.Supplier.EquationRowCutsForward
+import Proof.PCP.ProjectionNormalizationForwardRules
+import Proof.PCP.ProjectionNormalizationSuffixRestore
+import Proof.Amplification.RecoveryPCPFormulaResumeForward
+import Proof.Supplier.EquationRowForward
+import Proof.PCP.PCPPNativeForwardScalar
 
 set_option autoImplicit false
 set_option maxRecDepth 120000
@@ -332,9 +339,62 @@ theorem nat71 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRows
 theorem nat72 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.Threshold.machine) (1688 : Fin 1704) :=
   nat71
 
+/-- `NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.append` at tape 1059. -/
+theorem sup0 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.append) (1059 : Fin 1060) :=
+  (CursorRestore.focus_forward _ (by decide) _ (1 : Fin 3) RecoveryPCPFormulaResumeForward.field_append)
+
+/-- `NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.choice` at tape 1059. -/
+theorem sup1 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.choice Bool.true) (1059 : Fin 1060) :=
+  (pair_forward _ _ _ _ (halt_forward _ _ (fun _ _ => rfl)) sup0)
+
+/-- `NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.prefixMachine` at tape 1059. -/
+theorem sup2 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.prefixMachine Bool.true) (1059 : Fin 1060) :=
+  (CursorRestore.composition_forward _ _ _ (EquationRowRaw.embedded_extra_forward _ (0 : Fin 1)) sup1)
+
+/-- `NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.round` at tape 1059. -/
+theorem sup3 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.round Bool.true) (1059 : Fin 1060) :=
+  (CursorRestore.composition_forward _ _ _ sup2 (EquationRowRaw.embedded_extra_forward _ (0 : Fin 1)))
+
+/-- `NearCubicWires.RepairOrdinary.CloseoutRowsDegreeLoop.machine` at tape 1059. -/
+theorem sup4 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsDegreeLoop.machine
+  (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.round Bool.true)) (1059 : Fin 1061) :=
+  (CursorRestore.repeat_forward _ _ (1059 : Fin 1060) sup3)
+
+/-- `NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.loop` at tape 1059. -/
+theorem sup5 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.loop Bool.true) (1059 : Fin 1061) :=
+  sup4
+
+/-- `NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.Dock.machine` at tape 1703. -/
+theorem sup6 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.Dock.machine Bool.true) (1703 : Fin 1704) :=
+  (CursorRestore.focus_forward _ CloseoutRowsSupportStream.Dock.slots_injective _ (1059 : Fin 1061) sup5)
+
+/-- `NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.Dock.returned` at tape 1703. -/
+theorem sup7 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.Dock.returned Bool.true) (1703 : Fin 1704) :=
+  (CursorRestore.composition_forward _ _ _ sup6 (EquationRowRaw.embedded_extra_forward _ (0 : Fin 1)))
+
+/-- `NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.tail` at tape 1703. -/
+theorem sup8 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.tail Bool.true) (1703 : Fin 1704) :=
+  (pair_forward _ _ _ _ sup7 (EquationRowRaw.embedded_extra_forward _ (0 : Fin 1)))
+
+/-- `NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.body` at tape 1703. -/
+theorem sup9 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.body Bool.true) (1703 : Fin 1704) :=
+  (CursorRestore.composition_forward _ _ _ (EquationRowRaw.embedded_extra_forward _ (0 : Fin 1)) sup8)
+
+/-- `Sigma.snd` at tape 1703. -/
+theorem sup10 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.Threshold.program.snd) (1703 : Fin 1704) :=
+  (pair_forward _ _ _ _ (EquationRowRaw.embedded_extra_forward _ (0 : Fin 1)) sup9)
+
+/-- `NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.Threshold.machine` at tape 1703. -/
+theorem sup11 : CursorRestore.NoLeft (NearCubicWires.RepairOrdinary.CloseoutRowsSupportStream.Threshold.machine) (1703 : Fin 1704) :=
+  sup10
+
 /-- **The original THR writer's native cursor (tape 1688) never moves left.** -/
 theorem native_forward :
     CursorRestore.NoLeft CloseoutRowsSupportStream.Threshold.machine (1688 : Fin 1704) := nat72
+
+/-- **The original THR writer's support cursor (tape 1703) never moves left.** -/
+theorem support_forward :
+    CursorRestore.NoLeft CloseoutRowsSupportStream.Threshold.machine (1703 : Fin 1704) := sup11
 
 end NearCubicWires.SourceRequest.ThrOriginalForward
 

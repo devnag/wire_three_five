@@ -1,0 +1,24 @@
+import Proof.Packets.PacketsXVectorLiteralPaletteBoot
+import Proof.Packets.PacketsXVectorLiteralPaletteProgram
+import Proof.Packets.PacketsXVectorLiteralPaletteReset
+
+/-! Repeated literal-vector execution uses the same paid program and the
+resident reset reserve. Every working tape is erased before fanout. -/
+set_option autoImplicit false
+set_option maxHeartbeats 1000000
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedSimpArgs false
+namespace PCJ9eff70d512234a4c_Fixed.Materializer.VectorBottomUp
+open NearCubicWires NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdinary
+open NearCubicWires.ExtDecompositionBatch NearCubicWires.ExtIncidence
+open NearCubicWires.RepairSource.VerifierDecoding CloseoutRowsModeCache
+open NearCubicWires.SupplierToeplitz NearCubicWires.SupplierToeplitzCore NearCubicWires.SupplierWalkBridge
+open NearCubicWires.CanonicalFourfoldRowProgram NearCubicWires.RepairSource.CloseoutRawRows
+open NormalizedFiniteTransport Theorem25Completion.CycleBounds SubstitutionCensus
+noncomputable section
+
+def literalPaletteRefreshProgram := Composition.machine paletteReset literalPaletteProgram
+
+end
+end PCJ9eff70d512234a4c_Fixed.Materializer.VectorBottomUp

@@ -1,6 +1,5 @@
-import Proof.Assembly.ColdSource
+import Proof.SourceAssembly.Compatible
 import Proof.SourceAssembly.PoolDonorCompatible
-import Proof.SourceAssembly.SourceRefill
 
 /- The actual paired-pool writer followed immediately by Cold decomposition.
 The shared source port aliases the append output. This omits the unused
@@ -25,5 +24,12 @@ noncomputable def machine (a : DecompositionAlgorithm) := Composition.machine
   (TapeEmbedding.machine (Cold.tapes a) PoolEntryLoop.machine)
   (RecoveryFocus.machine (slots a) (Cold.machine a))
 
+noncomputable def start {q : Nat} (live : Finset (Fin q))
+    (occ : List (SupportedNormalizedGate q)) (B w : Nat) (top : List Bool) :=
+  RepeatMachine.cfg 0
+    (PoolEntryLoop.cfg live occ B w 0 (natWord (2*occ.length)++RepairOrdinary.frame top)) occ.length 1
+
+def coldHeads (a : DecompositionAlgorithm) := Cold.heads a 0
+def coldData (a : DecompositionAlgorithm) (P q : Nat) := Cold.data a P q []
 
 end PCJ6fbdd6f776f6447d_Source.PoolCold

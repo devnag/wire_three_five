@@ -1,5 +1,6 @@
 import Proof.MachineModel.BankRefuterWordFrameProgram
 import Proof.MachineModel.BoundedOracleStructuralFormulaPrefixSATProgram
+import Proof.MachineModel.CanonicalBranchSelectorProgram
 
 /-!
 # The branch query, assembled by the machine

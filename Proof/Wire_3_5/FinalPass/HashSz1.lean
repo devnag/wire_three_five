@@ -1,6 +1,20 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.HashShape
-import Proof.Wire_3_5.FinalPass.SymDeg
+import Proof.Wire_3_5.FinalPass.SymDegBase
 import Proof.Wire_3_5.FinalPass.ThrSz1
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.HashSz1Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The HASH call's sizes, part 1: the majorant's numbers, F-free
 
@@ -28,8 +42,6 @@ open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.
 /-- The majorant constants of the literals. -/
 noncomputable def cJ (l : Literals) : ℕ := 40 + 28 * CallIndex.algX l + 113 + CallIndexR.capZR l
 noncomputable def cT (l : Literals) : ℕ := 12 + 28 * CallIndex.algX l + 65 + cJ l
-
-theorem n1_le_L (n : ℕ) : n + 1 ≤ 2 ^ Nat.clog 2 (n + 2) := by have := n2_le_L n; omega
 
 section Gate
 variable (l : Literals) (F : GateFree l)
@@ -67,11 +79,6 @@ theorem cut_le' (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ} (ha' : 
     (Primitive.thrCutoff ((callInputs l F kclk coef A a ha).starParams n hs) Cs (gate0 l F).alg (Primitive.thrCallDen (gate0 l F).alg (callInputs l F kclk coef A a ha) hs Cs)) ≤ 2 ^ ((10 * (CallIndex.algX l) + 32) * (Nat.clog 2 (n + 2))) := by
   have hd : ∀ i, (Cs i).descriptionBits ≤ (n + 1) ^ 26 := fun i => hcall.2.2.1 i
   exact (CallIndex.cut_le l F kclk coef A a ha n hs ha' Cs hd).trans (pow_N_le n _)
-
-theorem primes_le (c : ℕ) : Fintype.card (SupplierPrime.PrimeIndex c) ≤ c + 1 := by
-  rw [Fintype.card_coe]
-  unfold SupplierPrime.primesUpTo
-  exact (Finset.card_filter_le _ _).trans (by simp)
 
 /-- **The populations' count** `A ≤ 2^{(24a+64)L + 2}`. -/
 theorem A_le (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ} (ha' : a' ≤ 4)
@@ -217,3 +224,5 @@ theorem M_le (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ} (ha' : a' 
 end Gate
 
 end NearCubicWires.WireExponent3_5.FinalPass.HashFr
+
+end

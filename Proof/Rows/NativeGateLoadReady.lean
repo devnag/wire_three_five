@@ -1,7 +1,5 @@
-import Proof.Rows.CellGatePalette
-import Proof.Rows.HeaderRewind
-import Proof.Rows.TopChildCursor
 import Proof.SourceAssembly.PoolDonorCompatible
+import Proof.Rows.TopFrameReentry
 
 /-! Actual native gate frame to signed fields, with paid scratch reuse. -/
 set_option autoImplicit false

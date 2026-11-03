@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeCanonicalWalkControl
+import Proof.PCP.PCPPNativeCanonicalTreeMeaning
 
 namespace NearCubicWires.RepairOrdinary.PCPPNativeCanonicalWalk
 open LocalBitMultitape RecoveryExecution RecoveryRootRound RadixSemantics

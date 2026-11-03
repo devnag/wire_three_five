@@ -1,6 +1,17 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.RadSetupB3
-import Proof.Wire_3_5.UnionMachine.RadSpec
+import Proof.Wire_3_5.UnionMachine.RadSpecBase
 import Proof.Wire_3_5.FinalPass.DigsIface
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.ThresholdWriter.RadSetup
+import Proof.Wire_3_5.Assembly.Split
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # RADIX, Route B, v4: the setup's bounds polynomial in the RADIX row's explicit capacity
 
@@ -57,3 +68,5 @@ noncomputable def radMeas (pr : SupplierPrime.PrimeIndex (Enum.thrC (gate0 l F).
 end Call
 
 end NearCubicWires.WireExponent3_5.UnionMachine.RadSetupB4
+
+end

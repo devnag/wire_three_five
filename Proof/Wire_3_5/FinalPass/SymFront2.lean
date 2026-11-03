@@ -1,4 +1,5 @@
-import Proof.Wire_3_5.FinalPass.SymFront1
+import Proof.Wire_3_5.Foundations.OutMachineDataDockW2
+import Proof.Wire_3_5.UnionMachine.NumsA9Base
 
 /-! # The SYM front, part 2: stream `113` rewound by a bound
 

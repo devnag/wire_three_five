@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.Primitive.SeedFix.C4SymKA2
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymKA
 import Proof.Wire_3_5.Primitive.SeedFix.C4SymKB
 
 /-! # C4.K SYM, the free numbers' contract, v2 (amendment, the findings)

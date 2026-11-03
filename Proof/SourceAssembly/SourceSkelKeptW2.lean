@@ -14,10 +14,16 @@ open NearCubicWires.SourceConstruction NearCubicWires.SourceConstruction.InitRun
 open NearCubicWires.SourceConstruction NearCubicWires.SourceConstruction.InitRun
 namespace NearCubicWires.SourceSkeleton.KeptW
 open NearCubicWires.SourceSkeleton.ClassR NearCubicWires.SourceSkeleton.Params NearCubicWires.SourceSkeleton.ClassV4
+open NearCubicWires.SourceSkeleton.ParamsR (gWR)
+open NearCubicWires.SourceSkeleton.ParamsV4 (LW fPW sfPW)
+open NearCubicWires.SourceSkeleton.Fill (XtraW)
 open NearCubicWires.SourceSkeleton.FillV5 NearCubicWires.SourceSkeleton.FirstW
 noncomputable section
 
 section kept
+variable (selector : CyclicChoice.Laws) (xtra : XtraW selector) (mask : MaskProducer)
+  (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector) (rows : PCJc4297ab269d8423a_Source.RowLibrary selector)
+  (sources : EightSources) (gamma : Real) (hg : 0 < gamma) (hh : gamma < 1/2) (p : Parameters sources gamma)
 
 set_option hygiene false in
 local notation "𝔡" => dSite selector xtra mask packets rows sources gamma hg hh p

@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.W6N
+import Proof.Wire_3_5.FinalPass.WordMap
 
 /-! # W6, part 15: the search's entry bank and the modulus reader
 

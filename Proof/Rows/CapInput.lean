@@ -1,4 +1,6 @@
 import Proof.Rows.CapDouble
+import Proof.MachineModel.OrdinaryMatrixDimensionField
+import Proof.MachineModel.OrdinaryMatrixRawDimension
 
 set_option autoImplicit false
 set_option maxHeartbeats 600000

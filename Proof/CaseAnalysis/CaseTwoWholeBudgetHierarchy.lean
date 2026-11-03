@@ -1,5 +1,6 @@
-import Proof.Circuits.PaddedRunnerBudgetClosure
 import Proof.PCP.PCPPNativeCanonicalBounds
+import Proof.Circuits.PaddedRunnerBudgetClosure
+import Proof.Foundations.RecoveryScheduleEnvelope
 
 /-! Fixed-source polynomials for the original hierarchy request. These
 constants may depend on the fixed hierarchy clock, as allowed in C.12. -/

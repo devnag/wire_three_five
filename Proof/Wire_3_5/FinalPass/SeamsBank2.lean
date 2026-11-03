@@ -1,5 +1,15 @@
-import Proof.Wire_3_5.FinalPass.SeamsWS
+import Lean
+import Proof.Wire_3_5.FinalPass.SeamsProg2Base
+import Proof.Wire_3_5.FinalPass.SeamsS4
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
 import Proof.Wire_3_5.Primitive.Writers.S5SeamB2
+import Proof.Wire_3_5.FinalPass.SeamsBank2Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S4's bank, v2: the front halves' room as parameters
 
@@ -23,22 +33,11 @@ open NearCubicWires.WireExponent3_5.FinalPass NearCubicWires.WireExponent3_5.Fin
 open NearCubicWires.WireExponent3_5.FinalPass.Tm NearCubicWires.WireExponent3_5.FinalPass.Seams
 open NearCubicWires.WireExponent3_5.PrimAsm.S5Seam NearCubicWires.WireExponent3_5.Split
 
-/-- **The front halves' room** at rooms `mT`, `mC`. -/
-structure HalfRoom2 {nw : ℕ} (L : S5Lay nw) (mT mC : ℕ) where
-  thrE : Fin mT ↪ Fin L.t
-  thrE_sc : ∀ i, L.thrSc (thrE i) = true
-  coreE : Fin mC ↪ Fin L.t
-  coreE_sc : ∀ i, L.coreSc (coreE i) = true
-
-/-- **A front half built generic in the bank** at rooms `mT`, `mC`. -/
-structure HalfGen2 {nw : ℕ} (P : S5Lay nw → Type) (mT mC : ℕ) where
-  K : ℕ
-  D : ℕ
-  half : ∀ L : S5Lay nw, HalfRoom2 L mT mC → K ≤ L.Kc → D ≤ L.Dc → P L
-
 /-- **The THR half's target, generic in the bank**, rooms `mT l`, `mC l`, at every call family. -/
 abbrev ThrHalfGen2 (Sw : SymWords) (mT mC : Literals → ℕ) : Type :=
   ∀ (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1),
     HalfGen2 (fun L : S5Lay Sw.nw => S5ThrB2 l F kclk coef A a ha Sw L) (mT l) (mC l)
 
 end NearCubicWires.WireExponent3_5.FinalPass.Bank
+
+end

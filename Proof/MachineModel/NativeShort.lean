@@ -1,4 +1,5 @@
 import Proof.MachineModel.NativeMeasured
+import Proof.Supplier.RowTupleFields
 
 /-! Print the short comparison and zero-index fields used by the empty
 native bank, using the existing unary and fixed-width scalar workers. -/

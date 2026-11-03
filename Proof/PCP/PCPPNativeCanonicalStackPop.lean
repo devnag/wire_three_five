@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeCanonicalTreeStep
+import Proof.PCP.PCPStackReady
 
 /-! The existing stack pop overwrites the current original-width code word.
 This exact caller extension accounts for its nonblank output backing; the

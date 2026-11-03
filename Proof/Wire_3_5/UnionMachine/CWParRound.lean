@@ -1,5 +1,6 @@
-import Proof.Wire_3_5.UnionMachine.CWMain
 import Proof.Wire_3_5.UnionMachine.CWParStages
+import Proof.PCP.PCPPRequestTaggedCons
+import Proof.Wire_3_5.UnionMachine.CWMain
 
 /-! # C6 front, U5, the code writers: the parity's bottoms, one per round
 

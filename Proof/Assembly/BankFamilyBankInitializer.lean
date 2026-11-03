@@ -1,4 +1,5 @@
 import Proof.Assembly.Driver
+
 set_option autoImplicit false
 set_option maxHeartbeats 3000000
 set_option maxRecDepth 120000
@@ -24,6 +25,16 @@ def layout {α : Type} (t : Nat) (payload : Fin t→α) (cap : α)
       (Fin.addCases (m:=t) (n:=1) (motive:=fun _=>α) payload (fun _=>cap)) row) body)
     (fun _=>count)) extra) drivers
 
+def cap (t : Nat) (i : Fin 1) : Fin (t+26) :=
+ (((((i.natAdd t).castAdd 2).castAdd 4).castAdd 1).castAdd 11).castAdd 7
+def row (t : Nat) (i : Fin 2) : Fin (t+26) :=
+ ((((i.natAdd (t+1)).castAdd 4).castAdd 1).castAdd 11).castAdd 7
+def body (t : Nat) (i : Fin 4) : Fin (t+26) :=
+ (((i.natAdd (t+1+2)).castAdd 1).castAdd 11).castAdd 7
+def count (t : Nat) (i : Fin 1) : Fin (t+26) :=
+ ((i.natAdd (t+1+2+4)).castAdd 11).castAdd 7
+def extra (t : Nat) (i : Fin 11) : Fin (t+26) :=
+ (i.natAdd (t+1+2+4+1)).castAdd 7
 def source (t : Nat) (i : Fin 7) : Fin (t+26) := i.natAdd (t+19)
 
 

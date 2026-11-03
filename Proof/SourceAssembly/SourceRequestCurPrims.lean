@@ -1,4 +1,8 @@
 import Proof.SourceAssembly.SourceFactorSelCount
+import Proof.MachineModel.OrdinaryMatrixBucketDivide
+import Proof.MachineModel.OrdinaryMatrixUnaryDifference
+import Proof.CaseAnalysis.ScheduleCompare
+import Proof.PCP.PCPUnaryCopy
 
 set_option autoImplicit false
 set_option maxRecDepth 120000
@@ -113,10 +117,16 @@ theorem tcopy_local (n Qa S C : Nat) (hQa : n + 2 ≤ Qa) (hS : n + 2 ≤ S) (hC
 
 /-! ## Docked forms (`Function.update` of the output port(s); heads unchanged) -/
 
+def divM {U : Nat} (a b d l : Fin U) :=
+  RecoveryFocus.machine (![a, b, d, l] : Fin 4 → Fin U) MatrixBucketDivide.machine
+def cmpM {U : Nat} (a b d l : Fin U) :=
+  RecoveryFocus.machine (![a, b, d, l] : Fin 4 → Fin U) MatrixBucketDimensions.Compare.machine
 def diffM {U : Nat} (a b d l : Fin U) :=
   RecoveryFocus.machine (![a, b, d, l] : Fin 4 → Fin U) MatrixUnaryDifference.resetMachine
 def tcopyM {U : Nat} (a d e f l : Fin U) :=
   RecoveryFocus.machine (![a, d, e, f, l] : Fin 5 → Fin U) MatrixTemplateCopy.resetMachine
+def constM {U : Nat} (w : List Bool) (d l : Fin U) :=
+  RecoveryFocus.machine (![d, l] : Fin 2 → Fin U) (HierarchyFixedWord.machine w)
 
 theorem quad_inj {U : Nat} (a b d l : Fin U) (h1 : a ≠ b) (h2 : a ≠ d) (h3 : a ≠ l) (h4 : b ≠ d)
     (h5 : b ≠ l) (h6 : d ≠ l) : Function.Injective (![a, b, d, l] : Fin 4 → Fin U) :=

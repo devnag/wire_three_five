@@ -1,5 +1,7 @@
-import Proof.CaseAnalysis.FinalRetainedPhaseFold
 import Proof.MachineModel.TopDownWorkspaceSelectedEntryRepeat
+import Proof.CaseAnalysis.FinalGuardedStageConsumer
+import Proof.CaseAnalysis.FinalRetainedPhaseFold
+import Proof.CaseAnalysis.RowsOriginalClauseLoop
 
 set_option autoImplicit false
 set_option maxHeartbeats 250000
@@ -44,6 +46,17 @@ def body {t P extra : Nat} (ht : 2 ≤ t) (hP : 302 ≤ P)
     (hspace : P+1155 ≤ extra) (i : Fin (t+2+extra-4)) : Fin (t+1+1+extra) :=
   ⟨location t P i.val, by have := (facts t P extra ht hP hspace).1 i.val i.isLt; omega⟩
 
+theorem body_injective {t P extra : Nat} (ht : 2 ≤ t) (hP : 302 ≤ P)
+    (hspace : P+1155 ≤ extra) : Function.Injective (body ht hP hspace) := by
+  intro i j he
+  exact Fin.ext ((facts t P extra ht hP hspace).2.1 i.val j.val i.isLt j.isLt
+    (congrArg Fin.val he))
+
+theorem body_ne_driver {t P extra : Nat} (ht : 2 ≤ t) (hP : 302 ≤ P)
+    (hspace : P+1155 ≤ extra) (i : Fin (t+2+extra-4)) :
+    (body ht hP hspace i).val ≠ t+2+P+51 :=
+  (facts t P extra ht hP hspace).2.2.1 i.val i.isLt
+
 noncomputable section
 variable (sources : EightSources) {gamma : Real} (par : Parameters sources gamma)
   (k r extra : Nat)
@@ -54,6 +67,52 @@ def selectedBody (hspace : WorkspaceSelectedEntry.size sources k r par.clauseDeg
       dsimp [WorkspaceSelectedEntry.size]; omega) hspace
 
 attribute [local irreducible] WorkspaceSelectedAdmission.originalTapes WorkspaceSelectedEntry.size
+
+/-- Transport an existing phase realization through the physically docked
+source-count Repeat. This is the padded-driver counterpart of
+RetainedConsumer.phase_realizes, with ambient tapes preserved throughout. -/
+def phase_realizes {Atom : Type} {arity t B se sc sf : Nat}
+    {circuit : BooleanCircuit arity} {source : RepairRepresentation.PointwisePCPPAlgorithm}
+    {constants : CompetitorRationalGap.Constants source}
+    {pcpp : SourceInterfaces.PointwisePCPP circuit}
+    {proofValue : BitInput arity → Fin (pcpp.systematicBits+pcpp.auxiliaryBits) → Real}
+    {evaluate : Atom → BitInput arity → Bool} {ph : CloseoutRowsOriginalSchedule.Phase}
+    (entry : Machine t se) (clause : Machine B sc) (fold : Machine B sf)
+    (port : Fin B) (width entryFuel N cost foldFuel : Nat)
+    (body : Fin B → Fin t) (driver : Fin t)
+    (hi : Function.Injective body) (hd : ∀ i, body i ≠ driver)
+    (H : Nat → Fin B → Nat) (A : Nat → Fin B → List Bool)
+    (hin middleH : Fin t → Nat) (tin middle : Fin t → List Bool)
+    (hentry : Step entry entryFuel hin tin middleH middle)
+    (hhead : ∀ i, middleH (body i)=H 0 i) (htape : ∀ i, middle (body i)=A 0 i)
+    (hdriver : middleH driver=1) (hword : middle driver=UnaryTemplate.tape N)
+    (hround : ∀ j, j<N → Step clause cost (H j) (A j) (H (j+1)) (A (j+1)))
+    (R : CloseoutFinalC10Realizes.Realizes ph constants pcpp proofValue evaluate
+      fold foldFuel (H N) (A N) port width) :
+    CloseoutFinalC10Realizes.Realizes ph constants pcpp proofValue evaluate
+      (Composition.machine entry
+        (Composition.machine
+          (RecoveryFocus.machine (WorkspaceSelectedEntryRepeat.slots body driver)
+            (RepeatMachine.machine clause (fun _ _=>true)))
+          (RecoveryFocus.machine body fold)))
+      (entryFuel+1+(N*(cost+3)+3+1+foldFuel)) hin tin (body port) width := by
+  let slots := WorkspaceSelectedEntryRepeat.slots body driver
+  have inj := WorkspaceSelectedEntryRepeat.slots_injective body driver hi hd
+  let HN := dockH slots middleH (Fin.addCases (H N) (fun _ : Fin 1=>1))
+  let AN := install slots middle (Fin.addCases (A N) (fun _ : Fin 1=>UnaryTemplate.tape N))
+  have hloop := WorkspaceSelectedEntryRepeat.run_at clause body driver hi hd N cost H A
+    middleH middle hhead htape hdriver hword hround
+  have hfold := R.run.dock body hi HN AN
+    (by
+      intro i
+      simpa only [slots, WorkspaceSelectedEntryRepeat.slots, Fin.addCases_left] using
+        dockH_slot slots inj middleH (Fin.addCases (H N) (fun _ : Fin 1=>1)) (i.castAdd 1))
+    (by
+      intro i
+      simpa only [slots, WorkspaceSelectedEntryRepeat.slots, Fin.addCases_left] using
+        install_slot slots inj middle (Fin.addCases (A N) (fun _ : Fin 1=>UnaryTemplate.tape N)) (i.castAdd 1))
+  exact C10TailComposeVerdict.transport R _ _ (hentry.seq (hloop.seq hfold))
+    ((install_slot body hi AN R.exit port).trans R.hencoded)
 
 end
 end NearCubicWires.P1TopDown.ControllerSelectedLayout

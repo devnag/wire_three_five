@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CaseTwoShape
+import Proof.MachineModel.GeneratedAmplifierSemantics
 
 /-! A physical masked XOR scan over the actual support mask and input.
 The semantic parity bridge is reused; no support-code enumeration runs. -/

@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.Primitive.Writers.WriterIface
+import Proof.Wire_3_5.Primitive.Writers.WriterIfaceBase
 
 /-! # PA (d)-SYM, part 11: the SYM tape as one flat stream of units (the writer loop's emissions)
 

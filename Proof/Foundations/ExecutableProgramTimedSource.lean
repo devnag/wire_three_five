@@ -41,46 +41,5 @@ def toTimedDecisionMachine
       program.runner.budget (program.request input) :=
   rfl
 
-/-- A refuter source whose hierarchy is carried by one fixed executable
-program.  Every reference to the hierarchy language below is definitionally
-the output language of that program. -/
-structure ExecutableProgramRefuterSource (bound : ℕ → ℕ) where
-  hierarchyProgram : ExecutableLanguageProgram
-  hierarchySteps : ∀ n input, programSteps hierarchyProgram n input ≤ bound n
-  refuter : ExecutableSATOracleRefuter hierarchyProgram.language bound
-  sound : ∀ machine : ExecutableWeakNondeterministicMachine,
-    RunsInLittleO machine.toSemantic bound →
-    (∀ n, machine.witnessBits n ≤ n / 10) →
-    ∃ onset, ∀ n, onset ≤ n →
-      (machine.toSemantic.accepts (refuter.output machine n) ↔
-        hierarchyProgram.language n (refuter.output machine n) = false)
-
-def ExecutableProgramRefuterSource.hierarchyMachine
-    {bound : ℕ → ℕ} (source : ExecutableProgramRefuterSource bound) :
-    TimedDecisionMachine :=
-  toTimedDecisionMachine source.hierarchyProgram
-
-/-- Exact compatibility adapter for the large legacy recovery cone.  Its
-timed machine is derived from `hierarchyProgram`; no arbitrary step callback
-is introduced by this projection. -/
-def ExecutableProgramRefuterSource.toLegacy
-    {bound : ℕ → ℕ} (source : ExecutableProgramRefuterSource bound) :
-    ExecutableRefuterSource bound where
-  hierarchyMachine := source.hierarchyMachine
-  hierarchySteps := source.hierarchySteps
-  refuter := source.refuter
-  sound := source.sound
-
-@[simp] theorem ExecutableProgramRefuterSource.toLegacy_hierarchyMachine
-    {bound : ℕ → ℕ} (source : ExecutableProgramRefuterSource bound) :
-    source.toLegacy.hierarchyMachine =
-      toTimedDecisionMachine source.hierarchyProgram :=
-  rfl
-
-@[simp] theorem ExecutableProgramRefuterSource.toLegacy_refuter
-    {bound : ℕ → ℕ} (source : ExecutableProgramRefuterSource bound) :
-    source.toLegacy.refuter = source.refuter :=
-  rfl
-
 
 end NearCubicWires.ExecutableProgramTimedSource

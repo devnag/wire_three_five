@@ -1,5 +1,7 @@
-import Proof.CaseAnalysis.CaseTwoLive
 import Proof.CaseAnalysis.CaseTwoPolynomial
+import Proof.CaseAnalysis.CaseTwoLive
+import Proof.CaseAnalysis.CaseTwoHardness
+import Proof.Amplification.RecoveryPCPFormulaResumeHierarchyActual
 
 /-! The physical Case2 request is the same global normalized source request.
 The original hierarchy input is transported by the checked exact dimension

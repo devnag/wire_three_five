@@ -1,4 +1,5 @@
-import Proof.Circuits.DecompositionAtomTail
+import Proof.Circuits.DecompositionAtomReset
+import Proof.MachineModel.OrdinaryWilliamsSourceCropLayout
 
 /-! Cold ordinary input framing and the two actual native header counts.
 The retained raw source stops at the first signed child field. -/

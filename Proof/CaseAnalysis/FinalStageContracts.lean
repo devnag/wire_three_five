@@ -30,6 +30,10 @@ noncomputable section
 
 
 
+theorem foldWidth_eq_joinScalarWidth (entryWidth : ℕ) (entries : List Entry) :
+    foldWidth (CompetitorRationalDecision.width entryWidth) entries = joinScalarWidth entryWidth entries.length :=
+  (joinScalarWidth_eq entryWidth entries).symm
+
 variable (sources : EightSources) (k : ℕ)
 
 /-- The decoded PCPP at the guess.  The oracle is `oracleOf` at the closure

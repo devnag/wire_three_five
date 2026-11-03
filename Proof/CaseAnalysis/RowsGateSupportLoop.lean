@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RowsGateSupportRun
+import Proof.Amplification.RecoveryPaddedCopy
 
 /-! The actual weight-count driver checks and filters all native weights.
 It reads the same retained support bitmap, reuses one prefix scratch tape,

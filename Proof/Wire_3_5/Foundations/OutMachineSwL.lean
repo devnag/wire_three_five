@@ -1,6 +1,6 @@
 import Proof.Wire_3_5.Foundations.OutMachineSwLK
-import Proof.Wire_3_5.FinalPass.SymFront3
-import Proof.Wire_3_5.FinalPass.SWParts
+import Proof.Wire_3_5.FinalPass.SymFront3Base
+import Proof.Wire_3_5.Foundations.OutMachineJoinGBase
 
 /-! # SWl, part 2: **`swL : ∀ l, SWParts.SWlT l`**
 

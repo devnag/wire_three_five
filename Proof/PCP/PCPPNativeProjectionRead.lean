@@ -1,4 +1,6 @@
 import Proof.Amplification.RecoveryFocusDock
+import Proof.Amplification.RecoveryUnpair
+import Proof.PCP.ProjectionNormalizationUnary
 import Proof.PCP.PCPPRequestNodeFieldsJoin
 
 /-! Actual raw projection-code field to its two bounded unary components.

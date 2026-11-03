@@ -1,4 +1,29 @@
-import Proof.Wire_3_5.UnionMachine.FrontSemPathCaps
+import Lean
+import Proof.Wire_3_5.UnionMachine.FrontSemPathCapsBase
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Recovery.RecoveryLanguage
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Recovery.RecoverySetupTwo
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.UnionCallCount
+import Proof.Wire_3_5.UnionMachine.UnionCheck
+import Proof.Wire_3_5.UnionMachine.FrontCaps
+import Proof.Wire_3_5.UnionMachine.FrontSemCap1
+import Proof.Wire_3_5.UnionMachine.FrontSemSUE
+import Proof.Wire_3_5.UnionMachine.FrontSemSize
+import Proof.Wire_3_5.UnionMachine.FrontSemTW
+import Proof.Wire_3_5.UnionMachine.PlanW2
+import Proof.Wire_3_5.UnionMachine.PlanW3
+import Proof.Wire_3_5.UnionMachine.UnionSetup
+import Proof.Wire_3_5.UnionMachine.FrontSemEnvSBase
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-! # C6 front, the semantic core (19): the master size bound at the pinned setup (P3:3485-3491, 3669-3691)
 
@@ -16,7 +41,7 @@ set_option linter.unusedSimpArgs false
 
 namespace NearCubicWires.WireExponent3_5.UnionMachine.FrontSemEnvS
 open NearCubicWires NearCubicWires.WireExponent3_5 NearCubicWires.WireExponent3_5.Transfer
-open NearCubicWires.WireExponent3_5.Transfer.CaseTwoPadG NearCubicWires.WireExponent3_5.Split
+open NearCubicWires.WireExponent3_5.Split
 open NearCubicWires.WireExponent3_5.UnionMachine.PlanW2 NearCubicWires.WireExponent3_5.Ledger
 open NearCubicWires.WireExponent3_5.UnionMachine.FrontCaps (BU PQ)
 open NearCubicWires.Bindings.CLW20Theorem113 (InNTIME)
@@ -29,19 +54,25 @@ open NearCubicWires.WireExponent3_5.UnionMachine.FrontFoldBound (lc)
 section SUE
 variable (l : Literals) (F : GateFree l) (e coef A : ℕ) (L : Language) (hL : InNTIME (fun n => n ^ (kE l e + 2)) L)
 
-/-- The setup's query coefficient. -/
-noncomputable def CHs : ℕ := (hierarchyPCP l (FrontSemSUE.hhOf l e L hL)).data.coefficient
+/-- The size cap lies below `(w+1)^{capExp l}`. -/
+theorem sue_cap : ∀ o w, o ≤ RecoveryScheduleEnvelope.oracleSizeBound (SUE l F e coef A L hL).G w →
+    o + 1 ≤ (w + 1) ^ capExp l := fun o w ho => by
+  rw [FrontSemSUE.sue_G] at ho
+  exact oracleSize_le l w o ho
 
-/-- **The pinned setup's query bound.** -/
-theorem sue_hQ : ∀ N, (SUE l F e coef A L hL).pcp.queryCount N ≤
-    CHs l e L hL * ((SUE l F e coef A L hL).pcp.nativeWidth N + 1) ^ (gateSource l).degrees.queries := by
-  by_cases h : L = recL l (kE l e)
-  · unfold CHs
-    rw [FrontSemSUE.hh_rec l e L hL h, FrontSemSUE.sue_eq_rec l F e coef A L hL h]
-    exact fun N => UnionCallCount.hierQuery_le l (kE l e) (refH l (kE l e)) N _ (le_max_left _ _)
-  · unfold CHs
-    rw [FrontSemSUE.hh_other l e L hL h, FrontSemSUE.sue_eq_other l F e coef A L hL h]
-    exact fun N => UnionCallCount.hierQuery_le l (kE l e) (hierarchyOf hL) N _ (le_max_left _ _)
+/-- The size constant of `H_Γ` at the pinned setup (Lemma H.7(b), `UnionCallCount.hsize_pair`). -/
+noncomputable def KsS : ℕ :=
+  Classical.choose (UnionCallCount.hsize_pair (SUE l F e coef A L hL) (capExp l) (sue_cap l F e coef A L hL))
+
+/-- The size exponent of `H_Γ` at the pinned setup. -/
+noncomputable def σS : ℕ := UnionCallCount.eHS (SUE l F e coef A L hL) (capExp l)
+
+theorem KsS_spec : ∀ N (z : BitInput N) (Γ : NearCubicGates.Close.Outer.OuterGuess ((SUE l F e coef A L hL).width N)),
+    N = 2 ^ Nat.log 2 N → (SUE l F e coef A L hL).onset ≤ Nat.log 2 N →
+    Γ.pf.size ≤ RecoveryScheduleEnvelope.oracleSizeBound (SUE l F e coef A L hL).G ((SUE l F e coef A L hL).width N) →
+    ((SUE l F e coef A L hL).request z Γ).circuit.size + 1 ≤
+      KsS l F e coef A L hL * ((SUE l F e coef A L hL).width N + 1) ^ σS l F e coef A L hL :=
+  Classical.choose_spec (UnionCallCount.hsize_pair (SUE l F e coef A L hL) (capExp l) (sue_cap l F e coef A L hL))
 
 /-- The mass bound's coefficient. -/
 noncomputable def KL : ℕ := Classical.choose (rowBLambda_pow16_le (gateZeta_pos l) (gateZeta_lt l) 2)
@@ -77,16 +108,9 @@ noncomputable def KcD (q : ℕ) : ℕ := FrontSemSize.Kc (DD l F e coef A) q
 /-- The fold's size parameter: the width and the atoms' codes words. -/
 noncomputable def s0 (q : ℕ) : ℕ := q + SpB l q * KcD l F e coef A q
 
-/-- The carriers' code exponent (both modes). -/
-noncomputable def Lc : ℕ :=
-  lc (FrontCh5.PwM .thr) (FrontCh5.CwM .thr) + lc (FrontCh5.PwM .sym) (FrontCh5.CwM .sym) + 2
-
-/-- The constant's code word bound. -/
-def CC : ℕ := (natWord (CWConst.constCode .thr)).length + (natWord (CWConst.constCode .sym)).length
-
 /-- The PCPP output's size bound at the pinned setup. -/
 noncomputable def KpS (q : ℕ) : ℕ :=
-  FrontSemSize.Kp (SUE l F e coef A L hL) (CHs l e L hL) (gateSource l).degrees.queries q
+  FrontSemSize.Kp (SUE l F e coef A L hL) (KsS l F e coef A L hL) (σS l F e coef A L hL) q
 
 /-- **The master size bound.** -/
 noncomputable def MS (c0 q : ℕ) : ℕ :=
@@ -111,8 +135,8 @@ theorem MS_pq (c0 : ℕ) : PQ (MS l F e coef A L hL c0) := by
     PQ.add (PQ.add (PQ.mul (PQ.const 2) PQ.var) (PQ.const 3)) (PQ.mul PQ.var (PQ.add (PQ.mul (PQ.const 2) PQ.var)
       (PQ.const 5)))
   have a1 := PQ.add PQ.var (PQ.const 3)
-  have a2 := PQ.add a1 (PQ.mul (PQ.const 4) (FrontSemSize.Kp_pq (S := SUE l F e coef A L hL) (CH := CHs l e L hL)
-    (eQ := (gateSource l).degrees.queries)))
+  have a2 := PQ.add a1 (PQ.mul (PQ.const 4) (FrontSemSize.Kp_pq (S := SUE l F e coef A L hL)
+    (Ks := KsS l F e coef A L hL) (σ := σS l F e coef A L hL)))
   have a3 := PQ.add a2 (LamB_pq l)
   have a4 := PQ.add a3 (SpB_pq l)
   have a5 := PQ.add a4 (PQ.mul (SpB_pq l) hK)
@@ -135,20 +159,18 @@ theorem MS_ge (c0 q : ℕ) :
   unfold MS
   refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩ <;> omega
 
-/-- **Every guess within the size cap that passes the atom test has the size envelope** `GEnv g Λ̄(q) (MS c₀ q)`. -/
+/-- **Every guess passing the outer step's guards and the atom test has the size envelope** `GEnv g Λ̄(q) (MS c₀ q)`. -/
 theorem genv_of (c0 : ℕ) {N : ℕ} (x : BitInput N) (g : UnionGuess (SUE l F e coef A L hL) x)
-    (hsz : g.oracle.size ≤ RecoveryScheduleEnvelope.oracleSizeBound (SUE l F e coef A L hL).G
-      ((SUE l F e coef A L hL).pcp.nativeWidth N))
-    (hat : PlanW3.AtomsOkG g) (harity : g.q = (SUE l F e coef A L hL).pcp.nativeWidth N)
-    (hstar : (IUE l F e coef A).StarAt g.q) :
+    (hG : UnionGuards (SUE l F e coef A L hL) x g)
+    (hat : PlanW3.AtomsOkG g) (hstar : (IUE l F e coef A).StarAt g.q) :
     FrontSemCap1.GEnv g (rowBLambda (gateZeta_pos l) (gateZeta_lt l) 2 g.q) (MS l F e coef A L hL c0 g.q) := by
   obtain ⟨m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12⟩ := MS_ge l F e coef A L hL c0 g.q
-  have hQ := sue_hQ l F e coef A L hL
-  have hnv := FrontSemSize.nv_le hQ x g.oracle hsz
-  have hcb := FrontSemSize.cb_le hQ x g.oracle hsz
-  have hr := FrontSemSize.req_size hQ x g.oracle hsz
-  have eK : KpS l F e coef A L hL g.q = FrontSemSize.Kp (SUE l F e coef A L hL) (CHs l e L hL)
-      (gateSource l).degrees.queries ((SUE l F e coef A L hL).pcp.nativeWidth N) := by
+  have harity : g.q = (SUE l F e coef A L hL).width N := q_eq_width _ g hG.2.1 hG.2.2.1
+  have hr := KsS_spec l F e coef A L hL N x g.pair hG.2.1 hG.2.2.1 hG.2.2.2.2.1
+  have hnv := FrontSemSize.nv_le x g.pair _ hr
+  have hcb := FrontSemSize.cb_le x g.pair _ hr
+  have eK : KpS l F e coef A L hL g.q = FrontSemSize.Kp (SUE l F e coef A L hL) (KsS l F e coef A L hL)
+      (σS l F e coef A L hL) ((SUE l F e coef A L hL).width N) := by
     unfold KpS; rw [harity]
   have hpA := FrontSemSUE.sue_parity l F e coef A L hL
   have hcA := FrontSemSUE.sue_const l F e coef A L hL
@@ -209,7 +231,7 @@ theorem genv_of (c0 : ℕ) {N : ℕ} (x : BitInput N) (g : UnionGuess (SUE l F e
     rw [eK]; exact hnv
   have hcb' : 2 ^ g.pcpp.clauseBits ≤ KpS l F e coef A L hL g.q := by rw [eK]; exact hcb
   refine
-    { q2 := by show 2 ≤ max _ _; exact le_trans (SUE l F e coef A L hL).pcppAlg.minimumArityBound (le_max_right _ _)
+    { q2 := le_trans (SUE l F e coef A L hL).pcppAlg.minimumArityBound ((SUE l F e coef A L hL).request x g.pair).large
       q := by omega
       nv := by show g.pcpp.systematicBits + g.pcpp.auxiliaryBits ≤ _; omega
       cb := by omega
@@ -230,7 +252,7 @@ theorem genv_of (c0 : ℕ) {N : ℕ} (x : BitInput N) (g : UnionGuess (SUE l F e
       tr := ?_
       trl := by omega
       cst := ?_ }
-  · have e2 : (SUE l F e coef A L hL).pcppAlg.coefficient * (((SUE l F e coef A L hL).request x g.oracle).circuit.size + 1) ^
+  · have e2 : (SUE l F e coef A L hL).pcppAlg.coefficient * (((SUE l F e coef A L hL).request x g.pair).circuit.size + 1) ^
         (SUE l F e coef A L hL).pcppAlg.degree ≤ KpS l F e coef A L hL g.q := by
       rw [eK]; unfold FrontSemSize.Kp
       exact Nat.mul_le_mul_left _ (Nat.pow_le_pow_left hr _)
@@ -274,3 +296,5 @@ theorem genv_of (c0 : ℕ) {N : ℕ} (x : BitInput N) (g : UnionGuess (SUE l F e
 end SUE
 
 end NearCubicWires.WireExponent3_5.UnionMachine.FrontSemEnvS
+
+end

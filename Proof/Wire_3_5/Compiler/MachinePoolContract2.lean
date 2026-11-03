@@ -1,5 +1,5 @@
-import Proof.Wire_3_5.Compiler.MachinePoolContract
 import Proof.Wire_3_5.Compiler.MachinePoolRunCost
+import Proof.Wire_3_5.Compiler.MachinePoolContract
 
 /-! # C3a′: the pool builder's contract with the hypotheses its machine needs (P3:1596-1664, 1896-1906)
 

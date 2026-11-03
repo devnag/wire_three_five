@@ -1,4 +1,4 @@
-import Proof.SourceAssembly.SourceRequestTermSegA
+import Proof.SourceAssembly.SourceRequestTermCoef
 
 set_option autoImplicit false
 set_option maxRecDepth 120000

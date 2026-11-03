@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RawRowsDescriptions
+import Proof.Supplier.RowCachedEquationMeaning
 
 /-! Coarse top-source bounds avoid an aggregate magnitude producer. They
 refer to the same retained top children and original fourfold equation stack. -/

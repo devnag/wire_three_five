@@ -1,5 +1,8 @@
-import Proof.CaseAnalysis.FinalRowCommonCapacity
 import Proof.CaseAnalysis.FinalRowScannerDock
+import Proof.CaseAnalysis.RowsEstimatorBacking
+import Proof.CaseAnalysis.RowsEstimatorPrepareLive
+import Proof.CaseAnalysis.RowsEstimatorPreparedPorts
+import Proof.CaseAnalysis.FinalRowFrameJoin
 
 /-! A reused, common-capacity row transaction: copy the seven produced fields,
 then execute the actual warm printer, append and reset. The native header can

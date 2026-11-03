@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.C4Enum
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixJLink
 
 /-! # C4.K side conditions: the structural fields of a counter value's group, generic in the child family
 
@@ -174,6 +175,7 @@ structure GroupCaps (X : JCtx) (j : ℕ) (S : JState) (V : SExpr) : Prop where
 
 section Group
 variable (P : SeedParams) (nT R : ℕ) (batch : List SExpr) (TWd Cap : ℕ) (p' : List Bool)
+
 
 /-- **The group's structural fields at the call's entries**: with the capacity fields, the group's hypotheses. -/
 theorem groupOk_of (hplen : p'.length ≤ 8 * P.ell) (hnT : nT ≤ 2 ^ TWd)

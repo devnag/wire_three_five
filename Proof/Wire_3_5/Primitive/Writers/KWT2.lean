@@ -1,5 +1,6 @@
 import Proof.Wire_3_5.Primitive.SeedFix.C4KWTypes
 import Proof.Wire_3_5.Primitive.SeedFix.C4KWd
+import Proof.Wire_3_5.Primitive.SeedFix.C4CapA
 
 /-! # T-c v2: `QCopy2` (the `1^{Q'}` copy at its true cost) and its producer
 

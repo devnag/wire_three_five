@@ -1,6 +1,9 @@
-import Proof.CaseAnalysis.FinalLengthGate
-import Proof.Wire_3_5.FinalPass.FiltTabCopy
 import Proof.Wire_3_5.UnionMachine.RoundBits
+import Proof.Wire_3_5.FinalPass.WordAux
+import Proof.Wire_3_5.FinalPass.WordMap
+import Proof.Wire_3_5.FinalPass.WordMul
+import Proof.Wire_3_5.FinalPass.FiltTabCopy
+import Proof.CaseAnalysis.FinalLengthGate
 
 /-! # C6 front, U2: `⌈log₂ T(N)⌉` from the binary clock (P3:3637-3640)
 

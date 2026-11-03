@@ -1,4 +1,5 @@
 import Proof.Assembly.AppendFrameKernel
+import Proof.Amplification.RecoveryScratchErase
 import Proof.Hierarchy.CompetitorRecordRewind
 import Proof.MachineModel.Runs
 

@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CommonProgramSuppliers
+import Proof.CaseAnalysis.CaseTwoSelectedOutput
 
 /-! Choose and discharge every local supplier from the eight sources and
 the actual weak-machine/refuter theorem. The common onset is chosen once. -/

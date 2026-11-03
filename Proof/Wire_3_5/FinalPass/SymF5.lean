@@ -1,6 +1,7 @@
 import Proof.Wire_3_5.FinalPass.SymF4
-import Proof.Wire_3_5.FinalPass.TabFlat
+import Proof.Wire_3_5.Primitive.ThresholdWriter.ShellIface
 import Proof.Wire_3_5.Primitive.SeedFix.S3Big1
+import Proof.Wire_3_5.FinalPass.TabFlat
 
 /-! # SWf (the SYM words writer's flat tables), part 5: the unit machine and the seeds' flat tables
 

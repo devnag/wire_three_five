@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryFormulaPayload
+import Proof.Amplification.RecoveryQueryCellReuse
 
 /-! The six existing pair/list-cell operations for one original Tseitin
 clause. Signs use the original Encodable Bool convention, not native PCP

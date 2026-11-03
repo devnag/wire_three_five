@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoveryLiteralDecode
+import Proof.Amplification.RecoveryScratchErase
 
 /-! One paid coarse sweep prepares every literal: original decoder work,
 lookup scratch and its selected operand. The other live operand is retained,

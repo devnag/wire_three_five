@@ -1,5 +1,7 @@
 import Proof.Wire_3_5.Primitive.SeedFix.CtrMath
 import Proof.Wire_3_5.Primitive.SeedFix.FlipsDec
+import Proof.Wire_3_5.FinalPass.HashTable
+import Proof.Wire_3_5.FinalPass.WordLib
 import Proof.Wire_3_5.Primitive.Writers.GeoColsCw
 
 /-! # X3, part 2: the center writer's layout and small programs (P3:1206-1216)

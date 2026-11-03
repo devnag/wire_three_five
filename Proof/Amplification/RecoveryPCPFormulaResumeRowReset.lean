@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryPCPFormulaResumeRowState
+import Proof.MachineModel.OrdinaryMaskedReset
 
 /-! Pay the original-clause source rewind while retaining the formula
 append cursor. The address tape has reusable false backing from entry. -/

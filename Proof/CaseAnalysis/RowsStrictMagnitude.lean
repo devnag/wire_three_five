@@ -1,4 +1,7 @@
 import Proof.CaseAnalysis.WitnessNativeWord
+import Proof.Hierarchy.HierarchyAllocation
+import Proof.Circuits.CanonicalBinaryOutput
+import Proof.PCP.PCPPairReusable
 
 /-! The magnitude serializer needed by the strict-threshold request. Its
 bit-length word is produced from the actual frame. Positive predecessor

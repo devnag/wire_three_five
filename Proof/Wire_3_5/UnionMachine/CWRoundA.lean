@@ -1,12 +1,16 @@
-import Proof.Wire_3_5.Recovery.CertSched
 import Proof.Wire_3_5.UnionMachine.CWWords
+import Proof.CaseAnalysis.RowsCircuitHeader
+import Proof.CaseAnalysis.WitnessCanonicalFields
 import Proof.Wire_3_5.UnionMachine.FrontLoopKit
+import Proof.Wire_3_5.Transfer.FoldBody
+import Proof.Wire_3_5.Recovery.CertSched
 
 /-! # C6 front, U5, the code writers: loop A's round — one circuit's bottoms
 
 The carrier of a call is "the union of a named variable's atoms' bottom gates" (P3:3401-3410; `Stars.Carrier`), so the
 carrier writer first collects the bottoms of every circuit it reads. A circuit's code is the tagged list
-`[family tag, bottom count, bottoms, top]` whose third field is the balanced list of its bottoms' codes (`CarrierFormat.sym_fields` / `thr_fields`). One ROUND of loop A handles circuit `i` on a fixed bank of `423` tapes:
+`[family tag, bottom count, bottoms, top]` whose third field is the balanced list of its bottoms' codes (T's
+`CarrierFormat.sym_fields` / `thr_fields`). One ROUND of loop A handles circuit `i` on a fixed bank of `423` tapes:
 * `0` the fields `frame u`, `1` the round counter `1^i 0 r`, `2` the bottom accumulator (framed words), `3` the count
   accumulator `false :: 1^n`; `4` the word layer's cell;
 * the crop (`CWWords.cropAW`): circuit `i`'s payload `frame (pay x)` on `5`, the header's constant `frame []` on `7`;
@@ -219,6 +223,7 @@ theorem roundA_run (xs : List ℕ) (W : ℕ) (hW : ∀ x ∈ xs, natBitLength x 
       show (1 : Fin 423) = cropSl 2 from rfl, b2hit, c2]
   · exact (install_slot apSl apSl_inj B4 o5 3).trans a3
   · exact (install_slot apSl apSl_inj B4 o5 4).trans a4
+
 
 /-! ## Loop A: every circuit -/
 

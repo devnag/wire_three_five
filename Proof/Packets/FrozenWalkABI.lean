@@ -1,5 +1,4 @@
-import Proof.MachineModel.OrdinaryBoundedCounter
-import Proof.Packets.ToeplitzSeedBits
+import Proof.Packets.WalkSeedBinary
 
 /-! Exact label widths of the frozen powered walk. A base label has four
 physical bits even though its arithmetic branch uses only three of them. -/

@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.Writers.PopCellNum
+import Proof.Wire_3_5.Primitive.Writers.PopLink
 
 /-! # PA (d)-SYM, part 15: the POP cell's word program (numbers, record, rewind)
 

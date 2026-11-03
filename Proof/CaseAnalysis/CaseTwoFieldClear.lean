@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CaseTwoFieldReady
+import Proof.Amplification.RecoveryScratchErase
 
 /-! One complete original field append returns the same reusable work bank.
 All scratch is physically cleared; the source, offset, width and native

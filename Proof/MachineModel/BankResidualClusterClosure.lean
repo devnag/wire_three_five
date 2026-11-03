@@ -1,3 +1,5 @@
+import Proof.MachineModel.BankAtomContextRegisters
+import Proof.MachineModel.BankFramedTargetChains
 import Proof.MachineModel.BankProjectionTableStage
 import Proof.MachineModel.BankRegisterCaseTwoChain
 

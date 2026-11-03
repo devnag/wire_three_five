@@ -1,5 +1,21 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.HashRange
 import Proof.Wire_3_5.FinalPass.HashRows
+import Proof.Wire_3_5.FinalPass.SymPool
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.HashSz1
+import Proof.Wire_3_5.FinalPass.HashSz2
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.HashPre1Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The HASH child request's precondition, part 1: the request's numbers at a THR call
 
@@ -25,9 +41,6 @@ open NearCubicWires.SupplierPipeline NearCubicWires.WireExponent3_5.Stars NearCu
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.FinalPass.SymFr
 open NearCubicWires.WireExponent3_5.FinalPass.FreeGen
 
-/-- **The HASH requests' degree bound** `d = d_D·β²` (the aux FILTER rows' degree is `O(L²)`). -/
-def hashDF (c : SymC) (x : FreeIn) : ℕ := c.dD * (β x * β x)
-
 /-- The printed expression's term-count constant. -/
 noncomputable def cV (l : Literals) : ℕ :=
   cN l + 24 * CallIndex.algX l + 66 + cJ l + 2 * cT l * cL0 l + 2 * cT l
@@ -41,9 +54,6 @@ structure HpreH (l : Literals) (alg : RepairRepresentation.DecompositionAlgorith
   dP1 : 3 * c.dH * c.dQ * c.dD ≤ c.dP
   eP1 : c.eH + 5 ≤ c.eP
   dP2 : 8 * cPW l + 8 * cT l * cL0 l + 3 * c.dQ ≤ c.dP
-
-theorem L_le_n (n : ℕ) : Nat.clog 2 (n + 2) ≤ n + 1 :=
-  Nat.clog_le_of_le_pow (Nat.lt_two_pow_self (n := n + 1))
 
 section Gate
 variable (l : Literals) (F : GateFree l)
@@ -212,3 +222,5 @@ theorem coef_hash (c : SymC) (hdP : 8 * cPW l + 8 * cT l * cL0 l + 3 * c.dQ ≤ 
 end Gate
 
 end NearCubicWires.WireExponent3_5.FinalPass.HashFr
+
+end

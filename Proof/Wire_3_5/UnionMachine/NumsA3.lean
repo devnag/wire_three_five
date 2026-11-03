@@ -1,4 +1,27 @@
-import Proof.Wire_3_5.UnionMachine.S6Sizes
+import Lean
+import Proof.Wire_3_5.Primitive.Writers.SymFamBase
+import Proof.Wire_3_5.Primitive.SeedFix.C4CapD
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymKB
+import Proof.Wire_3_5.UnionMachine.S6SizesBase
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.CallSize
+import Proof.Wire_3_5.Primitive.Writers.HashFam
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.SymFam
+import Proof.Wire_3_5.Primitive.Writers.SymHelp
+import Proof.Wire_3_5.Primitive.Writers.SymNeed
+import Proof.Wire_3_5.Primitive.SeedFix.C4GateSymB
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.NumsA3Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # NW phase (a), part 3: the SYM numbers front's needs at a polynomial envelope
 
@@ -277,35 +300,6 @@ theorem sym_needsG (l : Literals) (F : GateFree l) (kclk coef A a0 : ℕ) (ha0 :
   · show (cyOf Cs).getD 2 0 ≤ cap; have := hy 2; omega
   · show (cyOf Cs).getD 3 0 ≤ cap; have := hy 3; omega
 
-/-- `2^{⌈log₂ x⌉} ≤ 2x` at `x ≥ 2`. -/
-theorem pow_clog_le (x : ℕ) (hx : 2 ≤ x) : 2 ^ Nat.clog 2 x ≤ 2 * x := by
-  have h1 := Nat.pow_pred_clog_lt_self (by norm_num : 1 < 2) (by omega : 1 < x)
-  have hpos : 0 < Nat.clog 2 x := Nat.clog_pos (by norm_num) (by omega)
-  obtain ⟨m, hm⟩ : ∃ m, Nat.clog 2 x = m + 1 := ⟨(Nat.clog 2 x).pred, (Nat.succ_pred_eq_of_pos hpos).symm⟩
-  rw [hm, Nat.pred_succ] at h1
-  rw [hm, pow_succ]
-  omega
-
-/-- **The atom property at the polynomial envelope** `2^{c_A+K_F}·(n+2)^{K_F}·2^k`. -/
-theorem kq_atom (cA KF n k : ℕ) {X c d a' : ℕ}
-    (hX : X ≤ 2 ^ c * ((n + 2) ^ d * 2 ^ (a' * Nat.clog 2 (n + 2)) * 2 ^ k * 2 ^ 0)) (hc : c ≤ cA)
-    (hda : d + a' ≤ KF) : X ≤ 2 ^ (cA + KF) * (n + 2) ^ KF * 2 ^ k := by
-  have hL := pow_clog_le (n + 2) (by omega)
-  have h1 : 2 ^ (a' * Nat.clog 2 (n + 2)) ≤ 2 ^ a' * (n + 2) ^ a' := by
-    rw [mul_comm a', pow_mul, ← mul_pow]
-    exact Nat.pow_le_pow_left hL a'
-  have h2 : 2 ^ c ≤ 2 ^ cA := Nat.pow_le_pow_right (by norm_num) hc
-  have h3 : 2 ^ a' ≤ 2 ^ KF := Nat.pow_le_pow_right (by norm_num) (by omega)
-  have h4 : (n + 2) ^ (d + a') ≤ (n + 2) ^ KF := Nat.pow_le_pow_right (by omega) hda
-  calc X ≤ 2 ^ c * ((n + 2) ^ d * 2 ^ (a' * Nat.clog 2 (n + 2)) * 2 ^ k * 2 ^ 0) := hX
-    _ ≤ 2 ^ c * ((n + 2) ^ d * (2 ^ a' * (n + 2) ^ a') * 2 ^ k * 1) := by
-        rw [pow_zero]
-        exact Nat.mul_le_mul_left _ (Nat.mul_le_mul_right _ (Nat.mul_le_mul_right _ (Nat.mul_le_mul_left _ h1)))
-    _ = 2 ^ c * 2 ^ a' * (n + 2) ^ (d + a') * 2 ^ k := by rw [pow_add]; ring
-    _ ≤ 2 ^ cA * 2 ^ KF * (n + 2) ^ KF * 2 ^ k :=
-        Nat.mul_le_mul_right _ (Nat.mul_le_mul (Nat.mul_le_mul h2 h3) h4)
-    _ = 2 ^ (cA + KF) * (n + 2) ^ KF * 2 ^ k := by rw [pow_add]
-
 /-- The SYM numbers' base constants at a gate's `c_r`, `fe` (`sym_needs`' equations by `rfl`). -/
 noncomputable def nwSB0 (l : Literals) (cr fe : ℕ) : SB where
   Cw := S6Sizes.cW
@@ -355,3 +349,5 @@ theorem nw_hnw (l : Literals) (F : GateFree l) (n : ℕ) :
     PrimT.C4GateSym.needW n ≤ (nwSB l F).Cnw * (n + 1) ^ (nwSB l F).Dnw := PrimT.C4GateSym.needW_le n
 
 end NearCubicWires.WireExponent3_5.UnionMachine.NumsA
+
+end

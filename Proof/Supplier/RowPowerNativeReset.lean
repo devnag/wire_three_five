@@ -1,4 +1,5 @@
 import Proof.Supplier.RowPowerNativeBlock
+import Proof.PCP.PCPSerializerTapeSupport
 
 /-! Actual local head restoration for the native-field block appender.
 Cache/output cursors are excluded. Reused scratch padding is transported

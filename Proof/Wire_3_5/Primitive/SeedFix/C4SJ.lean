@@ -1,5 +1,6 @@
 import Proof.Wire_3_5.Primitive.SeedFix.C4SI
-import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTypes
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTypesBase
+import Proof.CaseAnalysis.WitnessSelectedErase
 
 /-! # C4 per-call setup (item 3), part 10: the SYM stage's layout and its one-input stages
 

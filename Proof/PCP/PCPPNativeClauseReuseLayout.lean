@@ -1,4 +1,6 @@
 import Proof.PCP.PCPPNativeClausePadded
+import Proof.PCP.PCPUnaryCopy
+import Proof.Amplification.RecoveryScratchErase
 
 /-! One reusable literal bank: retain a raw reference outside the parser,
 then erase all fifteen work tapes using the actual capacity driver. -/

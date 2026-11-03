@@ -1,4 +1,4 @@
-import Proof.PCP.PCPPRequestSourceLayout
+import Proof.PCP.PCPPRequestSource
 
 /-! The native emitter reads one actual three-field oracle node into bounded
 unary indices. The source stream is consumed once and retained exactly. -/

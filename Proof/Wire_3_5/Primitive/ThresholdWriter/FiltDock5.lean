@@ -1,6 +1,7 @@
 import Proof.Wire_3_5.Primitive.ThresholdWriter.Joins
-import Proof.Wire_3_5.Primitive.Writers.CellUnit
 import Proof.Wire_3_5.UnionMachine.FiltSetupIface5
+import Proof.Wire_3_5.Primitive.Writers.SymFlat
+import Proof.Wire_3_5.Primitive.Writers.CellUnit
 
 /-! # queue item 2: the THR FILTER rows dock `FiltSetupSpec5` (C6's v5)
 

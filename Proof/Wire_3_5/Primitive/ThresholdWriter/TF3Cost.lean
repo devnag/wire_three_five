@@ -1,6 +1,8 @@
-import Proof.Wire_3_5.Primitive.ThresholdWriter.PortsE
 import Proof.Wire_3_5.Primitive.ThresholdWriter.TF3Port
+import Proof.Wire_3_5.Primitive.SeedFix.TabCost
 import Proof.Wire_3_5.Primitive.Writers.ThrDataCost
+import Proof.Wire_3_5.Primitive.ThresholdWriter.PortsE
+import Proof.SourceAssembly.SourceRequestSelOrigCost
 
 /-! # TopFrontPort3 body, part 8: the cost is polynomial in `V`, and the front end (`topFront3`)
 

@@ -1,4 +1,6 @@
 import Proof.Assembly.RowsPoolWeightLoop
+import Proof.Supplier.RowPowerBlockMeaning
+import Proof.MachineModel.OrdinaryMatrixScoreWeightLayout
 
 /-! The original native signed-field worker supplies both scalar parts of a
 weight. Its output heads are returned before the live-negative accumulator;

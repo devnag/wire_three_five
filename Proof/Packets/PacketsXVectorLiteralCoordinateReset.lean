@@ -1,0 +1,79 @@
+import Mathlib.Tactic
+import Proof.Assembly.FixedCore
+import Proof.CaseAnalysis.RowsEstimatorSubstitutionMonomial
+import Proof.CaseAnalysis.RowsEstimatorSubstitutionOuterRun
+import Proof.CaseAnalysis.RowsFamilyBudget
+import Proof.CaseAnalysis.RowsModeCacheHash
+import Proof.CaseAnalysis.RowsModeCacheSource
+import Proof.CaseAnalysis.RowsModeElementary
+import Proof.MachineModel.CanonicalFourfoldRowProgram
+import Proof.Packets.CycleCommonReserve
+import Proof.Packets.DenseAtomMaterialize
+import Proof.Packets.NativeNormalized
+import Proof.Packets.NormalizedAdditionData
+import Proof.Packets.NormalizedMultiplyData
+import Proof.Packets.NormalizerCold
+import Proof.Packets.PacketsXCycleDenseAtomCost
+import Proof.Packets.PacketsXCycleSerializedCost
+import Proof.Packets.PacketsXDeltaMetadata
+import Proof.Packets.PacketsXLiteralAlphabet
+import Proof.Packets.PacketsXLiteralCache
+import Proof.Packets.PacketsXLiteralCacheReuse
+import Proof.Packets.PacketsXModeCacheBounded
+import Proof.Packets.PacketsXNormalizedFiniteTransport
+import Proof.Packets.PacketsXNormalizedRing
+import Proof.Packets.PacketsXNormalizerOperations
+import Proof.Packets.PacketsXReusableArithmeticNat
+import Proof.Packets.PacketsXSubstitutionCensus
+import Proof.Packets.PacketsXSubstitutionNatInvariant
+import Proof.Packets.PacketsXVectorBottomUpMachine
+import Proof.Packets.PacketsXVectorCoordinateCallback
+import Proof.Packets.PacketsXVectorWorkerChildLoop
+import Proof.Packets.PacketsXVectorWorkerDeltaRound
+import Proof.Packets.PacketsXVectorWorkerLevelBody
+import Proof.Packets.PacketsXVectorWorkerLevelBounded
+import Proof.Packets.PacketsXVectorWorkerParentLoop
+import Proof.Packets.PacketsXVectorWorkerPrepareRight
+import Proof.Packets.PacketsXWindowLevelAtoms
+import Proof.Packets.PacketsXWindowLevelProvider
+import Proof.Packets.PacketsXWindowLiteralConsume
+import Proof.Packets.PacketsXWindowLiteralProvider
+import Proof.Packets.PacketsXWindowPositionalSupport
+import Proof.Packets.PacketsXWindowRawMeaning
+import Proof.Packets.ReusableArithmeticLeft
+import Proof.Packets.ReusableNormalizedArithmetic
+import Proof.Packets.SubstitutionOuterLoop
+import Proof.Packets.VectorAccumulatorRight
+import Proof.Packets.VectorChildTransaction
+import Proof.Packets.VectorControllerLayout
+import Proof.Packets.WindowSeed
+import Proof.Packets.WindowSourceClose
+import Proof.Rows.PhysicalFocusBoundary
+import Proof.Supplier.EquationZeroField
+import Proof.Supplier.RowThresholdSelections
+import Proof.Supplier.SupplierCapacity
+import Proof.Supplier.SupplierEstimator
+import Proof.Packets.PacketsXVectorCoordinateZeroLeft
+import Proof.Packets.PacketsXWindowCoordinateSubstitute
+import Proof.Packets.SubstitutionOuterStep
+import Proof.Packets.SubstitutionReusable
+
+/-! A fixed whole-coordinate callback accepting any fitting previous left
+operand. Reset, exact substitution, output capacities, and reentry are all
+closed concrete execution/layout theorems. -/
+set_option autoImplicit false
+set_option maxHeartbeats 800000
+set_option maxRecDepth 10000
+set_option warningAsError true
+namespace PCJ9eff70d512234a4c_Fixed.Materializer.VectorBottomUp
+open NearCubicWires NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdinary
+open NearCubicWires.ExtDecompositionBatch NearCubicWires.RepairSource.VerifierDecoding
+open NearCubicWires.SupplierToeplitz NearCubicWires.SupplierToeplitzCore NearCubicWires.SupplierWalkBridge
+open NearCubicWires.CanonicalFourfoldRowProgram NearCubicWires.RepairSource.CloseoutRawRows
+open CloseoutRowsModeCache NormalizedFiniteTransport Theorem25Completion.CycleBounds SubstitutionCensus
+noncomputable section
+
+def literalCoordinateCallback:=Composition.machine clearCoordinateLeft coordinateCallback
+
+end
+end PCJ9eff70d512234a4c_Fixed.Materializer.VectorBottomUp

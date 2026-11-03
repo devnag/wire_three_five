@@ -1,4 +1,26 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.CoreJ17
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.Core15
+import Proof.Wire_3_5.FinalPass.Core18
+import Proof.Wire_3_5.FinalPass.CoreIfaceMJ
+import Proof.Wire_3_5.FinalPass.CoreJ11
+import Proof.Wire_3_5.FinalPass.CoreJ16
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdR12
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.FinalPass.SeamsHalves
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.S5Seam2
+import Proof.Wire_3_5.Primitive.Writers.S5SeamB
+import Proof.Wire_3_5.FinalPass.CoreJ10
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S5Core over the writers with arbitrary residues, part J18: the core half, generic in the bank (P3:3044-3048, 3170-3181)
 
@@ -160,3 +182,5 @@ section Uni
 end Uni
 
 end NearCubicWires.WireExponent3_5.FinalPass.Core
+
+end

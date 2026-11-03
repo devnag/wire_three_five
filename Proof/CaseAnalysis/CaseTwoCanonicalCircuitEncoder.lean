@@ -1,4 +1,5 @@
 import Proof.MachineModel.CaseTwoDescriptionBitPoolProgram
+import Proof.MachineModel.PreserveRightProgram
 
 /-!
 # The recovered oracle's own code, from its canonical description

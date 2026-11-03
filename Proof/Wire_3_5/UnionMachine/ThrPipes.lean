@@ -1,5 +1,33 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.FiltLift
-import Proof.Wire_3_5.UnionMachine.RadSetupRun
+import Proof.Wire_3_5.FinalPass.DigsIface
+import Proof.Wire_3_5.FinalPass.SeamsProg2Base
+import Proof.Wire_3_5.Primitive.Writers.BudgetIface2
+import Proof.Wire_3_5.Primitive.Writers.PlanBase
+import Proof.Wire_3_5.Primitive.Writers.ThrDataIface3
+import Proof.Wire_3_5.Primitive.Writers.WritersJoinBase
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4Base
+import Proof.Wire_3_5.Primitive.ThresholdWriter.RadSetup2
+import Proof.Wire_3_5.Primitive.ThresholdWriter.ShellIface
+import Proof.Wire_3_5.UnionMachine.FiltSetupIface5
+import Proof.Wire_3_5.UnionMachine.RadNeed
+import Proof.Wire_3_5.UnionMachine.RadSetupB3
+import Proof.Wire_3_5.UnionMachine.RadSpecBase
+import Proof.Wire_3_5.UnionMachine.ThrDecIfaceBase
+import Proof.Wire_3_5.UnionMachine.RadPipeB
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.ThresholdWriter.RadSetup
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.RadSetupB5
+import Proof.Wire_3_5.UnionMachine.ThrDecIface
+import Proof.Wire_3_5.UnionMachine.ThrPipesBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The THR unit's pipes and emissions: RADIX (398) and FILTER (399) at a THR request unit
 
@@ -29,13 +57,6 @@ open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.
 open NearCubicWires.WireExponent3_5.PrimThrW.RadSetup
 
 /-! ## The index decode's ranges -/
-
-theorem thrEU_eq (nc : ℕ) : ThrDec.thrEU nc = 3 * nc + 5 := by unfold ThrDec.thrEU; ring
-
-theorem rowOfU_le (nc j : ℕ) (h : j % ThrDec.thrEU nc < ThrDec.thrEU nc - 1) : ThrDec.rowOfU nc j ≤ nc := by
-  unfold ThrDec.rowOfU
-  rw [thrEU_eq] at h ⊢
-  omega
 
 section Call
 variable (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n : ℕ}
@@ -160,3 +181,5 @@ theorem radP_ok (R : RadSetupB5.RadSetupSpecB5 x l F) (kclk coef A a : ℕ) (ha 
 end Rad
 
 end NearCubicWires.WireExponent3_5.UnionMachine.ThrPipes
+
+end

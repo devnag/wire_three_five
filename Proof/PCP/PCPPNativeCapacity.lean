@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeCapacityBank
+import Proof.PCP.PCPSerializerCapacityPower
 
 /-! Physically evaluate one common C/F/G bank from the retained measured W.
 The fixed native caller chooses D/K once; all three actual unary results

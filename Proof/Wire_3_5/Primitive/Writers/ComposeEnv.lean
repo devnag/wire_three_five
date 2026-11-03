@@ -1,5 +1,16 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.Compose
 import Proof.Wire_3_5.Primitive.Writers.CallSize
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.ComposeEnvBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # PA.compose.env: the composed program fits the per-call budget
 
@@ -21,84 +32,9 @@ open NearCubicWires.SourceInterfaces NearCubicWires.PolynomialSchedule
 
 /-! ## The request word below `C_w·2^{⌊n/2⌋}` -/
 
-theorem sq_bound_half {x n : ℕ} (h : x ^ 2 ≤ 2 ^ n) : x ≤ 2 * 2 ^ (n / 2) := by
-  by_contra hc'
-  have hc : 2 * 2 ^ (n / 2) < x := Nat.lt_of_not_le hc'
-  have h1 : (2 * 2 ^ (n / 2)) ^ 2 < x ^ 2 := Nat.pow_lt_pow_left hc (by norm_num)
-  have h2 : 2 ^ n ≤ (2 * 2 ^ (n / 2)) ^ 2 := by
-    rw [mul_pow, ← pow_mul]
-    calc 2 ^ n ≤ 2 ^ (n / 2 * 2 + 2) := Nat.pow_le_pow_right (by norm_num) (by omega)
-      _ = 2 ^ 2 * 2 ^ (n / 2 * 2) := by rw [pow_add, Nat.mul_comm]
-  omega
-
-theorem exists_wordConst : ∃ C : ℕ, ∀ n, CallSize.wordBound 26 26 2 n ≤ C * 2 ^ (n / 2) := by
-  have hpb := polynomiallyBounded_pow CallSize.wordBound_poly 2
-  obtain ⟨onset, hon⟩ := polynomiallyBounded_eventually_le_sixteenth_exponential hpb
-  set M := (Finset.range onset).sup (fun n => CallSize.wordBound 26 26 2 n) with hM
-  refine ⟨M + 2, fun n => ?_⟩
-  have hp : 1 ≤ 2 ^ (n / 2) := Nat.one_le_two_pow
-  by_cases hn : onset ≤ n
-  · have h := hon n hn
-    have h16 : 2 ^ (n + 1) / 16 ≤ 2 ^ n := by
-      have : 2 ^ (n + 1) = 2 * 2 ^ n := by ring
-      rw [this]; omega
-    have hb := sq_bound_half (le_trans h h16)
-    nlinarith
-  · have hmem : n ∈ Finset.range onset := Finset.mem_range.mpr (by omega)
-    have hle : CallSize.wordBound 26 26 2 n ≤ M := Finset.le_sup (f := fun n => CallSize.wordBound 26 26 2 n) hmem
-    nlinarith
-
-/-- The word constant `C_w`. -/
-noncomputable def wordConst : ℕ := Classical.choose exists_wordConst
-
-theorem wordConst_spec (n : ℕ) : CallSize.wordBound 26 26 2 n ≤ wordConst * 2 ^ (n / 2) :=
-  Classical.choose_spec exists_wordConst n
-
 /-! ## The classes are monotone in the exponents -/
 
-theorem classBound_mono {E E' : Envelope} (h : ClassLE E E') (c : BudgetClass) (q k psi : ℕ) (hq : 1 ≤ q)
-    (hc : c ≠ .sourcePoly) : classBound E c q k psi ≤ classBound E' c q k psi := by
-  cases c with
-  | sourcePoly => exact absurd rfl hc
-  | selection =>
-    exact Nat.mul_le_mul (Nat.pow_le_pow_right (by norm_num) (by have := Nat.mul_le_mul_right k h.csel; omega))
-      (Nat.pow_le_pow_right hq h.Asel)
-  | preprocessing =>
-    exact Nat.mul_le_mul (Nat.pow_le_pow_right (by norm_num) (Nat.mul_le_mul_right psi h.cpsi))
-      (Nat.pow_le_pow_right hq h.Apre)
-  | table => exact Nat.mul_le_mul le_rfl (Nat.pow_le_pow_right hq h.Atable)
-  | mainPass => exact Nat.mul_le_mul le_rfl (Nat.pow_le_pow_right hq h.Amain)
-
-/-- The four classes of an envelope at `(q, k, Ψ)`. -/
-def classSum (E : Envelope) (q k psi : ℕ) : ℕ :=
-  classBound E .selection q k psi + classBound E .preprocessing q k psi + classBound E .table q k psi +
-    classBound E .mainPass q k psi
-
-theorem seedClasses_le {E₄ E : Envelope} (h : ClassLE E₄ E) (q k psi : ℕ) (hq : 1 ≤ q) :
-    seedClasses E₄ q k psi ≤ 2 * classSum E q k psi := by
-  have h1 := classBound_mono h .selection q k psi hq (by decide)
-  have h2 := classBound_mono h .preprocessing q k psi hq (by decide)
-  have h3 := classBound_mono h .table q k psi hq (by decide)
-  unfold seedClasses classSum; omega
-
-theorem finalClasses_le {E₅ E : Envelope} (h : ClassLE E₅ E) (q k psi : ℕ) (hq : 1 ≤ q) :
-    finalClasses E₅ q k psi ≤ classSum E q k psi := by
-  have h2 := classBound_mono h .preprocessing q k psi hq (by decide)
-  have h4 := classBound_mono h .mainPass q k psi hq (by decide)
-  unfold finalClasses classSum; omega
-
-theorem half_le_classSum (E : Envelope) (q k psi : ℕ) (hq : 1 ≤ q) : 2 ^ (q / 2) ≤ classSum E q k psi := by
-  have h1 : 2 ^ (q / 2) ≤ classBound E .selection q k psi := by
-    show 2 ^ (q / 2) ≤ 2 ^ (q / 2 + E.csel * k) * q ^ E.Asel
-    have a := Nat.pow_le_pow_right (show 0 < 2 by norm_num) (show q / 2 ≤ q / 2 + E.csel * k by omega)
-    have b : 0 < q ^ E.Asel := Nat.pow_pos hq
-    exact le_trans a (Nat.le_mul_of_pos_right _ b)
-  unfold classSum; omega
-
 /-! ## The budget -/
-
-/-- The coefficient rule: `cg c₄ c₅ = glueK·(C_w + 2c₄ + c₅ + 1)`. -/
-noncomputable def cgRule (c₄ c₅ : ℕ) : ℕ := glueK * (wordConst + 2 * c₄ + c₅ + 1)
 
 theorem callBudget_eq (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) (n : ℕ) :
     ((gate0 l F).budget kclk coef A a ha).callBudget n =
@@ -138,3 +74,5 @@ theorem envFor : EnvFor cgRule := by
 noncomputable def envPack : EnvPack := ⟨cgRule, envFor⟩
 
 end NearCubicWires.WireExponent3_5.PrimAsm.ComposeEnv
+
+end

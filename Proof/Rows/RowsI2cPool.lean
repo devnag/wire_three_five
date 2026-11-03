@@ -1,5 +1,7 @@
 import Proof.Assembly.ColdSource
 import Proof.SourceAssembly.PoolDonorCompatible
+import Proof.PCP.ProjectionDimensionPolynomialBounds
+import Proof.Circuits.DecompositionCountPosition
 
 set_option autoImplicit false
 set_option maxHeartbeats 250000

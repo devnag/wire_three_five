@@ -1,5 +1,5 @@
 import Proof.CaseAnalysis.WitnessCountedReject
-import Proof.CaseAnalysis.WitnessTermRoundRun
+import Proof.CaseAnalysis.WitnessTermRoundReject
 
 /-! Total bookkeeping for the counted term proof uses the original
 accepted coefficient. Rejected words contribute only a dummy zero to the
@@ -23,6 +23,14 @@ theorem coefficient_some (b : ℕ) (bits : List Bool) (q : ℚ) :
       decodeCanonicalRational (value (TermCoefficient.coefficientCode bits))=some q ∧
       natBitLength q.num.natAbs ≤ b ∧ natBitLength q.den ≤ b := by
   simp only [coefficient,Option.filter_eq_some_iff,decide_eq_true_eq]
+  tauto
+
+theorem coefficient_isSome (b : ℕ) (bits : List Bool) :
+    (coefficient b bits).isSome=true ↔ PairHeader.valid bits ∧
+      ∃ q,decodeCanonicalRational (value (TermCoefficient.coefficientCode bits))=some q ∧
+        natBitLength q.num.natAbs ≤ b ∧ natBitLength q.den ≤ b := by
+  rw [Option.isSome_iff_exists]
+  simp only [coefficient_some]
   tauto
 
 theorem rational_eq (b : ℕ) (bits : List Bool) (q : ℚ)

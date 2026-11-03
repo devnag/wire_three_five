@@ -1,4 +1,5 @@
 import Proof.MachineModel.CanonicalRecoveryValidatorProgram
+import Proof.MachineModel.PreserveRightProgram
 
 /-!
 # The limits front end of the recovery verifier

@@ -1,9 +1,32 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.ThrK7
 import Proof.Wire_3_5.Primitive.Writers.ThrSide11
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SymBuild
+import Proof.Wire_3_5.FinalPass.SymCost4
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.CallSize
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.ThrSide1
+import Proof.Wire_3_5.Primitive.Writers.ThrSide2
+import Proof.Wire_3_5.Primitive.Writers.ThrSide3
+import Proof.Wire_3_5.Primitive.Writers.ThrSide7
+import Proof.Wire_3_5.Primitive.Writers.ThrSide8
+import Proof.Wire_3_5.Primitive.Writers.ThrSide9
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.ThrB7Base
 
-/-! # c4 THR block, piece 7 part 2: the THR constants and the builder `ThrFreeOkB7`
 
-The THR twin of `symCof`/`symCDs`/`symFreeOk` (SymBuild) at the v7 contract (v6 + the strip):
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2 c4 THR block, piece 7 part 2: the THR constants and the builder `ThrFreeOkB7`
+
+The THR twin of the `symCof`/`symCDs`/`symFreeOk` (SymBuild) at the v7 contract (v6 + the strip):
 * the strip's bound: `kbT_codes` (the call's circuit and carrier codes within `kbT n`), `strip_req` (the translation's
   words, at any call), `stripP` (one polynomial above the eight premises: `|req.word| ≤ wordBound`, `|hbF| ≤ c_H L²`,
   `kbT`, the translation, the counts) with **`stripP_poly`**, **`strip_le`** (`ThrStripAt pr` once
@@ -32,12 +55,6 @@ open NearCubicWires.WireExponent3_5.FinalPass.SymFr (SymC cDa one_le_L kh_two co
 
 /-! ## The strip's bound -/
 
-/-- `kbT` is polynomial. -/
-theorem kbT_poly : PolynomiallyBounded ThrFam.kbT :=
-  polynomiallyBounded_mono (fun _ => le_of_eq rfl)
-    (polynomiallyBounded_add (polynomiallyBounded_comp CallSize.pb_circBits CallSize.pb_codeParam)
-      (polynomiallyBounded_comp CallSize.pb_carrierBits CallSize.pb_codeParam))
-
 /-- **The strip's polynomial**: the call word's bound, `c_H(n+1)²`, `kbT`, the translation's words, `n`, `70`. -/
 noncomputable def stripP (l : Literals) (n : ℕ) : ℕ :=
   CallSize.wordBound 26 26 2 n + cH l * ((n + 1) * (n + 1)) + ThrFam.kbT n + 10 * ((2 * n + 3) * (n + 1)) + n + 70
@@ -62,33 +79,6 @@ noncomputable def stripD (l : Literals) : ℕ := Classical.choose (Classical.cho
 
 theorem stripP_le (l : Literals) (n : ℕ) : stripP l n ≤ stripC l * (n + 1) ^ stripD l :=
   (Classical.choose_spec (Classical.choose_spec (stripP_poly l))).2 n
-
-/-- **The translation's words at a call** (as in `CallSize.word_length_le`). -/
-theorem strip_req {kclk : ℕ} {E : Envelope} {B : TimeBudget kclk E} (I : PrimitiveInputs B) (req : PrimRequest)
-    (h : I.Call req) :
-    8 * req.translation.length + 2 * (RepairRepresentation.natListWord req.translation).length + 16 ≤
-      8 * req.n + 2 * ((2 * req.n + 3) * (req.n + 1)) + 16 := by
-  obtain ⟨_, _, _, _, ⟨htlen, htval⟩, hstar, _⟩ := h
-  have hr4 := hstar.2.2.1
-  have hl : req.translation.length ≤ req.n := by rw [htlen]; omega
-  have h5 : (RepairRepresentation.natListWord req.translation).length ≤ (2 * req.n + 3) * (req.n + 1) := by
-    unfold RepairRepresentation.natListWord
-    rw [List.length_append]
-    have e1 := CallSize.natWord_len_le_self req.translation.length
-    have e2 : (req.translation.flatMap RepairRepresentation.natWord).length ≤
-        req.translation.length * (2 * req.n + 3) := by
-      apply CallSize.flatMap_length_le
-      intro t ht
-      have g1 := htval t ht
-      have g2 : 2 ^ Nat.log 2 (req.n / B.rOf req.n + 1) ≤ req.n / B.rOf req.n + 1 :=
-        Nat.pow_log_le_self 2 (Nat.succ_ne_zero _)
-      have g3 : req.n / B.rOf req.n ≤ req.n := Nat.div_le_self _ _
-      have := CallSize.natWord_len_le_self t
-      omega
-    have e3 := Nat.mul_le_mul_right (2 * req.n + 3) hl
-    have e4 : (2 * req.n + 3) * (req.n + 1) = req.n * (2 * req.n + 3) + (2 * req.n + 3) := by ring
-    omega
-  omega
 
 section Gate
 variable (l : Literals) (F : GateFree l)
@@ -312,3 +302,5 @@ noncomputable def thrFreeOk (l : Literals) (wa : WilliamsAlgorithm) : ThrFam.Thr
       strip := thr_strip l wa fe F }⟩
 
 end NearCubicWires.WireExponent3_5.PrimAsm.ThrSide
+
+end

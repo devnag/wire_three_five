@@ -1,5 +1,6 @@
-import Proof.Wire_3_5.Primitive.Writers.Codec
 import Proof.Wire_3_5.Primitive.Writers.SparseNum
+import Proof.Wire_3_5.Primitive.Writers.Codec
+import Proof.Wire_3_5.Ledger.LedgerCap
 
 /-! # PA library (b), part 5: the per-mode cap `B_m(q)` in unary registers
 

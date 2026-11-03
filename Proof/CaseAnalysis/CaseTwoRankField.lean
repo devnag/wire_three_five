@@ -1,5 +1,6 @@
-import Proof.CaseAnalysis.CaseTwoDirect
 import Proof.CaseAnalysis.RowsCountBinary
+import Proof.PCP.VerifierDecodingSlice
+import Proof.CaseAnalysis.CaseTwoDirect
 
 /-! The original canonical description uses unary-rank fields.  Their
 literal trailing false bits are allocation, so the existing total unary

@@ -1,4 +1,6 @@
 import Proof.PCP.VerifierDecodingRun
+import Proof.MachineModel.OrdinaryControlPrefix
+import Proof.MachineModel.OrdinaryStreamConcat
 
 /-! Actual local lookup of a bounded literal field. The source is framed;
 offset and width are supplied as explicitly charged unary tapes. Producing

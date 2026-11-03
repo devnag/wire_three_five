@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryReturnBit
+import Proof.MachineModel.OrdinaryZeroUnpadding
 
 /-! Extend the actually counted input length into the canonical certificate
 width max(1,n)+2. The empty-input branch writes its extra mark, and the

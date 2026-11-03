@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.FinalPass.S5TStage
+import Proof.Wire_3_5.FinalPass.S5TStageBase
 
 /-! # S5-THR, part 28: erasing unary tapes after the scrub (P3:3170-3181)
 

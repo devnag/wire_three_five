@@ -1,5 +1,6 @@
-import Proof.Circuits.TotalSelectorBodyAdapter
+import Proof.Circuits.InverseSelectorAtomStreamClosure
 import Proof.MachineModel.TotalInverseSelectorAtomStreamSourceBank
+import Proof.Circuits.TotalSelectorBodyAdapter
 import Proof.MachineModel.TotalStructuralAtomRangeProgram
 
 /-!

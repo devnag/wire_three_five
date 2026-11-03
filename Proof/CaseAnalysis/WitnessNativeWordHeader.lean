@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.WitnessBitFieldsReady
+import Proof.MachineModel.OrdinaryMatrixNaturalHeader
+import Proof.MachineModel.UWalkUnary
 
 /-! Reuse the native header serializer, with its required one-bit zero word.
 The ordinary frame and the source's length-prefixed natWord remain distinct. -/

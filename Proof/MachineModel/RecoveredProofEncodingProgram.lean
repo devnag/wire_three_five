@@ -55,13 +55,4 @@ open NearCubicWires.VerifiedLinker
 
 /-! ## 4. Scheduled instance and the amplifier construction call -/
 
-/-- The exact `AmplifierRequest` code of one seed. -/
-def amplifierRequestCode {arity : ℕ} (seed : BoolFunction arity) : ℕ :=
-  Nat.pair arity (encodeBoolFunction seed)
-
-@[simp] theorem amplifierRequestCode_eq {arity : ℕ}
-    (seed : BoolFunction arity) :
-    AmplifierRequest.code ⟨arity, seed⟩ = amplifierRequestCode seed :=
-  rfl
-
 end NearCubicWires.RecoveredProofEncodingProgram

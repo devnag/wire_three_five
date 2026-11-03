@@ -1,6 +1,8 @@
-import Proof.SourceAssembly.SourceRequestSymOriginal
-import Proof.Wire_3_5.Foundations.Carrier
 import Proof.Wire_3_5.Primitive.SeedFix.TabPrep
+import Proof.SourceAssembly.SourceRequestSymOriginal
+import Proof.MachineModel.BlockUnaryCalc
+import Proof.Circuits.CanonicalWitnessCodec
+import Proof.Wire_3_5.Foundations.Carrier
 
 /-! # The gate tables: the pieces of the Step-level stage (P3:3071-3091, 1645-1650)
 

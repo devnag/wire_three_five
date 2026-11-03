@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryMatrixBatchRightReturn
+import Proof.MachineModel.OrdinaryMatrixRightLoop
 
 /-! The right-bucket controller at the original Request's native width.
 All rank, endpoint and scratch bounds are derived locally; its finite

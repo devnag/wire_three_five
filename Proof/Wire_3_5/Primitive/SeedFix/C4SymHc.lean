@@ -1,5 +1,16 @@
-import Proof.Wire_3_5.Primitive.SeedFix.C4SymKA3
+import Lean
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymKA
 import Proof.Wire_3_5.Primitive.Writers.C3ReqIface3
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.SeedFix.C3ReqIface
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # C4.K SYM item (d): the compiler request writer's run at the SYM stage (`hc3`)
 
@@ -47,3 +58,5 @@ theorem sym_hc3 (l : Literals) (F : GateFree l) (EW : Envelope) (cW cN DN kclk c
   exact C.sym_run n a ha Cs carriers translation hcall hs (fr 3) (fr 2) (fr 4) (fr 5) h1 hcf hload
 
 end NearCubicWires.WireExponent3_5.PrimT.C4SymW
+
+end

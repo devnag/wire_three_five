@@ -1,0 +1,23 @@
+import Proof.Packets.PacketsXVectorLiteralInitialization
+import Proof.Packets.PacketsXVectorDenseInitialize
+import Proof.Packets.PacketsXVectorBottomUpMachine
+import Proof.Packets.VectorControllerLayout
+import Proof.Rows.PhysicalFocusBoundary
+
+/-! All three banks are empty at entry to this initialization program. -/
+set_option autoImplicit false
+set_option maxHeartbeats 1000000
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedSimpArgs false
+namespace PCJ9eff70d512234a4c_Fixed.Materializer.VectorBottomUp
+open NearCubicWires NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdinary
+open NearCubicWires.ExtDecompositionBatch NearCubicWires.RepairSource.VerifierDecoding
+open CloseoutRowsModeCache
+noncomputable section
+
+def initializeLiteral := Composition.machine VectorNumericArena.initializeDense VectorNumericArena.initializeController
+attribute [local irreducible] VectorNumericArena.initializeController VectorNumericArena.initializeDense
+
+end
+end PCJ9eff70d512234a4c_Fixed.Materializer.VectorBottomUp

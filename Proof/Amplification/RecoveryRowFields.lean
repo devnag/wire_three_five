@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryClauseEvaluationRun
+import Proof.Amplification.RecoveryCertificateRow
 
 /-! The certificate row reader retains all four scalar fields on separate
 ordinary tapes. It advances the shared source cursor and restores each field

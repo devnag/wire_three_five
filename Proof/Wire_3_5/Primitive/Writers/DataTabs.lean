@@ -1,7 +1,9 @@
-import Proof.Wire_3_5.Lists.ListMachinePrintBank
-import Proof.Wire_3_5.Primitive.SeedFix.CarTable
 import Proof.Wire_3_5.Primitive.Writers.DataSetup
 import Proof.Wire_3_5.Primitive.Writers.DockW
+import Proof.Wire_3_5.Primitive.SeedFix.TabSym
+import Proof.Wire_3_5.Primitive.SeedFix.CarTable
+import Proof.Wire_3_5.MachineModel.BlockJoin
+import Proof.Wire_3_5.Lists.ListMachinePrintBank
 
 /-! # PA (d), the per-call data stage, part 2: the table machines on the slots
 

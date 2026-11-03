@@ -1,5 +1,22 @@
-import Proof.Wire_3_5.FinalPass.SdI11
+import Lean
+import Proof.Wire_3_5.FinalPass.SdI10Base
 import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdI1
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.FinalPass.SeamsProg
+import Proof.Wire_3_5.FinalPass.SeamsPt
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SdR2Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S4 v2, part R2: the numbers' width with the degree on `(l, fe)` alone (P3:3044-3048, 3114-3115)
 
@@ -22,24 +39,6 @@ open NearCubicWires.WireExponent3_5.Stars NearCubicWires.WireExponent3_5.Filters
 open NearCubicWires.WireExponent3_5.Primitive NearCubicWires.WireExponent3_5.Cost NearCubicWires.WireExponent3_5.FinalPass
 open NearCubicWires.WireExponent3_5.FinalPass.PlanFP NearCubicWires.WireExponent3_5.PrimAsm.Plan
 open NearCubicWires.WireExponent3_5.Split
-
-/-- **The exponent sum below the width**, the coefficients inside. -/
-theorem expo_ltR (n g q v a b c Z : ℕ) (ha : a ≤ Z) (hb : b ≤ Z) (hc : c ≤ Z) (h2 : 2 ≤ Z) :
-    n + g * (n + 2) ^ a + ((2 * (n * n) + 1) + q * (n + 2) ^ b) + v * (n + 2) ^ c <
-      (g + q + v + 8) * (n + 2) ^ Z := by
-  have hN : 1 ≤ n + 2 := by omega
-  have hy2 : (n + 2) ^ 2 ≤ (n + 2) ^ Z := Nat.pow_le_pow_right hN h2
-  have ha' := Nat.mul_le_mul_left g (Nat.pow_le_pow_right hN ha)
-  have hb' := Nat.mul_le_mul_left q (Nat.pow_le_pow_right hN hb)
-  have hc' := Nat.mul_le_mul_left v (Nat.pow_le_pow_right hN hc)
-  have hsq : n * n + 4 * n + 4 = (n + 2) ^ 2 := by ring
-  have e : (g + q + v + 8) * (n + 2) ^ Z = g * (n + 2) ^ Z + q * (n + 2) ^ Z + v * (n + 2) ^ Z + 8 * (n + 2) ^ Z := by
-    ring
-  rw [e]
-  generalize (n + 2) ^ Z = y at hy2 ha' hb' hc' ⊢
-  generalize (n + 2) ^ 2 = s at hsq hy2
-  generalize n * n = m at hsq ⊢
-  omega
 
 section Family
 variable (l : Literals) (F : GateFree l)
@@ -175,3 +174,5 @@ theorem n2_le_Tf (r : FReq l F kclk coef A a ha) : r.1.n + 2 ≤ Tf l F kclk coe
 end Family
 
 end NearCubicWires.WireExponent3_5.FinalPass.Sd.R
+
+end

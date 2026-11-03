@@ -16,6 +16,7 @@ open NearCubicWires.RepairOrdinary.CloseoutRowsOriginalSchedule (Phase)
 open NearCubicWires.SourceRequest.SelFront NearCubicWires.SourceRequest.SelSpec NearCubicWires.SourceRequest.CurSpec
 open NearCubicWires.SourceRequest.CurContract NearCubicWires.SourceRequest.CoordBridge NearCubicWires.SourceRequest.TermReader
 open NearCubicWires.SourceRequest.SelBack
+open NearCubicWires.SourceFactorSel.Modes (kindOf bmOf bitsOf)
 noncomputable section
 
 section slots
@@ -23,6 +24,10 @@ section slots
 end slots
 
 section four
+variable {n0 : Nat} {circuit : BooleanCircuit n0} {pcpp : PointwisePCPP circuit}
+
+/-- The SYM producer at the admission caps. -/
+abbrev PS (da : RepairRepresentation.DecompositionAlgorithm) (Pw W Ld : Nat) := SymSwitch.producer (pcpp := pcpp) da Pw W Ld
 
 end four
 

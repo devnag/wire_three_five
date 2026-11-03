@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.UnionMachine.RadDigs
+import Proof.Wire_3_5.FinalPass.HashSeed
 import Proof.Wire_3_5.UnionMachine.RadFieldsP
 
 /-! # RADIX, stage 5a (1): the fixed hash's window word (P3:2604)

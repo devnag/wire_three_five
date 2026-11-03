@@ -1,6 +1,7 @@
-import Mathlib
 import Proof.Foundations.AppendixC
 import Proof.Foundations.ExecutableInterfaces
+import Mathlib
+import Proof.Foundations.Semantics
 import Proof.Foundations.ThresholdCompiler
 
 /-!
@@ -62,51 +63,6 @@ structure HardCore (family : SizedFunctionFamily) where
   size : ℕ
   advantage : ℝ
   hard : AverageHardAt family function size advantage
-
-/-- Explicit fixed executable algorithm and constants extracted from the
-strengthened STV source contract. -/
-structure AmplifierWitness where
-  algorithm : ExecutableWorstCaseAmplifierAlgorithm
-  stvExponent : ℕ
-  arityCoefficient : ℕ
-  stvExponentPositive : 1 ≤ stvExponent
-  arityCoefficientPositive : 1 ≤ arityCoefficient
-  sound : ∀ (sizeBound : ℕ → ℕ), TimeConstructible sizeBound →
-    ∀ (n : ℕ) (function : BoolFunction n),
-      WorstCaseHardAt function (sizeBound n) →
-      let output := algorithm.amplify n function
-      output.outputArity ≤ arityCoefficient * n ∧
-        (∀ circuit : BooleanCircuit output.outputArity,
-          circuit.size ≤ integerFloorRoot stvExponent (sizeBound n) →
-          agreement circuit.eval output.function ≤
-            1 / 2 + Real.rpow (sizeBound n : ℝ)
-              (-(1 : ℝ) / stvExponent))
-
-structure CaseOneInput (witness : AmplifierWitness) where
-  sizeBound : ℕ → ℕ
-  constructible : TimeConstructible sizeBound
-  seedArity : ℕ
-  seed : BoolFunction seedArity
-  worstCaseHard : WorstCaseHardAt seed (sizeBound seedArity)
-
-noncomputable def hardCoreFromCaseOne
-    {witness : AmplifierWitness} (input : CaseOneInput witness) :
-    HardCore booleanCircuitFamily := by
-  let output := witness.algorithm.amplify input.seedArity input.seed
-  refine
-    { arity := output.outputArity
-      function := output.function
-      size := integerFloorRoot witness.stvExponent
-        (input.sizeBound input.seedArity)
-      advantage := Real.rpow (input.sizeBound input.seedArity : ℝ)
-        (-(1 : ℝ) / witness.stvExponent)
-      hard := ?_ }
-  intro candidate hcandidate
-  rcases hcandidate with ⟨circuit, hsize, heval⟩
-  subst candidate
-  exact
-    (witness.sound input.sizeBound input.constructible
-      input.seedArity input.seed input.worstCaseHard).2 circuit hsize
 
 /-! ## Bounded-jump scheduling and exact padding -/
 

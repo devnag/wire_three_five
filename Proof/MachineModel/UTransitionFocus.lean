@@ -1,5 +1,6 @@
-import Proof.MachineModel.OrdinaryTransitionWalkInitialConsumer
 import Proof.MachineModel.UPreparedSources
+import Proof.MachineModel.OrdinaryTransitionWalkRun
+import Proof.MachineModel.OrdinaryTransitionWalkInitialConsumer
 
 /-! Fixed157-tape transition ABI. Matching independently padded finite
 representations uses the same physical walk with exactly the same steps. -/

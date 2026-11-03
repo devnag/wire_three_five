@@ -1,8 +1,9 @@
-import Proof.Wire_3_5.UnionMachine.C1CarPre
 import Proof.Wire_3_5.UnionMachine.C1RL
-import Proof.Wire_3_5.UnionMachine.FrontAtomRound
-import Proof.Wire_3_5.UnionMachine.FrontDescDecoder
+import Proof.Wire_3_5.UnionMachine.C1CarPre
 import Proof.Wire_3_5.UnionMachine.WalkKit
+import Proof.Wire_3_5.UnionMachine.FrontLoopKit
+import Proof.Wire_3_5.UnionMachine.FrontDescDecoder
+import Proof.Wire_3_5.UnionMachine.FrontAtomRound
 
 /-! # C6 front, the C1 dock: the carrier loop's bank and stages (P3:1326-1330, 3409-3410, 3673)
 
@@ -27,6 +28,7 @@ open NearCubicWires.WireExponent3_5.UnionMachine.FrontLoopKit
 open NearCubicWires.WireExponent3_5.UnionMachine.FrontTWKit (frItems)
 open NearCubicWires.RepairOrdinary.Streaming (marks)
 open NearCubicWires.RepairRepresentation (natListWord)
+
 
 /-! ## Slots -/
 

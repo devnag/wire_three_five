@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryMemoryValidation
+import Proof.MachineModel.OrdinaryZeroUnpadding
 
 /-! Remove all preallocated blank scratch from the actual checker entry.
 Only the sorted source, framed initial key and true result bit remain. Cells

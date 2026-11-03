@@ -1,4 +1,5 @@
 import Proof.Hierarchy.CompetitorSourceAverage
+import Proof.Hierarchy.CompetitorRationalTolerance
 
 /-! The fixed interior rational reserve absorbs the actual outer N^-10
 acceptance mass. The midpoint consumer keeps the separate estimation and

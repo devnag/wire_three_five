@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.MachineModel.BlockCost
+import Proof.MachineModel.OrdinaryStreamController
 
 /-! # Block v3 (S5): the stream loop (`while` the source tape's scanned bit is set)
 

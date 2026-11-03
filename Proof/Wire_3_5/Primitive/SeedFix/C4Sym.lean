@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.C4Child
+import Proof.Wire_3_5.Primitive.SeedFix.C4Val
 import Proof.Wire_3_5.UnionMachine.TailAsm
 
 /-! # SEEDFIX C4.L at a SYM call: the child family and the fixed seed (P3:3034-3038)

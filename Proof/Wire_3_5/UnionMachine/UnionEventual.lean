@@ -1,4 +1,13 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.UnionCheck
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.UnionCodecBase
+import Proof.Wire_3_5.UnionMachine.UnionSchedule
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # Eventual completeness of the union machine (P3:3675-3680, 3771)
 
@@ -11,9 +20,9 @@ Paper quantity: the union machine's acceptance on every accepting guess past an 
 (the field `complete` of the split's `UnionLeafAt`, verbatim). The onset is chosen after the primitive and the language,
 so the machine may reject outright below it; the ledger's time split holds with its onset fixed before the language.
 
-* `CompleteFor.eventually`: 's `CompleteFor` implies it.
+* `CompleteFor.eventually`: `CompleteFor` implies it.
 * `completeForEventually_of_run`: a machine accepting, past an onset, every witness of its length `W(N) ≥ ⌊N/16⌋` on
-  which `unionRun` accepts, is eventually complete (`unionRun_complete`).
+  which `unionRun` accepts, is eventually complete (`unionRun_complete`, M8).
 * `accepts_of_completeForEventually`: the Case-2 use, an accepting guess at a length past the onset is accepted. -/
 
 set_option autoImplicit false
@@ -32,3 +41,5 @@ def CompleteForEventually (S : UnionSetup I) (P : FusedPrimitive I) (M : Ordinar
 end Eventual
 
 end NearCubicWires.WireExponent3_5.Transfer
+
+end

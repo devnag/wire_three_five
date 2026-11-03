@@ -1,11 +1,33 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.Close4
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.Asm1
+import Proof.Wire_3_5.FinalPass.Asm2
+import Proof.Wire_3_5.FinalPass.AssemblyDock3
+import Proof.Wire_3_5.FinalPass.Close2
+import Proof.Wire_3_5.FinalPass.CoreJ11
+import Proof.Wire_3_5.FinalPass.CoreJ18
+import Proof.Wire_3_5.FinalPass.S5TInst
+import Proof.Wire_3_5.FinalPass.S5TNum3
+import Proof.Wire_3_5.FinalPass.S6Iface
+import Proof.Wire_3_5.FinalPass.SdR12
+import Proof.Wire_3_5.FinalPass.SeamsOut2
+import Proof.Wire_3_5.FinalPass.Stage1
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.UnionMachine.SymSize2
+import Proof.Wire_3_5.Foundations.OutMachineHUBase
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-! # The uniformity bundle `hU`: S6's constants at the final pass's parts
 
 "The coefficients depend only on the gate, the degrees only on the literals and the filter error degree"
 (P3:3170-3181: the final pass's running time is `c₅·(n+1)^{D₅}` uniformly over the call family). `S6Uni` asks, at
-the parts of `finalPassClose4` (`coreGenJ` over the four pool writers `Wr`, S4 v2 `XfR`, the bridge, the front,
-the out machine), for degrees `Dg l fe` and coefficients `Cg l fe F` above every part's own:
+the parts of `finalPassClose4` (the `coreGenJ` over the four pool writers `Wr`, S4 v2 `XfR`, the bridge, the front,
+X6's out machine), for degrees `Dg l fe` and coefficients `Cg l fe F` above every part's own:
 
 * the degrees are read off by `rfl` (`frontOfHalves_Df/Dw`, `thrHalf_Dt`, `coreB3J`'s `Dcc = L.Dc`, `bridgeT_Dc/Dt/
   Dp/Do`, `XfR_Dt/Dp/Do/Dc`, `outGen_D`) and summed in **`DgU`**;
@@ -36,8 +58,6 @@ noncomputable def DgU (l : Literals) (fe : ℕ) : ℕ :=
   (S5T.Dl l + 1) + 3 * Zx l fe + Core.DcoreJ (Wr l) fe + Sd.R.ZTe l fe + 4 * Zx l fe +
     (2 * Zx l fe + Sd.budD (TabW.E2 F5c (Zx l fe)) (Zx l fe) (Zx l fe) PrimAsm.ThrData.thrDataStage2.Dc +
       3 * Zx l fe) + 2
-
-theorem h00 : (0 : ℕ) ≤ 0 + 1 := Nat.zero_le _
 
 /-- **The coefficients' bound** on `(l, F)`: every part's coefficient at the parameters `(0, 0, 0, 0)`. -/
 noncomputable def CgU (l : Literals) (_fe : ℕ) (F : GateFree l) : ℕ :=
@@ -128,7 +148,7 @@ theorem hC4 (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kc
   unfold CgU
   refine ⟨by omega, by omega, by omega, by omega, by omega, by omega⟩
 
-/-- **The uniformity bundle at `finalPassClose4`'s parts** (the output machine). -/
+/-- **The uniformity bundle at `finalPassClose4`'s parts** (X6). -/
 noncomputable def hU4 :
     Assembly.S6Uni Sw0 (XfR F5c UnionMachine.SymSize.symSize_poly)
       (bTf (fun l => Core.mCoreOfJ (Wr l)) (Core.coreGenJ Wr S5T.mThrL) Out.mOut)
@@ -149,3 +169,5 @@ noncomputable def hU4 :
 noncomputable def finalPassClose5 : FinalPassStage1.StageT := Close4.finalPassClose4 Wr (hU4 Wr)
 
 end NearCubicWires.WireExponent3_5.FinalPass.Out.HU
+
+end

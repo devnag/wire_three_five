@@ -1,13 +1,28 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.TS4V
 import Proof.Wire_3_5.Primitive.Writers.SymNeed
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPoly
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Primitive.Writers.CallIndexRBase
+import Proof.Wire_3_5.Primitive.Writers.SymNeedBase
 
-/-! # thrStage4U, part 12: the v4 stage's capacity need, polynomial in `n`
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # T (#120, thrStage4U), part 12: the v4 stage's capacity need, polynomial in `n`
 
 P3:3425-3430 (the THR cap `B_T(n)`, tr:B), P3:3819, 3400 (the sparse count), P3:2543-2558 (W6's need) and P3:3114-3115
 ("All powers of `n` are fixed before a fixed `r`"): one polynomial `needT l c_r n` dominates every capacity the v4 stage
 uses at the fill `2W + 2`:
 
-* `cEnc_le_cMainT`, **`capNeed_ofT`** (the THR twin of `SymFam.capNeed_of`: `CapNum.capM_spec`'s conditions
+* `cEnc_le_cMainT`, **`capNeed_ofT`** (the THR twin of the `SymFam.capNeed_of`: `CapNum.capM_spec`'s conditions
   from `2^{40}·capK·(n+2)^{Z_m} + cMain ≤ cap`);
 * `ZmL`, `spA`, `spB`, `capTL`, **`needT`**;
 * **`p0need_of`** (the prep's `P0Need`), `needW_of` (W6's need `≤ V = W + (n+1)^{26}`), `capTL_pos`;
@@ -132,7 +147,7 @@ variable (l : Literals)
 /-- The main term's exponent. -/
 noncomputable def ZmL : ℕ := 80 + 48 + (gateCsp l + 3) * 32 + 64 + gateBetaInv l * 32
 
-/-- The sparse bound's exponents (`SymSizes.sparse_le_gate`). -/
+/-- The sparse bound's exponents (the `SymSizes.sparse_le_gate`). -/
 noncomputable def spA : ℕ := 3 + 32 * SymSizes.cXg l * SymSizes.schedJ l
 noncomputable def spB : ℕ := 6 + 32 * SymSizes.cXg l * (SymSizes.schedJ l + 1)
 
@@ -183,3 +198,5 @@ theorem needW_of (cr n W : ℕ) (h : needT l cr n ≤ 2 * W + 2) :
   unfold needT at h; omega
 
 end NearCubicWires.WireExponent3_5.PrimT.TS4
+
+end

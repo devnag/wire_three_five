@@ -1,4 +1,4 @@
-import Proof.MachineModel.OrdinaryDominanceScan
+import Proof.MachineModel.OrdinaryRecordLoop
 
 /-! Append a bounded prefix of a framed local record. A second framed word
 controls its width; the source need not end at that boundary. Only the three

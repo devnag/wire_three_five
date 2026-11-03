@@ -1,6 +1,6 @@
-import Proof.Packets.PacketsMetaStageRun
-import Proof.Packets.PacketsNatAt
 import Proof.SourceAssembly.SourceSkelFillOrd
+import Proof.Packets.PacketsMetaSeedCount
+import Proof.Packets.PacketsMetaPrime
 
 section
 set_option autoImplicit false
@@ -17,6 +17,14 @@ open NearCubicWires.SourceParent NearCubicWires.SourcePhase NearCubicWires.Sourc
 noncomputable section
 attribute [local irreducible] P1TopDownPaidPayload.tapes WorkspaceSelectedAdmission.originalTapes
   WorkspaceSelectedEntry.size SelectedRecoveryIntegration.outer
+
+def restDataOf (gW : SourceBudget.ParNat) : RestFam := fun sources gamma hg hh p =>
+  { vE := PacketsGlue.RequestMeta.seedCount (decompositionOf sources)
+    vP := PacketsGlue.RequestMeta.primeCountOf (decompositionOf sources)
+    se := PacketsMeta.Seed.seedCountStage (decompositionOf sources)
+    sp := PacketsGlue.RequestMeta.primeCountStage (decompositionOf sources)
+      (PacketsMeta.cutoffStage (decompositionOf sources))
+    gW := gW sources gamma hg hh p }
 
 end
 end NearCubicWires.SourceSkeleton

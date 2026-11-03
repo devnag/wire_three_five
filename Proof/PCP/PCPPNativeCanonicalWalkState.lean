@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeCanonicalStackMarker
+import Proof.PCP.PCPSerializerReuseCopy
 
 /-! Literal29-tape DFS state: the checked reusable tree decoder, the live
 pending stack, the ordered field stream, and its physically growing count.

@@ -1,4 +1,4 @@
-import Proof.SourceAssembly.SourceFactorSelWordsLayout
+import Proof.SourceAssembly.SourceFactorSelWordsHostMap
 
 set_option autoImplicit false
 set_option maxRecDepth 120000
@@ -95,6 +95,10 @@ def HostLay.NSv (v : Nat) : Prop :=
 
 def HostLay.Blank (gw : Nat) (v : Nat) : Prop :=
   (L.F ≤ v ∧ v < L.F + L.rt) ∨ (L.G ≤ v ∧ v < L.P0 + 408 + mask.work + L.tc) ∨ v = L.B ∨ (L.wB ≤ v ∧ v < L.wB + gw)
+
+/-- The dock of the words stage on this layout. -/
+def HostLay.dock (src : Fin 6 → Fin V) (N : Nat) (hV : ∀ p, 6 ≤ p → p < N → hostV L.P0 mask.work L.tc L.B L.Pc L.wB p < V) :
+    Fin N → Fin V := wsl src L.P0 mask.work L.tc L.B L.Pc L.wB hV
 
 end lay
 

@@ -1,4 +1,5 @@
 import Proof.Hierarchy.HierarchyNormalizedReady
+import Proof.Hierarchy.HierarchyEncodeReady
 
 /-! Actual fixed-source normalized-PCP realization and its immediate
 separated/outer consumers. Every constructor/resource field is supplied. -/

@@ -1,4 +1,5 @@
 import Proof.Foundations.SourceInterfaces
+import Statement
 
 /-!
 # Binding: HLW06 Construction 8.1 / Theorem 8.2 → `ExpanderSpectrumContract`

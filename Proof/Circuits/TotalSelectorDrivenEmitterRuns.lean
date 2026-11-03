@@ -1,4 +1,6 @@
+import Proof.Circuits.SelectorDrivenEmitterRuns
 import Proof.Circuits.TotalInverseCompilerRuns
+import Proof.MachineModel.StructuralAtomEmitterProgramContract
 import Proof.Circuits.TotalSelectorDrivenEmitterResources
 
 /-!

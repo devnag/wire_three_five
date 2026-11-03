@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CaseTwoDirect
+import Proof.Foundations.WireScaleTransfer
 
 /-! The actual native-width caps feed BOTH headline circuit classes.
 Reuse the existing constant-factor wireScale theorem; only min-one clipping

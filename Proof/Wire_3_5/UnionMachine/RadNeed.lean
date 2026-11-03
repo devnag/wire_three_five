@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.UnionMachine.RadCall
+import Proof.Wire_3_5.UnionMachine.RadCallBase
 import Proof.Wire_3_5.UnionMachine.PopPipeLe
 
 /-! # RADIX, Route B: the setup's word lengths and costs, bounded (the `RadSetupSpecB5` instance, part 1)

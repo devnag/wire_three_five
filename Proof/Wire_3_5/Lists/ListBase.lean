@@ -1,5 +1,6 @@
-import Proof.MachineModel.CanonicalFourfoldRowProgram
 import Proof.Wire_3_5.Lists.ListPoly
+import Proof.Supplier.SupplierListCompiler
+import Proof.MachineModel.CanonicalFourfoldRowProgram
 
 /-! # `list:base` (P3:1375-1414): the pointwise base list at the windows `W_j`
 

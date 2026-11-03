@@ -1,4 +1,6 @@
 import Proof.Amplification.RecoveryProjectionWidthBudget
+import Proof.PCP.ProjectionNormalizationUnary
+import Proof.MachineModel.UWalkUnary
 
 namespace NearCubicWires.RepairSource.RecoveryProjectionDimension
 open LocalBitMultitape RepairOrdinary RecoveryExecution RecoveryRootRound

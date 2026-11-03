@@ -1,10 +1,32 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.C4SymLfB
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Primitive.Writers.C3ReqIface3
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.SymNeed
+import Proof.Wire_3_5.Primitive.SeedFix.C4BudF
+import Proof.Wire_3_5.Primitive.SeedFix.C4KIface
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymKB7
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymNE
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTypes
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymLfCBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # C4.K SymLeafC4, part 3: the SYM part of C4Leaf
 
 P3:3105-3115 (the seed-fixing budget `c₄·seedClasses E₄`: `E₄` before `F`, `c₄` after), P3:3011-3016, 3034-3038 (the
-SYM stage), (the floors `CD ≥ CD_s`, `cpsi ≥ 1`), (contract v7, `Atable ≥ Dp + 1`): from the builder
-of the free numbers (`SymBuild7`), the C3 request writers (`C3ReqLeaf3` at `c_N = K3`, `D_N = D3`) and the eval-unchanged lemma (`PadEval`): after `fe`, `E₄ = emax E_W (Atable ≥ Dp+1, cpsi ≥ 1)` and `CD₄ = max(CD_s, CD_W, 1)`;
+SYM stage), #148 (the floors `CD ≥ CD_s`, `cpsi ≥ 1`), #156/#159 (contract v7, `Atable ≥ Dp + 1`): from the builder
+of the free numbers (`SymBuild7`), the C3 request writers (`C3ReqLeaf3` at `c_N = K3`, `D_N = D3`) and C1b's
+eval-unchanged lemma (`PadEval`): after `fe`, `E₄ = emax E_W (Atable ≥ Dp+1, cpsi ≥ 1)` and `CD₄ = max(CD_s, CD_W, 1)`;
 for every admissible `F`, the capacity constant `C_c` (`sym_fits2`, `sym_bigS2`), `c₄` (`sym_steps_gen`), and at every
 call family the branched stage `padStage (symStageU3 …)` at the layout `symLay` (the C3 writer of the family), running
 at every SYM call: with rows `sym_plain_run`, degenerate `sym_deg_run` (pad `padCost E ≤ K_P·2^{⌊n/8⌋}`).
@@ -62,33 +84,6 @@ noncomputable def symSB (l : Literals) (F : GateFree l) (Cw Dw Cnw Dnw : ℕ) : 
   cr := F.cr
   fe := F.filterErrDeg
   cM := CapNum.cMain (gateCap l) .sym
-
-/-- The envelope floor of the SYM stage: the pad's table degree `Dp + 1` and `cpsi ≥ 1`. -/
-def symFloor (Dp : ℕ) : Envelope := ⟨0, 0, 0, Dp + 1, 0, 0, 0, 1⟩
-
-/-- The SYM stage's layout at a call family: the unary degree `D`, the family's C3 writer, the loop's tapes. -/
-noncomputable def symLay (wa : RepairRepresentation.WilliamsAlgorithm) (S3 : C3ReqIface.C3Stage) (D : ℕ) : Lay :=
-  ⟨D + 16, S3, (C4SymW.famU wa).T + 3, 31⟩
-
-theorem symLay_T (wa : RepairRepresentation.WilliamsAlgorithm) (S3 : C3ReqIface.C3Stage) (D : ℕ) :
-    (C4SymW.famU wa).T + 1 + 1 + 1 ≤ (symLay wa S3 D).T := by
-  show _ ≤ (C4SymW.famU wa).T + 3
-  omega
-
-/-- The pad writer's steps at `E ≤ 2^{⌊n/8⌋ + C}` entries. -/
-theorem pad_le_cap (E Cc n : ℕ) (hE : E ≤ 2 ^ C4Cap.capExp2 Cc n) :
-    C4Pad.padCost E ≤ (8 * C4Pad.W1.length + 28) * 2 ^ Cc * 2 ^ (n / 8) := by
-  have hM : 2 ^ C4Cap.capExp2 Cc n = 2 ^ Cc * 2 ^ (n / 8) := by unfold C4Cap.capExp2; rw [pow_add, mul_comm]
-  obtain ⟨M, hMd⟩ : ∃ x, x = 2 ^ Cc * 2 ^ (n / 8) := ⟨_, rfl⟩
-  have hM1 : 1 ≤ M := by rw [hMd]; exact Nat.one_le_iff_ne_zero.mpr (by positivity)
-  rw [hM, ← hMd] at hE
-  have h1 : E * (4 * C4Pad.W1.length + 10) ≤ M * (4 * C4Pad.W1.length + 10) := Nat.mul_le_mul_right _ hE
-  have e : (8 * C4Pad.W1.length + 28) * 2 ^ Cc * 2 ^ (n / 8) = 8 * (M * C4Pad.W1.length) + 28 * M := by
-    rw [mul_assoc, ← hMd]; ring
-  have e2 : M * (4 * C4Pad.W1.length + 10) = 4 * (M * C4Pad.W1.length) + 10 * M := by ring
-  rw [e]
-  unfold C4Pad.padCost
-  omega
 
 /-- **The SYM part of C4Leaf** from the builder (v7), the C3 request writers and the eval-unchanged lemma, at the
 call words' and `needW`'s polynomial bounds. -/
@@ -178,3 +173,5 @@ noncomputable def symLeafC4 (l : Literals) (wa : RepairRepresentation.WilliamsAl
     (Classical.choose_spec (Classical.choose_spec PrimT.C4GateSym.needW_pb)).2 Bld W3 he
 
 end NearCubicWires.WireExponent3_5.PrimT.C4SymLf
+
+end

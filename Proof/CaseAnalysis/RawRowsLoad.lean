@@ -1,5 +1,4 @@
-import Proof.CaseAnalysis.RawRowsMonomials
-import Proof.CaseAnalysis.RowsRawLogShape
+import Proof.CaseAnalysis.RawRowsChildren
 
 /-! The actual mode row and corrected child source supply the common digit
 width. Cut generation is separately added and paid by the strict paper load. -/

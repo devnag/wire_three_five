@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinarySignedSortKey
+import Proof.MachineModel.OrdinaryRewindWorkspace
 
 /-! Ordinary scalar counter step for sequential rank/bucket scans. A carry
 walk changes only scanned cells; the retained auxiliary counter pays the

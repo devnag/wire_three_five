@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.FinalCompareDockField
+import Proof.Hierarchy.CompetitorThresholdDecision
 
 /-! **Decision tail, stage 2a-iii — the comparator, docked.**
 

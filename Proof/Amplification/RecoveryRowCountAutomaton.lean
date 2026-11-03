@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryRowStructureSemantics
+import Proof.MachineModel.OrdinaryAdd
 
 /-! A fixed carry automaton checks the three binary row-count relations in
 one pass. Both addition carries are retained in finite control; overflow is

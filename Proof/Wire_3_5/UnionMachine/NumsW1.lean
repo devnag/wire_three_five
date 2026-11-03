@@ -1,4 +1,22 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.NumsA4
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.FpInLen
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.NumsPh2
+import Proof.Wire_3_5.UnionMachine.NumsW1Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # NW assembly, part 1: `V` is polynomial in the input, and the denominator split
 
@@ -50,19 +68,6 @@ theorem q_le_fpIn_thr {n a' : ℕ} (ha' : a' ≤ 4) (Cs : Fin a' → NormalizedT
   have := Nat.le_mul_of_pos_right (SeedFix.thrCount (gate0 l F).alg (callInputs l F kclk coef A a ha) hs Cs)
     (by omega : 0 < 4 * SeedFix.callKh ((callInputs l F kclk coef A a ha).starParams n hs) + 2)
   omega
-
-/-- The arithmetic of `V`'s bound. -/
-theorem v_arith (n X g f q gK fK gz zv : ℕ) (hX : n + 1 ≤ X) (hg : g ≤ gK * (n + 2) ^ gz)
-    (hf : f ≤ 2 * (fK + 1) * (n + 2) ^ zv) (hq : q ≤ X) :
-    g * f * q ≤ 2 * gK * (fK + 1) * 2 ^ (zv + gz) * X ^ (zv + gz + 1) := by
-  have hP : (n + 2) ^ gz * (n + 2) ^ zv ≤ 2 ^ (zv + gz) * X ^ (zv + gz) := by
-    rw [← pow_add, add_comm gz zv, ← mul_pow]; exact Nat.pow_le_pow_left (by omega) _
-  calc g * f * q ≤ (gK * (n + 2) ^ gz) * (2 * (fK + 1) * (n + 2) ^ zv) * X :=
-        Nat.mul_le_mul (Nat.mul_le_mul hg hf) hq
-    _ = 2 * gK * (fK + 1) * ((n + 2) ^ gz * (n + 2) ^ zv) * X := by ring
-    _ ≤ 2 * gK * (fK + 1) * (2 ^ (zv + gz) * X ^ (zv + gz)) * X :=
-        Nat.mul_le_mul_right _ (Nat.mul_le_mul_left _ hP)
-    _ = 2 * gK * (fK + 1) * 2 ^ (zv + gz) * X ^ (zv + gz + 1) := by rw [pow_succ]; ring
 
 /-- **`V` is polynomial in the input**: `vOf r ≤ K_V·(|fpIn|+1)^{D_V}`. -/
 theorem vOf_le (r : FReq l F kclk coef A a ha) :
@@ -143,3 +148,5 @@ theorem denSplit : NumsPh2.DenSplit l F kclk coef A a ha := by
 end Gate
 
 end NearCubicWires.WireExponent3_5.UnionMachine.NumsA
+
+end

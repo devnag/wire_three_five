@@ -1,4 +1,18 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SymHp1
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SymOcc4
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.FinalPass.SymSz2
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SymOcc3Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The SYM child request's precondition, part 2: coefficients, pool fits, term count
 
@@ -145,3 +159,4 @@ end Gate
 
 end NearCubicWires.WireExponent3_5.FinalPass.SymFr
 
+end

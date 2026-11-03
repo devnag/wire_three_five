@@ -1,5 +1,5 @@
-import Proof.Packets.PacketsMetaCutoffMath
 import Proof.Wire_3_5.Primitive.ThresholdWriter.Joins
+import Proof.Packets.PacketsMetaCutoffMath
 
 /-! # THR, EqW value layer: the equation word of selection `g`, circuit by circuit (`eqRef`, `eqWord_thrRealize`)
 

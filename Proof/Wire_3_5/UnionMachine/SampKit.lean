@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.UnionMachine.TailAsm
+import Proof.Wire_3_5.FinalPass.WordLib
 
 /-! # C6 tail, item 2 (part 2): ruler loops over word programs
 

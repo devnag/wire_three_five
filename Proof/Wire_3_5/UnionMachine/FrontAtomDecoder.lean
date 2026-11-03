@@ -1,13 +1,15 @@
-import Proof.CaseAnalysis.RowsCircuitPadding
-import Proof.CaseAnalysis.RowsCircuitSymmetricRun
 import Proof.CaseAnalysis.RowsCircuitThresholdRun
+import Proof.CaseAnalysis.RowsCircuitSymmetricRun
+import Proof.CaseAnalysis.RowsCircuitPadding
+import Proof.CaseAnalysis.RowsCircuitMeaning
+import Proof.MachineModel.Runs
+import Proof.Wire_3_5.UnionMachine.UnionCodecBase
 import Proof.Wire_3_5.UnionMachine.CodecBound
-import Proof.Wire_3_5.UnionMachine.UnionCodec
 
-/-! # C6 front, U1b: the Theorem 2.5 repository's atom decoders, padded for reuse (P3:3670)
+/-! # C6 front, U1b: v8's atom decoders, padded for reuse (P3:3670)
 
 "It rejects malformed descriptions, oversized atoms" (P3:3670): the codec reads every grid atom with the canonical
-decoder of its class mode (`decodeAtom`), which is the Theorem 2.5 repository's circuit decoder (`CloseoutRowsCircuit{Threshold,Symmetric}Run`,
+decoder of its class mode (`decodeAtom`), which is v8's circuit decoder (`CloseoutRowsCircuit{Threshold,Symmetric}Run`,
 1703 tapes, flag tape `1700`) up to its wire and description bounds (base `RowsCircuitMeaning`). The union runs one
 decoder per atom on the SAME tapes, so it runs the decoder in base's padded workspace (`CloseoutRowsCircuitPadding`:
 the raw tape padded to `P`, the private tapes to `H`).

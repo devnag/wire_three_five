@@ -1,4 +1,17 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SymWordsIface
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.FinalPass.CoreIfaceBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The core half's word writers: interfaces (P3:3044-3048, 3170-3181)
 
@@ -30,10 +43,6 @@ open NearCubicWires.WireExponent3_5.FinalPass.Tm NearCubicWires.WireExponent3_5.
 open NearCubicWires.WireExponent3_5.FinalPass.PlanFP NearCubicWires.WireExponent3_5.PrimAsm.Plan
 open NearCubicWires.RepairOrdinary.SignedSortKey (binary)
 
-/-- S4's slot `k` (`k < 4`). -/
-def s4SlotA (k : Fin 4) : Fin (17 + Sw0.nw) := ⟨k.val, by rw [sw0_nw]; omega⟩
-
-/-- S4's slot `4 + k`. -/
-def s4SlotB (k : Fin 4) : Fin (17 + Sw0.nw) := ⟨4 + k.val, by rw [sw0_nw]; omega⟩
-
 end NearCubicWires.WireExponent3_5.FinalPass.Finish
+
+end

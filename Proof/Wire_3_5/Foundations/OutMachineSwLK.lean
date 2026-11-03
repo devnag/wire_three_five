@@ -1,5 +1,6 @@
-import Proof.Wire_3_5.FinalPass.S5TUtil
 import Proof.Wire_3_5.Foundations.SwPartsTmpl
+import Proof.Wire_3_5.Primitive.Writers.SparseNum
+import Proof.Wire_3_5.FinalPass.S5TUtil
 
 /-! # SWl, part 1: one circuit's template on a blank stream, and the bounds
 

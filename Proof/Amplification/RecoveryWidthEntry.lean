@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryWidthWhole
+import Proof.PCP.VerifierDecodingLength
 
 /-! First cold checker phase, from exactly framed binary input and one
 blank count tape. Both source rewind and canonical-width production are

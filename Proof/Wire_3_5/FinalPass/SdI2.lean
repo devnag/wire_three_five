@@ -1,4 +1,20 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SdI1
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.FinalPass.SeamsProg
+import Proof.Wire_3_5.FinalPass.SeamsPt
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SdI2Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S4 (the seeds phase), part 51: the numbers' width, polynomial in `n` (P3:2994-3000, 3044-3048)
 
@@ -21,21 +37,23 @@ open NearCubicWires.WireExponent3_5.Primitive NearCubicWires.WireExponent3_5.Cos
 open NearCubicWires.WireExponent3_5.FinalPass.PlanFP NearCubicWires.WireExponent3_5.PrimAsm.Plan
 open NearCubicWires.WireExponent3_5.Split
 
-theorem mul4_le {a b c d x y z w : ℕ} (ha : a ≤ 2 ^ x) (hb : b ≤ 2 ^ y) (hc : c ≤ 2 ^ z) (hd : d ≤ 2 ^ w) :
-    a * b * c * d ≤ 2 ^ (x + y + z + w) := by
-  calc a * b * c * d ≤ 2 ^ x * 2 ^ y * 2 ^ z * 2 ^ w :=
-        Nat.mul_le_mul (Nat.mul_le_mul (Nat.mul_le_mul ha hb) hc) hd
-    _ = _ := by rw [pow_add, pow_add, pow_add]
-
-theorem le_two_pow_of {x b : ℕ} (h : x ≤ b) : x ≤ 2 ^ b :=
-  h.trans (Nat.lt_two_pow_self).le
-
-theorem card_prime_le (c : ℕ) : Fintype.card (PrimeIndex c) ≤ c + 1 := by
-  rw [Fintype.card_coe]; exact RepairOrdinary.CloseoutFinalC10WireEnvelope.primesUpTo_card_le c
-
 section Family
+variable (l : Literals) (F : GateFree l)
+
+/-- The per-point values' exponent (both modes). -/
+noncomputable def ZV : ℕ := PrimAsm.CallIndex.flatZ l F + 14 * PrimAsm.CallIndex.algX l + 32
+
+/-- The width's exponent. -/
+noncomputable def ZT : ℕ := PrimAsm.CallIndex.gapZ l F + ZV l F + 2
+
+/-- The sample count's exponent's coefficient, both modes. -/
+noncomputable def C1m : ℕ := 13 + 2 * (PrimAsm.CallIndex.symZ l F + PrimAsm.CallIndex.thrZ l F) + 2 * (gate0 l F).D
+
+/-- The width's coefficient. -/
+noncomputable def KT : ℕ := C1m l F + 8
 
 end Family
 
 end NearCubicWires.WireExponent3_5.FinalPass.Sd
 
+end

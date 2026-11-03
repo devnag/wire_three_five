@@ -1,11 +1,12 @@
 import Proof.Wire_3_5.Recovery.CertPrefixBounds
+import Proof.CaseAnalysis.Capacity
 
 /-! # The prefix's preparation from the input word (P3:3758-3759; D1.6, the prefix stage)
 
 Realizes the first step of the `E^NP` program on an input `x` of length `n`: everything the scan needs is computed from
 the framed word alone. Base's `HierarchyAllocation` (at `1·n + 0`) gives `1^n` and the word `0 1^n` (twice: the scan's
 counter and the schedule loop's counter, `c = n`); base's `CloseoutCapacity.machine` gives the drivers `1^{C_i}` of the
-three capacities (`pcap e_i n`, `Proof.Wire_3_5.Recovery.CertPrefixBounds`); base's `HierarchyFixedWord` writes the words
+three capacities (`pcap e_i n`, `WireExponent3_5CertPrefixBounds`); base's `HierarchyFixedWord` writes the words
 `0 1^p`, `0 1^w`; base's `RecoveryScratchErase` turns the empty banks into `false`-padded ones (`C₁` for the scan
 index, `C₂` for the schedule round's scratch, `C₃` for the scan round's scratch) and produces the capacity tapes.
 
@@ -235,6 +236,7 @@ variable (D : ℕ)
 def ppos (m : ℕ) (h : m < prefixTapes D) : Fin (prefixTapes D) := ⟨m, h⟩
 
 macro "cert_prefix_ptac" : tactic => `(tactic| (first | (simp only [ppos, Fin.val_mk]; omega) | simp [ppos] | (simp [ppos] <;> omega)))
+
 
 theorem alloc_out0 (bits : List Bool) : HierarchyAllocation.output 1 0 bits 0 = frame bits := by
   simp [HierarchyAllocation.output, HierarchyAllocation.afterConstant, HierarchyAllocation.afterProduct,

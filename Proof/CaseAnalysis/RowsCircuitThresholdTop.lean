@@ -1,3 +1,4 @@
+import Proof.CaseAnalysis.RowsGateBankPorts
 import Proof.CaseAnalysis.RowsCircuitLayout
 
 /-! Complete threshold top check and retained-field publication. The same

@@ -1,5 +1,5 @@
 import Proof.Wire_3_5.Foundations.OutMachineDPhK
-import Proof.Wire_3_5.UnionMachine.NumsPh4
+import Proof.Wire_3_5.UnionMachine.NumsPh4Base
 
 /-! # NW phase (d), part 2: **`phD : ∀ x, NumsPh4.PhD' x`**
 
@@ -70,7 +70,7 @@ theorem finalX (x : ℕ) (T e v B b : ℕ) (w : List Bool) (σ : WState (LNS x) 
         · subst qT; simp [Function.update_apply, qV, qE]
         · simp [Function.update_apply, qV, qE, qT, hregs q qT qE qV]
 
-/-- **Phase (d)** (the output machine): `NumsPh4.PhD' x` at `C = 300`, `D = 2`. -/
+/-- **Phase (d)** (X6): `NumsPh4.PhD' x` at `C = 300`, `D = 2`. -/
 def phD (x : ℕ) : NumsPh4.PhD' x where
   s := (dProgX x).toProg.size
   M := (dProgX x).toProg.compile

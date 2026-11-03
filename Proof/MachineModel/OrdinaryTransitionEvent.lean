@@ -1,3 +1,5 @@
+import Proof.MachineModel.OrdinaryMemoryEmitAdvance
+import Proof.MachineModel.OrdinaryKeyField
 import Proof.MachineModel.OrdinaryHeadUpdate
 
 /-! The transition consumer serializes the physical head and tape-id fields

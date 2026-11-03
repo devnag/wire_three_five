@@ -27,5 +27,6 @@ theorem width_injective : Function.Injective widthSlots := by decide
 /-- The native loop's 49 tapes. -/
 def slots : Fin 49 → Fin 166 := ![157,151,158,159,160,161,49,163,165,92,95,99,144,145,149,77,107,146,61,65,153,150,147,32,154,106,152,39,155,156,23,90,91,93,28,94,96,97,98,100,101,162,142,103,130,164,1,102,89]
 theorem slots_injective : Function.Injective slots := by decide
+def heads (r : Request) : Fin 49 → ℕ := ![0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,(header r).length,0,1]
 
 end NearCubicWires.RepairOrdinary.MatrixBatchGateLayout

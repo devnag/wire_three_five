@@ -1,6 +1,7 @@
 import Proof.SourceAssembly.SourceSkelCode
 import Proof.SourceAssembly.SourceSkelSelect
-import Proof.MachineModel.RuntimeShapeRecipe
+import Proof.MachineModel.RuntimeShape
+import Proof.SourceAssembly.SourceBundle
 
 section
 set_option autoImplicit false
@@ -17,6 +18,10 @@ open NearCubicWires.SourceParent NearCubicWires.SourcePhase NearCubicWires.Sourc
 noncomputable section
 attribute [local irreducible] P1TopDownPaidPayload.tapes WorkspaceSelectedAdmission.originalTapes
   WorkspaceSelectedEntry.size SelectedRecoveryIntegration.outer
+
+/-- The site-fuel function: fixed per parameter tuple and input, per phase. -/
+abbrev SiteFuelFam := (sources : EightSources) → (gamma : Real) → 0 < gamma → gamma < 1/2 →
+  Parameters sources gamma → (n : Nat) → BitInput n → List Bool → Phase → Nat
 
 end
 end NearCubicWires.SourceSkeleton

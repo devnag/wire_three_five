@@ -1,6 +1,7 @@
-import Proof.Circuits.CanonicalBalancedCall
 import Proof.MachineModel.CanonicalAggregationEnvelopeProgram
+import Proof.Circuits.CanonicalBalancedCall
 import Proof.MachineModel.CanonicalSupplierCircuitHeaderProgram
+import Proof.MachineModel.PreserveRightProgram
 
 namespace NearCubicWires.CanonicalSupplierCircuitBatchProgram
 

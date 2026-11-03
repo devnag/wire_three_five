@@ -1,4 +1,5 @@
 import Proof.Circuits.TotalSelectorDrivenContextRuns
+import Proof.MachineModel.TotalSelectorAtomShapeProgram
 
 /-! # Total selector atom-shape count tail -/
 

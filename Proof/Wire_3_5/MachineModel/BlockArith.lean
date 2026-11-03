@@ -1,5 +1,9 @@
-import Proof.Wire_3_5.MachineModel.BlockCost
 import Proof.Wire_3_5.MachineModel.BlockOfRun
+import Proof.Wire_3_5.MachineModel.BlockCost
+import Proof.MachineModel.OrdinaryAdd
+import Proof.MachineModel.OrdinaryCompare
+import Proof.MachineModel.OrdinaryBoundedCounter
+import Proof.Hierarchy.HierarchyBinaryMultiply
 
 /-! # Block v3 (S5): fixed-width binary arithmetic as blocks
 

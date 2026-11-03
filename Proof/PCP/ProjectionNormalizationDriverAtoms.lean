@@ -1,4 +1,5 @@
 import Proof.PCP.ProjectionNormalizationClauses
+import Proof.Hierarchy.HierarchyBinaryPower
 
 /-! Restored-counter endpoints used by the actual dimension-driver chain.
 The padding of the difference sentinel is retained at its next consumer. -/

@@ -1,4 +1,6 @@
 import Proof.PCP.PCPPRequestSourceLayout
+import Proof.Amplification.RecoveryRootRoundTapes
+import Proof.Hierarchy.HierarchyBinaryPower
 
 /-! Copy the exact request before its single faithful constructor call.
 The untouched original frame is the honest caller's retained input; the

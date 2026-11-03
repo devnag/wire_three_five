@@ -1,3 +1,4 @@
+import Proof.Foundations.PCPPClausePadding
 import Proof.Foundations.ScheduledRecovery
 
 /-! # Perfect oracle acceptance forces hierarchy acceptance -/

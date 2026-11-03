@@ -1,4 +1,7 @@
 import Proof.SourceAssembly.SourcePhaseRecords
+import Proof.CaseAnalysis.FinalSiteWireEnvelope
+import Proof.CaseAnalysis.FinalStageFields
+import Proof.CaseAnalysis.FinalThresholdNaturalFit
 
 section
 set_option autoImplicit false

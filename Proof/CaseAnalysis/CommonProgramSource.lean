@@ -1,5 +1,7 @@
 import Proof.CaseAnalysis.CommonProgramOneBranch
+import Proof.CaseAnalysis.RecoveryMeaning
 import Proof.CaseAnalysis.RecoveryCapacitySource
+import Proof.CaseAnalysis.CaseTwoSelectedDescription
 
 /-! The common worker's native request and dimensions are the original
 selected outer PCP's request and dimensions. -/

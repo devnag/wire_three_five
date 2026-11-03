@@ -1,5 +1,20 @@
-import Proof.Wire_3_5.Primitive.SeedFix.C4SymNA
+import Lean
+import Proof.Wire_3_5.Primitive.Writers.SymFamBase
+import Proof.Wire_3_5.Primitive.SeedFix.C4CapD
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymKB
 import Proof.Wire_3_5.Primitive.SeedFix.C4CapE
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.C4GateSymB
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymNBBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # C4.K SYM item (b), part 2: the SYM call's sizes below `2^{a(B+1)²}`
 
@@ -20,12 +35,6 @@ open NearCubicWires.WireExponent3_5 NearCubicWires.WireExponent3_5.Split NearCub
 open NearCubicWires.WireExponent3_5.Transfer NearCubicWires.SupplierPipeline
 open NearCubicWires.WireExponent3_5.PrimAsm NearCubicWires.WireExponent3_5.PrimAsm.SymFam
 open NearCubicWires.WireExponent3_5.Filters NearCubicWires.WireExponent3_5.Primitive
-
-/-- The exponent of `K_Q`. -/
-def eKQ (cr : ℕ) (h : SB) : ℕ := h.cA + (2 * cr + 4 + h.KF)
-
-/-- The exponent of the numbers front's load `100·K_Q + 200000`. -/
-def e0 (cr : ℕ) (h : SB) : ℕ := 7 + eKQ cr h + 18 + 1
 
 /-- The exponent of the SYM sample count. -/
 noncomputable def eQ (l : Literals) (cr fe : ℕ) : ℕ :=
@@ -89,20 +98,6 @@ theorem q_le (l : Literals) (F : GateFree l) (kclk coef A a0 : ℕ) (ha0 : a0 �
     le_trans hQ (le_of_eq_of_le (Nat.mul_assoc _ _ _) (Nat.mul_le_mul_left _ h3))
   exact C4Cap.pw_K hs1 h4
 
-/-- The star's small numbers are below `2n`. -/
-theorem star_small (P : Shared.StarParams) :
-    P.b ≤ P.n ∧ P.s ≤ P.n ∧ P.r ≤ P.n ∧ P.r / 2 ≤ P.n ∧ (P.b - P.s) * (P.r / 2) ≤ P.n ∧ P.r * P.b ≤ P.n ∧
-      P.n - P.r * P.b + 1 ≤ P.n + 1 ∧ (P.n - P.r * P.b + 1) / 2 + (P.b - P.s) * (P.r / 2) ≤ 2 * P.n := by
-  have h1 := P.r_mul_b_le
-  have h2 := P.two_le_r
-  have h3 := P.four_r_le_n
-  have hb : P.b ≤ P.r * P.b := Nat.le_mul_of_pos_left _ (by omega)
-  have hsb : P.s ≤ P.b := by
-    have e := P.b_succ
-    have := Nat.lt_two_pow_self (n := P.s)
-    omega
-  have hbs : (P.b - P.s) * (P.r / 2) ≤ P.r * P.b :=
-    le_trans (Nat.mul_le_mul (Nat.sub_le _ _) (Nat.div_le_self _ _)) (le_of_eq (Nat.mul_comm _ _))
-  refine ⟨by omega, by omega, by omega, by omega, by omega, h1, by omega, by omega⟩
-
 end NearCubicWires.WireExponent3_5.PrimT.C4SymN
+
+end

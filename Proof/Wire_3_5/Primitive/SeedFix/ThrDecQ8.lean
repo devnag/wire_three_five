@@ -1,6 +1,22 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.ThrDecQ7
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.GeoPack
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDecQ5
+import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPoly
+import Proof.Wire_3_5.Primitive.ThresholdWriter.RadSetup
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.ThrDecIface
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDecQ8Base
 
-/-! # THR decode front, packaging part 8: the run at a THR call
+
+noncomputable section
+set_option maxRecDepth 120000
+
+
+/-! # T3 THR decode front, packaging part 8: the run at a THR call
 
 **`call_run`**: at every THR call of the gate, every output `out`, unit `j` and capacity `cap ≥ c₀(n)`, the decode
 front `frontM` (the front end `TW l`, W6 `NW l`, the gate's `c_r` and `f_e`) runs from the unit's fresh cell to
@@ -29,10 +45,6 @@ noncomputable def needT (l : Literals) (F : GateFree l) (n : ℕ) : ℕ :=
 /-- The front's cost bound at length `n`. -/
 noncomputable def boundT (l : Literals) (F : GateFree l) (n : ℕ) : ℕ :=
   fK (TW l) (NW l) * (needT l F n + 1) ^ fD (TW l) (NW l)
-
-theorem thrCodes_len {n a' : ℕ} (Cs : Fin a' → NormalizedThresholdThresholdCircuit n) :
-    (ReqBridge.thrCodes Cs).length = a' := by
-  unfold ReqBridge.thrCodes; rw [List.length_ofFn]
 
 section Call
 variable (x : ℕ) (l : Literals) (hx : dX (TW l) (NW l) ≤ x) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1)
@@ -270,3 +282,5 @@ theorem call_run (out : List Bool) (j cap : ℕ) (hcap : needT l F n ≤ cap) :
 end Call
 
 end NearCubicWires.WireExponent3_5.PrimT.ThrDecF
+
+end

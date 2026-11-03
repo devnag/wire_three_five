@@ -1,9 +1,31 @@
 import Mathlib.Data.Nat.Choose.Bounds
 import Mathlib.Tactic.Linarith
+import Proof.Amplification.RecoveryPaddedCopyMeaning
+import Proof.Amplification.RecoveryPrefixCompare
+import Proof.Amplification.RecoveryScratchErase
+import Proof.CaseAnalysis.RowsGateSupportCount
+import Proof.CaseAnalysis.RowsMetadataCopy
+import Proof.CaseAnalysis.RowsTouchingFrameSeek
 import Proof.CaseAnalysis.RowsTouchingPascalNext
 import Proof.CaseAnalysis.WitnessHeaderSwitch
+import Proof.Circuits.DecompositionCountPosition
+import Proof.Circuits.MatrixBucketDimensionsIncrement
+import Proof.Hierarchy.HierarchySourceScales
+import Proof.MachineModel.ClockUnaryProduct
 import Proof.MachineModel.FrameSkip
 import Proof.MachineModel.Layout
+import Proof.MachineModel.OrdinaryCellLoad
+import Proof.MachineModel.OrdinaryMatrixBucketRootPower
+import Proof.MachineModel.OrdinaryMatrixRawBlock
+import Proof.MachineModel.OrdinaryMatrixScoreAccumulate
+import Proof.MachineModel.Runs
+import Proof.PCP.PCPPQueryRows
+import Proof.PCP.VerifierDecodingLength
+import Proof.Supplier.EquationWidenLoop
+import Proof.Supplier.RowCachedEquationMeaning
+import Proof.Supplier.RowCoordinateIncrement
+import Proof.Supplier.SupplierTouching
+import Proof.PCP.VerifierLookupFieldReaders
 
 /-! A.4 cold start, part 4: the missing one-cell writer.
 

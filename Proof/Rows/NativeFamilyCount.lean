@@ -1,4 +1,5 @@
-import Proof.Rows.NativeFlagsLoop
+import Proof.Rows.CircuitCountAdvance
+import Proof.Rows.NativeFlags
 
 /-! Dock the actual fifth-header count producer into the final circuit-loop
 bank, preserving its advancing native source and the gate evaluator masters. -/

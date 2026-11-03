@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryPCPFormulaResumeSearchPairFrame
+import Proof.Amplification.RecoveryFormulaPrefix
 
 /-! The actual cold constructor now writes the complete externally framed
 request of the accepted canonical proof-prefix search. -/

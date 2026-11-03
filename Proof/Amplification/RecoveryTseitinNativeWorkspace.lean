@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryTseitinNativeReadOnly
+import Proof.Circuits.DecompositionSourceBounds
 
 /-! The repeated node workspace is bounded by actual writes. The original
 raw counters, native source and accumulated formula remain unpadded. -/

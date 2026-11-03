@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CapacityPower
+import Proof.Hierarchy.HierarchyAllocation
 
 /-! One fixed cold producer for the shared recovery capacity 2^(A*n+B).
 Its only input is the actual final-language word. Constants, input-length

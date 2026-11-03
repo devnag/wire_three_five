@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.NwB4
+import Proof.Wire_3_5.Primitive.Writers.UnaryArith
 
 /-! # NW phase (b), part 5: the multiplication kit on the cell bank
 

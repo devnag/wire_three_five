@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RowsGateSupportReady
+import Proof.PCP.ProjectionNormalizationSuffixRestore
 
 /-! The same support loop appends immediately after the native arity.
 No second copy of the filtered weight list or output-length tape is needed. -/

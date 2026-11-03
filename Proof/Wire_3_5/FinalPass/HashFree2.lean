@@ -1,6 +1,17 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.HashFree
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.HashFreeBase
 
-/-! # The HASH free numbers' contract, amended (the request): `HashFreeOk2`
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # The HASH free numbers' contract, amended: `HashFreeOk2`
 
 `filt:soft`, P3:2253-2290: the HASH child rebuilds its free-bit ruler `1^{2tℓ₀ − |p|}` from the kept pad `1^{c_C}`, which
 needs `2·t·ℓ₀ ≤ c_C` at every THR call's HASH stage (`s_h = 2tℓ₀` decisions, P3:2238-2251; the Hb capacities are the
@@ -33,3 +44,5 @@ structure HashFreeOk2 (l : Literals) (F : GateFree l) (wa : RepairRepresentation
         Fp.val (hashX (callInputs l F kclk coef A a ha) (gate0 l F).alg Cs carriers hs) 1
 
 end NearCubicWires.WireExponent3_5.FinalPass.HashFr
+
+end

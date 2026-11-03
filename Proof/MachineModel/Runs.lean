@@ -1,5 +1,6 @@
-import Proof.Amplification.RecoveryRowLookupTapes
 import Proof.MachineModel.Basic
+import Proof.Amplification.RecoveryReadyCalls
+import Proof.Amplification.RecoveryRowLookupTapes
 import Proof.MachineModel.OrdinaryMaskedReset
 
 namespace NearCubicWires.ExtDecompositionBatch

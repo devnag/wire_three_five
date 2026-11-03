@@ -30,6 +30,14 @@ def reference (k : Nat) (clock : OrdinaryClock (fun n => n^(k+2))) : WorkerData 
   onset := 0
   passed := fun _ _ _ => false
 
+def legalOnset (sources : EightSources) {gamma : Real} (p : Parameters sources gamma)
+    (k : Nat) (clock : OrdinaryClock (fun n => n^(k+2))) (coldCutoff : Nat) : Nat :=
+  Classical.choose (C10LegalAdmission.passed_legal_eventually sources p (reference k clock) coldCutoff)
+
+def onset (sources : EightSources) {gamma : Real} (p : Parameters sources gamma)
+    (k : Nat) (clock : OrdinaryClock (fun n => n^(k+2))) (coldCutoff base : Nat) : Nat :=
+  max (max base (Soundness.cutoff (constantsOf sources))) (legalOnset sources p k clock coldCutoff)
+
 def input {t : Nat} (x bits : List Bool) : Fin t → List Bool :=
   fun i => if i.val=0 then RepairOrdinary.frame x else if i.val=1 then RepairOrdinary.frame bits else []
 

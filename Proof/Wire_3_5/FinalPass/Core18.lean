@@ -1,4 +1,30 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.Core17
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.Core11
+import Proof.Wire_3_5.FinalPass.Core15
+import Proof.Wire_3_5.FinalPass.Core16
+import Proof.Wire_3_5.FinalPass.Core8
+import Proof.Wire_3_5.FinalPass.CoreIfaceM
+import Proof.Wire_3_5.FinalPass.FpInLen
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdR12
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.FinalPass.SeamsHalves
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.FinalPass.SeamsPt
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.S5Seam2
+import Proof.Wire_3_5.Primitive.Writers.S5SeamB
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.Core18Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S5Core, part 18: the core half, generic in the bank (P3:3044-3048, 3170-3181)
 
@@ -32,9 +58,10 @@ open NearCubicWires.RepairOrdinary.SignedSortKey (binary)
 section Gen
 variable {l : Literals} (W : CoreWriters l) (F : GateFree l)
 
-/-- A capacity or step bound below the bank's register length. -/
-theorem cap_le (C D N Kc Dc : ℕ) (hN : 1 ≤ N) (hC : C ≤ Kc) (hD : D ≤ Dc) : C * N ^ D ≤ Kc * N ^ Dc :=
-  Nat.mul_le_mul hC (Nat.pow_le_pow_right hN hD)
+/-- **The core's register coefficient**: every writer's capacity and step coefficient, at least `2`. -/
+def Kcore : ℕ :=
+  max 2 (max (max (W.SA.Kc F) (W.SA.Cs F)) (max (max (W.SB.Kc F) (W.SB.Cs F))
+    (max (max (W.NW.Kc F) (W.NW.Cs F)) (max (W.SW.Kc F) (W.SW.Cs F)))))
 
 end Gen
 
@@ -66,7 +93,9 @@ theorem coreOut : FrontOut l F kclk coef A a ha L.wd ![L.tN, L.tD] (frontWordsW2
 end Out
 
 section Need
+variable {l : Literals} (W : CoreWriters l) (F : GateFree l) (fe : ℕ)
 
+theorem k2 : 2 ≤ Kcore W F := by unfold Kcore; omega
 
 end Need
 
@@ -99,3 +128,5 @@ section Uni
 end Uni
 
 end NearCubicWires.WireExponent3_5.FinalPass.Core
+
+end

@@ -1,5 +1,6 @@
 import Proof.Circuits.CanonicalBalancedCall
 import Proof.MachineModel.BalancedClauseStreamFlattenProgram
+import Proof.Foundations.CanonicalBinaryProgram
 import Proof.MachineModel.CircuitInputClauseProgram
 import Proof.MachineModel.CircuitInputTautologyProgram
 import Proof.MachineModel.PreserveRightProgram

@@ -1,5 +1,29 @@
-import Proof.Wire_3_5.Recovery.HybridLedger
+import Lean
+import Proof.CaseAnalysis.CaseTwoDirect
+import Proof.CaseAnalysis.NativeWidthStep
+import Proof.Foundations.ProjectionPCPPadding
+import Proof.Foundations.RecoveryScheduleEnvelope
+import Proof.PCP.PCPPSubstitutionCircuit
+import Proof.PCP.PCPPSubstitutionRequest
+import Proof.Wire_3_5.Recovery.RecoveryEventualBase
+import Proof.Wire_3_5.Recovery.RecoveryLeaf
+import Proof.Wire_3_5.Stars.StarSelectionChoice
+import Proof.Wire_3_5.Transfer.TransferSeedCalls
 import Proof.Wire_3_5.Assembly.Ok
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Recovery.RecoveryLanguage
+import Proof.Wire_3_5.Recovery.RecoverySetupTwo
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.UnionAtomsOk
+import Proof.Wire_3_5.Assembly.FreeBase
+import Proof.Wire_3_5.UnionMachine.UnionCodecBase
+import Proof.Wire_3_5.UnionMachine.UnionSchedule
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The refuter's machine at `S₂` for a union leaf with the atom test
 
@@ -61,3 +85,5 @@ theorem complete2Ok :
 end RefuterOk
 
 end NearCubicWires.WireExponent3_5.Transfer
+
+end

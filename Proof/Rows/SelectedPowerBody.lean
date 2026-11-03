@@ -15,6 +15,7 @@ open PCJ45bee56da9f34d5a_SelectedPowerBank
 noncomputable section
 attribute [local irreducible] PCJ45bee56da9f34d5a_HeaderRewind.clear
 
+def equation {n : Nat} (g : ExactThresholdGate n):SupplierPipeline.LabelledEquation (Fin n):={weights:=g.weight,target:=g.target}
 
 end
 end PCJ45bee56da9f34d5a_SelectedPowerBody

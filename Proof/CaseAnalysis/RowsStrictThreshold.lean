@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RowsStrictSelector
+import Proof.Hierarchy.HierarchyFixedWord
 
 /-! The complete signed threshold-minus-one branch controller. The input
 magnitude is the SAME canonical magnitude returned by the checked integer

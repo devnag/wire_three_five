@@ -1,6 +1,39 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.ThrTB5
+import Proof.Wire_3_5.FinalPass.DigsIface
+import Proof.Wire_3_5.FinalPass.SeamsProg2Base
+import Proof.Wire_3_5.Primitive.Writers.BudgetIface2
+import Proof.Wire_3_5.Primitive.Writers.PlanBase
+import Proof.Wire_3_5.Primitive.Writers.SymDecEmit
+import Proof.Wire_3_5.Primitive.Writers.ThrDataIface3
+import Proof.Wire_3_5.Primitive.Writers.WritersJoinBase
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4Base
+import Proof.Wire_3_5.Primitive.ThresholdWriter.RadSetup2
+import Proof.Wire_3_5.Primitive.ThresholdWriter.ShellIface
+import Proof.Wire_3_5.UnionMachine.FiltSetupIface5
+import Proof.Wire_3_5.UnionMachine.RadSetupB3
+import Proof.Wire_3_5.UnionMachine.RadSpecBase
+import Proof.Wire_3_5.UnionMachine.ThrDecIfaceBase
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.ThrDimIface
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDecQ5
+import Proof.Wire_3_5.Primitive.SeedFix.ThrTB3
+import Proof.Wire_3_5.Primitive.SeedFix.ThrTB4
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.ThrDimC
+import Proof.Wire_3_5.UnionMachine.ThrDimG
+import Proof.Wire_3_5.UnionMachine.ThrDimN
+import Proof.Wire_3_5.UnionMachine.ThrUnitIface5
+import Proof.Wire_3_5.Primitive.SeedFix.ThrTB6Base
 
-/-! # THRTAIL T-B, part 6: the THR writer's run at a call
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # T3 THRTAIL T-B, part 6: the THR writer's run at a call
 
 The THR writer `thrM` = the v4 shell `shellMGH4` over the v4 data stage `S`, the unit machine `U` (THRU4) and
 T-A's dimension stage `thrDimStageG l F K_L K_f` (`K_L = kLT l f_e D₀`, `K_f = D₀ + 1`), the scrub capacity
@@ -46,30 +79,6 @@ noncomputable def kTB : ℕ :=
   kShell (dSh D0) (cSh D0 C0 (cLT l F)) (dT2 l D0) (cT2 l F C0) (ThrDimB.DnG l) (dimT l F fe D0).Kn 1 (cLT l F) +
     C0 * (3 * cT2 l F C0 + 1) ^ D0 + (dimT l F fe D0).Kc * ((dimT l F fe D0).Kn + 1) ^ ThrDimB.DcG l +
     cSh D0 C0 (cLT l F)
-
-/-- The monomial bound at `Y ≥ n + 1`. -/
-theorem mono_Y {X c d Y E n : ℕ} (hX : X ≤ c * (n + 1) ^ d) (hn : n + 1 ≤ Y) (hd : d ≤ E) : X ≤ c * Y ^ E :=
-  hX.trans (Nat.mul_le_mul_left _ ((Nat.pow_le_pow_left hn d).trans (Nat.pow_le_pow_right (by omega) hd)))
-
-/-- The data stage's cost, arithmetic: `C_c(3V + n + 1)^{D_c} ≤ K·Y^E`. -/
-theorem cc_arith (cost Cc Dc V n Y D0 C0 c2 d2 E K : ℕ) (hc : cost ≤ Cc * (V + n + V + V + 1) ^ Dc)
-    (hCc : Cc ≤ C0) (hDc : Dc ≤ D0) (hV : V ≤ c2 * Y ^ d2) (hnY : n + 1 ≤ Y ^ d2) (hY : 1 ≤ Y) (hE : d2 * D0 ≤ E)
-    (hK : C0 * (3 * c2 + 1) ^ D0 ≤ K) : cost ≤ K * Y ^ E := by
-  obtain ⟨Z, hZ⟩ : ∃ x, x = Y ^ d2 := ⟨_, rfl⟩
-  rw [← hZ] at hV hnY
-  have hZ1 : 1 ≤ Z := by rw [hZ]; exact Nat.one_le_pow _ _ hY
-  have hb : V + n + V + V + 1 ≤ (3 * c2 + 1) * Z := by
-    have e : (3 * c2 + 1) * Z = 3 * (c2 * Z) + Z := by ring
-    omega
-  have hb1 : 1 ≤ (3 * c2 + 1) * Z := by nlinarith
-  have hp : (V + n + V + V + 1) ^ Dc ≤ (3 * c2 + 1) ^ D0 * Y ^ (d2 * D0) := by
-    calc (V + n + V + V + 1) ^ Dc ≤ ((3 * c2 + 1) * Z) ^ Dc := Nat.pow_le_pow_left hb _
-      _ ≤ ((3 * c2 + 1) * Z) ^ D0 := Nat.pow_le_pow_right hb1 hDc
-      _ = (3 * c2 + 1) ^ D0 * Y ^ (d2 * D0) := by rw [mul_pow, hZ, ← pow_mul]
-  calc cost ≤ Cc * (V + n + V + V + 1) ^ Dc := hc
-    _ ≤ C0 * ((3 * c2 + 1) ^ D0 * Y ^ (d2 * D0)) := Nat.mul_le_mul hCc hp
-    _ = C0 * (3 * c2 + 1) ^ D0 * Y ^ (d2 * D0) := by ring
-    _ ≤ K * Y ^ E := Nat.mul_le_mul hK (Nat.pow_le_pow_right hY hE)
 
 /-- **The data stage's cost at the master bound.** -/
 theorem cc_le (hSD : S.Dc3 ≤ D0) (hSC : S.Cc3 ≤ C0) {n a' : ℕ} (ha' : a' ≤ 4)
@@ -127,3 +136,5 @@ theorem c2_le' (P : Shared.StarParams) (Y : ℕ) (hn : P.n + 1 ≤ Y) :
 end Dim
 
 end NearCubicWires.WireExponent3_5.PrimT.ThrTB
+
+end

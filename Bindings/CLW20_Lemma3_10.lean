@@ -1,4 +1,5 @@
 import Proof.Foundations.ProjectionSourceContract
+import Statement
 
 /-!
 # Binding: CLW20 Lemma 3.10 (the projection PCP, from [BV14]) → `ProjectionPCPSource`
@@ -114,110 +115,11 @@ set_option maxRecDepth 120000
 
 
 
-/-- The time hypothesis only on the witnesses the lemma talks about, `y ∈ {0,1}^{T(n)}` (the
-import's hypothesis). -/
-def RunsInTimeOnWitnessLengthT (M : OrdinaryVerifier) (T : ℕ → ℕ) : Prop :=
-  ∀ n (x : BitInput n) (y : BitInput (T n)), ∃ receipt,
-    run M.machine (T n) (M.inputTapes (List.ofFn x) (List.ofFn y)) = some receipt
-
 /-! ## The literal -/
-
-/-- CLW20 Lemma 3.10 (PDF p.18), with its properties claimed for `n ≥ n₀` and time hypothesis
-`runsInTime`. The conjuncts follow the printed order: the algorithm (Tier 1), t = poly(r),
-proof length, completeness, soundness. The Complexity item is part of the type `Circuits`. -/
-def lemma3_10Core (n₀ : ℕ) (runsInTime : OrdinaryVerifier → (ℕ → ℕ) → Prop) : Prop :=
-  ∀ (M : OrdinaryVerifier) (T : ℕ → ℕ), (∀ n, n ≤ T n) → runsInTime M T →
-  ∃ out : InputRequest → Circuits,
-    -- "Given x ∈ {0,1}^n, one can output in poly(n, log T) time circuits Q … and R" (Tier 1;
-    -- the time bound T(n) is supplied in binary)
-    (∃ K e : ℕ, Nonempty (OrdinaryWordFunction InputRequest
-      (fun x => frame (List.ofFn x.2) ++ frame (T x.1).bits) (fun x => (out x).word)
-      (fun x => K * (x.1 + natBitLength (T x.1) + 1) ^ e))) ∧
-    -- "for t = poly(r)"
-    (∃ K e : ℕ, ∀ x : InputRequest, n₀ ≤ x.1 → (out x).t ≤ K * ((out x).r + 1) ^ e) ∧
-    -- "Proof length. 2^r ≤ T · polylogT."
-    (∃ K e : ℕ, ∀ x : InputRequest, n₀ ≤ x.1 →
-      2 ^ (out x).r ≤ K * T x.1 * logScale (T x.1) ^ e) ∧
-    -- "Completeness. If there is a y ∈ {0,1}^{T(n)} such that M(x, y) accepts then there is a
-    -- map π: {0,1}^r → {0,1} such that for all z ∈ {0,1}^r, R(π(q1), …, π(qt)) = 1"
-    (∀ x : InputRequest, n₀ ≤ x.1 →
-      (∃ y : BitInput (T x.1), M.accepts (List.ofFn x.2) (List.ofFn y)) →
-      ∃ π : BitInput (out x).r → Bool, ∀ z, (out x).accepts π z = true) ∧
-    -- "Soundness. If no y ∈ {0,1}^{T(n)} causes M(x, y) to accept, then for every map π, at most
-    -- 2^r/n^10 distinct z ∈ {0,1}^r have R(π(q1), …, π(qt)) = 1"
-    (∀ x : InputRequest, n₀ ≤ x.1 →
-      (¬ ∃ y : BitInput (T x.1), M.accepts (List.ofFn x.2) (List.ofFn y)) →
-      ∀ π : BitInput (out x).r → Bool,
-        ((Finset.univ.filter fun z => (out x).accepts π z = true).card : ℝ) ≤
-          (2 : ℝ) ^ (out x).r / (x.1 : ℝ) ^ 10)
-
-/-- **CLW20 Lemma 3.10** (PDF p.18), the literal: time `T` on every input `(x, y)`, with the
-properties for `n ≥ 1`. -/
-def CLW20_Lemma3_10 : Prop :=
-  lemma3_10Core 1 RunsInTime
-
-/-- CLW20 Lemma 3.10 with the time hypothesis required only for `y ∈ {0,1}^{T(n)}`. -/
-def CLW20_Lemma3_10_onWitnessLengthT : Prop :=
-  lemma3_10Core 1 RunsInTimeOnWitnessLengthT
-
-/-- A stronger time hypothesis is easier to meet: the witness-length version implies the
-literal. -/
-theorem clw20_lemma3_10_onWitnessLengthT_to_literal :
-    CLW20_Lemma3_10_onWitnessLengthT → CLW20_Lemma3_10 :=
-  fun L M T hT hrun => L M T hT fun n x y => hrun n x (List.ofFn y)
 
 /-! ## The properties cannot also be claimed at `n = 0` -/
 
-/-- A verifier that halts at once and rejects. -/
-def haltingVerifier : OrdinaryVerifier where
-  tapeCount := 2
-  stateCount := 1
-  twoTapes := le_rfl
-  machine :=
-    { descriptionBits := 0
-      start := 0
-      halted := fun _ => true
-      rule := fun _ _ => none }
-  accepting := fun _ => false
-
-theorem haltingVerifier_runsInTime : RunsInTime haltingVerifier fun n => n := by
-  intro n x y
-  cases n <;> exact ⟨_, rfl⟩
-
-theorem lemma3_10Core_false_at_zero (runsInTime : OrdinaryVerifier → (ℕ → ℕ) → Prop)
-    (h : runsInTime haltingVerifier fun n => n) : ¬ lemma3_10Core 0 runsInTime := by
-  intro L
-  obtain ⟨out, _, _, ⟨K, e, hproof⟩, _, _⟩ := L haltingVerifier (fun n => n) (fun _ => le_rfl) h
-  have hbound := hproof ⟨0, Fin.elim0⟩ le_rfl
-  have hpos : 0 < 2 ^ (out ⟨0, Fin.elim0⟩).r := pow_pos (by norm_num) _
-  simp only [Nat.mul_zero, Nat.zero_mul] at hbound
-  omega
-
-/-- With the properties claimed at `n = 0` too, the literal is false. -/
-theorem clw20_lemma3_10_false_at_zero : ¬ lemma3_10Core 0 RunsInTime :=
-  lemma3_10Core_false_at_zero _ haltingVerifier_runsInTime
-
-/-- With the properties claimed at `n = 0` too, the witness-length version is false. -/
-theorem clw20_lemma3_10_onWitnessLengthT_false_at_zero :
-    ¬ lemma3_10Core 0 RunsInTimeOnWitnessLengthT :=
-  lemma3_10Core_false_at_zero _ fun n x y => haltingVerifier_runsInTime n x (List.ofFn y)
-
 /-! ## Bridges -/
-
-/-- The import's record from the printed circuits: query `j`, address bit `i` is output bit
-`r·j + i` of Q. -/
-def toRaw (P : Circuits) : RawProjectionPCP where
-  width := P.r
-  queries := P.t
-  queryBits := fun j i => P.Q (blockIndex j i)
-  decision := P.R
-
-/-- The two descriptions are the same word: the `r·t` output bits of Q in order are the `t`
-queries' `r` address bits in order. -/
-theorem Circuits.word_eq (P : Circuits) : P.word = (toRaw P).word := by
-  unfold Circuits.word RawProjectionPCP.word
-  rw [List.ofFn_mul', List.flatten_flatten, List.map_ofFn]
-  rfl
 
 /-- The import's table proof, read back as a map on `{0,1}^r`. -/
 def decodeAddress {r : ℕ} (a : Fin (2 ^ r)) : BitInput r :=
@@ -234,73 +136,7 @@ theorem decodeAddress_binaryAddress {r : ℕ} (b : BitInput r) :
   unfold decodeAddress
   rw [hval, Nat.testBit_ofBits_lt _ _ i.isLt]
 
-/-- A table proof `p` accepts on `z` exactly when the map `z ↦ p (binaryAddress z)` does. -/
-theorem raw_accepts_eq (P : Circuits) (p : BitInput (2 ^ P.r)) (z : BitInput P.r) :
-    (toRaw P).accepts p z = P.accepts (fun w => p (binaryAddress w)) z := rfl
-
-/-- The literal's map `π` as a table gives the same verdicts. -/
-theorem raw_accepts_decode (P : Circuits) (π : BitInput P.r → Bool) (z : BitInput P.r) :
-    (toRaw P).accepts (fun a => π (decodeAddress a)) z = P.accepts π z := by
-  rw [raw_accepts_eq]
-  simp only [decodeAddress_binaryAddress]
-
-theorem card_bitInput (r : ℕ) : Fintype.card (BitInput r) = 2 ^ r := by
-  simp [BitInput]
-
-/-- "at most 2^r/n^10 distinct z" is "at most a 1/n^10 fraction of the z". -/
-theorem sound_fraction (P : Circuits) (p : BitInput (2 ^ P.r)) (n : ℕ)
-    (h : ((Finset.univ.filter fun z => P.accepts (fun w => p (binaryAddress w)) z = true).card :
-      ℝ) ≤ (2 : ℝ) ^ P.r / (n : ℝ) ^ 10) :
-    (toRaw P).acceptanceFraction p ≤ 1 / (n : ℝ) ^ 10 := by
-  unfold RawProjectionPCP.acceptanceFraction
-  have hcard : (Fintype.card (BitInput (toRaw P).width) : ℝ) = (2 : ℝ) ^ P.r := by
-    rw [show (toRaw P).width = P.r from rfl, card_bitInput]
-    push_cast
-    rfl
-  rw [hcard]
-  have hpos : (0 : ℝ) < (2 : ℝ) ^ P.r := by positivity
-  rw [div_le_iff₀ hpos]
-  calc ((Finset.univ.filter fun z => (toRaw P).accepts p z = true).card : ℝ)
-      = ((Finset.univ.filter fun z => P.accepts (fun w => p (binaryAddress w)) z = true).card :
-          ℝ) := rfl
-    _ ≤ (2 : ℝ) ^ P.r / (n : ℝ) ^ 10 := h
-    _ = 1 / (n : ℝ) ^ 10 * (2 : ℝ) ^ P.r := by ring
-
-/-- An ordinary word function with a pointwise-equal output word. -/
-def congrOutput {Request : Type} {input output output' : Request → List Bool}
-    {budget : Request → ℕ} (W : OrdinaryWordFunction Request input output budget)
-    (h : ∀ r, output r = output' r) : OrdinaryWordFunction Request input output' budget where
-  program := W.program
-  realizes := fun r => by
-    obtain ⟨receipt, hrun, hout⟩ := W.realizes r
-    exact ⟨receipt, hrun, hout.trans (h r)⟩
-
 /-! ## The adapter -/
-
-/-- **CLW20 Lemma 3.10**, with the time hypothesis on `y ∈ {0,1}^{T(n)}`, gives the imported
-projection PCP source. -/
-theorem clw20_lemma3_10_onWitnessLengthT_to_import :
-    CLW20_Lemma3_10_onWitnessLengthT → ProjectionPCPSource := by
-  intro L verifier T hT hhalt
-  obtain ⟨out, ⟨K0, e0, ⟨W⟩⟩, ⟨Kt, et, ht⟩, ⟨Kp, ep, hp⟩, hcomplete, hsound⟩ :=
-    L verifier T hT hhalt
-  let K := K0 + Kt + Kp + 1
-  refine ⟨{
-    output := fun x => toRaw (out x)
-    degrees := ⟨e0, et, ep⟩
-    coefficient := K
-    coefficientPositive := by omega
-    constructor := RepairOrdinary.WordFunction.enlargeBudget
-      (congrOutput W fun x => Circuits.word_eq (out x))
-      (fun x => Nat.mul_le_mul_right _ (by omega))
-    proofBound := fun x hx =>
-      (hp x hx).trans (Nat.mul_le_mul_right _ (Nat.mul_le_mul_right _ (by omega)))
-    queryBound := fun x hx => (ht x hx).trans (Nat.mul_le_mul_right _ (by omega))
-    complete := fun x hx hlang => by
-      obtain ⟨π, hπ⟩ := hcomplete x hx hlang
-      exact ⟨fun a => π (decodeAddress a), fun z => (raw_accepts_decode (out x) π z).trans (hπ z)⟩
-    sound := fun x hx hlang p =>
-      sound_fraction (out x) p x.1 (hsound x hx hlang fun w => p (binaryAddress w)) }⟩
 
 
 end NearCubicWires.Bindings.CLW20Lemma310

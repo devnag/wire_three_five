@@ -1,4 +1,5 @@
 import Proof.MachineModel.BlockPlatform
+import Proof.MachineModel.OrdinarySortCarrier
 
 /-! # Block v3 (S5): any receipt-level run is a `Block`
 

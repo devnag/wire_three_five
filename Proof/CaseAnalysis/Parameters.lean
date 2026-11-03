@@ -1,4 +1,5 @@
 import Proof.Hierarchy.CompetitorSourceValidity
+import Proof.Foundations.RecoveryCaseOne
 
 /-! Paper C.10--C.12 parameter order: retain the source's rational validity
 radius, choose the cutoff after the absolute STV exponent, and only then

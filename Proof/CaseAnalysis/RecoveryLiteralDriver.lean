@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.RecoveryLiteralMeaning
+import Proof.Amplification.RecoverySourceLiteralDriver
+import Proof.Amplification.RecoveryProjectionWidthBudget
 
 /-! Reuse the original binary literal-code decoder in the shared C backing.
 Its actual sign/index fields and every scratch tape fit the existing capacity.

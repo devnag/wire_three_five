@@ -96,6 +96,15 @@ theorem setupFieldsG_len (u R L : ℕ) (ev : Fin 8 → List Bool) :
     List.length_nil]
   omega
 
+theorem storeRec_len (xs : List (FSpec (negFam F35))) : xs.length ≤ (storeRec xs).length := by
+  unfold storeRec
+  have h : ∀ l : List (FSpec (negFam F35)), l.length ≤ (l.flatMap fun x => true :: x.block).length := by
+    intro l; induction l with
+    | nil => simp
+    | cons x l ih => simp only [List.flatMap_cons, List.length_append, List.length_cons]; omega
+  have := h xs
+  simp only [List.length_append]; omega
+
 theorem termCostR_le (fs : List Poly) : termCostR fs ≤ 2 * mselCost fs + 18 := by
   simp [termCostR, putCost, coefWord, NearCubicWires.RepairOrdinary.frame]
   omega

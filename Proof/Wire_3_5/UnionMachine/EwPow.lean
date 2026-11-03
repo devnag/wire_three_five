@@ -1,5 +1,6 @@
-import Proof.Wire_3_5.Primitive.Writers.UnaryPow
 import Proof.Wire_3_5.UnionMachine.EwWords
+import Proof.Wire_3_5.UnionMachine.RegRatMul
+import Proof.Wire_3_5.Primitive.Writers.UnaryPow
 
 /-! # C6, e/W_j, part 6: the power `M^{2t}` and the product `8KA(M + J·M^{2t}) + 1`
 

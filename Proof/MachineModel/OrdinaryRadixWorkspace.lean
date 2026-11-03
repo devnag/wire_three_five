@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryRadixRound
+import Proof.Foundations.OrdinaryTapeRenaming
 
 /-! The complete framed workspace carried by the radix-loop consumer. A round
 changes its physical input role; both roles are fixed controller instances,

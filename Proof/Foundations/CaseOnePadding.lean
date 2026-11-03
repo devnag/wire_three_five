@@ -154,40 +154,4 @@ theorem booleanCircuitFamily_restrictionClosed :
     rw [heval]
     rfl
 
-/-- Extend a Case-1 amplifier output to the exact shared branch arity.  Size
-and advantage are definitionally unchanged; only ignored variables are added. -/
-noncomputable def paddedCaseOneHardCore
-    {witness : AmplifierWitness} (input : CaseOneInput witness)
-    (target : ℕ) (hcore : (hardCoreFromCaseOne input).arity ≤ target) :
-    HardCore booleanCircuitFamily where
-  arity := target
-  function := padCore (hardCoreFromCaseOne input).function hcore
-  size := (hardCoreFromCaseOne input).size
-  advantage := (hardCoreFromCaseOne input).advantage
-  hard :=
-    averageHard_padCore
-      (family := booleanCircuitFamily)
-      (size := (hardCoreFromCaseOne input).size)
-      (function := (hardCoreFromCaseOne input).function)
-      (advantage := (hardCoreFromCaseOne input).advantage)
-      booleanCircuitFamily_restrictionClosed
-      (hardCoreFromCaseOne input).hard hcore
-
-@[simp] theorem paddedCaseOneHardCore_arity
-    {witness : AmplifierWitness} (input : CaseOneInput witness)
-    (target : ℕ) (hcore : (hardCoreFromCaseOne input).arity ≤ target) :
-    (paddedCaseOneHardCore input target hcore).arity = target := rfl
-
-@[simp] theorem paddedCaseOneHardCore_size
-    {witness : AmplifierWitness} (input : CaseOneInput witness)
-    (target : ℕ) (hcore : (hardCoreFromCaseOne input).arity ≤ target) :
-    (paddedCaseOneHardCore input target hcore).size =
-      (hardCoreFromCaseOne input).size := rfl
-
-@[simp] theorem paddedCaseOneHardCore_advantage
-    {witness : AmplifierWitness} (input : CaseOneInput witness)
-    (target : ℕ) (hcore : (hardCoreFromCaseOne input).arity ≤ target) :
-    (paddedCaseOneHardCore input target hcore).advantage =
-      (hardCoreFromCaseOne input).advantage := rfl
-
 end NearCubicWires.CaseOnePadding

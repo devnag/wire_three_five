@@ -1,6 +1,8 @@
+import Proof.Foundations.CanonicalBinaryProgram
 import Proof.Foundations.ComponentwiseVerifierParameters
 import Proof.Foundations.PCPPClausePadding
 import Proof.Foundations.PolynomialSchedule
+import Proof.Foundations.SupplierPipeline
 
 /-!
 # Source-only recovery arity envelope

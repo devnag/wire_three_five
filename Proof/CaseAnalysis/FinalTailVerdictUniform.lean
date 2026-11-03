@@ -61,6 +61,11 @@ def tbud (W : ℕ) : ℕ :=
   (((C10TailFeedUniform.budget W + 1 + C10TailFeedUniform.budget W) + 1 +
     C10TailFeedUniform.budget W) + 1 + 4) + 1 + 4
 
+theorem tbud_mono {W W' : ℕ} (h : W ≤ W') : tbud W ≤ tbud W' := by
+  have := C10TailFeedUniform.budget_mono h
+  unfold tbud
+  omega
+
 noncomputable def flagProgram :=
   RecoveryFocus.machine (pairT tailFlag tailSpare) (HierarchyFixedWord.machine [false])
 

@@ -20,6 +20,10 @@ open PCJ9eff70d512234a4c_Fixed
 attribute [local irreducible] P1TopDownPaidPayload.tapes
 noncomputable section
 
+def retained (k : Fin 440) : Prop :=
+  k.val=0 ∨ k.val=3 ∨ k.val=4 ∨ k.val=15 ∨ k.val=88 ∨ k.val=262 ∨
+  k.val=277 ∨ k.val=278 ∨ k.val=282 ∨ k.val=283
+
 
 
 

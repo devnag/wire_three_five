@@ -1,0 +1,28 @@
+import Proof.SourceAssembly.SourceSkelResWin
+
+section
+set_option autoImplicit false
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedVariables false
+
+open NearCubicWires NearCubicWires.ComponentwisePolynomial NearCubicWires.RepairOrdinary.CompetitorRawFieldEmit NearCubicWires.RepairOrdinary.CloseoutRowsOriginalSchedule LocalBitMultitape ExtDecompositionBatch RepairOrdinary RepairRepresentation SourceInterfaces RepairSource RepairSource.CloseoutFinal P1TopDown RepairSource.VerifierDecoding RecoveryRootRound RecoveryExecution CloseoutRowsEstimator CloseoutRowsEstimatorCoefficients CompetitorSelectedCount MatrixScoreBatch CompetitorCountMask SupplierPipeline SupplierEstimator SupplierPrime CanonicalFourfoldRowProgram CloseoutRawRows C10ExternalRowLoop C10ThresholdNaturalRowPrint C10ThresholdParityRow C10ThresholdEstimateRowJoin CloseoutFinalC10RowAnswerWord P1Closure P1TopDownPaidReusable P1TopDownPaidReusableReserves P1TopDownPaidBinaryReserves
+open PCJ1fef9807c6954e94_Native
+open PCJ9eff70d512234a4c_Fixed PCJd4d1d9d7d1fa4313_Production
+open PCJc4297ab269d8423a_Source
+open NearCubicWires.SourceConstruction NearCubicWires.SourceConstruction.InitRun
+namespace NearCubicWires.SourceSkeleton.Fill
+open NearCubicWires.SourceSkeleton.ClassR NearCubicWires.SourceSkeleton.Params NearCubicWires.SourceSkeleton.ClassV4
+open NearCubicWires.SourceSkeleton.ParamsR (gWR)
+open NearCubicWires.SourceSkeleton.ParamsV4
+noncomputable section
+
+/-- The free onset's type. -/
+abbrev XtraW (selector : PCJ9eff70d512234a4c_Fixed.CyclicChoice.Laws) :=
+  (mask : MaskProducer) → PCJc4297ab269d8423a_Source.PacketLibrary selector →
+    PCJc4297ab269d8423a_Source.RowLibrary selector → SourceBudget.ParNat
+
+end
+end NearCubicWires.SourceSkeleton.Fill
+end
+

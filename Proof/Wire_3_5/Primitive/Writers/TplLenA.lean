@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Foundations.SwPartsTmpl
+import Proof.Wire_3_5.Primitive.Writers.SparseNum
 
 /-! # SWn item 6, part A: the template length's program and its bounds
 

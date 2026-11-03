@@ -1,5 +1,6 @@
-import Proof.MachineModel.OrdinaryMaskedReset
 import Proof.Supplier.RowBinLiftWidth
+import Proof.MachineModel.ClockNormalize
+import Proof.MachineModel.OrdinaryMaskedReset
 
 /-! One actual radix digit for the row stack. A physical unary width drives
 simultaneous positive/negative block emission. Magnitudes are padded in bits,

@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CaseOneFormulaBound
+import Proof.MachineModel.OrdinarySelectiveWorkspace
 
 /-! The actual original printer supplies its own serialized-width bound:
 its output cursor starts at zero and finishes at the emitted stream length.

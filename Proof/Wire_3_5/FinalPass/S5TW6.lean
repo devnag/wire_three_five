@@ -1,4 +1,5 @@
-import Proof.Wire_3_5.FinalPass.S5TP0
+import Proof.Wire_3_5.FinalPass.S5TP0Base
+import Proof.Wire_3_5.Primitive.SeedFix.W6ZI
 
 /-! # S5-THR, part 8: the THR numbers machine W6 docked (P3:2543-2558, 2596-2604, 2150-2157, 2220-2231)
 

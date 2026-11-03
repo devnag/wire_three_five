@@ -1,5 +1,6 @@
-import Proof.CaseAnalysis.FinalModeNativeStageFields
 import Proof.CaseAnalysis.FinalThresholdNaturalRowPrint
+import Proof.CaseAnalysis.FinalRowAnswerWord
+import Proof.CaseAnalysis.FinalModeNativeStageFields
 
 open NearCubicWires NearCubicWires.SupplierPipeline NearCubicWires.SupplierEstimator
 open NearCubicWires.SupplierPrinter NearCubicWires.SupplierPrime
@@ -22,7 +23,15 @@ namespace NearCubicWires.RepairSource.CloseoutFinal.C10ThresholdEstimateRowJoin
 
 open C10ThresholdParityRow C10ThresholdNaturalSum C10ThresholdNaturalRowPrint
 open C10SupplierCall (bank)
+open C10SupplierCountStage (bank_scratch_apply scratchOf scratchOf_apply round_step_of_dock)
 open C10TailComposeUniform (Atoms pcppOf)
+open C10NaturalModeAtoms (nativeThresholdAtom)
+open C10SumFamilyTransport (stageCoordinate)
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10RowAnswerWord
+  (sumMachine rowAnswerFuel sum_dock)
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10ModeNativeStageFields
+  (thresholdEstimate stageEstimate stageEstimate_native)
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10StageFields (stageArity stageTarget)
 open NearCubicWires.RepairOrdinary.CloseoutFinalC10SupplierCalls (siteCalls)
 
 noncomputable section

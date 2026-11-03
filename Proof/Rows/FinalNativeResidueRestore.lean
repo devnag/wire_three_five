@@ -1,8 +1,5 @@
-import Proof.CaseAnalysis.FinalSelectorLoadMasks
-import Proof.CaseAnalysis.RawRowsThresholdAccuracy
-import Proof.CaseAnalysis.RowsEstimatorDriverPorts
-import Proof.CaseAnalysis.RowsEstimatorParityThreshold
-import Proof.Rows.FinalWalkStep
+import Proof.Rows.FinalNativeResidueAppend
+import Proof.Amplification.RecoveryScratchErase
 
 namespace NearCubicWires.RepairSource.CloseoutFinal.C10NativeResidueRestore
 open LocalBitMultitape RepairOrdinary RecoveryExecution RecoveryRootRound ExtDecompositionBatch

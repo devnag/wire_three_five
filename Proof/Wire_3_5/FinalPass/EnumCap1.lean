@@ -1,5 +1,6 @@
 import Proof.Wire_3_5.Primitive.SeedFix.C4GrpD
 import Proof.Wire_3_5.Primitive.Writers.SFCost4
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixConsRows
 
 /-! # The enumeration's side conditions at a call, generic in the batch, part 1: the group's capacities
 

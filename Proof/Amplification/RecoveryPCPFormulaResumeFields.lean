@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoverySourceClauseBudget
+import Proof.Amplification.RecoveryFormulaValueFields
 
 /-! The actual source-clause words seal the original outer-proof formula.
 Randomness order, repeated clauses and the initial variable tautologies are

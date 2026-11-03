@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.FinalPass.Core9
+import Proof.Wire_3_5.FinalPass.Core9Base
 
 /-! # S5Core, part 10: a writer's stage in the core's room (P3:3170-3181)
 

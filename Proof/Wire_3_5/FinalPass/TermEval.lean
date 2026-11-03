@@ -1,10 +1,11 @@
-import Proof.Wire_3_5.FinalPass.ListEvalCyc
 import Proof.Wire_3_5.FinalPass.TermRef
+import Proof.Wire_3_5.FinalPass.ListEvalCyc
+import Proof.Wire_3_5.FinalPass.WordMap
 
 /-! # Final pass, stage 8: the circuit's factor of the reported conjunction at one point (P3:2489-2494, 3170-3178)
 
 The per-point evaluator of one symmetric circuit's factor `g(#1 − #3 + #2 + [t⁺] − [t⁻])` (`termOk`,
-`Proof.Wire_3_5.FinalPass.TermRef`): a register program `term8` over two read-only streams, the framed corner word
+`WireExponent3_5FinalPassTermRef`): a register program `term8` over two read-only streams, the framed corner word
 `frame X` (stream 0, from any head position `h₀`) and the framed top table `frame top` (stream 1, from any `h₁`), with
 the lists' reports `t⁺, t⁻` in two registers.
 
@@ -52,6 +53,7 @@ macro_rules
         | (funext i; fin_cases i <;> first | rfl | (simp [S8, $ts,*]; done) | (simp [S8, $ts,*] <;> omega))
         | rfl
         | (simp [$ts,*]; done)))
+
 
 /-- Close an equality of phase states argument by argument. -/
 macro "s8_args" : tactic => `(tactic| (congr 1 <;> first | rfl | omega | (simp; done) | (simp <;> omega)))
@@ -224,6 +226,7 @@ theorem count8_spec (rest : List Bool) (t p m a f k : ℕ) (c : Bool) (L : ℕ) 
       rw [cnt_group, v3]; ring
     rw [e1, e2, e3, e4] at ih'
     exact RExec.mono (RExec.whsT hr s1 ih') (by omega)
+
 
 /-! ## Phase 2: the clamped reports -/
 

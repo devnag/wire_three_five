@@ -1,5 +1,5 @@
-import Proof.Foundations.OrdinaryFramedSource
 import Proof.Foundations.OrdinaryRewind
+import Proof.Foundations.OrdinaryFramedSource
 import Proof.Foundations.OrdinaryStablePartition
 
 /-! Paid reset applied to the shared ordinary carrier and the actual partition

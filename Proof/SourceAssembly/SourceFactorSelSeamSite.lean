@@ -22,6 +22,10 @@ noncomputable section
 attribute [local irreducible] P1TopDownPaidPayload.tapes
 
 section nums
+variable (mask : MaskProducer) {selector : CyclicChoice.Laws}
+  (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector)
+  (rows : PCJc4297ab269d8423a_Source.RowLibrary selector) (sources : EightSources)
+  (res : Nat) (hres : 19 ≤ res) {gamma : Real} (p : Parameters sources gamma) (k r : Nat)
 
 set_option hygiene false in
 local notation "𝔇" => dimsOf mask packets rows sources res p k r
@@ -69,6 +73,14 @@ set_option hygiene false in
 local notation "ℜ𝔖" => (ClassV4.siteR4 selector mask packets rows).C sources gamma hg hh p *
   RuntimeShape.tableClass (ClassV4.siteL4 selector mask packets rows sources gamma hg hh p)
     ((ClassV4.siteR4 selector mask packets rows).hR sources gamma hg hh p) (C10PartsSchedule.widthAt sources k n)
+
+def siteOnGF (hg : 0 < gamma) (hh : gamma < 1/2) (den : ℕ) (hden : 1 ≤ den) : ℕ :=
+  max (seamOn selector mask packets rows sources gamma hg hh p (ParamsV4.kW selector mask packets rows sources gamma hg hh p) den hden)
+    (max (hfamOnW selector mask packets rows sources gamma hg hh p)
+      (max (NearCubicWires.SourceStart.LayRP.layOnW selector mask packets rows sources gamma hg hh p)
+        (max (SourceSteps.selR sources p (ParamsV4.kW selector mask packets rows sources gamma hg hh p)).onset
+          (NearCubicWires.SourceFactorSel.ClauseCost.refOnS selector mask packets rows sources gamma hg hh p
+            (SourceBudget.capIndexOf (ParamsV4.den0W selector mask packets rows))))))
 
 end nums
 

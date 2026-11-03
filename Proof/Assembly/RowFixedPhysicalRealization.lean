@@ -1,5 +1,5 @@
-import Proof.Assembly.FramingSpec
 import Proof.Assembly.Header
+import Proof.Assembly.FramingSpec
 
 /-! A fixed physical row transaction. The header writer and complete descriptor
 framer are closed programs. The three remaining stages are shared ordinary

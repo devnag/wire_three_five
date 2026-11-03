@@ -1,4 +1,28 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SymF13
+import Proof.Wire_3_5.FinalPass.SdI7
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.FpInLen
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SWParts
+import Proof.Wire_3_5.FinalPass.SdI5
+import Proof.Wire_3_5.FinalPass.SymF11
+import Proof.Wire_3_5.FinalPass.SymF12
+import Proof.Wire_3_5.FinalPass.SymFront3
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Foundations.OutMachineJoinG
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.NumsC7
+import Proof.Wire_3_5.UnionMachine.NumsPh2
+import Proof.Wire_3_5.UnionMachine.NumsPh3
+import Proof.Wire_3_5.FinalPass.SymF14Base
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-! # SWf (the SYM words writer's flat tables), part 14: the flat tables' writer `SWfT l`
 
@@ -31,71 +55,6 @@ open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.
 open NearCubicWires.WireExponent3_5.PrimT.WalkBank NearCubicWires.SupplierPipeline NearCubicWires.BlockPlatform
 
 /-! ## Arithmetic -/
-
-/-- The front's and the requests' needs below `(K_F + C_F + 64c_X + 20)·X^{D_F + D_Fs + E₀}`. -/
-theorem cap_arith (KF CF cX X DF DFs E0 n lw : ℕ) (hn : n + 1 ≤ X) (hE0 : 1 ≤ E0)
-    (hlw : lw ≤ 16 * (cX * X ^ E0)) :
-    KF * X ^ DF ≤ (KF + CF + 64 * cX + 20) * X ^ (DF + DFs + E0) ∧
-    CF * X ^ DFs ≤ (KF + CF + 64 * cX + 20) * X ^ (DF + DFs + E0) ∧
-    n + 4 * lw + 10 ≤ (KF + CF + 64 * cX + 20) * X ^ (DF + DFs + E0) := by
-  have hX : 1 ≤ X := by omega
-  obtain ⟨Y, hY⟩ : ∃ Y, Y = X ^ (DF + DFs + E0) := ⟨_, rfl⟩
-  rw [← hY]
-  have pw : ∀ d, d ≤ DF + DFs + E0 → X ^ d ≤ Y := fun d hd => by rw [hY]; exact Nat.pow_le_pow_right hX hd
-  have p1 := pw DF (by omega)
-  have p2 := pw DFs (by omega)
-  have p3 := pw E0 (by omega)
-  have p4 : X ≤ Y := by
-    have := pw 1 (by omega)
-    rwa [pow_one] at this
-  have q1 : KF * X ^ DF ≤ KF * Y := Nat.mul_le_mul_left _ p1
-  have q2 : CF * X ^ DFs ≤ CF * Y := Nat.mul_le_mul_left _ p2
-  have q3 : cX * X ^ E0 ≤ cX * Y := Nat.mul_le_mul_left _ p3
-  have e : (KF + CF + 64 * cX + 20) * Y = KF * Y + CF * Y + 64 * (cX * Y) + 20 * Y := by ring
-  rw [e]
-  exact ⟨by omega, by omega, by omega⟩
-
-/-- The flat part's steps and residues below `(C_F + 1566K_c + 3200c_X + 4B_C + 20000)·X^{D_k + B_D + 2}`. -/
-theorem swf_cost (CF Kc cX BC X DFs Dk BD E0 n lw : ℕ) (B : Fin 4 → ℕ) (hn : n + 1 ≤ X) (h1 : DFs ≤ Dk)
-    (h2 : E0 ≤ Dk) (hlw : lw ≤ 16 * (cX * X ^ E0)) (hB : ∀ c, B c ≤ BC * X ^ BD) :
-    CF * X ^ DFs + 1 + tailCost (Kc * X ^ Dk) B n lw ≤
-      (CF + 1566 * Kc + 3200 * cX + 4 * BC + 20000) * X ^ (Dk + BD + 2) ∧
-    CF * X ^ DFs + 2 * lw + 1 + (B 0 + B 1 + B 2 + B 3) ≤
-      (CF + 1566 * Kc + 3200 * cX + 4 * BC + 20000) * X ^ (Dk + BD + 2) := by
-  have hX : 1 ≤ X := by omega
-  obtain ⟨Y, hY⟩ : ∃ Y, Y = X ^ (Dk + BD + 2) := ⟨_, rfl⟩
-  rw [← hY]
-  have pw : ∀ d, d ≤ Dk + BD + 2 → X ^ d ≤ Y := fun d hd => by rw [hY]; exact Nat.pow_le_pow_right hX hd
-  have p1 := pw DFs (by omega)
-  have p2 := pw Dk (by omega)
-  have p3 := pw E0 (by omega)
-  have p4 := pw BD (by omega)
-  have p5 : X * X ≤ Y := by
-    have := pw 2 (by omega)
-    rwa [sq] at this
-  have hY1 : 1 ≤ Y := by
-    have := pw 0 (by omega)
-    rwa [pow_zero] at this
-  have q1 : CF * X ^ DFs ≤ CF * Y := Nat.mul_le_mul_left _ p1
-  have q2 : Kc * X ^ Dk ≤ Kc * Y := Nat.mul_le_mul_left _ p2
-  have q3 : cX * X ^ E0 ≤ cX * Y := Nat.mul_le_mul_left _ p3
-  have q4 : ∀ c, B c ≤ BC * Y := fun c => (hB c).trans (Nat.mul_le_mul_left _ p4)
-  have b0 := q4 0
-  have b1 := q4 1
-  have b2 := q4 2
-  have b3 := q4 3
-  have hbl : natBitLength n ≤ n + 1 := Nat.add_le_add_right (Nat.log_le_self _ _) 1
-  have rc : Sd.reqCost n lw ≤ 2200 * (X * X) + 50 * lw + 200 := by
-    unfold Sd.reqCost
-    have h : (natBitLength n + 10) * (100 * n + 200) ≤ (11 * X) * (200 * X) :=
-      Nat.mul_le_mul (by omega) (by omega)
-    have e : (11 * X) * (200 * X) = 2200 * (X * X) := by ring
-    omega
-  have e : (CF + 1566 * Kc + 3200 * cX + 4 * BC + 20000) * Y =
-      CF * Y + 1566 * (Kc * Y) + 3200 * (cX * Y) + 4 * (BC * Y) + 20000 * Y := by ring
-  rw [e]
-  unfold tailCost
-  exact ⟨by omega, by omega⟩
 
 /-! ## The constants -/
 
@@ -272,3 +231,5 @@ noncomputable def swf : SWParts.SWfT l where
 end Inst
 
 end NearCubicWires.WireExponent3_5.FinalPass.SymF
+
+end

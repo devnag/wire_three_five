@@ -1,4 +1,22 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.Core16
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.Core11
+import Proof.Wire_3_5.FinalPass.Core9
+import Proof.Wire_3_5.FinalPass.CoreIfaceM
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.Core17Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S5Core, part 17: the core half's cost below one power (P3:3170-3181)
 
@@ -23,36 +41,10 @@ open NearCubicWires.WireExponent3_5.FinalPass.Seams NearCubicWires.WireExponent3
 open NearCubicWires.WireExponent3_5.FinalPass.PlanFP
 open NearCubicWires.WireExponent3_5.FinalPass.S5T (mulCost)
 
-/-- **The count's chain** below `k·(40·K·N^D + 40)`. -/
-theorem zCost_le (N K D : ℕ) (hN : 1 ≤ N) : ∀ k, k ≤ D → zCost N K k ≤ k * (40 * (K * N ^ D) + 40)
-  | 0, _ => by simp [zCost]
-  | k + 1, hk => by
-    have ih := zCost_le N K D hN k (by omega)
-    have h1 : K * N ^ k ≤ K * N ^ D := Nat.mul_le_mul_left _ (Nat.pow_le_pow_right hN (by omega))
-    have h2 : K * N ^ k * N ≤ K * N ^ D := by
-      rw [show K * N ^ k * N = K * N ^ (k + 1) by ring]
-      exact Nat.mul_le_mul_left _ (Nat.pow_le_pow_right hN hk)
-    have hm : mulCost (K * N ^ k) N = 13 * (K * N ^ k * N) + 14 * (K * N ^ k) + 15 := by
-      unfold mulCost; ring
-    show zCost N K k + 1 + (mulCost (K * N ^ k) N + 1 + (3 * (K * N ^ k) + 3 + 1 + (1 + 1 + (5 * (K * N ^ k) + 1)))) ≤
-      (k + 1) * (40 * (K * N ^ D) + 40)
-    rw [hm]
-    have e : (k + 1) * (40 * (K * N ^ D) + 40) = k * (40 * (K * N ^ D) + 40) + 40 * (K * N ^ D) + 40 := by ring
-    rw [e]
-    generalize K * N ^ k * N = P at h2 ⊢
-    generalize K * N ^ k = Q at h1 ⊢
-    generalize K * N ^ D = R at h1 h2 ih ⊢
-    omega
-
-/-- A product below its share of `Y`. -/
-theorem mul_share (m c Y : ℕ) (hc : c ≤ Y) (hY : 1 ≤ Y) : m * (6 * c + 17) ≤ 23 * (m * Y) := by
-  have h1 : m * c ≤ m * Y := Nat.mul_le_mul_left _ hc
-  have h2 : m ≤ m * Y := Nat.le_mul_of_pos_right _ hY
-  have e : m * (6 * c + 17) = 6 * (m * c) + 17 * m := by ring
-  omega
-
 section Cost
 
 end Cost
 
 end NearCubicWires.WireExponent3_5.FinalPass.Core
+
+end

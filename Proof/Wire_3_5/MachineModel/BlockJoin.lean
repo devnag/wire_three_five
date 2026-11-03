@@ -377,6 +377,32 @@ end RippleIn
 
 /-! ## The merge, as pure semantics -/
 
+/-- The register after loading up to record `k` of `L`: the current record, the last one once `L` is exhausted, or
+the stale word `r0` if `L` is empty. -/
+def reg (L : List (List Bool)) (k : ℕ) (r0 : List Bool) : List Bool := ((L.take (k + 1)).getLast?).getD r0
+
+/-- The stream head after loading up to record `k`. -/
+def pos (L : List (List Bool)) (k : ℕ) : ℕ := ((L.take (k + 1)).flatMap frame).length
+
+/-- The merge state: records of `A` counted, records of `B` processed, the accumulated sum, the last test. -/
+structure MS where
+  i : ℕ
+  j : ℕ
+  s : ℕ
+  t : Bool
+
+/-- One merge step, exactly as the machine takes it. -/
+def mstep (A B : List (List Bool)) (init : Bool) (ra0 rb0 : List Bool) (m : MS) : MS :=
+  if (foldBits cmpStep init (reg A m.i ra0) (reg B m.j rb0) && decide (m.i < A.length)) then
+    ⟨m.i + 1, m.j, m.s, true⟩
+  else ⟨m.i, m.j + 1, m.s + m.i, false⟩
+
+theorem reg_lt (L : List (List Bool)) (k : ℕ) (r0 : List Bool) (hk : k < L.length) : reg L k r0 = L[k] := by
+  unfold reg
+  rw [List.getLast?_eq_getElem?, List.length_take, Nat.min_eq_left (by omega)]
+  rw [List.getElem?_take, if_pos (by omega), show k + 1 - 1 = k by omega, List.getElem?_eq_getElem hk]
+  rfl
+
 /-- The relation the pass counts: `≤` (init `true`) or `<` (init `false`) on values. -/
 def rel (init : Bool) (a b : List Bool) : Prop := value a < value b ∨ (init = true ∧ value a = value b)
 
@@ -389,6 +415,104 @@ theorem foldCmp_rel (init : Bool) (a b : List Bool) (h : a.length = b.length) :
   by_cases he : value a = value b
   · rw [if_pos he]; cases init <;> simp [he]
   · rw [if_neg he]; apply decide_eq_decide.mpr; simp [he]
+
+/-- The merge invariant along the path. -/
+def Inv (A B : List (List Bool)) (init : Bool) (m : MS) : Prop :=
+  m.i ≤ A.length ∧ m.j ≤ B.length ∧
+    (∀ i' (hi' : i' < A.length), i' < m.i → ∀ j' (hj' : j' < B.length), m.j ≤ j' → rel init A[i'] B[j']) ∧
+    m.s = ((B.take m.j).map (fun b => A.countP (fun a => decide (rel init a b)))).sum
+
+theorem rel_mono_right (init : Bool) (a b b' : List Bool) (hbb : value b ≤ value b') (h : rel init a b) :
+    rel init a b' := by
+  unfold rel at *
+  rcases h with h | ⟨hi, h⟩
+  · exact Or.inl (by omega)
+  · rcases Nat.lt_or_ge (value a) (value b') with h' | h'
+    · exact Or.inl h'
+    · exact Or.inr ⟨hi, by omega⟩
+
+theorem not_rel_mono_left (init : Bool) (a a' b : List Bool) (haa : value a ≤ value a') (h : ¬ rel init a b) :
+    ¬ rel init a' b := by
+  unfold rel at *
+  intro h'
+  apply h
+  rcases h' with h' | ⟨hi, h'⟩
+  · exact Or.inl (by omega)
+  · rcases Nat.lt_or_ge (value a) (value b) with h'' | h''
+    · exact Or.inl h''
+    · exact Or.inr ⟨hi, by omega⟩
+
+/-- When the `i` counted records of `A` are exactly those related to `b`, the count is `i`. -/
+theorem countP_prefix (A : List (List Bool)) (p : List Bool → Bool) (i : ℕ) (hi : i ≤ A.length)
+    (hyes : ∀ i' (h : i' < i), p (A[i']'(by omega)) = true) (hno : ∀ i' (h : i' < A.length), i ≤ i' → p A[i'] = false) :
+    A.countP p = i := by
+  have hsplit : A = A.take i ++ A.drop i := (List.take_append_drop i A).symm
+  rw [hsplit, List.countP_append]
+  have h1 : (A.take i).countP p = i := by
+    rw [List.countP_eq_length.mpr]
+    · simp; omega
+    · intro x hx
+      obtain ⟨k, hk, rfl⟩ := List.getElem_of_mem hx
+      rw [List.getElem_take]
+      exact hyes k (by simp at hk; omega)
+  have h2 : (A.drop i).countP p = 0 := by
+    rw [List.countP_eq_zero]
+    intro x hx
+    obtain ⟨k, hk, rfl⟩ := List.getElem_of_mem hx
+    rw [List.getElem_drop]
+    have := hno (i + k) (by simp at hk; omega) (by omega)
+    simp [this]
+  omega
+
+theorem mstep_inv (A B : List (List Bool)) (init : Bool) (ra0 rb0 : List Bool) (W : ℕ)
+    (hA : ∀ a ∈ A, a.length = W) (hB : ∀ b ∈ B, b.length = W)
+    (sA : A.Pairwise (fun a b => value a ≤ value b)) (sB : B.Pairwise (fun a b => value a ≤ value b))
+    (m : MS) (hm : Inv A B init m) (hj : m.j < B.length) : Inv A B init (mstep A B init ra0 rb0 m) := by
+  obtain ⟨hi, hjle, hall, hs⟩ := hm
+  have hregB : reg B m.j rb0 = B[m.j] := reg_lt B m.j rb0 hj
+  unfold mstep
+  by_cases hc : (foldBits cmpStep init (reg A m.i ra0) (reg B m.j rb0) && decide (m.i < A.length)) = true
+  · rw [if_pos hc]
+    simp only [Bool.and_eq_true, decide_eq_true_eq] at hc
+    obtain ⟨hcmp, hiA⟩ := hc
+    have hregA : reg A m.i ra0 = A[m.i] := reg_lt A m.i ra0 hiA
+    rw [hregA, hregB, foldCmp_rel init _ _ (by rw [hA _ (List.getElem_mem _), hB _ (List.getElem_mem _)])] at hcmp
+    simp only [decide_eq_true_eq] at hcmp
+    refine ⟨by simp; omega, hjle, fun i' hi' hi'' j' hj' hjj => ?_, hs⟩
+    rcases Nat.lt_or_ge i' m.i with h | h
+    · exact hall i' hi' h j' hj' hjj
+    · have : i' = m.i := by simp at hi''; omega
+      subst this
+      rcases Nat.eq_or_lt_of_le hjj with h' | h'
+      · subst h'; exact hcmp
+      · exact rel_mono_right init _ _ _ ((List.pairwise_iff_getElem.mp sB) m.j j' hj hj' h') hcmp
+  · rw [if_neg hc]
+    refine ⟨hi, by simp; omega, fun i' hi' hi'' j' hj' hjj => hall i' hi' hi'' j' hj' (by simp at hjj; omega), ?_⟩
+    rw [hs, List.take_add_one, List.getElem?_eq_getElem hj, Option.toList_some, List.map_append, List.sum_append]
+    simp only [List.map_cons, List.map_nil, List.sum_cons, List.sum_nil, Nat.add_zero]
+    congr 1
+    symm
+    apply countP_prefix A _ m.i hi
+    · intro i' h
+      simp only [decide_eq_true_eq]
+      exact hall i' (by omega) h m.j hj le_rfl
+    · intro i' h hge
+      simp only [decide_eq_false_iff_not]
+      have hnot : ¬ rel init A[m.i] B[m.j] ∨ ¬ m.i < A.length := by
+        simp only [Bool.and_eq_true, decide_eq_true_eq, not_and_or] at hc
+        rcases hc with hc | hc
+        · left
+          by_cases hiA : m.i < A.length
+          · rw [reg_lt A m.i ra0 hiA, hregB, foldCmp_rel init _ _ (by rw [hA _ (List.getElem_mem _),
+              hB _ (List.getElem_mem _)])] at hc
+            simpa using hc
+          · exact absurd (by omega : m.i < A.length) hiA
+        · right; exact hc
+      rcases hnot with hn | hn
+      · rcases Nat.eq_or_lt_of_le hge with h' | h'
+        · subst h'; exact hn
+        · exact not_rel_mono_left init _ _ _ ((List.pairwise_iff_getElem.mp sA) m.i i' (by omega) h h') hn
+      · exact absurd (by omega : m.i < A.length) hn
 
 
 
@@ -410,6 +534,7 @@ theorem foldCmp_rel (init : Bool) (a b : List Bool) (h : a.length = b.length) :
 Tapes: 0 `A` and 1 `B` (the streams); 2 `RA` and 3 `RB` (the registers); 4 `CA` (the count); 5 the pass's sum;
 6 the other pass's sum (untouched); 7 `T`, 8 `AV`, 9 `BV` (cells); 10 a spare cell; 11 the rewind log. -/
 
+def andOp : Bool → Bool → Bool → Bool := fun t a _ => t && a
 
 
 section PassStages
@@ -453,6 +578,8 @@ theorem read_pre (L : List (List Bool)) (k : ℕ) (hne : ∀ w ∈ L, w ≠ []) 
     unfold pre streamOf
     rw [List.take_of_length_le (by omega)]
     simpa using Streaming.read_append (L.flatMap frame) [] false
+
+def loadCost (W : ℕ) : ℕ := 2 * (2 * W + 1) + 2 + 1 + 1 + 1 + 1 + 2
 
 section Loads
 

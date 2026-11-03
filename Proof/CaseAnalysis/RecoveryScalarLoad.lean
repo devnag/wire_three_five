@@ -1,4 +1,6 @@
 import Proof.PCP.PCPUnaryCopy
+import Proof.PCP.PCPPairReusable
+import Proof.Hierarchy.HierarchyWidth
 
 /-! Five actual raw source scalars are copied into the metadata bank.
 One paid B sweep allocates all destinations; the original scalars survive. -/

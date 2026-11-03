@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.Writers.CopyNat
+import Proof.Wire_3_5.Foundations.SkeletonBase
 
 /-! # PA library (a), part 4: the PrimRequest codec — the word's fields, the writer and the parser
 
@@ -48,6 +49,7 @@ theorem word_eq (r : PrimRequest) :
 /-- The codes list has the call's arity as its length. -/
 theorem codeList_length (r : PrimRequest) : (codeList r).length = r.a := by simp [codeList]
 
+
 /-! ## The writer -/
 
 section Writer
@@ -65,6 +67,7 @@ theorem word_length (r : PrimRequest) : r.word.length = (RepairRepresentation.na
 
 end Writer
 
+
 /-! ## The parser -/
 
 section Parser
@@ -74,19 +77,11 @@ open NearCubicWires.WireExponent3_5.PrimAsm.CopyNat
 
 variable {ns nr : ℕ} (cap : ℕ)
 
-/-- The parser's register maps: `n` read with scratch `W 3, W 4, W 5, W 8`; the copies with `Q 0 = W 10`, scratch
-`W 3 … W 8`, `Q 8 = W 11`, and their own position counter `Q 7`: `W 9` (codes), `W 12` (carriers), `W 13`
-(translation). -/
-def pQc : Fin 9 ↪ Fin 14 := ⟨![10, 3, 4, 5, 6, 7, 8, 9, 11], by decide⟩
-def pQk : Fin 9 ↪ Fin 14 := ⟨![10, 3, 4, 5, 6, 7, 8, 12, 11], by decide⟩
-def pQt : Fin 9 ↪ Fin 14 := ⟨![10, 3, 4, 5, 6, 7, 8, 13, 11], by decide⟩
 
-@[simp] theorem pQc_apply (i : Fin 9) : pQc i = ![10, 3, 4, 5, 6, 7, 8, 9, 11] i := rfl
-@[simp] theorem pQk_apply (i : Fin 9) : pQk i = ![10, 3, 4, 5, 6, 7, 8, 12, 11] i := rfl
-@[simp] theorem pQt_apply (i : Fin 9) : pQt i = ![10, 3, 4, 5, 6, 7, 8, 13, 11] i := rfl
 @[simp] theorem stp_true : stp true = 2 := rfl
 
 end Parser
+
 
 /-! ## The round trip -/
 
@@ -94,13 +89,6 @@ section RoundTrip
 open NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdinary NearCubicWires.WireExponent3_5.FinalPass.Tm
 open NearCubicWires.WireExponent3_5.PrimAsm.ParseNat NearCubicWires.WireExponent3_5.PrimAsm.WriteNat
 open NearCubicWires.WireExponent3_5.PrimAsm.CopyNat
-
-variable {ns nr : ℕ} (cap : ℕ)
-
-/-- The writer's registers inside the parser's: `W 0 … W 11`. -/
-def eR : Fin 12 ↪ Fin 14 := Fin.castLEEmb (by norm_num)
-
-@[simp] theorem eR_apply (i : Fin 12) : eR i = Fin.castLE (by norm_num) i := rfl
 
 end RoundTrip
 

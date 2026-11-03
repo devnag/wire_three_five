@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeQueryAllocate
+import Proof.Circuits.DecompositionCountPosition
 
 /-! Literal cold query-bank layout: original descriptor/stream, raw R/Q,
 and the physically computed C/F/G. The two real sentinel drivers are

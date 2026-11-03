@@ -1,13 +1,30 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.Close2
 import Proof.Wire_3_5.UnionMachine.S6Sizes
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.Asm1
+import Proof.Wire_3_5.FinalPass.Asm2
+import Proof.Wire_3_5.FinalPass.S5TInst
+import Proof.Wire_3_5.FinalPass.S6Iface
+import Proof.Wire_3_5.FinalPass.SeamsHalves
+import Proof.Wire_3_5.FinalPass.Stage1
+import Proof.Wire_3_5.UnionMachine.SymSize2
+import Proof.Wire_3_5.FinalPass.Close2Base
+import Proof.Wire_3_5.UnionMachine.S6SizesBase
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-!
 # The final pass's closure join, step 3
 
-`finalPassClose2` with S6's size bounds N1–N3 supplied by verified code (`S6Sizes.fpIn_bound`, `seedCount_bound`, `ptCount_bound`). The producers still open, one binder each:
+`finalPassClose2` with S6's size bounds N1–N3 supplied by verified code (C6b:
+`S6Sizes.fpIn_bound`, `seedCount_bound`, `ptCount_bound`). The producers still open, one binder each:
 
-* `mCore`, `core`: the core half (`coreGen` over the pool writers SA/SB/NW/SW, -M);
-* `hU`: the uniformity bundle at these parts (the output machine).
+* `mCore`, `core`: the core half (the `coreGen` over the pool writers SA/SB/NW/SW);
+* `hU`: the uniformity bundle at these parts (X6).
 
 Paper quantity of the main type: `FinalPassLeaf l`, the final pass of `lem:primitive` (P3:3044-3048, 3170-3181).
 -/
@@ -34,3 +51,5 @@ noncomputable def finalPassClose3
     UnionMachine.S6Sizes.ptCount_bound hU
 
 end NearCubicWires.WireExponent3_5.FinalPass.Close3
+
+end

@@ -1,4 +1,4 @@
-import Proof.MachineModel.OrdinaryBucketScan
+import Proof.MachineModel.OrdinaryStreamController
 
 /-! Locate the rank half of a bounded annotated record. Two already loaded
 copies permit a four-to-two physical-head walk, without a numeric-width

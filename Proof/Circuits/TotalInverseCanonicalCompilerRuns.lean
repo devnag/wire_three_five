@@ -1,6 +1,11 @@
 import Batteries.Tactic.OpenPrivate
-import Proof.Circuits.TotalInverseCompilerRuns
+import Proof.Circuits.CallableRelocation
+import Proof.MachineModel.BoundedOracleStructuralSelectiveProgram
 import Proof.Supplier.SelectiveTowerClosure
+import Proof.Circuits.TotalInverseCompilerRuns
+import Proof.Supplier.SelectiveClausesGuardRequest
+import Proof.MachineModel.TotalSelectiveFixedCountProgram
+import Proof.MachineModel.TotalSelectiveVerifierRowsProgram
 
 /-! # Premise-free canonical guarded inverse compiler runners -/
 

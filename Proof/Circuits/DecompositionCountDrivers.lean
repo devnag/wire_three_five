@@ -1,4 +1,5 @@
-import Proof.Circuits.DecompositionAtomTail
+import Proof.Circuits.DecompositionAtomReset
+import Proof.MachineModel.OrdinaryWilliamsSourceCropLayout
 
 /-! Paid count copies from the two actual native header outputs. Only counts
 are expanded to unary; integer magnitudes remain in their native binary form. -/

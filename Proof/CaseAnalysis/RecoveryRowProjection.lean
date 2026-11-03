@@ -1,5 +1,6 @@
-import Proof.Amplification.RecoveryPCPFormulaResumeRowRandomness
 import Proof.CaseAnalysis.RecoveryRowReusableBudget
+import Proof.Amplification.RecoveryPCPFormulaResumeRowRandomness
+import Proof.PCP.PCPPairReusable
 
 /-! The original normalized address producer uses one retained padded
 output cell and its existing exact randomness successor. -/

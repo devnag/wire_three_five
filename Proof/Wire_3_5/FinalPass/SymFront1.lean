@@ -1,12 +1,25 @@
-import Proof.Wire_3_5.UnionMachine.NumsA9
+import Lean
+import Proof.Wire_3_5.UnionMachine.NumsA9Base
 import Proof.Wire_3_5.Foundations.OutMachineDataDockW2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.FpInLen
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.C4GateSymB
+import Proof.Wire_3_5.Assembly.Split
 
-/-! # The SYM front, part 1: the data stage with its tapes exported (build once)
 
-`NumsA.dockPost` (the per-call data stage docked on NW's bank `tmapA`, then the counts unframed onto stream
-`113`) with `DataW.dataDock_stepW` in place of `DataDock.dataDock_step`, so the data stage's output tapes are
+noncomputable section
+set_option maxRecDepth 120000
+
+
+/-! # The SYM front, part 1: the data stage with its tapes exported (root #265/#268, build once)
+
+The `NumsA.dockPost` (the per-call data stage docked on NW's bank `tmapA`, then the counts unframed onto stream
+`113`) with X6's `DataW.dataDock_stepW` in place of `DataDock.dataDock_step`, so the data stage's output tapes are
 EXPORTED: every filled SYM slot's scan word (`scanWord C_i = natWord C.bottomCount ++ frame (ofFn C.top) ++ tabSeg`,
-the top table for SWt) and gate table (`gatesW (tabH G_i) G_i`, for SWg). The proof is the reference one, the request explicit.
+the top table for SWt) and gate table (`gatesW (tabH G_i) G_i`, for SWg). The proof is C6b's, the request explicit.
 
 * **`dataPostW`**.
 
@@ -32,7 +45,8 @@ open NearCubicWires.WireExponent3_5.UnionMachine NearCubicWires.WireExponent3_5.
 section Gate
 variable (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1)
 
-/-- **The data stage and the counts onto stream `113`**, the scan words exported (`NumsA.dockPost` with `dataDock_stepW`): at a SYM request, from `PreDock` at `L = W = wOf |fpIn| n`. -/
+/-- **The data stage and the counts onto stream `113`**, the scan words exported (the `NumsA.dockPost` with X6's
+`dataDock_stepW`): at a SYM request, from `PreDock` at `L = W = wOf |fpIn| n`. -/
 theorem dataPostW (x : ℕ) (hx : DataDock.DT + 3 ≤ x) (n a' : ℕ) (ha' : a' ≤ 4)
     (Cs : Fin a' → NormalizedSymmetricThresholdCircuit n) (carriers : List (Stars.Carrier n)) (translation : List ℕ)
     (hcall : (callInputs l F kclk coef A a ha).Call ⟨n, .sym, a', ha', Cs, carriers, translation⟩)
@@ -279,3 +293,5 @@ theorem dataPostW (x : ℕ) (hx : DataDock.DT + 3 ≤ x) (n a' : ℕ) (ha' : a' 
 end Gate
 
 end NearCubicWires.WireExponent3_5.FinalPass.SymFront
+
+end

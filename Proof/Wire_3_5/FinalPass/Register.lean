@@ -190,6 +190,17 @@ theorem role_reg {j : Fin (ns + 2 + nr)} {r : Fin nr} (h : role j = .reg r) : j 
         show j.val = ns + 2 + (j.val - (ns + 2))
         omega
 
+/-- The encoded bank of an abstract state, with stream contents `inp` and register capacity `cap`. -/
+def enc (inp : Fin (ns + 1) → List Bool) (cap : ℕ) (σ : RState ns nr) : Bank (ns + 2 + nr) where
+  H := fun j => match role j with
+    | .stream i => σ.sh i
+    | .cell => 0
+    | .reg r => σ.val r
+  A := fun j => match role j with
+    | .stream i => inp i
+    | .cell => [σ.cell]
+    | .reg r => regTape cap (σ.val r)
+
 variable (inp : Fin (ns + 1) → List Bool) (cap : ℕ)
 
 

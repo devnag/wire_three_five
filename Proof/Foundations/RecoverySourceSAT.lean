@@ -1,4 +1,5 @@
 import Proof.Foundations.RecoveryOracleSemantics
+import Statement
 
 /-! The source refuter uses conventional explicit 3SAT, represented by a
 canonical balanced list of fixed-length clause codes.  Recursive `Encodable`

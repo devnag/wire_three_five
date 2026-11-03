@@ -28,9 +28,31 @@ open PCJ9eff70d512234a4c_Fixed PCJd4d1d9d7d1fa4313_Production
 attribute [local irreducible] P1TopDownPaidPayload.tapes
 noncomputable section
 
+variable (printer : WilliamsAlgorithm) (work : Nat)
+
 /-! ## 1. The three port blocks -/
 
+/-- The `k`-th public/private work port of the row bank. -/
+def workSlot (k : Fin (rowWork work)) : Fin (rowTapes printer work) :=
+  k.natAdd (440+(P1TopDownPaidPayload.tapes printer+2))
+
+variable {α : Type} (h : Fin 440 → α) (f : Fin (P1TopDownPaidPayload.tapes printer+2) → α)
+  (w : Fin (rowWork work) → α)
+
 /-! ## 2. The three blocks of one row -/
+
+variable {q Lq : Nat} (a : DecompositionAlgorithm) (F : Packets.Family q Lq)
+  (g : Packets.Geometry F) (layout : Packets.Layout a F g) (caps : RowCaps) (reserve : Fin 440 → Nat)
+  (base : Nat → Fin (rowWork work) → List Bool) (drv lg : Fin (rowWork work))
+
+/-- The full raw source remains resident throughout the family. -/
+def rawFamily : List Bool := F.rows.flatMap (PCJ38fbfed565f64139_Family.rawWord a F g)
+
+/-- Metadata and packet-count driver do not depend on the row key. -/
+def commonHeader : Fin 440 → List Bool :=
+  letI := PCJcc051fd4c1bd4540_Header.radix a F g layout
+  CompactNativeInitialize.input (Packets.pool a F g) ((Packets.live F).card+1)
+    layout.w (C10SupplierRowInput.liveList (Packets.live F)).length (rawFamily a F g) []
 
 /-! ## 3. The state -/
 

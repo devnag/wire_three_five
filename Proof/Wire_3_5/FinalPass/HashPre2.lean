@@ -1,14 +1,31 @@
+import Lean
+import Proof.Wire_3_5.FinalPass.HashPre1
 import Proof.Wire_3_5.FinalPass.HashOcc
 import Proof.Wire_3_5.Primitive.Writers.ThrSide6
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.HashRange
+import Proof.Wire_3_5.FinalPass.HashSz1
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.HashOccBase
+import Proof.Wire_3_5.FinalPass.HashPre1Base
+import Proof.Wire_3_5.Primitive.Writers.ThrSide6Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The HASH child request's precondition, part 2: the printer's budget and `hpre`
 
 alg:eq-budget (P3:1897-1900) at the HASH child request, against the auxiliary load
 `Ψ_aux = C_D[k + L² + (k+L³)L²(k+L)]` (P3:3101-3102, "It suffices that `max{Ψ_i, Ψ_aux} ≤ c₀(n−k)`", P3:3106-3107):
-the printed expression has `≤ 2^{k + c_V X²}` terms, the dense pool `≤ 2^{k + c_{Da} L}` children (`thrD_le`),
+the printed expression has `≤ 2^{k + c_V X²}` terms, the dense pool `≤ 2^{k + c_{Da} L}` children (the `thrD_le`),
 `m = 2t + 1`, `Q' = d_Q(L³ + k + L)`, `d = d_D L²`, so `log A + m + Q' + Q'd·log(P_ex+1) ≤ C₁·Ψ_aux/C_D`, within
 `dRow ≥ (n−k)/2` once `C_D ≥ 160C₁ + 2` (`occCDH`, fixed before `F`). With the pool's fits at `h = d_H(n+1)^{e_H}`
-(`thr_fits_of`) and part 1's numbers: **`hpre_hash`**, `C3Req.Pre` of the HASH child request at every prefix of
+(the `thr_fits_of`) and part 1's numbers: **`hpre_hash`**, `C3Req.Pre` of the HASH child request at every prefix of
 at most `s_h = 2t·ℓ₀` bits (`HashEAt`'s `hpre`).
 
 * **`fits_hash`**, **`occ_hash`**, **`hpre_hash`**.
@@ -29,7 +46,7 @@ open NearCubicWires.WireExponent3_5.FinalPass.FreeGen
 
 section Gate
 variable (l : Literals) (F : GateFree l)
-/-- **The pool fits at the HASH `h`** (`thr_fits_of` at `h = d_H(n+1)^{e_H}`). -/
+/-- **The pool fits at the HASH `h`** (the `thr_fits_of` at `h = d_H(n+1)^{e_H}`). -/
 theorem fits_hash (c : SymC) (hdH : (gate0 l F).alg.coefficient * 4 ^ (gate0 l F).alg.degree + 2 ≤ c.dH)
     (heH : 26 * (gate0 l F).alg.degree + 1 ≤ c.eH) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ} (ha' : a' ≤ 4)
     (Cs : Fin a' → NormalizedThresholdThresholdCircuit n) (carriers : List (Carrier n)) (translation : List ℕ)
@@ -213,3 +230,5 @@ theorem hpre_hash (c : SymC) (hc : HpreH l (gate0 l F).alg c) (hCD : occCDH l (g
 end Gate
 
 end NearCubicWires.WireExponent3_5.FinalPass.HashFr
+
+end

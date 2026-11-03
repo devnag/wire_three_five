@@ -1,5 +1,5 @@
 import Proof.Wire_3_5.FinalPass.Core2
-import Proof.Wire_3_5.FinalPass.CoreIface
+import Proof.Wire_3_5.FinalPass.CoreIfaceBase
 
 /-! # S5Core, part 3: a word program docked onto the bank (P3:3170-3181)
 

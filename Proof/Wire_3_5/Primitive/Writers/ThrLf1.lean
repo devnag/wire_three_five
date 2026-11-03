@@ -1,11 +1,34 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.ThrHc3S
-import Proof.Wire_3_5.Primitive.Writers.ThrBud2
-import Proof.Wire_3_5.Primitive.SeedFix.C4SymLfC
-import Proof.Wire_3_5.Primitive.SeedFix.TS4W
+import Proof.Wire_3_5.Primitive.Writers.ThrBud2Base
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymLfCBase
+import Proof.Wire_3_5.Primitive.SeedFix.TS4WBase
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.C3ReqIface3
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.HashFam
+import Proof.Wire_3_5.Primitive.Writers.HashLeaf
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.ThrCap4
+import Proof.Wire_3_5.Primitive.SeedFix.C4GateThrB
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTypes
+import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPoly
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.ThrB7Base
+import Proof.Wire_3_5.Primitive.Writers.ThrDataH
+import Proof.Wire_3_5.Primitive.Writers.ThrK7Base
+import Proof.Wire_3_5.Primitive.Writers.ThrStrip7
+import Proof.Wire_3_5.Primitive.SeedFix.C3ReqIface
 
-/-! # c4 THR block, piece 9 part 1: the THR stage at one THR call (`thr_plain_run`)
 
-The THR twin of `sym_plain_run` (C4SymLfB): at a THR call, from the contract's side conditions (`ThrEAt3`), its
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2 c4 THR block, piece 9 part 1: the THR stage at one THR call (`thr_plain_run`)
+
+The THR twin of the `sym_plain_run` (C4SymLfB): at a THR call, from the contract's side conditions (`ThrEAt3`), its
 load (`c3_le`) and strip (`ThrStripAt`), the numbers' fits at the capacity v2 (`ThrFitAt`), the v4 data stage `S4`
 at the unary numbers `C_L(n+1)^D ≥ needW` and `C_d(n+1)^D` above the data word, and PA's C3 request writer, the THR
 stage runs to the call's seed word within any budget above its steps (`thr_stage_of_big` with `thr_hd`,
@@ -140,3 +163,5 @@ theorem thr_plain_run (l : Literals) (F : GateFree l) (wa : RepairRepresentation
     hQp hcost hrange hR Bd (hBd _ hR hb _)
 
 end NearCubicWires.WireExponent3_5.PrimAsm.ThrLf
+
+end

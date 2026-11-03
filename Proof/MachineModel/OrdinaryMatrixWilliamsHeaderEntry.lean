@@ -9,6 +9,10 @@ set_option maxHeartbeats 250000
 set_option maxRecDepth 120000
 set_option warningAsError true
 
+def slots : Fin 4 → Fin 412 := ![12,409,410,411]
+noncomputable def first := TapeEmbedding.machine 3 MatrixFirstSignedPlane.machine
+noncomputable def last := RecoveryFocus.machine slots MatrixPowerHeader.machine
+noncomputable def machine := Composition.machine first last
 noncomputable def budget (r : Request) := MatrixFirstSignedPlane.budget r+1+(6*r.d+14)
 
 

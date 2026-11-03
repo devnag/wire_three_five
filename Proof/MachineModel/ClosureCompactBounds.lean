@@ -1,5 +1,7 @@
 import Proof.CaseAnalysis.FinalSupplierRowInput
+import Proof.CaseAnalysis.RowsCommonInput
 import Proof.MachineModel.PlanDirectCount
+import Proof.Supplier.RowOccurrenceReusable
 
 /-! A.12's compact bounds at the actual hardwired pool and incidence bank.
 Hardwiring cannot increase the equation magnitude bound. Incidence conversion

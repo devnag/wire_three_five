@@ -19,11 +19,23 @@ noncomputable section
 attribute [local irreducible] P1TopDownPaidPayload.tapes
 
 section seam
+variable (mask : MaskProducer) {selector : CyclicChoice.Laws}
+  (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector)
+  (rows : PCJc4297ab269d8423a_Source.RowLibrary selector) (sources : EightSources)
+  (res : Nat) (hres : 19 ≤ res) {gamma : Real} (p : Parameters sources gamma) (k r : Nat)
 
 set_option hygiene false in
 local notation "𝔇" => dimsOf mask packets rows sources res p k r
 set_option hygiene false in
 local notation "𝒽" => UOf_le mask packets rows sources res p k r
+
+def refill3 {vE vP : PCJd4d1d9d7d1fa4313_Production.Request → Nat}
+    (se : PacketsGlue.RequestMeta.UnaryStage (decompositionOf sources) vE)
+    (sp : PacketsGlue.RequestMeta.UnaryStage (decompositionOf sources) vP) {gW : Nat}
+    (e : (𝔇).RestExt3 se.extra sp.extra gW)
+    {s7 : Nat} (g7M : Machine (UOf mask packets rows sources res p k r) s7) :
+    Σ s, Machine (UOf mask packets rows sources res p k r) s :=
+  ⟨_, Rest.refillPro3 se sp e 𝒽 g7M⟩
 
 set_option hygiene false in
 local notation "𝒞" => skelCodeR mask packets rows sources res hres p k r ph (refill3 mask packets rows sources res p k r se sp e g7M) preF

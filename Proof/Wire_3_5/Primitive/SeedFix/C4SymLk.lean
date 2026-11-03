@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.C4SymKB
+import Proof.Wire_3_5.Primitive.Writers.SymQM
 
 /-! # C4.K SYM item (c), part 1: the numbers machine's values are the call's
 

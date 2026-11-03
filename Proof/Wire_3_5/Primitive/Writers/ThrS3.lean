@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.Primitive.Writers.ThrSet5
+import Proof.Wire_3_5.Primitive.Writers.ThrSet4
 import Proof.Wire_3_5.Primitive.SeedFix.C4CapG
 
 /-! # c4 THR block, the THR setup at capacity v2

@@ -1,7 +1,6 @@
-import Proof.Wire_3_5.Compiler.Expression
-import Proof.Wire_3_5.Foundations.Runtime
 import Proof.Wire_3_5.Sampler.SamplerFix
-import Proof.Wire_3_5.Stars.StarSelection
+import Proof.Wire_3_5.Foundations.Runtime
+import Proof.Wire_3_5.Compiler.Table
 
 /-! # B6: `samp:printable` accounting — the sample count, the seed length, the load, the final pass (P3:2977-3055)
 
@@ -11,7 +10,7 @@ logarithm is `O_h(k+L)`, so the seed in samp:seed has that length [...] Its lead
 independently of the subsequent choice of `r`. The final sampled observable is evaluable in `2^{n−k/4}poly(n)` time"
 (P3:2987-3001), and the proof's "Substitution in (alg:eq-occurrences) gives
 `log₂𝒮 ≤ O_h(k+L²) + O_h(k+L)·d·O(k+L)`, which is (samp:load)" (P3:3027-3031) and "For `h = 4`, (samp:q) is
-`Q = O(N^{3/2}I^{1/4}η^{−2}) = 2^{3k/4}n^{O(1)}`" (P3:3043-3044), for the direct `h = 4` condition of this component
+`Q = O(N^{3/2}I^{1/4}η^{−2}) = 2^{3k/4}n^{O(1)}`" (P3:3043-3044), for the direct `h = 4` condition used here
 (`Q⁴η⁸ ≥ 4⁸C₈·I·N⁵`, `Q = O(N^{5/4}I^{1/4}η^{−2})`).
 
 Main declarations: **`sampleCount`** (`Q = 2^{⌈5kh/4⌉}·2^{13}·I·n^{2D}`) with **`sampleCount_rate`** (it meets

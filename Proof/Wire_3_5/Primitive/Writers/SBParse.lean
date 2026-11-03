@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.Writers.SBEmit
+import Proof.Wire_3_5.Primitive.Writers.DataSetup
 import Proof.Wire_3_5.Primitive.Writers.SparseNum
 
 /-! # SB, part 15: the request's length `n` and mode bit, and the carrier counts

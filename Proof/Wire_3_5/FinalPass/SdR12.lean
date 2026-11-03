@@ -1,4 +1,18 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SdR11
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SdI3
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.FinalPass.SdR3
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.FinalPass.SdR10Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S4 v2, part R12: S4's degrees on `(l, fe)` alone (the uniformity `S6Uni` needs)
 
@@ -42,3 +56,5 @@ theorem ZT_eq : ZT l F = ZTe l F.filterErrDeg := rfl
 end Family
 
 end NearCubicWires.WireExponent3_5.FinalPass.Sd.R
+
+end

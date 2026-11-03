@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.CaseTwoSourceBlock
+import Proof.MachineModel.GeneratedAmplifierCopy
+import Proof.Amplification.RecoveryTseitinReadOnly
 
 /-! The retained PCPP request and the actual input field are unframed,
 concatenated, then framed once for the original honest auxiliary machine.

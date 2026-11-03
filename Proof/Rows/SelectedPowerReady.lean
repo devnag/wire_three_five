@@ -12,9 +12,14 @@ open NearCubicWires.ExtDecompositionBatch NearCubicWires.RepairOrdinary.Recovery
 open NearCubicWires.RepairRepresentation NearCubicWires.RepairSource.VerifierDecoding
 open NearCubicWires.RepairSource.CloseoutFinal SignedSortKey
 open PCJ45bee56da9f34d5a_SelectedPowerPrepare
+open PCJ45bee56da9f34d5a_SelectedPowerBody (equation)
 noncomputable section
 attribute [local irreducible] PCJ45bee56da9f34d5a_HeaderRewind.clear
 
+
+def budget {n :Nat} (gs :List (ExactThresholdGate n)) (i :Fin gs.length) (w F U v :Nat):=
+ ((2*PCPPQueryNatural.budget n+4*U+10)+1+(MatrixUnaryTemplate.budget v i.val+2*U+5))+1+
+ PCJ45bee56da9f34d5a_SelectedPowerRun.budget gs i w F U+1+(4*U+9)
 
 end
 end PCJ45bee56da9f34d5a_SelectedPowerReady

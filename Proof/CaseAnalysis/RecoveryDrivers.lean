@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoveryArity
+import Proof.CaseAnalysis.RecoveryGrammarDriverReady
 
 /-! Print both original grammar drivers and use the first one immediately
 for the physical description arity, before positioning any scan head. -/

@@ -1,5 +1,6 @@
 import Batteries.Tactic.OpenPrivate
 import Proof.Circuits.StructuralTaggedReverseEntry
+import Proof.MachineModel.BoundedOracleStructuralSelectiveProgram
 import Proof.Supplier.SelectiveClausesGuardRequest
 
 /-!

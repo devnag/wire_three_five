@@ -1,4 +1,15 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.WriterIfaceJ
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.PreLinkBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # PA (e): the writers' class link (the TYPE C6 proves), and the load-constant floor it needs
 
@@ -10,7 +21,7 @@ HASH) run over the star cells, `2^{k+L}·poly(n)` units (`k = kOf n`, `L = ⌈lo
 * **`PreLink`** (the (e) TYPE, for C6): after the endpoint exponent `fe` and the writers' fixed polynomial
   `(D, C)`, a floor envelope `E_W` and a load-constant floor `CD_W`; for every admissible `F` above both floors, a
   coefficient `c_W` with `C·(2^{k+L} + n + 1)^D ≤ c_W · classBound E_W .preprocessing n k Ψ` at every call length.
-* **`psiOf_eq_zero`**: at `F.CD = 0` the load `Ψ` is `0`, so **`preClass_zero`**: the
+* FINDING (why the floor): **`psiOf_eq_zero`**: at `F.CD = 0` the load `Ψ` is `0`, so **`preClass_zero`**: the
   preprocessing class is the polynomial `n^{Apre}`, which no writer over `2^{k}` cells meets (`k ≥ L`, and
   `k = r·⌊log₂(n/r+1)⌋` with `r = Θ(log L)` is superlogarithmic). `WriterIfaceJ.WriterLeafJ` has no `C_D` floor
   (SeedFixLeaf and FinalPassLeaf have one: `CD₄ ≤ F.CD`, `CD₅ ≤ F.CD`).
@@ -53,3 +64,5 @@ def WriterLeafJ2 (l : Literals) : Type :=
     Σ cW : ℕ, ∀ (kclk coef A a : ℕ) (ha : a ≤ kclk + 1), WritersAtJ l F EW cW kclk coef A a ha
 
 end NearCubicWires.WireExponent3_5.PrimAsm.PreLink
+
+end

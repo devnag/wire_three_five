@@ -1,4 +1,20 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.Bridge2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.AssemblyDock3
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.FinalPass.SeamsOut2
+import Proof.Wire_3_5.FinalPass.SeamsProg
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.FinalPass.SeamsPt
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.FinalPass.Bridge1
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # BridgeT, part 3: the seeds phase `bridgeT`, the halves' layout and rooms
 
@@ -140,3 +156,5 @@ def bridgeRoom : HalfRoom2 (layOf4 (bridgeT X mT mC mI K0 D0) (bridgeExt X mT mC
 end Br3
 
 end NearCubicWires.WireExponent3_5.FinalPass.Bridge
+
+end

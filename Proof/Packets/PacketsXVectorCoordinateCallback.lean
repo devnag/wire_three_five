@@ -1,0 +1,31 @@
+import Proof.Packets.PacketsXVectorBottomUpMachine
+import Proof.Packets.VectorControllerLayout
+import Proof.Rows.PhysicalFocusBoundary
+import Proof.Packets.CycleCommonReserve
+import Proof.Packets.PacketsXWindowCoordinateSubstitute
+import Proof.Packets.SubstitutionOuterStep
+import Proof.Packets.SubstitutionReusable
+import Proof.Supplier.SupplierCapacity
+import Proof.Supplier.SupplierEstimator
+
+/-! Focus the closed whole-coordinate substitution into the actual vector
+controller. It acts after final-coordinate lookup and retains all banks,
+indices, saved fold accumulator, and the numeric controller workspace. -/
+set_option autoImplicit false
+set_option maxHeartbeats 950000
+set_option maxRecDepth 120000
+set_option warningAsError true
+namespace PCJ9eff70d512234a4c_Fixed.Materializer.VectorBottomUp
+open NearCubicWires NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdinary
+open NearCubicWires.ExtDecompositionBatch NearCubicWires.CanonicalFourfoldRowProgram
+open NearCubicWires.SupplierToeplitz NearCubicWires.SupplierToeplitzCore
+open NearCubicWires.SupplierListPolynomial NearCubicWires.RepairSource.CloseoutRawRows
+open NormalizedFiniteTransport SubstitutionCensus Theorem25Completion.CycleBounds
+noncomputable section
+
+def coordinateCallback:=RecoveryFocus.machine providerSlots WindowProvider.coordinateSubstitute
+
+attribute [local irreducible] WindowProvider.coordinateSubstitute coordinateCallback
+
+end
+end PCJ9eff70d512234a4c_Fixed.Materializer.VectorBottomUp

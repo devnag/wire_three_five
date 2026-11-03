@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RowsGateGuardRun
+import Proof.Circuits.DecompositionSourceRealization
 
 /-! The guarded original source call may return its documented output
 cursor and templates, rather than restore every head to the caller's entry.

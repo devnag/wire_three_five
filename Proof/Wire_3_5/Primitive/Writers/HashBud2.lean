@@ -1,9 +1,13 @@
 import Proof.Wire_3_5.Primitive.Writers.HashBud1
-import Proof.Wire_3_5.Primitive.Writers.HashFit3
+import Proof.Wire_3_5.Primitive.Writers.HashF1Base
+import Proof.Wire_3_5.Primitive.Writers.HashFit2Base
+import Proof.Wire_3_5.Primitive.Writers.ThrCap3Base
+import Proof.Wire_3_5.Primitive.SeedFix.C4HashLf2Base
 
 /-! # c4 HASH budget (C), part 2: the cell and the kept words writer at rate `4`
 
-P3:3105-3115 (`c₄` after `F`): at every THR call, with the cell's digit bound `B_m` within the cell's capacity (the premise) and `S_m` within it (`CellFit.cc`), the HASH cell's steps `HashCell.callCost` and the kept words writer's
+P3:3105-3115 (`c₄` after `F`): at every THR call, with the cell's digit bound `B_m` within the cell's capacity (M78's
+premise) and `S_m` within it (`CellFit.cc`), the HASH cell's steps `HashCell.callCost` and the kept words writer's
 `Wk.cost` are at most `K·U⁴`, `U = 2^{⌊n/8⌋ + c_U}`: the populations' cost is quartic in `q + cap + 1`
 (**`pops_arith`**, **`pops_le`**), the cell's other terms quadratic in the capacity or polynomial in `n`
 (**`call_arith`**), the writer's size `kwS` quadratic and its numbers `kwT ≤ 9q` quasi-polynomial (**`kwT_le`**,

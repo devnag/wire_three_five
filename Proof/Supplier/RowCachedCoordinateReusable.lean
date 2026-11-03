@@ -1,4 +1,5 @@
 import Proof.Supplier.RowCachedCoordinateReset
+import Proof.Amplification.RecoveryRowLookupTapes
 
 /-! Complete reusable selected-child coordinate call. Both scratch banks are
 physically cleared, the original cache returns to head0, and each P/N cursor

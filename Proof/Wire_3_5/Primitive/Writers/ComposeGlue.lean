@@ -1,5 +1,6 @@
+import Proof.Wire_3_5.Primitive.Writers.ComposeBase
 import Proof.Wire_3_5.Primitive.Writers.AppendFrame
-import Proof.Wire_3_5.Primitive.Writers.Compose
+import Proof.CaseAnalysis.FinalWordFunctionDock
 
 /-! # PA.compose.glue: two rewound word functions compose to one ordinary word function
 

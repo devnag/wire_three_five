@@ -1,7 +1,7 @@
 import Proof.Wire_3_5.FinalPass.FreeGen
-import Proof.Wire_3_5.Primitive.SeedFix.C4KIface
-import Proof.Wire_3_5.Primitive.SeedFix.C4SymKB4
 import Proof.Wire_3_5.Primitive.Writers.ThrFam2
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTypesBase
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymKB4
 
 /-! # c4 THR block, the free numbers' side conditions at one THR call (`ThrEAt3`, v3)
 

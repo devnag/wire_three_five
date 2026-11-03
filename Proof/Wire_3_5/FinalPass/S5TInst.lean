@@ -1,4 +1,29 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.S5TRun2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.S5TNum3
+import Proof.Wire_3_5.FinalPass.S5TRun0
+import Proof.Wire_3_5.FinalPass.S5TRun1
+import Proof.Wire_3_5.FinalPass.S5TScr
+import Proof.Wire_3_5.FinalPass.S5TStage
+import Proof.Wire_3_5.FinalPass.SeamsBank2
+import Proof.Wire_3_5.FinalPass.SeamsProg2
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Primitive.Writers.S5Seam2
+import Proof.Wire_3_5.Primitive.Writers.S5SeamB
+import Proof.Wire_3_5.Primitive.Writers.S5SeamB2
+import Proof.Wire_3_5.Primitive.SeedFix.TS4K
+import Proof.Wire_3_5.Primitive.SeedFix.TS4O
+import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPoly
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.FinalPass.S5TNum4
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-! # S5-THR, part 42: the THR half, generic in S4's bank (P3:3170-3181)
 
@@ -123,3 +148,5 @@ section Uni
 end Uni
 
 end NearCubicWires.WireExponent3_5.FinalPass.S5T
+
+end

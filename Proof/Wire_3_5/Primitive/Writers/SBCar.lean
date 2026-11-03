@@ -1,12 +1,25 @@
-import Proof.Wire_3_5.Foundations.OutMachineCarGen
+import Lean
+import Proof.Wire_3_5.Foundations.OutMachineCarGenBase
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.FpInLen
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.SBCarBase
 
-/-! # SB, part 17: the carrier pipeline for SB (counts only), at any capacity
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # SB, part 17: X6's carrier pipeline for SB (counts only), at any capacity
 
 SB (S4's words `4 … 7`) needs the carriers' atom counts (`carLen = 2·carCnt`, `s4Small2`) and their number, not the
-tables. The pipeline (`CarPipe.carPipe`) at the keep list `keepLS` (the request, the two counts and
+tables. X6's pipeline (`CarPipe.carPipe`) at the keep list `keepLS` (the request, the two counts and
 `1^{|carriers|}`) erases every other stream, the tables included, and runs at any capacity above its needs:
 
-* `pipe_le_cap` (`pipeCost` within `(57600(D+1) + 10^6)·cap²`, `pipe_le` at a general capacity);
+* `pipe_le_cap` (`pipeCost` within `(57600(D+1) + 10^6)·cap²`, X6's `pipe_le` at a general capacity);
 * **`carRunS`**: at a request of the family, at every capacity `≥ 2^{D}·(|fpIn|+1)^{D}` (`D = DtC`): the counts on
   `sCar k 5`, `1^{|carriers|}` on `s6`, the request kept, the erased streams and the log at `0^{(N+2)^D}`, heads,
   registers and the cell back at `0`/`false`.
@@ -23,22 +36,6 @@ open NearCubicWires.WireExponent3_5.PrimAsm.Data NearCubicWires.WireExponent3_5.
 open NearCubicWires.WireExponent3_5.FinalPass.Out.CarL NearCubicWires.WireExponent3_5.FinalPass.Out.CarM1
 open NearCubicWires.WireExponent3_5.FinalPass.Out.CarS NearCubicWires.WireExponent3_5.FinalPass.Out.CarPipe
 open NearCubicWires.WireExponent3_5.FinalPass.Out.CarBound
-
-theorem pipe_le_cap (cap Dt N n : ℕ) (hDt : 1 ≤ Dt) (codes : List ℕ) {n' : ℕ} (carriers : List (Stars.Carrier n'))
-    (hT1 : m1Cost (c1Of n) n ≤ (N + 2) ^ Dt)
-    (hT2 : Lof n + Out.CarM2.m2Bnd (c2Of N n) n (Lof n) codes carriers ≤ (N + 2) ^ Dt) (hTC : (N + 2) ^ Dt ≤ cap) :
-    pipeCost cap Dt N n codes carriers ≤ (57600 * (Dt + 1) + 10 ^ 6) * cap ^ 2 := by
-  have hN2 : N + 2 ≤ (N + 2) ^ Dt := Nat.le_self_pow (by omega) _
-  have hsq := sq_le cap cap (by omega)
-  have hCC : cap ≤ cap ^ 2 := Nat.le_self_pow (by norm_num) _
-  have hmk : mkTCost cap Dt N ≤ (Dt + 1) * (4 * PrimAsm.UnaryPow.sq cap) + 27 * N + 12 := by unfold mkTCost; omega
-  have hmk2 : (Dt + 1) * (4 * PrimAsm.UnaryPow.sq cap) ≤ (Dt + 1) * (28800 * cap ^ 2) :=
-    Nat.mul_le_mul_left _ (by omega)
-  have hr : (Dt + 1) * (28800 * cap ^ 2) = 28800 * ((Dt + 1) * cap ^ 2) := by ring
-  have hr2 : (57600 * (Dt + 1) + 10 ^ 6) * cap ^ 2 = 57600 * ((Dt + 1) * cap ^ 2) + 10 ^ 6 * cap ^ 2 := by ring
-  rw [hr2]
-  unfold pipeCost s1Cost s3Cost
-  omega
 
 theorem carRunS (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1)
     (r : FReq l F kclk coef A a ha) (σ : OSt) (hin : σ.st (oS sIN) = frame (fpIn l F kclk coef A a ha r))
@@ -80,3 +77,5 @@ theorem carRunS (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a �
     fun k => h5 k (by fin_cases k <;> simp [keepLS]), h6, hkeep.trans hin, hres, hτs, hτv, hτc⟩
 
 end NearCubicWires.WireExponent3_5.PrimAsm.SBCar
+
+end

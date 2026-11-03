@@ -1,3 +1,4 @@
+import Proof.Foundations.SourceRegistry
 import Proof.Amplification.RecoveryEncodedNPVerifier
 
 /-! The exact final consumer for the repaired proof. All three local suppliers

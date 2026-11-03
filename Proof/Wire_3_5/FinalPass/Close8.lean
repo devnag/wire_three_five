@@ -1,11 +1,32 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.Close7
 import Proof.Wire_3_5.Primitive.SeedFix.SWt5
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SWParts
+import Proof.Wire_3_5.FinalPass.Stage1
+import Proof.Wire_3_5.Foundations.OutMachineDPh
+import Proof.Wire_3_5.Foundations.OutMachineHUBase
+import Proof.Wire_3_5.Foundations.OutMachineJoinGBase
+import Proof.Wire_3_5.Foundations.OutMachineNwBVBase
+import Proof.Wire_3_5.Foundations.OutMachineSlot0WBase
+import Proof.Wire_3_5.Primitive.Writers.SBCap3Base
+import Proof.Wire_3_5.Primitive.Writers.SBInstBase
+import Proof.Wire_3_5.Primitive.SeedFix.NwB15Base
+import Proof.Wire_3_5.Primitive.SeedFix.SBIdBase
+import Proof.Wire_3_5.Primitive.SeedFix.SWt5Base
+import Proof.Wire_3_5.UnionMachine.NumsG2Base
+import Proof.Wire_3_5.UnionMachine.NumsW2Base
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-!
 # The final pass's closure join, step 8
 
-`finalPassClose7` with SW's top tables supplied by verified code: `swT` at `x = DT + 7`
-. The producers still open are SW's three remaining parts: `Pf` (flat tables), `Pl` (templates), `Pn`
+`finalPassClose7` with SW's top tables supplied by verified code: the `swT` at `x = DT + 7`.
+The producers still open are SW's three remaining parts: `Pf` (flat tables), `Pl` (templates), `Pn`
 (numbers).
 
 Paper quantity of the main type: `FinalPassLeaf l`, the final pass of `lem:primitive` (P3:3044-3048, 3170-3181).
@@ -24,3 +45,5 @@ noncomputable def finalPassClose8
   Close7.finalPassClose7 (fun l => PrimT.SWt.swT (UnionMachine.DataDock.DT + 7) le_rfl l) Pf Pl Pn
 
 end NearCubicWires.WireExponent3_5.FinalPass.Close8
+
+end

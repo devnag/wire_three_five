@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.UnionMachine.Plan
+import Proof.Wire_3_5.UnionMachine.PlanBase
 
 /-! # C6 front utility: blank register tapes of a computed capacity
 

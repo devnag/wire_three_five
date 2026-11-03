@@ -1,5 +1,6 @@
 import Proof.MachineModel.CanonicalBalancedLookupProgram
 import Proof.MachineModel.ProjectionRunnerBalancedProgram
+import Proof.Foundations.VerifiedLinker
 
 /-!
 # Public projection-table semantics for the bounded-oracle compiler

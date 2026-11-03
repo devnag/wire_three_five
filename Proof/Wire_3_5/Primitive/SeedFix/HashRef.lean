@@ -1,6 +1,7 @@
-import Proof.Wire_3_5.Compiler.MachinePoolSpec
 import Proof.Wire_3_5.Primitive.SeedFix.SeedFixHashObjective
 import Proof.Wire_3_5.Primitive.SeedFix.SeedFixSampExpr
+import Proof.Wire_3_5.Compiler.MachinePoolSpec
+import Proof.Wire_3_5.Stars.StarMixedScore
 
 /-! # C4.Hb, reference: the hash fixing's printed expression (`filt:soft`, P3:2253-2290)
 
@@ -17,7 +18,8 @@ population `pop = (sgn, gis)` it has:
   positions` and `γ : Fin 2t → Bool`.
 
 Here `F_{q,e}` is the call's aux FILTER row at batch position `q·nE + e` (PA's HASH tape), and `Z_i` is
-`Z^{sgn}` of pool gate `gis_i` at row `q` (`zPoly`, the fixed 4-atom corner form). Every count is the Gaussian-elimination count `cntG`, and terms with count `0` are omitted. The terminal terms are padded with
+`Z^{sgn}` of pool gate `gis_i` at row `q` (`zPoly`, the fixed 4-atom corner form). Every count is M3's
+Gaussian-elimination count `cntG`, and terms with count `0` are omitted. The terminal terms are padded with
 constant-one factors to the moment terms' `1 + 2t` factors.
 
 Paper quantity of the main type (**`hashTerms_eval`**): the printed column value `Σ_q Σ_e F·Σ_pop hashElimZ`, i.e.

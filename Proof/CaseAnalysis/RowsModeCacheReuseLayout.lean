@@ -1,4 +1,7 @@
+import Proof.CaseAnalysis.RowsModeCacheHash
 import Proof.CaseAnalysis.RowsModeCacheSource
+import Proof.Supplier.EquationZeroField
+import Proof.Supplier.RowThresholdSelections
 
 /-! Repeated cache passes retain original inputs and the last child count.
 Private backing is erased at the next entry, before the actual source runs. -/

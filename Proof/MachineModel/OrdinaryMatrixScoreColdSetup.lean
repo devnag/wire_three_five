@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryMatrixScoreFields
+import Proof.MachineModel.OrdinaryMatrixScoreSetup
 
 /-! The original raw headers now physically produce every native initial
 field and counter needed by the all-2U score traversal. -/

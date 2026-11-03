@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.RowsCountBinary
+import Proof.MachineModel.ClockScalarFields
+import Proof.Amplification.RecoveryListPredecessor
 
 /-! A positive physical incidence counter produces the fixed-width last-row
 index. The conversion is paid in the raw monomial count, not table capacity. -/

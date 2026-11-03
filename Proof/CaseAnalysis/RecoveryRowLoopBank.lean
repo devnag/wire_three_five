@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoveryRowAddressBatch
+import Proof.Amplification.RecoveryRowStructureField
 
 /-! The original row address changes at its one physical source port.
 All enclosing bank identities keep the large grammar and gate banks opaque. -/

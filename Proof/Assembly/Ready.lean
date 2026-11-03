@@ -1,4 +1,4 @@
-import Proof.Assembly.Family
+import Proof.Assembly.Cycle
 
 /-! The shared row layout has no preparation pass. Entry is already the exact
 cold Header bank. The descriptor target is append-only and outside the Header

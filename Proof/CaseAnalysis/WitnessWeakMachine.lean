@@ -1,5 +1,5 @@
-import Proof.CaseAnalysis.WitnessFamilyLift
-import Proof.CaseAnalysis.WitnessFamilySupportPrefix
+import Proof.CaseAnalysis.WitnessSupportLiftHandoff
+import Proof.MachineModel.UAcceptanceCarrier
 
 /-! One ordinary weak-machine wrapper for the actual all-input worker.
 The worker receipt remains a mandatory supplier until the row run is closed.

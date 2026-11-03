@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.UnionMachine.RadAsm3
+import Proof.Wire_3_5.FinalPass.WordMul
 
 /-! # RADIX assembly (4): stages 3, 4 and 5a's inputs, composed (P3:2585-2623)
 

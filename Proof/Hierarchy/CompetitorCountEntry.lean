@@ -85,4 +85,28 @@ theorem enter_run (tapes : Fin 9 → List Bool) :
     · rfl
   exact (Timed.single (by rfl) hstep).run (by rfl)
 
+theorem entry_run (b w : ℕ) (xs : List ℕ) (hw : b≤w)
+    (hx : ∀ x∈xs,x<2^b) (hfit : xs.sum<2^w) :
+    ∃ r : ExecutionReceipt 9 (2+Fintype.card (RepeatMachine.Control 17)),
+      run machine (xs.length*(16*w+20)+5) (input b w xs)=some r ∧
+      r.final.tapes 5=frame (binary w xs.sum) ∧
+      r.final.tapes 0=CompetitorCountFold.raw b xs ∧
+      r.steps=xs.length*(16*w+20)+5 := by
+  obtain ⟨start,hr,hf,hs⟩ := enter_run (input b w xs)
+  obtain ⟨loop,hl,hl5,hl0,hls⟩ := loop_run b w xs hw hx hfit
+  have he : Composition.restart start.final CompetitorCountFold.machine.start=loopStart b w xs := by
+    rw [hf]
+    rfl
+  have hl' : runFrom CompetitorCountFold.machine (xs.length*(16*w+20)+3)
+      (Composition.restart start.final CompetitorCountFold.machine.start)=some loop := by
+    rw [he]
+    exact hl
+  have hall := Composition.run_join enter CompetitorCountFold.machine 1 (xs.length*(16*w+20)+3)
+    _ start loop hr hl'
+  have ht : 1+1+(xs.length*(16*w+20)+3)=xs.length*(16*w+20)+5 := by omega
+  rw [ht] at hall
+  refine ⟨Composition.joinedReceipt start loop,hall,hl5,hl0,?_⟩
+  change start.steps+1+loop.steps=xs.length*(16*w+20)+5
+  omega
+
 end NearCubicWires.RepairOrdinary.CompetitorCountEntry

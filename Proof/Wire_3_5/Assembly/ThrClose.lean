@@ -1,14 +1,69 @@
+import Lean
 import Proof.Wire_3_5.Assembly.ThrStage3
+import Proof.Wire_3_5.Primitive.Writers.PreLink
 import Proof.Wire_3_5.Primitive.SeedFix.TS4W
+import Proof.Wire_3_5.UnionMachine.ThrUnitIface5
+import Proof.Wire_3_5.UnionMachine.ThrUnitOf
+import Proof.Wire_3_5.UnionMachine.RadSetupRun
 import Proof.Wire_3_5.UnionMachine.FsSpec
 import Proof.Wire_3_5.UnionMachine.WalkStage
+import Proof.Wire_3_5.UnionMachine.FiltPipeLe
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SeamsUni
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.UnionMachine.ThrDecIface
+import Proof.Wire_3_5.UnionMachine.ThrUnitIface
+import Proof.Wire_3_5.FinalPass.DigsIface
+import Proof.Wire_3_5.FinalPass.RadBW5
+import Proof.Wire_3_5.FinalPass.RadBW6
+import Proof.Wire_3_5.FinalPass.RadCaps
+import Proof.Wire_3_5.FinalPass.RadPreBase
+import Proof.Wire_3_5.FinalPass.SeamsProg2Base
+import Proof.Wire_3_5.Primitive.Writers.BudgetIface2
+import Proof.Wire_3_5.Primitive.Writers.PlanBase
+import Proof.Wire_3_5.Primitive.Writers.PreLinkBase
+import Proof.Wire_3_5.Primitive.Writers.ShellT2
+import Proof.Wire_3_5.Primitive.Writers.SymDecEmit
+import Proof.Wire_3_5.Primitive.Writers.ThrDataIface3
+import Proof.Wire_3_5.Primitive.Writers.WriteNat
+import Proof.Wire_3_5.Primitive.Writers.WritersJoinBase
+import Proof.Wire_3_5.Primitive.SeedFix.TS4WBase
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4Base
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDecF4
+import Proof.Wire_3_5.Primitive.ThresholdWriter.RadSetup2
+import Proof.Wire_3_5.Primitive.ThresholdWriter.ShellIface
+import Proof.Wire_3_5.UnionMachine.FiltSetupIface5
+import Proof.Wire_3_5.UnionMachine.RadBnd
+import Proof.Wire_3_5.UnionMachine.RadCnt
+import Proof.Wire_3_5.UnionMachine.RadDigs
+import Proof.Wire_3_5.UnionMachine.RadFields2
+import Proof.Wire_3_5.UnionMachine.RadFieldsP
+import Proof.Wire_3_5.UnionMachine.RadNeed
+import Proof.Wire_3_5.UnionMachine.RadNums
+import Proof.Wire_3_5.UnionMachine.RadPipeB
+import Proof.Wire_3_5.UnionMachine.RadScan
+import Proof.Wire_3_5.UnionMachine.RadSeed
+import Proof.Wire_3_5.UnionMachine.RadSetupB3
+import Proof.Wire_3_5.UnionMachine.RadSpecBase
+import Proof.Wire_3_5.UnionMachine.RadSpec3
+import Proof.Wire_3_5.UnionMachine.RadTab
+import Proof.Wire_3_5.UnionMachine.RadTrunc
+import Proof.Wire_3_5.UnionMachine.RadWin
+import Proof.Wire_3_5.UnionMachine.ThrDecIfaceBase
+import Proof.Wire_3_5.UnionMachine.ThrUnitIface5Base
+import Proof.Wire_3_5.UnionMachine.ThrUnitOfBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-!
 # The thr leaf's closure join
 
-The thr leaf's finish term, stated from EXACTLY the producers still open at 09-28, with every other
+The thr leaf's finish term, stated from the producers given as binders, with every other
 argument supplied by verified code: the v4 data stage `thrStage4U` (PrimTTS4W), the unit machines `thrUnitOf5`
-at the walk bank `walkBank`, C6's FILTER setup `fsSpec` and pipe bound `filtPipe_le2`, and the RADIX
+ at the walk bank `walkBank`, C6's FILTER setup `fsSpec` and pipe bound `filtPipe_le2`, and the RADIX
 setups as a uniform family `radStage` (RadSetupRun). The open producers, one binder each:
 
 * `tail`: THRTAIL, the THR writer's leaf from the unit machines v4 (`ThrLeafOfU4`: T-A's dimension stage
@@ -39,3 +94,5 @@ noncomputable def thrClose
       (UnionMachine.RadSetupRun.radStage l (xF l)))
 
 end NearCubicWires.WireExponent3_5.ThrClose
+
+end

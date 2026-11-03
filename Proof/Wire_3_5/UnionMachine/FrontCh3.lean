@@ -1,6 +1,7 @@
-import Proof.Wire_3_5.UnionMachine.FrontEntriesStage
-import Proof.Wire_3_5.UnionMachine.FrontFmtHd
 import Proof.Wire_3_5.UnionMachine.FrontNums
+import Proof.Wire_3_5.UnionMachine.FrontFmtHd
+import Proof.Wire_3_5.UnionMachine.FrontEntriesStage
+import Proof.PCP.PCPSerializerCapacityPower
 
 /-! # C6 front, the chain, phase 3: the counts (P3:3669-3674)
 

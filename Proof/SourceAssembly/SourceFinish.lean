@@ -1,7 +1,6 @@
+import Proof.Assembly.Initializer
 import Proof.Assembly.Assembly
-import Proof.MachineModel.RuntimeShape
-import Proof.SourceAssembly.SourceClearBound
-import Proof.SourceAssembly.SourceLiveCount
+import Proof.SourceAssembly.SourceCleanupClass
 
 section
 set_option autoImplicit false
@@ -17,6 +16,11 @@ noncomputable section
 attribute [local irreducible] P1TopDownPaidPayload.tapes
 
 /-! ## 1. The initializer's two tape groups -/
+
+/-- The dock: family bank along `fam`, drivers along `drv`. -/
+def joinSlots (a : WilliamsAlgorithm) {V : ℕ} (fam : Fin (r_tapes a) → Fin V) (drv : Fin 7 → Fin V) :
+    Fin (initTapes a) → Fin V := by
+  unfold initTapes; exact Fin.addCases fam drv
 
 /-! ## 2. The docked, padded initializer -/
 

@@ -1,8 +1,11 @@
 import Proof.Amplification.CanonicalRecoveryRequest
 import Proof.CaseAnalysis.CaseTwoWitnessCompleteness
-import Proof.MachineModel.QuotientProgramConversion
-import Proof.MachineModel.RecoveryLimitsFrontEndProgram
+import Proof.Foundations.QuotientBudgetCurrency
+import Proof.Foundations.VerifiedLinker
+import Proof.MachineModel.BoundedOracleRecoveryProgram
+import Proof.MachineModel.CanonicalRecoveryValidatorProgram
 import Proof.MachineModel.SharedNormalizedEstimatorProgram
+import Proof.MachineModel.RecoveryLimitsFrontEndProgram
 
 /-!
 # The polynomial resource envelope of the composed recovery verifier

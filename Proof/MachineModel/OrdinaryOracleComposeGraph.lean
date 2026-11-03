@@ -1,4 +1,6 @@
 import Proof.MachineModel.OrdinaryOracleComposeReset
+import Proof.Amplification.RecoveryCallController
+import Proof.Amplification.RecoveryFocusedMachine
 
 /-! The compositor's finite call graph. All pieces share one oracle port;
 source queries and their literal costs survive static tape/control wiring. -/

@@ -1,4 +1,5 @@
 import Proof.MachineModel.CanonicalBalancedAtomIndexProgram
+import Proof.MachineModel.CanonicalBalancedValidationProgram
 import Proof.MachineModel.CanonicalGateAtomHeadListProgram
 
 /-!

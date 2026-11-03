@@ -1,5 +1,34 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.RadNeed
 import Proof.Wire_3_5.UnionMachine.ThrUnitIface3
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SeamsUni
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.ThrSide7
+import Proof.Wire_3_5.Primitive.ThresholdWriter.RadSetup
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.RadCall
+import Proof.Wire_3_5.UnionMachine.RadSetupB4
+import Proof.Wire_3_5.UnionMachine.RadSetupB5
+import Proof.Wire_3_5.FinalPass.DigsIface
+import Proof.Wire_3_5.FinalPass.SeamsProg2Base
+import Proof.Wire_3_5.Primitive.Writers.BudgetIface2
+import Proof.Wire_3_5.Primitive.Writers.PlanBase
+import Proof.Wire_3_5.Primitive.Writers.ThrDataIface3
+import Proof.Wire_3_5.Primitive.Writers.WritersJoinBase
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4Base
+import Proof.Wire_3_5.Primitive.ThresholdWriter.RadSetup2
+import Proof.Wire_3_5.Primitive.ThresholdWriter.ShellIface
+import Proof.Wire_3_5.UnionMachine.FiltSetupIface5
+import Proof.Wire_3_5.UnionMachine.RadSetupB3
+import Proof.Wire_3_5.UnionMachine.RadSpecBase
+import Proof.Wire_3_5.UnionMachine.ThrDecIfaceBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # RADIX, Route B: the `RadSetupSpecB5` instance (the setup at every THR call, need/bound/pipe polynomial)
 
@@ -241,3 +270,5 @@ noncomputable def radStage (l : Literals) (xF : GateFree l → ℕ) :
         fun _ _ _ _ _ => ⟨radSetupSpecB5 (xF F) l F, le_rfl, le_rfl⟩⟩⟩
 
 end NearCubicWires.WireExponent3_5.UnionMachine.RadSetupRun
+
+end

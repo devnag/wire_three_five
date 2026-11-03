@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.Writers.ThrN1
+import Proof.Wire_3_5.Primitive.Writers.CopyNat
 
 /-! # c4 THR block, the hash bits of a THR call: read off its input word
 

@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CapacityBudget
+import Proof.Amplification.RecoveryScratchErase
 
 /-! The common dispatcher clears its actual oracle query using a capacity
 physically produced from the final address. Other machine work is untouched. -/

@@ -12,9 +12,75 @@ open RepairSource CloseoutWitness SourceInterfaces RepairRepresentation
 open RepairSource.CloseoutFinal
 open WorkspaceGuardedWorker (entry reference)
 open WorkspaceSelectedAdmission (originalTapes preFuel coldCutoff)
+open WorkspaceSelectedProgram (finalBank lengthFlag)
 open WorkspaceSelectedEntry RecoveryRootRound
 noncomputable section
 attribute [local irreducible] WorkspaceSelectedProgram.admission
+
+theorem output_public (sources : EightSources) (k r D n : Nat) (x bits : List Bool)
+    (w : Nat→List Bool) (i : Fin (size sources k r D))
+    (hi : i.val=0 ∨ i.val=1 ∨ i.val=216) :
+    output sources k r D n x bits w i=
+      if i.val=0 then RepairOrdinary.frame x else if i.val=1 then RepairOrdinary.frame bits else [true] := by
+  let b := 218+(60+(engineTapes sources k r D+23))
+  have hb : i.val<b := by dsimp only [b];rcases hi with h|h|h <;>omega
+  let j : Fin b := ⟨i.val,hb⟩
+  have he : i=j.castAdd 1 := Fin.ext rfl
+  rw [he]
+  simp only [output,Fin.addCases_left,C10SupplierCall.bank,C10SupplierCall.bankAt,Fin.val_castAdd]
+  rcases hi with h|h|h
+  · have hj:j.val=0:=h
+    simp [hj]
+  · have hj:j.val=1:=h
+    simp [hj]
+  · have hj:j.val=216:=h
+    simp [hj]
+
+theorem old_bank_retained (sources : EightSources) (k r D n t extra : Nat)
+    (ht : 2≤t) (hspace : size sources k r D≤extra)
+    (A : Fin t→List Bool) (L : Nat) (x bits : List Bool) (w : Nat→List Bool)
+    (hx : A ⟨0,by omega⟩=RepairOrdinary.frame x)
+    (hb : A ⟨1,by omega⟩=RepairOrdinary.frame bits) :
+    ∀i:Fin t,install (slots ht hspace) (finalBank A L extra) (output sources k r D n x bits w)
+      (((i.castAdd 1).castAdd 1).castAdd extra)=A i := by
+  intro i
+  by_cases h0:i.val=0
+  · let j : Fin (size sources k r D) := ⟨0,by dsimp [size];omega⟩
+    have he : slots ht hspace j=(((i.castAdd 1).castAdd 1).castAdd extra) := by
+      apply Fin.ext;simp [slots,j,h0]
+    rw [←he,install_slot _ (slots_injective ht hspace)]
+    have hp:=output_public sources k r D n x bits w j (Or.inl rfl)
+    have hi:i=⟨0,by omega⟩:=Fin.ext h0
+    simpa only [j,if_true,hi] using hp.trans hx.symm
+  by_cases h1:i.val=1
+  · let j : Fin (size sources k r D) := ⟨1,by dsimp [size];omega⟩
+    have he : slots ht hspace j=(((i.castAdd 1).castAdd 1).castAdd extra) := by
+      apply Fin.ext;simp [slots,j,h1]
+    rw [←he,install_slot _ (slots_injective ht hspace)]
+    have hp:=output_public sources k r D n x bits w j (Or.inr (Or.inl rfl))
+    have hi:i=⟨1,by omega⟩:=Fin.ext h1
+    simpa only [j,show ¬(1:Nat)=0 by omega,if_false,if_true,hi] using hp.trans hb.symm
+  · rw [install_other _ _ _ _ (by
+      intro j he
+      have hv:=congrArg Fin.val he
+      have hi:=i.isLt
+      dsimp only [slots,Fin.val_castAdd] at hv
+      split_ifs at hv <;>omega)]
+    exact WorkspaceSelectedProgram.finalBank_original A L extra i
+
+theorem fresh_retained (sources : EightSources) (k r D n t extra : Nat)
+    (ht : 2≤t) (hspace : size sources k r D≤extra)
+    (A : Fin t→List Bool) (L : Nat) (x bits : List Bool) (w : Nat→List Bool)
+    (j : Fin extra) (hj : size sources k r D≤j.val) :
+    install (slots ht hspace) (finalBank A L extra) (output sources k r D n x bits w)
+      (j.natAdd (t+1+1))=[] := by
+  rw [install_other _ _ _ _ (by
+    intro i he
+    have hv:=congrArg Fin.val he
+    have hi:=i.isLt
+    dsimp only [slots,Fin.val_natAdd] at hv
+    split_ifs at hv <;>omega)]
+  exact Fin.addCases_right j
 
 end
 end NearCubicWires.P1TopDown.WorkspaceSelectedEntryFacts

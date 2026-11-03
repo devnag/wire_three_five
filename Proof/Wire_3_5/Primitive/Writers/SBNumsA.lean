@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.Writers.NumsXT2
+import Proof.Wire_3_5.Primitive.Writers.SymQM
 import Proof.Wire_3_5.Primitive.Writers.PopSetupNums
 
 /-! # SB, part 12: S4's small numbers, phase A (the star numbers, the sparse count, the mode's cap)

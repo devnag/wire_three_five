@@ -1,5 +1,7 @@
 import Proof.Circuits.BoundedOracleStructuralCircuit
 import Proof.Circuits.CanonicalSATSelfReduction
+import Proof.Circuits.CircuitInputCNF
+import Proof.Foundations.OuterPCPRecovery
 
 /-!
 # Canonical Appendix-C recovery language

@@ -1,9 +1,22 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.NumsPh2
 import Proof.Wire_3_5.FinalPass.CoreIfaceMJ
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.NumsPh3Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # NW: the phase interface v3 over the relaxed contract `NumsMJ` (types only)
 
-`CoreWordsMJ` lets a writer's scratch residue hold ANY content, of length at most
+The `CoreWordsMJ` lets a writer's scratch residue hold ANY content, of length at most
 `C_s F·(|fpIn|+1)^{D_s fe}`. v3 keeps v2's bank, roles, values (`NumsPh2.eOf`, `mOf`, `vOf`, `DenSplit`) and phase
 shapes, and changes the residue:
 
@@ -29,9 +42,6 @@ open NearCubicWires.WireExponent3_5.UnionMachine.NumsPh2
 open NearCubicWires.RepairOrdinary.SignedSortKey (binary)
 
 variable (x : ℕ)
-
-/-- **The residue** (any content): every stream but `sIn`, `sW0`, `sW1` of length at most `B`. -/
-def ResidJ (σ : St x) (B : ℕ) : Prop := ∀ i, i ≠ sIn x → i ≠ sW0 x → i ≠ sW1 x → (σ.st i).length ≤ B
 
 section Bank
 variable (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1)
@@ -64,28 +74,6 @@ structure AfterV (r : FReq l F kclk coef A a ha) (B : ℕ) (σ : St x) : Prop wh
   regs : ∀ q, q ≠ rN → q ≠ rM → q ≠ rE → q ≠ rT → q ≠ rV → σ.val q = 0
 
 end Bank
-
-/-- **(d)'s entry** (generic): `T`, `e`, `v` in `rT`, `rE`, `rV`, the input `w` on `sIn`, the word streams blank,
-residue `B`. -/
-structure DBank (σ : St x) (w : List Bool) (T e v B : ℕ) : Prop where
-  hin : σ.st (sIn x) = w
-  hw0 : σ.st (sW0 x) = []
-  hw1 : σ.st (sW1 x) = []
-  heads : ∀ i, σ.sh i = 0
-  cell : σ.cell = false
-  resid : ResidJ x σ B
-  ht : σ.val rT = T
-  he : σ.val rE = e
-  hv : σ.val rV = v
-
-/-- **The writer's exit** (`CoreWordsMJ.run`'s conclusion at the words `T`, `D`). -/
-structure Final (σ : St x) (w : List Bool) (T D B : ℕ) : Prop where
-  hw0 : σ.st (sW0 x) = frame (binary T 0)
-  hw1 : σ.st (sW1 x) = frame (binary T D)
-  hin : σ.st (sIn x) = w
-  resid : ResidJ x σ B
-  heads : ∀ i, σ.sh i = 0
-  regs : ∀ q, σ.val q = 0
 
 section Phases
 variable (l : Literals)
@@ -138,3 +126,5 @@ structure PhB where
 end Phases
 
 end NearCubicWires.WireExponent3_5.UnionMachine.NumsPh3
+
+end

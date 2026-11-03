@@ -1,4 +1,18 @@
-import Proof.Wire_3_5.FinalPass.CoreJ12
+import Lean
+import Proof.Wire_3_5.FinalPass.CoreJ10
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.CoreIfaceMJ
+import Proof.Wire_3_5.FinalPass.CoreJ11
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.Assembly.Gate0
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S5Core over the writers with arbitrary residues, part J13: the writers' stages (P3:3044-3048, 3170-3181)
 
@@ -102,3 +116,5 @@ theorem stageABNJ (r : FReq l F kclk coef A a ha) (c : ℕ) (A2 : Fin L.t → Li
 end Run
 
 end NearCubicWires.WireExponent3_5.FinalPass.Core
+
+end

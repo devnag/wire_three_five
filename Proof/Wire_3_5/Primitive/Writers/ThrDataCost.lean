@@ -1,6 +1,7 @@
-import Proof.Wire_3_5.Primitive.SeedFix.CarCost
-import Proof.Wire_3_5.Primitive.Writers.ShellLayout
 import Proof.Wire_3_5.Primitive.Writers.ThrDataRun
+import Proof.Wire_3_5.Primitive.Writers.ShellLayout
+import Proof.Wire_3_5.Primitive.Writers.CopyNat
+import Proof.Wire_3_5.Primitive.SeedFix.CarCost
 
 /-! # PA (d): the THR data stage, part 3: its cost is polynomial, and the packaged stage
 

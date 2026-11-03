@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.WitnessDyadicEncoding
+import Proof.Hierarchy.CompetitorSourceCompleteness
 
 /-! The canonical accepting oracle makes every padded source request
 assignment a YES input. The actual integer wire cap has a fixed polynomial

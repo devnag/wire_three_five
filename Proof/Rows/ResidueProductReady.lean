@@ -1,4 +1,5 @@
 import Proof.Rows.ResidueProduct
+import Proof.MachineModel.ClockScalarFields
 
 /-! Paid width conversion closes the product consumer's wider-left-operand seam.
 Both factors enter as their actual original framed binary words. -/

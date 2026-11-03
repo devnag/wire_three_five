@@ -16,6 +16,27 @@ open RepairSource.CloseoutFinal.C10LengthGate (exitTapes)
 open WorkspaceGuardedWorker (input entry reference)
 noncomputable section
 
+theorem entry_embed {t : Nat} (ht : 2≤t) (x bits : List Bool) :
+    Fin.addCases (input x bits : Fin t → List Bool) (fun _ : Fin 1 => [true]) =
+      entry (Fin.last t) x bits := by
+  funext i
+  refine Fin.addCases (m:=t) (n:=1) ?_ ?_ i
+  · intro j
+    have hne : j.castAdd 1 ≠ Fin.last t := by
+      intro h
+      have := congrArg Fin.val h
+      simp only [Fin.val_castAdd,Fin.val_last] at this
+      omega
+    simp only [Fin.addCases_left,entry,exitTapes,hne,if_false,input,Fin.val_castAdd]
+    rfl
+  · intro j
+    have hj : j=0 := Subsingleton.elim _ _
+    subst j
+    have hv : (0 : Fin 1).natAdd t=Fin.last t := Fin.ext (by simp)
+    rw [Fin.addCases_right,hv]
+    simp [entry,exitTapes,input,Fin.val_last,Nat.ne_of_gt (show 0<t by omega),
+      Nat.ne_of_gt (show 1<t by omega),writeTapeBit]
+
 def originalTapes (sources : EightSources) {gamma : Real} (p : Parameters sources gamma)
     (k E : Nat) :=
   WorkspaceBoundedAdmission.tapes (fixedProjection sources) (CloseoutLanguage.selectedPCPP sources)
@@ -27,6 +48,11 @@ def originalProgram (sources : EightSources) {gamma : Real} (p : Parameters sour
     k (SelectedSource.hierarchy sources k clock).coefficient (padding sources k clock)
     coldCutoff p.clauseDegree p.degree p.copies E K 1 1
     (CompetitorRationalGap.zeta (constantsOf sources)) (SelectedSource.code sources k clock)
+
+def flag (sources : EightSources) {gamma : Real} (p : Parameters sources gamma) (k E : Nat) :
+    Fin (originalTapes sources p k E+1) :=
+  (BoundedFamilySupport.flag (fixedProjection sources) (CloseoutLanguage.selectedPCPP sources)
+    k p.clauseDegree p.degree E).castAdd 1
 
 def fuel (sources : EightSources) {gamma : Real} (p : Parameters sources gamma)
     (k : Nat) (clock : OrdinaryClock (fun n => n^(k+2))) (coldCutoff E K : Nat) : Nat → Nat :=

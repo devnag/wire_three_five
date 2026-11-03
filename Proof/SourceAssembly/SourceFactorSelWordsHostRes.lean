@@ -17,6 +17,8 @@ noncomputable section
 attribute [local irreducible] NearCubicWires.P1TopDownPaidPayload.tapes
 
 section res
+variable {mask : MaskProducer} {selector : CyclicChoice.Laws} {a : DecompositionAlgorithm} {printer : WilliamsAlgorithm}
+  {packet : PacketWriter selector a} {rows : RowProducer selector a printer} {V : Nat}
 
 /-- Unfold the layout predicates and close a linear goal. -/
 macro "lz" : tactic => `(tactic| (simp only [HostLay.IsTgt, HostLay.Blank, HostLay.NSv, HostLay.P0, HostLay.B, HostLay.tc] at *; omega))

@@ -1,7 +1,27 @@
 import Lean.Elab.Tactic.Omega
 import Mathlib.Data.Fin.Basic
+import Proof.Amplification.RecoveryScratchErase
+import Proof.Assembly.Generator
 import Proof.Assembly.Initializer
+import Proof.Assembly.NativeNativeSelected
+import Proof.Assembly.NativeValues
 import Proof.Assembly.Terminal
+import Proof.CaseAnalysis.FinalModeNativeStageFields
+import Proof.CaseAnalysis.FinalPartsSchedule
+import Proof.CaseAnalysis.FinalStageFields
+import Proof.CaseAnalysis.FinalSupplierAccuracyChain
+import Proof.CaseAnalysis.RowsDegreeLoop
+import Proof.CaseAnalysis.RowsSupportTyped
+import Proof.CaseAnalysis.RowsTupleSeekDock
+import Proof.CaseAnalysis.RowsTupleSeekFamilyRewind
+import Proof.CaseAnalysis.RowsUniversalLowering
+import Proof.CaseAnalysis.WitnessPaddedReset
+import Proof.MachineModel.CacheRewind
+import Proof.MachineModel.ClosureBinaryPool
+import Proof.MachineModel.Encoding
+import Proof.MachineModel.Layout
+import Proof.Supplier.RowThresholdSelections
+import Proof.Hierarchy.CompetitorRawRecordEmit
 
 /-! Fixed complete-Datum copier interface consumed by the new enclosing parent.
 The finite field list depends only on the fixed printer, not on runtime rows.

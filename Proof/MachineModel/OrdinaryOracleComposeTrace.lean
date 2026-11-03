@@ -1,3 +1,5 @@
+import Proof.Foundations.RecoveryOracleContracts
+import Proof.MachineModel.OrdinaryZeroPadding
 import Proof.Amplification.RecoveryTapeSupport
 
 /-! Trace operations used by the paid ordinary-oracle compositor. Padding

@@ -1,5 +1,5 @@
-import Mathlib
 import Proof.Rows.RowsCompleteWork
+import Proof.Rows.RowsSymC5
 
 set_option autoImplicit false
 set_option maxRecDepth 120000

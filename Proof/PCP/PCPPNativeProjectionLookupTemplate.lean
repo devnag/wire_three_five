@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeProjectionLookup
+import Proof.Circuits.DecompositionSerializerCount
 
 /-! The lookup consumes the exact sentinel emitted by the native node
 reader, including its physically present final false cell. -/

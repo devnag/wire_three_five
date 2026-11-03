@@ -1,3 +1,5 @@
+import Proof.Wire_3_5.Selection.ScanW
+import Proof.Wire_3_5.UnionMachine.RegRatOps
 import Proof.Wire_3_5.UnionMachine.RegRatRead
 
 /-! # C1.4: the point routine's word operations (P3:1339-1344)

@@ -1,4 +1,6 @@
 import Proof.Circuits.TotalSelectorDrivenFrameRuns
+import Proof.Circuits.TotalSelectorDrivenAdapterRuns
+import Proof.Circuits.TotalSelectorBodyAdapter
 
 /-! # Concrete all-request guarded selector body adapter -/
 

@@ -82,4 +82,22 @@ theorem plans_run (ps : List Plan) (cap : Nat) (refs : Fin 3→Nat)
       rw [←htime]
       omega
 
+theorem node_run {n : Nat} (index : Nat) (node : BooleanNode n) (cap : Nat)
+    (ambient : Fin 239→List Bool) (padding : Fin 3→List Bool) (out : List Bool)
+    (hc : ∀ p∈plans (kind node),RecoveryTseitin.capacity
+      (Prepare.literals p.signs (indices (references index node) p))≤cap)
+    (hb : Bounded cap ambient) (hd : ambient 3=List.replicate cap true)
+    (hl : ambient 4=List.replicate (cap+1) false)
+    (hi : ∀ j,ambient (sourceSlot j)=RepairOrdinary.frame (references index node j).bits++padding j) :
+    ∃ after : Fin 239→List Bool,∃ r,
+      runFrom (machine (plans (kind node))) ((plans (kind node)).length*(20*cap+5))
+        ⟨(machine (plans (kind node))).start,heads out.length,input ambient out cap⟩=some r ∧
+      r.final.heads=heads (out++RecoveryFormulaPayload.input (circuitInputNodeClauses index node)).length ∧
+      r.final.tapes=input after (out++RecoveryFormulaPayload.input (circuitInputNodeClauses index node)) cap ∧
+      (∀ i : Fin 239,i.val<3 → after i=ambient i) ∧
+      after 3=List.replicate cap true ∧ after 4=List.replicate (cap+1) false ∧
+      Bounded cap after ∧ r.steps≤(plans (kind node)).length*(20*cap+5) := by
+  have h:=plans_run (plans (kind node)) cap (references index node) ambient padding out hc hb hd hl hi
+  simpa only [emitted_formula,original_node] using h
+
 end NearCubicWires.RepairSource.RecoveryTseitinNode

@@ -146,5 +146,21 @@ theorem forward_run (worker : Machine 115 s) (z : Resources p R Q hr hq x count 
 
 end Driver
 
+noncomputable def forwardMachine:=Driver.machine bodyMachine
+noncomputable def configuration (phase : Fin 5) (z : Resources p R Q hr hq x count hc)
+    (b : BooleanDAGBuilder (descriptionWidth R bound)) (k : ℕ) (stack : List Bool) (total driver : ℕ):=
+  Driver.configuration bodyMachine phase z b k stack total driver
+
+theorem forward_run (z : Resources p R Q hr hq x count hc)
+    (b : BooleanDAGBuilder (descriptionWidth R bound)) (remaining k : ℕ) (rest : List (BitInput R))
+    (stack : List Bool) (total pos : ℕ) (hpos : pos+remaining=total) (hk : k+remaining<2^R)
+    (hFinal : (compileVerifierRows (compactProjectionPCP (p.normalized R Q hr hq)) x count hc b
+      (randomnesses R k remaining++rest)).final.nodes.length≤z.G) :
+    ∃ f : Forward z b (randomnesses R k remaining), ∃ r,
+      runFrom forwardMachine (remaining*(bodyBudget z.B+2)+total+3)
+        (configuration 0 z b k stack total (pos+1))=some r ∧
+      r.final=configuration 3 z f.next (k+remaining) (stack++stackWord f.refs) total 1 ∧
+      r.steps≤remaining*(bodyBudget z.B+2)+total+3 := by
+  exact Driver.forward_run bodyMachine z z.body_original b remaining k rest stack total pos hpos hk hFinal
 
 end NearCubicWires.RepairOrdinary.RecoveryBoundedRows

@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.C4CapD
+import Proof.Wire_3_5.Ledger.LedgerLoad
 
 /-! # C4 capacity (item (b)), part 5: sizes below `2^{a(B+1)²}` (generic in the mode)
 

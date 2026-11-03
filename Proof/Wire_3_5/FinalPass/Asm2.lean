@@ -1,5 +1,22 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.Asm1
 import Proof.Wire_3_5.FinalPass.SdR12
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.S5TInst
+import Proof.Wire_3_5.FinalPass.S6Iface
+import Proof.Wire_3_5.FinalPass.SdI3
+import Proof.Wire_3_5.FinalPass.SdR11
+import Proof.Wire_3_5.FinalPass.SeamsHalves
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.FinalPass.Asm1Base
+import Proof.Wire_3_5.FinalPass.SdR10Base
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-! # The final pass's assembly at S4 v2 (P3:3044-3048, 3114-3115, 3170-3181)
 
@@ -43,3 +60,5 @@ noncomputable def finalPassR {W5 : PrimT.WalkBank.WalkBankProducer} (F5 : PrimAs
   finalPassAsm2 (XfR F5 hS) mCore core mOut outG s6 hU
 
 end NearCubicWires.WireExponent3_5.FinalPass.Finish
+
+end

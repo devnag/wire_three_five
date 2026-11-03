@@ -1,5 +1,6 @@
+import Proof.Wire_3_5.Primitive.Writers.WriterIfaceBase
+import Proof.Wire_3_5.Primitive.Writers.FiltRec
 import Proof.Wire_3_5.Primitive.Writers.PopLink
-import Proof.Wire_3_5.Primitive.Writers.WriterIface
 
 /-! # (P-b): the batch's shape, part 1: generic (rows from requests) and the three request kinds
 

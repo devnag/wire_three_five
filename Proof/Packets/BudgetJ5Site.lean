@@ -17,6 +17,15 @@ noncomputable section
 attribute [local irreducible] P1TopDownPaidPayload.tapes WorkspaceSelectedAdmission.originalTapes
   WorkspaceSelectedEntry.size
 
+/-- **The per-clause site fuel** at the base class `(d0 hT0 hS0 m L c0P c0T c0S)` of the three cycle costs, with the
+calls-per-clause count `(q+1)^r` (coefficient `W^r`, `W = widthConst sources k`): the class of AD's
+`siteFuel_inClasses` at `E ≤ W^r·(q+1)^r`, `E ≤ W^r·(n+1)^r`. -/
+def siteRHS (sources : EightSources) (k r d0 hT0 hS0 m L c0P c0T c0S n qn : ℕ) : ℕ :=
+  Admission.splitRHS (r+d0) (r+hT0) (r+hS0) m L
+    (c0P + C10PartsSchedule.widthConst sources k^r*(c0P+c0P+4) + 4)
+    (c0T + C10PartsSchedule.widthConst sources k^r*(c0T+c0T))
+    (c0S + C10PartsSchedule.widthConst sources k^r*(c0S+c0S)) n qn
+
 section clause
 
 end clause

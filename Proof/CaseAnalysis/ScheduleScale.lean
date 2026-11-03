@@ -1,6 +1,7 @@
-import Proof.MachineModel.UWalkUnary
-import Proof.PCP.ProjectionDimensionPowerBounds
 import Proof.PCP.ProjectionDimensionTemplate
+import Proof.PCP.ProjectionDimensionPowerBounds
+import Proof.MachineModel.UWalkUnary
+import Proof.MachineModel.ClockUnarySum
 
 /-! Pay the fixed-copy scaling of q+1+r using existing unary operations.
 The two short inputs are already produced; every other tape starts blank. -/

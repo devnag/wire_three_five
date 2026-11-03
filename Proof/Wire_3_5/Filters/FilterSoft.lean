@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Filters.FilterMajorant
+import Proof.Wire_3_5.Foundations.MaskedExpectation
 
 /-! # `filt:soft` and `filt:observable` (P3:2205-2412): the soft-mask hash fixing and the masked observable
 
@@ -9,7 +10,7 @@ such that `E_x 1[w(x) ≤ CB] 1[some included count list is incorrect under h_*]
 a child with no larger value [...] The resulting hash satisfies `𝒰(h_*) ≤ 2ξ_base`"; and "The majorant gives
 `E_{h_*} ≤ H_{h_*}` everywhere. On `w ≤ CB`, auxiliary completeness gives `a(x) ≥ 1−ε_aux`. Consequently
 `E_x 1[w≤CB] E_{h_*}(x) ≤ 𝒰(h_*)/(1−ε_aux) ≤ 4ξ_base`." The exact evaluation of the conditional objectives (Gaussian
-elimination, `Proof.Wire_3_5.Filters.FilterSoftGauss`) and the common scale `Δ₀ = 2^{s_h}Π_jW_j^{2t}` are recorded as
+elimination, `WireExponent3_5FilterSoftGauss`) and the common scale `Δ₀ = 2^{s_h}Π_jW_j^{2t}` are recorded as
 `softScale_mul_condMean` (every conditional objective, scaled by `Δ₀`, is a natural number) and the column bound.
 
 And `filt:observable` (P3:2355-2383): "`E_{x,e}F_reg(e,x)|R̂(x)−R(x)| ≤ 4ξ_base+ξ_reg`" at the `row:masked-error` type

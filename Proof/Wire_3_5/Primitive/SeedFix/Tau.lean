@@ -1,5 +1,7 @@
-import Proof.Wire_3_5.FinalPass.HashTable
+import Proof.Wire_3_5.FinalPass.WordMul
 import Proof.Wire_3_5.FinalPass.WordAux
+import Proof.Wire_3_5.FinalPass.HashTable
+import Proof.Wire_3_5.Filters.GFTrace
 
 /-! # The trace mask word `τ` of `GF(2^ℓ)` as a word program (P3:2053-2055, 2932-2941)
 
@@ -14,7 +16,7 @@ product), and the trace's low bit is written as bit `b` of the mask.
 Donors checked: C5's `fmulW`/`fmulW_spec`, `mapPass_spec` with `copyOut`/`zeroOut`/`xorOut`,
 `advC`/`retC`, `frameP_set`, `Hash4.wcopyR` (used); S5's `GF2Machines` (Step-level `lfsrM`/`fmulM`, not needed in the
 word layer); `GF.trace_fold`, `fmulShift_spec`, `fmul_spec`, `rep_injOn`, `traceRef_val`, `testBit_tau`
-(used). No donor computes the mask (components DB: returns/mentions `GF2.tau` → only the reference and its bit lemma).
+(used). No existing program computes the mask; only the reference `GF2.tau` and its bit lemma exist.
 
 Paper quantity of the main type (`tauW_spec`): the trace mask word `frame (binary ℓ (GF2.tau p ℓ))`. -/
 

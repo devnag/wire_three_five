@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.FlipsPack
+import Proof.Wire_3_5.Primitive.SeedFix.CarWM
 
 /-! # SA's slot 0, part 1: the geo writer prints the offset word
 
@@ -9,7 +10,8 @@ parameters (`flD`, `flCv c_r`), the writer runs from `frame r.word`:
 * **`offW cr`**, **`offW_spec`** (the offset word on `gOUT`, the request kept);
 * **`offCost`**, **`offRun`** (`WriterRun (geoM (offW cr) flD (flCv cr)) … r.word (frame OFFw)` at a call's
   parameters);
-* **`offCost_le`**: the writer's budget within `(cA + 100)·(m+1)^{dA+1}` for any `m ≥ n, c_r, |r.word|` (`front_le`, `init_le`, `allM_le`).
+* **`offCost_le`**: the writer's budget within `(cA + 100)·(m+1)^{dA+1}` for any `m ≥ n, c_r, |r.word|` (T3's
+  `front_le`, `init_le`, `allM_le`).
 
 Paper quantity of the main type: the coset offset word (P3:1206-1207, 1224; S4's word 0, P3:3044-3048). -/
 

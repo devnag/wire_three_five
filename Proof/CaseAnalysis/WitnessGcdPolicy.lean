@@ -1,5 +1,4 @@
-import Proof.CaseAnalysis.WitnessAliases
-import Proof.Hierarchy.CompetitorGcdLoop
+import Proof.CaseAnalysis.WitnessGuardedGcd
 
 /-! The runtime comparison field is exactly the fixed bit policy, truncated
 to the actual raw-field width. This handles short and malformed inputs too. -/

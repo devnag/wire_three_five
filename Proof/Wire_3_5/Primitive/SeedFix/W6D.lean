@@ -1,4 +1,6 @@
 import Proof.Wire_3_5.Primitive.SeedFix.W6C
+import Proof.Wire_3_5.Primitive.Writers.ParseNat
+import Proof.Wire_3_5.Primitive.Writers.SymDecStreams
 import Proof.Wire_3_5.Primitive.ThresholdWriter.W6Meta
 
 /-! # W6, part 4: the words and the first numbers

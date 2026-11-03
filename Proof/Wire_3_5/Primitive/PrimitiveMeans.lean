@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.Foundations.Skeleton
+import Proof.Wire_3_5.Foundations.SkeletonBase
 import Proof.Wire_3_5.Rows.RowsSymState
 
 /-! # Primitive: the uniform averages of `prim:truth` (P3:3087-3091)

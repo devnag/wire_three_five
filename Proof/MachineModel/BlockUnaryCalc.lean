@@ -1,5 +1,10 @@
-import Proof.CaseAnalysis.FinalSelectorLoadMasks
 import Proof.MachineModel.BlockScrub
+import Proof.MachineModel.ClockUnarySum
+import Proof.MachineModel.ClockUnaryProduct
+import Proof.PCP.PCPSerializerCapacityPower
+import Proof.PCP.ProjectionDimensionPowerBounds
+import Proof.CaseAnalysis.FinalSelectorLoadMasks
+import Proof.Circuits.ValidatorPolynomialDomination
 
 namespace NearCubicWires.BlockPlatform
 open LocalBitMultitape RepairOrdinary RepairOrdinary.RecoveryExecution
@@ -22,10 +27,6 @@ theorem sum_step (r s : ℕ) :
       ![List.replicate r true, List.replicate s true, List.replicate (r+s) true,
         List.replicate (r+s+2) false] :=
   CloseoutFinalSelector.step_of_clock (ClockUnarySum.sum_ready r s)
-
-def sum (r s : ℕ) : Block 4 := ofStep (sum_step r s)
-
-@[simp] theorem sum_cost (r s : ℕ) : (sum r s).cost = 2*(r+s)+6 := rfl
 
 /-- The copier: `r` onto a fresh tape, leaving the rewind log `replicate (r+2) false`. -/
 theorem copy_step (r : ℕ) :

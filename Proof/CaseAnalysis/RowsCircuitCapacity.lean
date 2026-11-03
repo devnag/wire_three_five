@@ -15,6 +15,9 @@ theorem positive (N : ℕ) : 2 ≤ capacity N:=by
   have hp:1 ≤ (N+2)^26:=Nat.one_le_pow _ _ (by omega)
   unfold capacity;omega
 
+theorem monotone {n N : ℕ} (h : n ≤ N) : capacity n ≤ capacity N:=
+  Nat.mul_le_mul_left _ (Nat.pow_le_pow_left (by omega) 26)
+
 theorem raw_fits (N : ℕ) : 2*N+1 ≤ capacity N ∧ 1+2*(N+1) ≤ capacity N:=by
   have hp:N+2 ≤ (N+2)^26:=Nat.le_self_pow (by decide) _
   unfold capacity;omega

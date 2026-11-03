@@ -1,6 +1,7 @@
 import Proof.CaseAnalysis.FinalCompletenessDyadic
 import Proof.CaseAnalysis.FinalOneSidedness
 import Proof.CaseAnalysis.FinalSupplierStepBridge
+import Proof.CaseAnalysis.HardnessPremises
 
 /-! The assembly seat.
 

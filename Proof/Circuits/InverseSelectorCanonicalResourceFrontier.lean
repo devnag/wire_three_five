@@ -1,5 +1,6 @@
 import Proof.Circuits.InverseSelectorHexecutes
 import Proof.Circuits.ValidatorCompositeLeafBounds
+import Proof.Circuits.ValidatorPolynomialDomination
 
 /-! # Exact polynomial resource splice for the inverse selector terminal -/
 

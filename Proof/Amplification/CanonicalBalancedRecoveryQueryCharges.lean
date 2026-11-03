@@ -1,5 +1,7 @@
 import Proof.Circuits.TotalInverseCanonicalBodySelectorLocalClosure
 import Proof.Foundations.NestedBalancedCNFSATEncoding
+import Proof.MachineModel.BankRecoveryCodeProgram
+import Proof.MachineModel.StructuralAtomEmitterLoopProgram
 
 namespace NearCubicWires.CanonicalBalancedRecoveryQueryCharges
 

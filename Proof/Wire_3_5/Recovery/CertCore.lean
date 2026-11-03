@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Recovery.CertSetup
+import Proof.CaseAnalysis.ScheduleClauseWidth
 
 /-! # The core length test `2m_a ≤ n` (P3:3738-3741; D1.6, the prefix stage)
 

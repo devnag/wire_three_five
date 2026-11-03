@@ -1,5 +1,6 @@
-import Proof.Amplification.RecoveryProjectionRowsRewind
 import Proof.CaseAnalysis.RecoveryRowBudget
+import Proof.PCP.ProjectionNormalizationStreams
+import Proof.Amplification.RecoveryProjectionRowsRewind
 
 /-! The existing source normalizer supplies the exact original compact
 clauses and their actual count, once for every randomness row. -/

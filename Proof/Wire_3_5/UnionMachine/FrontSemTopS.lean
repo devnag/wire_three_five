@@ -1,4 +1,34 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.FrontSemEnvS
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.UnionCheck
+import Proof.Wire_3_5.UnionMachine.FrontCaps
+import Proof.Wire_3_5.UnionMachine.FrontOutRef
+import Proof.Wire_3_5.UnionMachine.FrontSelReq
+import Proof.Wire_3_5.UnionMachine.FrontSemC1Cap
+import Proof.Wire_3_5.UnionMachine.FrontSemCap1
+import Proof.Wire_3_5.UnionMachine.FrontSemCap2
+import Proof.Wire_3_5.UnionMachine.FrontSemEvS
+import Proof.Wire_3_5.UnionMachine.FrontSemPath
+import Proof.Wire_3_5.UnionMachine.FrontSemPathCaps
+import Proof.Wire_3_5.UnionMachine.FrontSemRun
+import Proof.Wire_3_5.UnionMachine.FrontSemSUE
+import Proof.Wire_3_5.UnionMachine.FrontSemSize
+import Proof.Wire_3_5.UnionMachine.FrontSemTW
+import Proof.Wire_3_5.UnionMachine.PlanW2
+import Proof.Wire_3_5.UnionMachine.PlanW3
+import W3.Front.ColdNative
+import Proof.Wire_3_5.UnionMachine.FrontSemTopSBase
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-! # C6 front, the semantic core (20): the machine's parameters at the pinned setup (P3:3669-3691)
 
@@ -15,7 +45,7 @@ set_option linter.unusedSimpArgs false
 
 namespace NearCubicWires.WireExponent3_5.UnionMachine.FrontSemTopS
 open NearCubicWires NearCubicWires.WireExponent3_5 NearCubicWires.WireExponent3_5.Transfer
-open NearCubicWires.WireExponent3_5.Transfer.CaseTwoPadG NearCubicWires.WireExponent3_5.Split
+open NearCubicWires.WireExponent3_5.Split
 open NearCubicWires.WireExponent3_5.UnionMachine.PlanW2 NearCubicWires.WireExponent3_5.Ledger
 open NearCubicWires.WireExponent3_5.UnionMachine.FrontCaps (BU PQ)
 open NearCubicWires.Bindings.CLW20Theorem113 (InNTIME)
@@ -24,16 +54,6 @@ open NearCubicWires.WireExponent3_5.UnionMachine.FrontSemCap1 (CN EW)
 open NearCubicWires.WireExponent3_5.UnionMachine.FrontSemEnvS (MS MS_pq)
 open NearCubicWires.WireExponent3_5.UnionMachine.FrontFoldBound (eT)
 open NearCubicWires.WireExponent3_5.UnionMachine.FrontSemFold (eMt)
-
-/-- A nonnegative rational's numerator as a natural number. -/
-def numN (r : ℚ) : ℕ := r.num.toNat
-
-theorem num_div_den (r : ℚ) (hr : 0 ≤ r) : r = (numN r : ℚ) / r.den := by
-  have h1 : (0 : ℤ) ≤ r.num := Rat.num_nonneg.mpr hr
-  have h2 : ((numN r : ℕ) : ℤ) = r.num := by unfold numN; exact Int.toNat_of_nonneg h1
-  have h3 : ((numN r : ℕ) : ℚ) = (r.num : ℚ) := by exact_mod_cast h2
-  rw [h3]
-  exact (Rat.num_div_den r).symm
 
 section SUE
 variable (l : Literals) (F : GateFree l) (e coef A : ℕ) (L : Language) (hL : InNTIME (fun n => n ^ (kE l e + 2)) L)
@@ -192,44 +212,39 @@ theorem q_ev : ∀ᶠ q : ℕ in Filter.atTop,
 
 /-- **The caps at a guess past the onset** (TopFacts' `caps`). -/
 theorem caps_at (c : Plan.C1At (dS l F e coef A L hL)) {N : ℕ}
-    (hnw : (SUE l F e coef A L hL).pcp.nativeWidth N = (BU l F e coef A).q N)
-    (hmin : (gatePCPP l).minimumArity ≤ (BU l F e coef A).q N) (hstar : (IUE l F e coef A).StarAt ((BU l F e coef A).q N))
+    (hnw : (SUE l F e coef A L hL).width N = (BU l F e coef A).q N)
+    (hstar : (IUE l F e coef A).StarAt ((BU l F e coef A).q N))
     (hev : 100 * MSS l F e coef A L hL ((BU l F e coef A).q N) ^ 6 ≤ ((BU l F e coef A).q N + 1) ^ dS l F e coef A L hL ∧
       AccB l F e coef A L hL ((BU l F e coef A).q N) ≤
         2 ^ ((BU l F e coef A).q N - (BU l F e coef A).kOf ((BU l F e coef A).q N) / 4) ∧
       1 * ((BU l F e coef A).q N + 1) ^ 1 ≤
         2 ^ ((BU l F e coef A).q N - (BU l F e coef A).kOf ((BU l F e coef A).q N) / 4))
     (x : BitInput N) (g : UnionGuess (SUE l F e coef A L hL) x)
-    (hsz : g.oracle.size ≤ RecoveryScheduleEnvelope.oracleSizeBound (recOracleDeg l) ((SUE l F e coef A L hL).pcp.nativeWidth N))
+    (hgd : UnionGuards (SUE l F e coef A L hL) x g)
     (hat : PlanW3.AtomsOkG g) (hsg : (g.checkData g.translation).signsOk = true) :
     FrontSemPath.PathCaps g (gateZeta_pos l) (gateZeta_lt l) (KwS l F e coef A L hL) (DwS l F e coef A L hL)
         (IUE l F e coef A).descDeg (DeS l F e coef A) (CeS l F e coef A) (DtS l F e coef A L hL) (CtS l F e coef A L hL)
         (KbS l F e coef A L hL) (DbS l F e coef A L hL) (gateCδ1 l) F.cr
-        (MSS l F e coef A L hL ((SUE l F e coef A L hL).pcp.nativeWidth N)) c ∧
+        (MSS l F e coef A L hL ((SUE l F e coef A L hL).width N)) c ∧
       FrontSemTW.EndCaps (gateZeta_pos l) (gateZeta_lt l) g (KwS l F e coef A L hL * (g.q + 1) ^ DwS l F e coef A L hL)
         (KbS l F e coef A L hL) (DbS l F e coef A L hL) (gateCδ1 l) (aVS l) (bVS l) (aTS l) (bTS l) F.cr (32 * coef + 1)
         (gate0 l F).E.Amain ∧
       (Plan.c1sized (dS l F e coef A L hL) c.E₁ c.c₁).pre (FrontSelReq.selReqOf g) := by
-  have hmin' : (SUE l F e coef A L hL).pcppAlg.minimumArity ≤ (SUE l F e coef A L hL).pcp.nativeWidth N := by
-    rw [FrontSemSUE.sue_alg, hnw]; exact hmin
-  have harity : g.q = (SUE l F e coef A L hL).pcp.nativeWidth N := by
-    show max _ _ = _; exact max_eq_left hmin'
+  have harity : g.q = (SUE l F e coef A L hL).width N := q_eq_width _ g hgd.2.1 hgd.2.2.1
   have hqB : g.q = (BU l F e coef A).q N := harity.trans hnw
   rw [← hqB] at hstar hev
   obtain ⟨hd, hacc, hlq⟩ := hev
-  have hsz' : g.oracle.size ≤ RecoveryScheduleEnvelope.oracleSizeBound (SUE l F e coef A L hL).G
-      ((SUE l F e coef A L hL).pcp.nativeWidth N) := by rw [FrontSemSUE.sue_G]; exact hsz
-  have hG := FrontSemEnvS.genv_of l F e coef A L hL (c0S l) x g hsz' hat harity hstar
+  have hG := FrontSemEnvS.genv_of l F e coef A L hL (c0S l) x g hgd hat hstar
   obtain ⟨m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12⟩ := FrontSemEnvS.MS_ge l F e coef A L hL (c0S l) g.q
   have hWr := KwS_spec l F e coef A L hL g.q
   have hBr := KbS_spec l F e coef A L hL g.q
   unfold Wreq at hWr
   unfold MSS at hWr hBr hd
-  have hQ := FrontSemEnvS.sue_hQ l F e coef A L hL
-  have hnv := FrontSemSize.nv_le hQ x g.oracle hsz'
-  have hcb := FrontSemSize.cb_le hQ x g.oracle hsz'
-  have eK : FrontSemEnvS.KpS l F e coef A L hL g.q = FrontSemSize.Kp (SUE l F e coef A L hL) (FrontSemEnvS.CHs l e L hL)
-      (gateSource l).degrees.queries ((SUE l F e coef A L hL).pcp.nativeWidth N) := by
+  have hr := FrontSemEnvS.KsS_spec l F e coef A L hL N x g.pair hgd.2.1 hgd.2.2.1 hgd.2.2.2.2.1
+  have hnv := FrontSemSize.nv_le x g.pair _ hr
+  have hcb := FrontSemSize.cb_le x g.pair _ hr
+  have eK : FrontSemEnvS.KpS l F e coef A L hL g.q = FrontSemSize.Kp (SUE l F e coef A L hL)
+      (FrontSemEnvS.KsS l F e coef A L hL) (FrontSemEnvS.σS l F e coef A L hL) ((SUE l F e coef A L hL).width N) := by
     unfold FrontSemEnvS.KpS; rw [harity]
   have hnv' : g.pcpp.systematicBits + g.pcpp.auxiliaryBits ≤ 2 * FrontSemEnvS.KpS l F e coef A L hL g.q := by
     rw [eK]; exact hnv
@@ -317,67 +332,77 @@ theorem caps_at (c : Plan.C1At (dS l F e coef A L hL)) {N : ℕ}
     hsS rfl haV hbV haT hbT hspW hBr hW1 hW2 hW3 F.cr_pos h4 (by omega) hcapW (by omega)
     (fun i => ((hacS i).trans hacc').trans hcap) (fun i => by have := hacS i; omega)
   have hpre := FrontSemC1Cap.pre_of hG hstar c hrK hLd hPd hcb1 hd
-  have eV : MS l F e coef A L hL (c0S l) g.q = MSS l F e coef A L hL ((SUE l F e coef A L hL).pcp.nativeWidth N) := by
+  have eV : MS l F e coef A L hL (c0S l) g.q = MSS l F e coef A L hL ((SUE l F e coef A L hL).width N) := by
     unfold MSS; rw [harity]
   exact ⟨eV ▸ hPC, hEC, hpre⟩
 
-/-- **The numbers' caps for every oracle within the size cap** (TopFacts' `nums`). -/
-theorem nums_at {N : ℕ} (x : BitInput N) (O : BooleanCircuit ((SUE l F e coef A L hL).pcp.nativeWidth N))
-    (hO : O.size ≤ RecoveryScheduleEnvelope.oracleSizeBound (recOracleDeg l) ((SUE l F e coef A L hL).pcp.nativeWidth N)) :
-    FrontCh3P.NumsCaps (2 * (KwS l F e coef A L hL * ((SUE l F e coef A L hL).pcp.nativeWidth N + 1) ^
+/-- **The numbers' caps for every pair within the size cap** (TopFacts' `nums`). -/
+theorem nums_at {N : ℕ} (x : BitInput N) (O : NearCubicGates.Close.Outer.OuterGuess ((SUE l F e coef A L hL).width N))
+    (hN : N = 2 ^ Nat.log 2 N) (hon : (SUE l F e coef A L hL).onset ≤ Nat.log 2 N)
+    (hO : O.pf.size ≤ RecoveryScheduleEnvelope.oracleSizeBound (SUE l F e coef A L hL).G
+      ((SUE l F e coef A L hL).width N)) :
+    FrontCh3P.NumsCaps (2 * (KwS l F e coef A L hL * ((SUE l F e coef A L hL).width N + 1) ^
         DwS l F e coef A L hL) + 2) (gateZeta_pos l) (gateZeta_lt l) (KbS l F e coef A L hL) (DbS l F e coef A L hL)
-      (gateCδ1 l) ((SUE l F e coef A L hL).pcp.nativeWidth N) ((SUE l F e coef A L hL).pcppOf x O).systematicBits
+      (gateCδ1 l) ((SUE l F e coef A L hL).width N) ((SUE l F e coef A L hL).pcppOf x O).systematicBits
       ((SUE l F e coef A L hL).pcppOf x O).auxiliaryBits ((SUE l F e coef A L hL).pcppOf x O).clauseBits := by
   obtain ⟨m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12⟩ :=
-    FrontSemEnvS.MS_ge l F e coef A L hL (c0S l) ((SUE l F e coef A L hL).pcp.nativeWidth N)
-  have hO' : O.size ≤ RecoveryScheduleEnvelope.oracleSizeBound (SUE l F e coef A L hL).G
-      ((SUE l F e coef A L hL).pcp.nativeWidth N) := by rw [FrontSemSUE.sue_G]; exact hO
-  have hQ := FrontSemEnvS.sue_hQ l F e coef A L hL
-  have hnv := FrontSemSize.nv_le hQ x O hO'
-  have hcb := FrontSemSize.cb_le hQ x O hO'
-  have eK : FrontSemEnvS.KpS l F e coef A L hL ((SUE l F e coef A L hL).pcp.nativeWidth N) =
-      FrontSemSize.Kp (SUE l F e coef A L hL) (FrontSemEnvS.CHs l e L hL) (gateSource l).degrees.queries
-        ((SUE l F e coef A L hL).pcp.nativeWidth N) := rfl
+    FrontSemEnvS.MS_ge l F e coef A L hL (c0S l) ((SUE l F e coef A L hL).width N)
+  have hr := FrontSemEnvS.KsS_spec l F e coef A L hL N x O hN hon hO
+  have hnv := FrontSemSize.nv_le x O _ hr
+  have hcb := FrontSemSize.cb_le x O _ hr
+  have eK : FrontSemEnvS.KpS l F e coef A L hL ((SUE l F e coef A L hL).width N) =
+      FrontSemSize.Kp (SUE l F e coef A L hL) (FrontSemEnvS.KsS l F e coef A L hL) (FrontSemEnvS.σS l F e coef A L hL)
+        ((SUE l F e coef A L hL).width N) := rfl
   rw [← eK] at hnv hcb
-  have hWr := KwS_spec l F e coef A L hL ((SUE l F e coef A L hL).pcp.nativeWidth N)
-  have hBr := KbS_spec l F e coef A L hL ((SUE l F e coef A L hL).pcp.nativeWidth N)
+  have hWr := KwS_spec l F e coef A L hL ((SUE l F e coef A L hL).width N)
+  have hBr := KbS_spec l F e coef A L hL ((SUE l F e coef A L hL).width N)
   unfold Wreq at hWr
   unfold MSS at hWr hBr
   exact FrontSemCap3.numsCaps_of (gateZeta_pos l) (gateZeta_lt l) (K := MS l F e coef A L hL (c0S l)
-    ((SUE l F e coef A L hL).pcp.nativeWidth N)) (by omega) (by omega) (by omega)
+    ((SUE l F e coef A L hL).width N)) (by omega) (by omega) (by omega)
     ((FrontSemEnvS.sp_le l _).trans m4) (one_le_gridSize (gateZeta_pos l) (gateZeta_lt l) (gateCδ1 l) (gateCδ1_pos l) _)
     ((FrontSemEnvS.lam_le l _).trans m3) (by omega) hBr (by omega) (by omega)
 
-/-- **The front's facts past the onset at the pinned setup.** -/
-theorem topFacts_ev (c : Plan.C1At (dS l F e coef A L hL)) : ∃ N₁ : ℕ, ∀ N, N₁ ≤ N →
-    FrontSemRun.TopFacts (S := SUE l F e coef A L hL) (gateSource l) (gatePCPP l) (kE l e) (gateApad l) (recOracleDeg l)
-      (DwS l F e coef A L hL) (DeS l F e coef A) (DtS l F e coef A L hL) c (FrontSemSUE.hhOf l e L hL)
-      (cpadOf (FrontSemSUE.hhOf l e L hL)) (le_max_right _ _) (KwS l F e coef A L hL) (gateZeta_pos l) (gateZeta_lt l)
-      (KbS l F e coef A L hL) (DbS l F e coef A L hL) (gateCδ1 l) (CeS l F e coef A) (CtS l F e coef A L hL) F.cr
-      (MSS l F e coef A L hL ((SUE l F e coef A L hL).pcp.nativeWidth N)) (aVS l) (bVS l) (aTS l) (bTS l) F.cr
-      (32 * coef + 1) (gate0 l F).E.Amain (fun N => FrontCaps.capQ l F e coef A ((BU l F e coef A).q N))
+/-- The cold front end at the pinned setup (the shared cold-front-end producer; cutoff `0`, one policy copy). -/
+noncomputable def cnwS : W3.NearCubicWires.RepairSource.Outer3.ColdNativeW (SUE l F e coef A L hL).mw
+    (SUE l F e coef A L hL).SV (SUE l F e coef A L hL).pcppAlg 0 1 (SUE l F e coef A L hL).G 0 0 :=
+  W3.NearCubicWires.RepairSource.Outer3.coldNativeW_of (SUE l F e coef A L hL).mw (SUE l F e coef A L hL).SV
+    (SUE l F e coef A L hL).pcppAlg 0 1 (SUE l F e coef A L hL).G 0 0 le_rfl
+
+/-- **The front's facts past the onset at the live pinned setup.** -/
+theorem topFacts_ev (h : L = recL l (kE l e)) (c : Plan.C1At (dS l F e coef A L hL)) : ∃ N₁ : ℕ, ∀ N, N₁ ≤ N →
+    FrontSemRun.TopFacts (S := SUE l F e coef A L hL) (cnwS l F e coef A L hL) (kE l e) (gateApad l)
+      (DwS l F e coef A L hL) (DeS l F e coef A) (DtS l F e coef A L hL) c (KwS l F e coef A L hL) (gateZeta_pos l)
+      (gateZeta_lt l) (KbS l F e coef A L hL) (DbS l F e coef A L hL) (gateCδ1 l) (CeS l F e coef A)
+      (CtS l F e coef A L hL) F.cr (MSS l F e coef A L hL ((SUE l F e coef A L hL).width N)) (aVS l) (bVS l) (aTS l)
+      (bTS l) F.cr (32 * coef + 1) (gate0 l F).E.Amain (fun N => FrontCaps.capQ l F e coef A ((BU l F e coef A).q N))
       (fun N => FrontCaps.RQ l F e coef A ((BU l F e coef A).q N))
       (fun N => FrontCaps.RQ l F e coef A ((BU l F e coef A).q N) + 1) N := by
-  obtain ⟨N₁, hN₁⟩ := FrontSemEvS.sue_ev l F e coef A L hL
+  obtain ⟨N₁, hN₁⟩ := FrontSemEvS.sue_ev l F e coef A L hL h
   have hq : Filter.Tendsto (BU l F e coef A).q Filter.atTop Filter.atTop :=
     Ledger.tendsto_nativeWidth (kE l e) (gateApad l)
   obtain ⟨N₂, hN₂⟩ := Filter.eventually_atTop.1 (hq.eventually (q_ev l F e coef A L hL))
-  refine ⟨max N₁ N₂, fun N hN => ?_⟩
+  set o1 := (SUE l F e coef A L hL).onset with ho1
+  set o2 := (cnwS l F e coef A L hL).onset with ho2
+  refine ⟨max (max N₁ N₂) (2 ^ (o1 + o2) + 1), fun N hN => ?_⟩
   obtain ⟨hnw, hmin, hstar, hfit, h4q, hnb, horc, h16⟩ := hN₁ N (by omega)
   have hev := hN₂ N (by omega)
+  have hlog : o1 + o2 ≤ Nat.log 2 N := Nat.le_log_of_pow_le (by norm_num) (by omega)
+  have hW : (SUE l F e coef A L hL).width N = Ledger.nativeWidth (kE l e) (gateApad l) N :=
+    FrontSemSUE.sue_width l F e coef A L hL h N
   exact
-    { hW := hnw
+    { hW := hW
       hmin := by rw [FrontSemSUE.sue_alg, hnw]; exact hmin
+      hlive := FrontSemSUE.sue_live l F e coef A L hL h
+      hon := by omega
+      hcut := Nat.zero_le _
+      hcon := by omega
       hStar := by rw [hnw]; exact hstar
       hFit := by rw [hnw]; exact hfit
       ph1 := fun x w hw => FrontSemEvS.ph1ok l e x w hw h16 h4q hnb
-      hcoeff := le_max_left _ _
-      hq := FrontSemSUE.sue_hq l F e coef A L hL
-      hPO := fun x O => FrontSemSUE.sue_hPO l F e coef A L hL x O (FrontSemSUE.sue_hq l F e coef A L hL x)
-      hcap := fun x O hO => FrontSemEvS.hcap_of x _ O.size (horc O.size (by rw [← hnw]; exact hO))
       hq3 := by rw [hnw]; omega
-      nums := fun x O hO => nums_at l F e coef A L hL x O hO
-      caps := fun x g hsz hat hsg => caps_at l F e coef A L hL c hnw hmin hstar hev x g hsz hat hsg
+      nums := fun x O hNd hO => nums_at l F e coef A L hL x O hNd (by omega) hO
+      caps := fun x g hgd hat hsg => caps_at l F e coef A L hL c hnw hstar hev x g hgd hat hsg
       hcapF := by show FrontCaps.capQ l F e coef A ((BU l F e coef A).q N) = _; rw [hnw]; exact capQ_eq l F e coef A _
       hRF := by show FrontCaps.RQ l F e coef A ((BU l F e coef A).q N) = _; rw [hnw]; exact RQ_eq l F e coef A _
       hLgF := by show FrontCaps.RQ l F e coef A ((BU l F e coef A).q N) + 1 = _; rw [hnw, RQ_eq] }
@@ -385,3 +410,5 @@ theorem topFacts_ev (c : Plan.C1At (dS l F e coef A L hL)) : ∃ N₁ : ℕ, ∀
 end SUE
 
 end NearCubicWires.WireExponent3_5.UnionMachine.FrontSemTopS
+
+end

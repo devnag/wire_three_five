@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeQuery
+import Proof.PCP.PCPPNativeCapacityBank
 
 /-! The actual normalized Q-loop consumes the physically allocated cold
 bank and physically generated sentinel drivers. It returns its actual

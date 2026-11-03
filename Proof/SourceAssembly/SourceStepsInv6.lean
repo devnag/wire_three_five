@@ -18,6 +18,31 @@ noncomputable section
 attribute [local irreducible] P1TopDownPaidPayload.tapes
 
 section inv6
+variable (mask : MaskProducer) {selector : CyclicChoice.Laws}
+  (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector)
+  (rows : PCJc4297ab269d8423a_Source.RowLibrary selector) (sources : EightSources)
+  (res : Nat) (hres : 19 ≤ res) {gamma : Real} (p : Parameters sources gamma) (k r : Nat)
+  (ph : Phase)
+  (se : PacketsGlue.RequestMeta.UnaryStage (decompositionOf sources) (PacketsGlue.RequestMeta.seedCount (decompositionOf sources)))
+  (sp : PacketsGlue.RequestMeta.UnaryStage (decompositionOf sources) (PacketsGlue.RequestMeta.primeCountOf (decompositionOf sources))) {gW : Nat}
+  (e : (dimsOf mask packets rows sources res p k r).RestExt3 se.extra sp.extra gW)
+  (g7F : Phase → Σ s, Machine (UOf mask packets rows sources res p k r) s)
+  (preFF : Phase → Σ s, Machine (UOf mask packets rows sources res p k r + 1) s)
+  (compiler : Packets.CompilerLaws) (den : Nat) (hden : 0 < den) (n : Nat) (x : BitInput n) (bits : List Bool)
+  (hp : P1Independent.CappedLegalAdmission.passed sources p
+    (ControllerCappedSelected.reference den hden k (PolynomialClock.ordinaryClock k))
+    (WorkspaceSelectedAdmission.coldCutoff sources) n x bits = true)
+  (site : Bool → Phase → Σ states, Machine (ControllerSelectedContinuation.bodyTapes sources p k r (scratchOf mask packets rows sources res)) states)
+  (ci : Fin (NC sources k (PolynomialClock.ordinaryClock k) x (C10TotalDecode.oracleOf sources k (PolynomialClock.ordinaryClock k) p.degree n bits)))
+  (L Rc Rk b : Nat)
+  (lay : TraceData.LayoutFamily (PCJd04de0277f804fcc_.coordinate sources k (PolynomialClock.ordinaryClock k) p den x (C10TotalDecode.oracleOf sources k (PolynomialClock.ordinaryClock k) p.degree n bits) bits) ph ci sources L (C10SupplierAccuracyChain.accuracyTargetAll (constantsOf sources) (CloseoutFinalC10StageFields.stageLimits sources p)) (PCJ374c44bb8b7f47d9_.S.mode sources p den hden k r (scratchOf mask packets rows sources res) n x bits hp) selector)
+  (K : Fin (UOf mask packets rows sources res p k r) → Prop)
+  (K0 : Fin (UOf mask packets rows sources res p k r) → List Bool)
+  (KH0 : Fin (UOf mask packets rows sources res p k r) → Nat)
+  (V : Nat) (dflt : P1TopDownPaidReusable.Datum) (Dw capw logw resetw : Nat)
+  (Hd : Nat → Fin (UOf mask packets rows sources res p k r) → Nat) (Ad : Nat → Fin (UOf mask packets rows sources res p k r) → List Bool)
+  (old : Nat → List Bool) (familyCost firstCost counterReserve refillCost : Nat) (cW cQ cB cS : Nat) (N : Nat)
+  (H' : Fin (UOf mask packets rows sources res p k r + 1) → Nat) (A' : Fin (UOf mask packets rows sources res p k r + 1) → List Bool)
 
 set_option hygiene false in
 local notation "𝔇" => dimsOf mask packets rows sources res p k r
@@ -63,6 +88,23 @@ set_option hygiene false in
 local notation "H0cS" => (fun y : Fin (UOf mask packets rows sources res p k r) => H' y.castSucc)
 set_option hygiene false in
 local notation "A0cS" => chainView 𝒞 b vdX N 0 (fun y : Fin (UOf mask packets rows sources res p k r) => A' y.castSucc)
+
+/-- **The clause chain's invariant, v6** (`seam6_clause`'s, named): `Inv5`'s six conjuncts and (7) the `encT 0..2, 4` lengths at the chain's end. -/
+def Inv6 : Nat → (Fin (UOf mask packets rows sources res p k r) → Nat) → (Fin (UOf mask packets rows sources res p k r) → List Bool) → Prop :=
+  fun j H A => Rest.InvR e 𝒽 Rc Rk K K0 KH0 j b vQ vMB vMS cW cQ cB cS vWS vRW vBF b vU0 (fuelOf 𝒞 b vdX j) H A ∧
+        (∀ z : Fin (UOf mask packets rows sources res p k r), z.val < (𝔇).F →
+          Cycle.Free ((𝔇).slot 𝒽) ((𝔇).maskSlots 𝒽) ((𝔇).pslots 𝒽) ((𝔇).poolSlots 𝒽) ((𝔇).familySlots 𝒽)
+            (Dims.rewind2Slots e.ext2.ext1.ext 𝒽) z →
+          (∀ i, (𝒞).app i ≠ z) → A z = A0cS z ∧ H z = H0cS z) ∧
+        (∀ i, ((𝒞).app i).val < (𝔇).F → H ((𝒞).app i) = H0cS ((𝒞).app i) ∧
+          (0 < j → A ((𝒞).app i) = appTOf b vdX (j-1) i)) ∧
+        (∀ kk : Fin 13, H (Dims.encT (d := 𝔇) 𝒽 kk) = H0cS (Dims.encT (d := 𝔇) 𝒽 kk)) ∧
+        (j < N → (∀ i, (∀ i', (𝒞).slots i' ≠ (𝒞).enc i) → A ((𝒞).enc i) = encInOf 𝒞 b vdX j i) ∧
+          (∀ i, (∀ i', (𝒞).slots i' ≠ (𝒞).app i) → (∀ i', (𝒞).enc i' ≠ (𝒞).app i) → A ((𝒞).app i) = appInOf 𝒞 b vdX j i)) ∧
+        (N ≤ j → 0 < j → ∀ kk : Fin 13, (kk.val = 3 ∨ 5 ≤ kk.val) →
+          A (Dims.encT (d := 𝔇) 𝒽 kk) = ZeroPadding.pad Rc
+            (install (𝒞).app (install (𝒞).enc (fun _ => []) (encWOf b vdX (j-1))) (appTOf b vdX (j-1)) (Dims.encT (d := 𝔇) 𝒽 kk))) ∧
+        (N ≤ j → 0 < j → ∀ kk : Fin 13, (kk.val < 3 ∨ kk.val = 4) → (A (Dims.encT (d := 𝔇) 𝒽 kk)).length ≤ Rc)
 
 set_option hygiene false in
 local notation "Inv5S" => Inv5 mask packets rows sources res hres p k r ph se sp e g7F preFF compiler den hden n x bits hp site ci L Rc Rk b lay K K0 KH0 V dflt Dw capw logw resetw Hd Ad old familyCost firstCost counterReserve refillCost cW cQ cB cS N H' A'

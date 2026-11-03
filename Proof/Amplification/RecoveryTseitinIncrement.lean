@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryTseitinAppend
+import Proof.Amplification.RecoveryPrefixCounter
 
 /-! Advance the actual canonical index after emitting its tautology.
 The live formula cursor is retained and the appender's cleared log is reused. -/

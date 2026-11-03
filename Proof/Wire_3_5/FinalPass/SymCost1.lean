@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.FinalPass.SymCap3
+import Proof.Wire_3_5.FinalPass.SymCap3Base
 import Proof.Wire_3_5.FinalPass.EnumCap7
 
 /-! # The SYM child's cost, part 1: the request's numbers as powers of two (the arithmetic)

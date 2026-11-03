@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeFrame
+import Proof.MachineModel.ClockUnarySum
 
 /-! One physical scan computes the padded native size and its exact padding
 from retained raw counters. The two inputs survive, and every head is reset. -/

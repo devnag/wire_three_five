@@ -1,5 +1,8 @@
-import Proof.MachineModel.UMemoryClose
 import Proof.MachineModel.UPreparedRun
+import Proof.MachineModel.OrdinaryTransitionWalkInitialConsumer
+import Proof.MachineModel.OrdinaryMemoryCheckerCost
+import Proof.MachineModel.UMemoryClose
+import Proof.MachineModel.ClockTotal
 
 /-! Fixed U's aggregate clock ledger. The prefix fuel already depends on
 the global L cap. Both emitter returns and its rejection branch are paid,

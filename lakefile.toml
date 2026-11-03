@@ -3,7 +3,7 @@ version = "1.0.0"
 defaultTargets = ["WireThreeFive"]
 
 [leanOptions]
-maxHeartbeats = 250000
+maxHeartbeats = 400000
 maxRecDepth = 120000
 warningAsError = true
 
@@ -15,7 +15,37 @@ rev = "v4.32.0"
 [[lean_lib]]
 name = "WireThreeFive"
 roots = ["MainTheorem_Wire_3_5"]
-globs = ["MainTheorem_Wire_3_5", "Statement", "Statement_Wire_3_5", "StatementChecks.+", "Proof.+", "Bindings.+"]
+globs = [
+  "MainTheorem_Wire_3_5",
+  "Bindings.+",
+  "CheckedPCPP.+",
+  "Close.+",
+  "Codec.+",
+  "Counter.+",
+  "ENP.+",
+  "Expand.+",
+  "GR.+",
+  "Gadget.+",
+  "Joins.+",
+  "NearCubicGates.+",
+  "Outer.+",
+  "OuterM.+",
+  "Platform.+",
+  "Proof.+",
+  "Recovery.+",
+  "Setup.+",
+  "Statement",
+  "StatementChecks.+",
+  "Statement_Wire_3_5",
+  "Succinct.+",
+  "TabMachine.+",
+  "Target",
+  "TermLoop.+",
+  "Transfer.+",
+  "W3.+",
+  "Worker.+",
+  "WorkerArith.+"
+]
 
 # For comparator only (README, "Optional extra checks"); `make` does not build them.
 [[lean_lib]]

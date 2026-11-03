@@ -1,10 +1,22 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SymCap2
+import Proof.Wire_3_5.FinalPass.SampPre
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SymBFBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The SYM batch's facts at a call (for `hpre_sym`, `symHcost_of`)
 
-P3:2477-2496 (row:sym) and P3:3011-3016 at a SYM call: the SYM batch (`symExprs`, `R = |carriers| + 2a′` rows
+P3:2477-2496 (row:sym) and P3:3011-3016 at a SYM call: the SYM batch (the `symExprs`, `R = |carriers| + 2a′` rows
 per entry) meets `SampShape.BatchFacts` with the factor counts `f r = 1` (filter rows) or the walk `w` (population
-rows) (`sym_rows_factors`), the degree bound `symDg` and the atoms `< |flips|·|pool|` (`sym_factors_ok`), `±1`
+rows) (the `sym_rows_factors`), the degree bound `symDg` and the atoms `< |flips|·|pool|` (`sym_factors_ok`), `±1`
 coefficients (`sym_coef_pm1`) and at most `T = (M+1)²2^w ≤ 2^{63(k+L)}` terms per row (`sym_row_terms_le`); the
 child's factor count `8·Σ_r f r` is the free number `m` whenever the call has rows (`sym_hmf`), and `8` (= `m`, the
 padded batch's single constant row) at a degenerate call (`pad_hmf`).
@@ -24,20 +36,10 @@ open NearCubicWires.SupplierPipeline NearCubicWires.WireExponent3_5.Stars NearCu
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.PrimAsm.WriterIface
 open NearCubicWires.WireExponent3_5.FinalPass.FreeGen
 
-theorem sum_split (N M w : ℕ) : ((List.range (N + M)).map fun r => if r < N then 1 else w).sum = N + M * w := by
-  rw [List.range_add, List.map_append, List.sum_append]
-  have h1 : ((List.range N).map fun r => if r < N then 1 else w).sum = N := by
-    rw [List.map_congr_left (g := fun _ => 1) (fun r hr => if_pos (List.mem_range.mp hr))]
-    simp
-  have h2 : (((List.range M).map (N + ·)).map fun r => if r < N then 1 else w).sum = M * w := by
-    rw [List.map_map, List.map_congr_left (g := fun _ => w) (fun r _ => by simp)]
-    simp
-  rw [h1, h2]
-
 section Gate
 variable (l : Literals) (F : GateFree l)
 
-/-- The SYM rows' factor counts by row position (`sym_rows_factors`). -/
+/-- The SYM rows' factor counts by row position (the `sym_rows_factors`). -/
 noncomputable def symF (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ} (Cs : Fin a' → NormalizedSymmetricThresholdCircuit n)
     (carriers : List (Carrier n)) : ℕ → ℕ :=
   fun r => if r < carriers.length then 1 else (symListParams (callInputs l F kclk coef A a ha) n a' Cs carriers).walkLen
@@ -140,3 +142,5 @@ theorem pad_hmf (c : SymC) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : �
 end Gate
 
 end NearCubicWires.WireExponent3_5.FinalPass.SymFr
+
+end

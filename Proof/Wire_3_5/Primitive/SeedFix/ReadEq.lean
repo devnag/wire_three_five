@@ -76,6 +76,13 @@ theorem blank_of_rdEq_nil (l : List Bool) (h : RdEq l []) : ∀ b ∈ l, b = fal
   rw [List.getD_eq_getElem _ _ hp] at this
   simpa using this
 
+theorem rdEq_append_blank (l r : List Bool) (hr : ∀ b ∈ r, b = false) : RdEq (l ++ r) l := fun p => by
+  unfold readTapeBit
+  by_cases hp : p < l.length
+  · rw [List.getD_append _ _ _ _ hp]
+  · rw [List.getD_append_right _ _ _ _ (by omega), List.getD_eq_default l false (by omega)]
+    exact rdEq_blank r hr (p - l.length)
+
 /-- **Two states read alike**: the same heads, registers and cell, streams reading the same everywhere. -/
 structure SimW {ns nr : ℕ} (σ σ' : WState ns nr) : Prop where
   sh : σ'.sh = σ.sh

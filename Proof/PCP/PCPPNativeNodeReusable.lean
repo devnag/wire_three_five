@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeNodeReuseLayout
+import Proof.Amplification.RecoveryRowLookupTapes
 
 /-! Execute one complete native-node substitution, reset its scratch and
 row-cache cursors, then physically erase the scratch with the actual F

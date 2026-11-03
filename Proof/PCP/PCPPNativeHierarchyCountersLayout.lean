@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeCounters
+import Proof.PCP.PCPPNativeHierarchyReady
 
 /-! Literal original hierarchy fields dock directly into the paid metadata
 and mass scans. All counter workspace is physically fresh. -/

@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RowsCapacityDriver
+import Proof.CaseAnalysis.RowsPolynomial
 import Proof.CaseAnalysis.RowsPreparationInput
 
 /-! Sequential native packet loading. The raw field is copied once and

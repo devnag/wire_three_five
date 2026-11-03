@@ -1,6 +1,7 @@
 import Proof.Amplification.RecoveryTseitinNativeAllocated
-import Proof.Amplification.RecoveryTseitinNativeNodeFull
 import Proof.Amplification.RecoveryTseitinNativeReadyDriver
+import Proof.Amplification.RecoveryTseitinNativeNodeFull
+import Proof.PCP.PCPPRequestNodeFieldsJoin
 
 /-! One actual native descriptor, raw arity and raw index produce every
 original Tseitin node clause, including both implication directions. -/

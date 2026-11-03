@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CaseOneEvaluationBound
+import Proof.MachineModel.OrdinaryAmplifierReplayBounds
 
 /-! The existing Case1 amplifier constructor and its paid replay/reset fit
 C.12 directly when the input and generated arities fit the final address.

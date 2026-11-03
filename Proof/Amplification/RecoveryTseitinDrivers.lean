@@ -1,4 +1,6 @@
 import Proof.Amplification.RecoveryTseitinStream
+import Proof.PCP.PCPSerializerCapacityPower
+import Proof.PCP.ProjectionNormalizationDriverAtoms
 
 /-! From the actual raw unary clause count, execute the existing polynomial
 capacity producer and sentinel counter. The count, capacity and all scratch

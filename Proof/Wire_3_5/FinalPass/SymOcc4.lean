@@ -1,4 +1,16 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SymOcc3
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SymOcc3Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The printer's gate budget at a SYM call, part 4: `occ_sym`
 
@@ -158,3 +170,4 @@ end Gate
 
 end NearCubicWires.WireExponent3_5.FinalPass.SymFr
 
+end

@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.FinalPass.FlatTable
+import Proof.Wire_3_5.FinalPass.Sym
 
 /-! # Final pass, (L): the amplified list's report as the majority machine computes it (P3:1508-1520)
 

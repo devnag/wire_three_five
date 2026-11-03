@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativePadding
+import Proof.Supplier.EquationRowForward
 
 /-! Actual native scalar outputs never move left. These rule-table facts
 allow the final existing output framer to measure the real append cursor. -/

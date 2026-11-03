@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.FinalPass.ThrPtRS26
+import Proof.Wire_3_5.Primitive.SeedFix.TabThrLayout
 
 /-! # S2 (THR per point), part 41: the call's facts (P3:3170-3178)
 

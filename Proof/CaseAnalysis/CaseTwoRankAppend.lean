@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CaseTwoRankSlice
+import Proof.PCP.PCPPNativeNaturalAppend
 
 /-! Direct original unary-rank field to the existing native-number appender.
 Trailing false field cells are explicit padding; no extra binary-width

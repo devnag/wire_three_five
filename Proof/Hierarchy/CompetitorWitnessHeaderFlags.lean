@@ -43,7 +43,30 @@ def testBits (bits : List Bool) : Fin 5 → Bool :=
 def selected : Fin 5 → Fin 6 := ![2,2,2,1,5]
 def gateSlots : Fin 6 → Fin 148 := ![123,128,133,137,146,147]
 
+theorem physical_tests (x bits : List Bool) (j : Fin 5) :
+    before x bits 5 (slots j (selected j))=[testBits bits j] := by
+  rw [before_output x bits 5 j j.isLt (by rfl) (selected j)]
+  fin_cases j <;> rfl
+
+theorem output_blank (x bits : List Bool) : before x bits 5 147=[] := by
+  rw [before_other x bits 5 147 (by intro j i;fin_cases j <;> fin_cases i <;> decide)]
+  change start x bits ((25 : Fin 26).natAdd 122)=[]
+  rw [start,Fin.addCases_right]
+
+theorem oracle_retained (x bits : List Bool) :
+    before x bits 5 78=frame (RecoveryFixedUnpair.leftWord (word bits 3)) := by
+  rw [before_other x bits 5 78 (by intro j i;fin_cases j <;> fin_cases i <;> decide)]
+  exact field_output x bits 3
+
+theorem sum_retained (x bits : List Bool) :
+    before x bits 5 118=frame (RecoveryFixedUnpair.leftWord (word bits 5)) := by
+  rw [before_other x bits 5 118 (by intro j i;fin_cases j <;> fin_cases i <;> decide)]
+  exact field_output x bits 5
+
 def allTests (bs : Fin 5 → Bool) := (((bs 0 && bs 1) && bs 2) && bs 3) && bs 4
+
+theorem allTests_iff (bits : List Bool) : allTests (testBits bits)=true ↔ headerValid bits := by
+  simp [allTests,testBits,headerValid,structural,and_assoc]
 
 def gateInput (bs : Fin 5 → Bool) : Fin 6 → List Bool := ![[bs 0],[bs 1],[bs 2],[bs 3],[bs 4],[]]
 def gateOutput (bs : Fin 5 → Bool) : Fin 6 → List Bool := ![[bs 0],[bs 1],[bs 2],[bs 3],[bs 4],[allTests bs]]
@@ -66,5 +89,22 @@ theorem gate_ready (bs : Fin 5 → Bool) : ReadyRun gate 1 (gateInput bs) (gateO
   exact ⟨r,hr,by rw [hf],by intro i;rw [hf],hs⟩
 
 noncomputable def last := RecoveryFocus.machine gateSlots gate
+noncomputable def output (x bits : List Bool) := install gateSlots (before x bits 5) (gateOutput (testBits bits))
+
+theorem last_ready (x bits : List Bool) : ReadyRun last 1 (before x bits 5) (output x bits) := by
+  exact (gate_ready (testBits bits)).focus gateSlots (by decide) (before x bits 5) (by
+    intro i;fin_cases i
+    · exact physical_tests x bits 0
+    · exact physical_tests x bits 1
+    · exact physical_tests x bits 2
+    · exact physical_tests x bits 3
+    · exact physical_tests x bits 4
+    · exact output_blank x bits)
+
+theorem output_passes (x bits : List Bool) : readTapeBit (output x bits 147) 0=true ↔ headerValid bits := by
+  have h := install_slot gateSlots (by decide) (before x bits 5) (gateOutput (testBits bits)) 5
+  change output x bits 147=[allTests (testBits bits)] at h
+  rw [h]
+  exact allTests_iff bits
 
 end NearCubicWires.RepairOrdinary.CompetitorWitnessHeader

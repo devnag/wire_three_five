@@ -1,5 +1,7 @@
-import Proof.Circuits.TotalSelectorDrivenBodyAdapterRuns
 import Proof.Circuits.TotalSelectorDrivenEmitterTotalContract
+import Proof.Circuits.TotalSelectorDrivenBodyAdapterRuns
+import Proof.Circuits.TotalInverseCompilerRuns
+import Proof.MachineModel.StructuralAtomEmitterProgramContract
 
 /-! # All-request guarded selector emitter run -/
 

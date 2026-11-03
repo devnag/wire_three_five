@@ -1,4 +1,19 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.FrontSemC1Cap
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.UnionCheck
+import Proof.Wire_3_5.UnionMachine.C1Ref
+import Proof.Wire_3_5.UnionMachine.FrontSelReq
+import Proof.Wire_3_5.UnionMachine.FrontSemCap1
+import Proof.Wire_3_5.UnionMachine.FrontSemFold
+import Proof.Wire_3_5.UnionMachine.FrontSemPath
+import Proof.Wire_3_5.UnionMachine.FrontSemTW
+import Proof.Wire_3_5.UnionMachine.FrontSemPathCapsBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # C6 front, the semantic core (18): the valid path's caps at a guess (P3:3669-3691)
 
@@ -21,12 +36,6 @@ open NearCubicWires.WireExponent3_5.UnionMachine.FrontSemCap1 (GEnv natWord_le n
 open NearCubicWires.WireExponent3_5.UnionMachine.FrontSemCap2 (BK PW pow2_bits bits_le pw_small)
 open NearCubicWires.WireExponent3_5.UnionMachine.FrontFoldBound (eT)
 open NearCubicWires.WireExponent3_5.UnionMachine.FrontSemFold (eMt)
-
-theorem pw_cube (K : ℕ) : 4 * (K * K * K) + 100 * (K * K) + 300 * K + 100 ≤ PW K := by
-  unfold PW; ring_nf; omega
-
-theorem pw_six (K : ℕ) : 200 * K ^ 6 + 20 * (K * K) + 50 * K + 100 ≤ PW K := by
-  unfold PW; ring_nf; omega
 
 section Guess
 variable {kclk : ℕ} {E : Envelope} {B : TimeBudget kclk E} {I : PrimitiveInputs B} {S : UnionSetup I} {N : ℕ}
@@ -120,3 +129,5 @@ theorem pathCaps_of (hG : GEnv g Λ K) {Kw Dw Dl De Ce Dt Ct Kb Db Cδ cr t : �
 end Guess
 
 end NearCubicWires.WireExponent3_5.UnionMachine.FrontSemPathCaps
+
+end

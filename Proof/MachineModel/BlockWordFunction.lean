@@ -1,4 +1,5 @@
 import Proof.MachineModel.BlockPlatform
+import Proof.Foundations.OrdinaryMachine
 
 /-! # A machine stated as `Step`s, delivered as a `WordFunction`.
 

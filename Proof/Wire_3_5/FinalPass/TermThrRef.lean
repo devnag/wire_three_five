@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.FinalPass.TermRef
+import Proof.Wire_3_5.Primitive.PrimitiveThr
 
 /-! # Final pass, stage 8 (THR): the reported modular row from the corners (P3:2587-2630, 3170-3178)
 

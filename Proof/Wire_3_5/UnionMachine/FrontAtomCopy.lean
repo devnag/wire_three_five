@@ -1,9 +1,10 @@
 import Proof.Wire_3_5.UnionMachine.FrontEntriesRef
 import Proof.Wire_3_5.UnionMachine.FrontOracleField
+import Proof.MachineModel.OrdinaryZeroPadding
 
-/-! # C6 front, U1b: one guessed atom's code onto the Theorem 2.5 repository's decoder tape (P3:3670)
+/-! # C6 front, U1b: one guessed atom's code onto v8's decoder tape (P3:3670)
 
-For "It rejects malformed descriptions, oversized atoms" (P3:3670) the front decodes every grid atom with the Theorem 2.5 repository's
+For "It rejects malformed descriptions, oversized atoms" (P3:3670) the front decodes every grid atom with v8's
 canonical circuit decoder (`CloseoutRowsCircuit{Threshold,Symmetric}Run`, run padded: base `CloseoutRowsCircuitPadding`),
 whose raw input tape holds `pad P (frame bits)` for the atom's code bits `bits` (`value bits` = the code). This register
 program (C5's `WM`) takes one entry of the validated guess rest `frame r` (the codec: the grid word `b 1 0 x`, then

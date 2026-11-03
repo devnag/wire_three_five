@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPRequestCircuitNodes
+import Proof.PCP.PCPPRequestNaturalFocus
 
 /-! The output-index field is parsed at the cursor left by the actual node
 list. The retained balanced node code is outside the fresh natural bank. -/

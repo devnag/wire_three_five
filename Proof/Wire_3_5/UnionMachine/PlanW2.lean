@@ -1,13 +1,28 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.PlanW
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Assembly.Free
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.UnionCheck
+import Proof.Wire_3_5.UnionMachine.UnionEventual
+import Proof.Wire_3_5.UnionMachine.Plan
+import Proof.Wire_3_5.UnionMachine.PlanW2Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # C6: leaf U's enclosing application with the union's own exponents
 
-The plan of `Proof.Wire_3_5.UnionMachine.PlanW` with the union's clock and source-work exponents chosen by the
-front: `kclk = gateDver + e`, `a = kclk + 1`, the margin `e` an existential of the front residual at each literal set
-(so the front author picks it without replanning). The union's own preprocessing includes the Theorem 2.5 repository's cold decoders, whose
-polynomial degree is fixed before the hierarchy clock (base `CloseoutWitness.Oracle.budget_polynomial`: `(N+2)^25`;
-the atom decoders' capacity `(ℓ+2)^26`), so the source-work exponent must exceed them; `C_clk = kclk + 2 > d_ver + 2`
-(P3:3653-3655) still holds, and the leaf's type `UnionLeafF l` (`Σ kclk A a`) is unchanged.
+The plan of `WireExponent3_5UnionMachinePlanW` with the union's clock and source-work exponents: the numeral
+clock `kclk` (paper v2, order of the constants, item (1): `C_clk = kclk + 2 > d_0 + 2`), `a = kclk + 1`, and a margin
+`e` kept as an index of the front residual. The union's own preprocessing includes v8's cold decoders, whose
+polynomial degree is an absolute constant (base `CloseoutWitness.Oracle.budget_polynomial`: `(N+2)^25`; the atom
+decoders' capacity `(ℓ+2)^26`), below the clock.
 
 Main statement: **`union_planW2 c1 dec fronts count acc facts : ∀ l, UnionLeafF l`** with
 `fronts : ∀ l, Σ e, ∀ F, GateFreeOK l F → FrontsFWE e l F` (the margin per literal set: a stage whose degree depends
@@ -30,11 +45,12 @@ open NearCubicWires.RecoveryScheduleEnvelope (oracleSizeBound)
 section Consts
 variable (l : Literals)
 
-/-- The clock exponent at margin `e`: `T(N) = N^{kclk+2}` with `kclk = gateDver + e`. -/
-noncomputable def kE (e : ℕ) : ℕ := gateDver l + e
+/-- The clock exponent at margin `e`: `T(N) = N^{kclk+2}`, the numeral `kclk` fixed first (paper v2, order of the
+constants, item (1)); the margin `e` is kept as an index of the front residual and does not move the clock. -/
+abbrev kE (_l : Literals) (_e : ℕ) : ℕ := kclk
 
 /-- The source-work exponent at margin `e`: `a = kclk + 1`. -/
-noncomputable def aE (e : ℕ) : ℕ := kE l e + 1
+abbrev aE (l : Literals) (e : ℕ) : ℕ := kE l e + 1
 
 theorem haE (e : ℕ) : aE l e ≤ kE l e + 1 := le_rfl
 
@@ -88,17 +104,13 @@ end Front
 section LeafB
 variable (l : Literals)
 
-/-- The ledger's width grows (`TimeBudget.growth`). -/
-theorem tendsto_q {kclk : ℕ} {E : Envelope} (B : TimeBudget kclk E) : Tendsto B.q atTop atTop :=
-  tendsto_atTop_atTop.2 fun m => B.growth m
-
 /-- The eventual facts the worker's time reads, at one coefficient, source work and language: the count,
 `GateFreeOK`'s absorption at the per-call factor `Kf·(3+Kd)`, and C1's one call. -/
 theorem eventual_timeE (e : ℕ) (F : GateFree l) (hF : GateFreeOK l F) (coef A : ℕ) (hc : 1 ≤ coef) (L : Language)
     (hL : InNTIME (fun n => n ^ (kE l e + 2)) L) {d₁ : ℕ} (c1 : C1At d₁) (Kf Kd : ℕ) (count : CallCountF l) :
     ∃ N₀ : ℕ, ∀ N, N₀ ≤ N →
       (∀ (z : BitInput N) (g : UnionGuess (SUE l F e coef A L hL) z),
-        g.oracle.size ≤ oracleSizeBound (SUE l F e coef A L hL).G ((SUE l F e coef A L hL).pcp.nativeWidth N) →
+        UnionGuards (SUE l F e coef A L hL) z g →
           ∀ tr : List ℕ, (g.checkData tr).schedule.length ≤
             ((gate0 l F).budget (kE l e) coef A (aE l e) (haE l e)).q N ^ unionCallDeg l) ∧
       Kf * (3 + Kd) * (((gate0 l F).budget (kE l e) coef A (aE l e) (haE l e)).q N + 1) ^
@@ -108,7 +120,7 @@ theorem eventual_timeE (e : ℕ) (F : GateFree l) (hF : GateFreeOK l F) (coef A 
           ((gate0 l F).budget (kE l e) coef A (aE l e) (haE l e)).callBudget
             (((gate0 l F).budget (kE l e) coef A (aE l e) (haE l e)).q N) := by
   have hq := tendsto_q ((gate0 l F).budget (kE l e) coef A (aE l e) (haE l e))
-  have e1 := count (kE l e) coef A (aE l e) (haE l e) F L hL
+  have e1 := count coef A (aE l e) (haE l e) F L hL
   have e2 := hq.eventually (calls_absorb l F hF (Kf * (3 + Kd)))
   have e3 := hq.eventually (Free.selection_le_callBudget l F (kE l e) coef A (aE l e) (haE l e) hc c1.E₁ c1.c₁)
   exact eventually_atTop.1 (e1.and (e2.and e3))
@@ -116,3 +128,5 @@ theorem eventual_timeE (e : ℕ) (F : GateFree l) (hF : GateFreeOK l F) (coef A 
 end LeafB
 
 end NearCubicWires.WireExponent3_5.UnionMachine.PlanW2
+
+end

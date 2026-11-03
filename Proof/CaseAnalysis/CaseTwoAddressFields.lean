@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CaseTwoBinaryMeaning
+import Proof.Hierarchy.HierarchyFixedWord
 
 /-! Extract the actual input, native clause address, and padded final position
 from one occurrence block. The original address frame survives every read.

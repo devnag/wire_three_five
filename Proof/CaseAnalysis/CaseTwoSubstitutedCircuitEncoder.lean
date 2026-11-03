@@ -1,4 +1,9 @@
+import Proof.MachineModel.CanonicalBalancedFlattenProgram
+import Proof.MachineModel.CanonicalBalancedLengthProgram
+import Proof.MachineModel.CanonicalNatDecodeProgram
+import Proof.MachineModel.CanonicalNativeCallProgram
 import Proof.MachineModel.CanonicalSymmetricRowTableRequestProgram
+import Proof.MachineModel.CaseTwoOccurrenceProgram
 import Proof.MachineModel.RuntimeCaseTwoOccurrencePacketSplit
 
 namespace NearCubicWires.CaseTwoSubstitutedCircuitEncoder

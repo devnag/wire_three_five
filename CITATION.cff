@@ -2,6 +2,7 @@ cff-version: 1.2.0
 message: "If you use this Lean proof, please cite the paper it formalizes."
 title: "Wire–correlation tradeoffs at exponent 7/2 for depth-two threshold circuits: a Lean proof of row B of Theorem 1.1"
 type: software
+version: "2"
 authors:
   - family-names: Nag
     given-names: Dev
@@ -18,4 +19,4 @@ preferred-citation:
   year: 2026
   doi: "10.5281/zenodo.22774130"
   url: "https://doi.org/10.5281/zenodo.22774130"
-  notes: "The LaTeX source in paper/paper.tex is version 1 (15 September 2026, doi:10.5281/zenodo.22774131), the version the Lean proof was checked against."
+  notes: "The LaTeX source in paper/paper_v2.tex is version 2 (3 November 2026, doi:10.5281/zenodo.23925761), the version the Lean proof was checked against; paper/paper.tex is version 1 (15 September 2026, doi:10.5281/zenodo.22774131). Theorem 1.1 is the same in both versions."

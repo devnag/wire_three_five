@@ -1,4 +1,22 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.ThrUnitMeas
+import Proof.Wire_3_5.FinalPass.ThrPtRS11
+import Proof.Wire_3_5.Filters.FilterGap
+import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPolyBase
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.ThrSide2
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.ThrDecIface
+import Proof.Wire_3_5.UnionMachine.ThrUnitRun
+import Proof.Wire_3_5.UnionMachine.ThrUnitMeas2Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The THR unit's measure absorbed by `Ψ_T`, part 2: the FILTER setup's arguments and the data counts
 
@@ -19,18 +37,6 @@ open NearCubicWires.WireExponent3_5.Cost NearCubicWires.WireExponent3_5.Split Ne
 open NearCubicWires.WireExponent3_5.PrimAsm NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.SupplierPipeline
 open NearCubicWires.WireExponent3_5.Stars
 open NearCubicWires.WireExponent3_5.FinalPass.SymFr (pow_N_le one_le_L n2_le_L pow_mono_mul)
-
-theorem sliceOff_succ {α : Type} (ls : List (List α)) (j : ℕ) :
-    Records.sliceOff ls (j + 1) = Records.sliceOff ls j + (ls.getD j []).length := by
-  unfold Records.sliceOff
-  rw [List.take_add_one, List.map_append, List.sum_append, List.getD_eq_getElem?_getD]
-  cases ls[j]? <;> simp
-
-theorem sliceOff_mono {α : Type} (ls : List (List α)) {j k : ℕ} (h : j ≤ k) :
-    Records.sliceOff ls j ≤ Records.sliceOff ls k := by
-  induction h with
-  | refl => exact le_rfl
-  | step _ ih => rw [sliceOff_succ]; omega
 
 /-- **The FILTER setup's constant** (from `l` and `f_e`). -/
 noncomputable def KF (l : Literals) (fe : ℕ) : ℕ := 6000 * (200 + CallIndexR.capZR l + fe) + 200
@@ -161,3 +167,5 @@ theorem u_le (Kt Dt : ℕ)
 end Call
 
 end NearCubicWires.WireExponent3_5.UnionMachine.ThrMeas
+
+end

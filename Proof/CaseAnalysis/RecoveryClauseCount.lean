@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryMatrixPacketOffset
+import Proof.MachineModel.UWalkUnary
 
 /-! The original normalization clause counter starts at its paid head one.
 One left move and the existing unary copier supply the actual metadata count. -/

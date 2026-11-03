@@ -1,15 +1,28 @@
-import Proof.Wire_3_5.Primitive.Writers.HashSetH2
+import Lean
+import Proof.Wire_3_5.Primitive.Writers.HashSetH2Base
 import Proof.Wire_3_5.Primitive.Writers.KWT2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.C3ReqIface3
+import Proof.Wire_3_5.Primitive.Writers.HashS1
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.C4GateThrB
+import Proof.Wire_3_5.Assembly.Split
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # HASH setup (C), P3 part 3: `setupH_run2`, the setup's run with T-c at its true cost
 
-P3:3011-3016: `setupH_run` verbatim with T-c's contract `QCopy2` (`qCost2 q = 14q + 14`, PrimAsmKWT2) in place
+P3:3011-3016: `setupH_run` (M64) verbatim with T-c's contract `QCopy2` (`qCost2 q = 14q + 14`, PrimAsmKWT2) in place
 of `QCopy` (whose `10q + 10` is below the copy's `14q + 4`): the same machine `M0H`, the same exit bank `HBank2`, the
 setup's cost with `qCost2 (fr 2)` for the copy.
 
 * **`setupH_run2`**.
 
-Paper quantity of the main type: `HBank2` at the call (the HASH stage's setup exit bank). -/
+Paper quantity of the main type: the `HBank2` at the call (the HASH stage's setup exit bank). -/
 
 set_option autoImplicit false
 set_option linter.unusedSimpArgs false
@@ -35,7 +48,7 @@ variable (l : Literals) (F : GateFree l) (EW : Envelope) (cW K3 D3 kclk coef A a
   (S4 : ThrData.ThrDataStage4 ((gate0 l F).alg) (callInputs l F kclk coef A a0 ha0).D (fun n => ((callInputs l F kclk coef A a0 ha0).filterParams .thr n).cap))
   (T : PrimThrW.PortsE.TopFrontPort3 ((gate0 l F).alg)) (N : PrimThrW.Nums4.NumsPort4 ((gate0 l F).alg) (callInputs l F kclk coef A a0 ha0).D) (Wk : PrimT.C4KW.KWW) (fT : ℕ)
 
-/-- **The HASH setup's run at a THR call** to `HBank2`, v2: T-c at `QCopy2` (its true cost `qCost2`). -/
+/-- **The HASH setup's run at a THR call** to the `HBank2`, v2: T-c at `QCopy2` (its true cost `qCost2`). -/
 theorem setupH_run2 (C3 : C3ReqIface3.C3ReqAt3 l F EW cW K3 D3 kclk coef A a0 ha0) (hL : L.S3 = C3.thr)
     (hDL : 16 ≤ L.D)
     (hDR : PrimT.C4KW.DataRerun S4 (XH L S4 T N Wk fT) (oD L S4) (hDD L S4 T N Wk fT) (g0 L S4 T N Wk fT) (tNt L S4 T N Wk fT) (tLt L S4 T N Wk fT) (tDt L S4 T N Wk fT))
@@ -81,7 +94,7 @@ theorem setupH_run2 (C3 : C3ReqIface3.C3ReqAt3 l F EW cW K3 D3 kclk coef A a0 ha
   obtain ⟨hk2, hdesc, he⟩ := PrimT.C4GateSym.thr_call_facts l F kclk coef A a0 ha0 n a ha Cs carriers translation hcall
   have hxb : xb L S4 = ThrSet.thrXb L S4.x3 := rfl
   have hNX : L.N = 3 + L.X := rfl
-  -- 1: the THR setup chain, lifted onto the bank
+  -- 1: the THR setup chain (M58), lifted onto the bank
   obtain ⟨c, B', hc, hB, fP0, fP1, fP2, fW, fUU, fRR, fPRE, fPOST, fLG, fmask, fbl, fbl2⟩ :=
     HashSet.hash_setup_run l F EW cW K3 D3 kclk coef A a0 ha0 C3 L hL hDL CL Cd Cc Fp S4 ha Cs carriers translation hcall
       hs hWL hLW hcu hneed hfit hfx dg h1 hcf hload
@@ -295,3 +308,5 @@ theorem setupH_run2 (C3 : C3ReqIface3.C3ReqAt3 l F EW cW K3 D3 kclk coef A a0 ha
 end Run
 
 end NearCubicWires.WireExponent3_5.PrimAsm.HashSetH
+
+end

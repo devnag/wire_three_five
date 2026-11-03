@@ -1,3 +1,5 @@
+import Proof.Hierarchy.CompetitorCountTable
+import Proof.Rows.FinalDominanceEncoder
 import Proof.CaseAnalysis.FinalExternalRowLoop
 import Proof.Rows.FinalCircuitRequest
 

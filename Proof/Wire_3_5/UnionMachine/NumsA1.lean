@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.Writers.DataSetup
+import Proof.Wire_3_5.FinalPass.WordMap
 
 /-! # NW phase (a), part 1: the unary kit (read a stashed number back, unframe the data word)
 

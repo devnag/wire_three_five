@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.FinalPass.CornerRef
+import Proof.Wire_3_5.FinalPass.WordMap
 import Proof.Wire_3_5.FinalPass.ListEvalCyc
 
 /-! # Final pass, stage 2: the corner words at a sampled pair (P3:1645-1650, 3046-3053, 3170-3178)

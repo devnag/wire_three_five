@@ -1,150 +1,125 @@
-import Proof.Packets.BudgetReaderCaps
-import Proof.Wire_3_5.Recovery.RecoveryEnvelope
+import Lean
 import Proof.Wire_3_5.Recovery.RecoveryFacts
+import Proof.Wire_3_5.Recovery.RecoveryEnvelope
+import Bindings.Williams14_Corollary4_4
+import Proof.PCP.PCPPQueryBounds
+import Proof.Packets.BudgetReaderCaps
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Recovery.RecoveryLanguage
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.UnionSetup
+import Proof.Wire_3_5.Recovery.RecoveryBudgetBase
+import W3.Joins.Cases
 
-/-! # The guess fits the refuter's budget, and the clause width (P3:3657-3666, 3675-3680; D1.5)
 
-Realizes the two remaining size statements of the union machine at the recovery: "Every guess has `q^{O(1)} = o(N)`
-bits, since `N = 2^{Θ(q)}`. At the finitely many source lengths where this fixed envelope exceeds the refuter's `N/10`
-guess budget, the machine rejects outright" (P3:3675-3680), and "Choose a branch-independent integer `d_G` bounding
-all PCPP clause counts" (P3:3657-3659).
+noncomputable section
 
-Paper quantities:
-* **`eventually_poly_le_div16`**: every fixed polynomial of `q(N)` is eventually at most `⌊N/16⌋`
-  (`q(N) = O(log N)`);
-* the code lengths the guess word reads, as fixed polynomials of their parameter (`oracleCode_le`, `atomCode_le`,
-  `intWord_grid_le`);
-* the substituted request's size for an oracle of size `≤ q^G` (`requestSize_le`) and hence the PCPP's variable count
-  and clause bits;
-* the clause degree `d_G = σ·d_a + 1` (`recDG`) with `2^{clauseBits} ≤ (q+2)^{d_G}` eventually. -/
+
+/-! # The clause degree at the substituted outer verifier (paper v2 (58); Lemma H.7(b))
+
+Paper v2 (58): "the branch-independent integer `d_G = a_p e_H` bounds all PCPP clause counts by `(q+2)^{d_G}`". The
+clause degree is the anchor constant `recDG l = e_H·a_p + 1` (`WireExponent3_5GateUnion`), with `e_H` the size
+exponent of `H_Γ` (Lemma H.7(b)). The size statements of the earlier outer step (the substituted request of a native
+PCP oracle, `recSigma`) are not used: the request is `H_Γ` itself. -/
 
 set_option autoImplicit false
 
 namespace NearCubicWires.WireExponent3_5.Transfer
-open NearCubicWires NearCubicWires.SourceInterfaces NearCubicWires.RepairSource NearCubicWires.RepairRepresentation
-open NearCubicWires.RepairOrdinary NearCubicWires.WireExponent3_5.Cost NearCubicWires.WireExponent3_5.Ledger
-open NearCubicWires.RecoveryWitnessPolicy
-open Filter
 
-section Budget
+open _root_.NearCubicGates.Close
+open _root_.NearCubicWires.RecoveryScheduleEnvelope (oracleSizeBound)
+open _root_.NearCubicWires.RepairSource.CloseoutLanguage (clauseWidth)
 
-theorem clog_le_self' (n : ℕ) : Nat.clog 2 n ≤ n :=
-  Nat.clog_le_of_le_pow (Nat.lt_two_pow_self).le
+variable (l : Literals)
 
-/-- `q(N) + 1 ≤ K·clog N + K` with `K = (kclk+2)(1+A) + 3A + 1`. -/
-theorem nativeWidth_le_clog (kclk A' N : ℕ) :
-    nativeWidth kclk A' N + 1 ≤ ((kclk + 2) * (1 + A') + 3 * A' + 1) * Nat.clog 2 N +
-      ((kclk + 2) * (1 + A') + 3 * A' + 1) := by
-  unfold nativeWidth
-  have h1 : Nat.clog 2 (N ^ (kclk + 2)) ≤ (kclk + 2) * Nat.clog 2 N := clog_pow_le N (kclk + 2)
-  have h2 : Nat.clog 2 (Nat.clog 2 (N ^ (kclk + 2)) + 2) ≤ Nat.clog 2 (N ^ (kclk + 2)) + 2 := clog_le_self' _
-  have h3 : A' * Nat.clog 2 (Nat.clog 2 (N ^ (kclk + 2)) + 2) ≤ A' * ((kclk + 2) * Nat.clog 2 N + 2) :=
-    Nat.mul_le_mul_left _ (by omega)
-  nlinarith
+theorem capExp_pos : 1 ≤ capExp l := Nat.one_le_two_pow
 
-/-- **Every fixed polynomial of `q(N)` is eventually at most `⌊N/16⌋`** (`q(N) = O(log N)`). -/
-theorem eventually_poly_le_div16 (kclk A' c d : ℕ) :
-    ∀ᶠ N in atTop, c * (nativeWidth kclk A' N + 1) ^ d ≤ N / 16 := by
-  set K := (kclk + 2) * (1 + A') + 3 * A' + 1 with hK
-  have hclog : Tendsto (fun N => Nat.clog 2 N) atTop atTop :=
-    tendsto_atTop_atTop.2 fun b => ⟨2 ^ b, fun N hN => by
-      calc b = Nat.clog 2 (2 ^ b) := (Nat.clog_pow 2 b (by norm_num)).symm
-        _ ≤ Nat.clog 2 N := Nat.clog_mono_right 2 hN⟩
-  have hev := hclog.eventually (eventually_mul_affine_pow_le_two_pow (32 * c) K K d)
-  filter_upwards [hev, eventually_ge_atTop 2] with N h hN
-  have hw := nativeWidth_le_clog kclk A' N
-  have hpow : (nativeWidth kclk A' N + 1) ^ d ≤ (K * Nat.clog 2 N + K) ^ d := Nat.pow_le_pow_left hw d
-  have hlt : 2 ^ (Nat.clog 2 N - 1) < N := Nat.pow_pred_clog_lt_self (by norm_num) (by omega)
-  have hpos : 1 ≤ Nat.clog 2 N := Nat.clog_pos (by norm_num) (by omega)
-  have h2 : 2 ^ Nat.clog 2 N = 2 * 2 ^ (Nat.clog 2 N - 1) := by
-    rw [← pow_succ']; congr 1; omega
-  rw [Nat.le_div_iff_mul_le (by norm_num)]
-  have h3 : 32 * c * (nativeWidth kclk A' N + 1) ^ d ≤ 2 ^ Nat.clog 2 N :=
-    (Nat.mul_le_mul_left _ hpow).trans h
-  have e : 32 * c * (nativeWidth kclk A' N + 1) ^ d = 2 * (c * (nativeWidth kclk A' N + 1) ^ d * 16) := by ring
-  omega
-
-/-- The code length of an oracle within the parameter `P`. -/
-theorem oracleCode_le {w : ℕ} (oracle : BooleanCircuit w) (P : ℕ) (h4 : 4 ≤ P) (hw : w ≤ P) (hs : oracle.size ≤ P) :
-    (natWord (ExecutableInterfaces.encodeBooleanCircuit oracle)).length ≤
-      2 * canonicalBooleanCircuitCodeBitBound P + 1 := by
-  rw [Bindings.Williams14.natWord_length]
-  have := encodeBooleanCircuit_bits_le_parameter oracle h4 hw hs
-  omega
-
-/-- The code length of an atom within the description parameter `P`. -/
-theorem atomCode_le (m : Mode) {n : ℕ} (C : m.Circuit n) (P : ℕ) (h4 : 4 ≤ P) (hd : m.descriptionBits C ≤ P) :
-    (natWord (m.code C)).length ≤
-      2 * (canonicalSymmetricCircuitCodeBitBound P + canonicalThresholdCircuitCodeBitBound P) + 1 := by
-  rw [Bindings.Williams14.natWord_length]
-  cases m
-  · have := encodeNormalizedThresholdCircuit_bits_le_parameter C h4 hd
-    show 2 * natBitLength (SupplierPipeline.encodeNormalizedThresholdThresholdCircuit C) + 1 ≤ _
+/-- **Lemma H.7(b) at the gate**: `|H_B| + 1 ≤ K_s (q+1)^{e_H}` for every pair `B` whose proof circuit has at most
+`q^G` gates, at every source index `1 ≤ ν ≤ q`, `q = q(N)`. -/
+theorem datSize_le : ∃ Ks : ℕ, ∀ (ν N : ℕ) (B : Outer.OuterGuess (gateWidth l N)), 1 ≤ ν → ν ≤ gateWidth l N →
+    B.pf.size ≤ oracleSizeBound (oracleDeg l) (gateWidth l N) →
+    (Outer.Dat (gateMW l) (gateSV l) ν B).D.size + 1 ≤ Ks * (gateWidth l N + 1) ^ eH l := by
+  obtain ⟨M, hM⟩ := Outer.natBitLength_T_le (gateSV l)
+  set eC' := (Outer.alg (gateMW l) (gateSV l)).sizeExp with heC
+  set cA := (Outer.alg (gateMW l) (gateSV l)).coefficient with hcA
+  have hcap1 := capExp_pos l
+  refine ⟨cA * (M + kclk + 4) ^ eC' + 3, fun ν N B hν1 hνq hpf => ?_⟩
+  have hD := Outer.Dat_size_le (gateMW l) (gateSV l) ν B
+  have hC := Outer.outC_size_le (gateMW l) (gateSV l) ν hν1 B.src
+  have hT := hM ν
+  have hpf1 := oracleSize_le l _ _ hpf
+  have hq1 : 1 ≤ gateWidth l N + 1 := by omega
+  have hlen : lenG l + 2 = capExp l + 1 := by unfold lenG; omega
+  have hX : 1 ≤ (gateWidth l N + 1) ^ (lenG l + 2) := Nat.one_le_pow _ _ hq1
+  have hlam : Outer.instLength (lenG l) ν ≤ (gateWidth l N + 1) ^ (lenG l + 2) := by
+    unfold Outer.instLength; exact Nat.pow_le_pow_left (by omega) _
+  have hlin : gateWidth l N + 1 ≤ (gateWidth l N + 1) ^ (lenG l + 2) := Nat.le_self_pow (by omega) _
+  have hin : Outer.instLength (lenG l) ν + natBitLength ((gateSV l).T (Outer.instLength (lenG l) ν)) + 1 ≤
+      (M + kclk + 4) * (gateWidth l N + 1) ^ (lenG l + 2) := by nlinarith
+  have hC2 : (Outer.outC (gateMW l) (gateSV l) ν B.src).circuit.size ≤
+      cA * ((M + kclk + 4) ^ eC' * (gateWidth l N + 1) ^ ((lenG l + 2) * eC')) := by
+    refine hC.trans (Nat.mul_le_mul_left _ ?_)
+    rw [pow_mul, ← mul_pow]
+    exact Nat.pow_le_pow_left hin _
+  set Y := (gateWidth l N + 1) ^ ((lenG l + 2) * eC') with hY
+  set Z := (gateWidth l N + 1) ^ capExp l with hZ
+  have hYZ : Y * Z ≤ (gateWidth l N + 1) ^ eH l := by
+    rw [hY, hZ, ← pow_add]
+    refine Nat.pow_le_pow_right hq1 ?_
+    unfold eH eC
+    rw [hlen]
+    nlinarith
+  have hq3 : gateWidth l N + 3 ≤ 3 * (gateWidth l N + 1) ^ eH l := by
+    have : gateWidth l N + 1 ≤ (gateWidth l N + 1) ^ eH l := Nat.le_self_pow (by unfold eH; omega) _
     omega
-  · have := encodeNormalizedSymmetricCircuit_bits_le_parameter C h4 hd
-    show 2 * natBitLength (SupplierPipeline.encodeNormalizedSymmetricThresholdCircuit C) + 1 ≤ _
-    omega
-
-/-- The word of a grid sign is at most four bits. -/
-theorem intWord_grid_le : ∀ σ ∈ ({-1, 0, 1} : Finset ℤ), (intWord σ).length ≤ 4 := by
-  intro σ hσ
-  simp only [Finset.mem_insert, Finset.mem_singleton] at hσ
-  rcases hσ with rfl | rfl | rfl <;> decide
-
-end Budget
-
-section Sizes
-variable (l : Literals) (G : Split.Gate) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1)
-
-/-- The size exponent `σ = 4e_Q + 2^{oracleDepth G} + 1` of the substituted request. -/
-noncomputable def recSigma : ℕ :=
-  4 * (gateSource l).degrees.queries + 2 ^ RecoveryScheduleEnvelope.oracleDepth (recOracleDeg l) + 1
-
-/-- **The clause degree** `d_G = σ·d_a + 1` (P3:3657-3659). -/
-noncomputable def recDG : ℕ := recSigma l * (gatePCPP l).degree + 1
-
-/-- The oracle size bound `q^G`: `oracleSizeBound G q + 1 ≤ (q+1)^{2^{oracleDepth G}}`. -/
-theorem oracleSize_le (d w : ℕ) (o : ℕ) (ho : o ≤ RecoveryScheduleEnvelope.oracleSizeBound d w) :
-    o + 1 ≤ (w + 1) ^ 2 ^ RecoveryScheduleEnvelope.oracleDepth d := by
-  have := PolynomialClock.pairIter_add_one_le_pow (RecoveryScheduleEnvelope.oracleDepth d) w
-  unfold RecoveryScheduleEnvelope.oracleSizeBound PolynomialClock.pairClock at ho
+  have hCpf : (Outer.outC (gateMW l) (gateSV l) ν B.src).circuit.size * (B.pf.size + 1) ≤
+      cA * (M + kclk + 4) ^ eC' * (Y * Z) := by
+    calc (Outer.outC (gateMW l) (gateSV l) ν B.src).circuit.size * (B.pf.size + 1)
+        ≤ (cA * ((M + kclk + 4) ^ eC' * Y)) * Z := Nat.mul_le_mul hC2 hpf1
+      _ = cA * (M + kclk + 4) ^ eC' * (Y * Z) := by ring
+  have h5 : cA * (M + kclk + 4) ^ eC' * (Y * Z) ≤ cA * (M + kclk + 4) ^ eC' * (gateWidth l N + 1) ^ eH l :=
+    Nat.mul_le_mul_left _ hYZ
+  have hD' : (Outer.Dat (gateMW l) (gateSV l) ν B).D.size ≤
+      (Outer.outC (gateMW l) (gateSV l) ν B.src).circuit.size * (B.pf.size + 1) + gateWidth l N + 2 := hD
+  have e : (cA * (M + kclk + 4) ^ eC' + 3) * (gateWidth l N + 1) ^ eH l =
+      cA * (M + kclk + 4) ^ eC' * (gateWidth l N + 1) ^ eH l + 3 * (gateWidth l N + 1) ^ eH l := by ring
+  clear hD
   omega
 
-/-- The size arithmetic of the substituted request. -/
-theorem size_arith (w Qc os cs dom CH eQ g σ minA : ℕ) (hQc : Qc ≤ CH * (w + 1) ^ eQ) (hos : os + 1 ≤ (w + 1) ^ g)
-    (hcs : cs ≤ Qc * (2 * os + 1) + 3 * (2 * Qc) ^ 3 + 1) (hdom : dom ≤ w + minA) (h1 : eQ + g ≤ σ)
-    (h3 : 3 * eQ ≤ σ) (h0 : 1 ≤ σ) :
-    max cs dom + 1 ≤ (3 * CH + 24 * CH ^ 3 + minA + 3) * (w + 1) ^ σ := by
-  have hw1 : 1 ≤ w + 1 := by omega
-  have hp1 : (w + 1) ^ (eQ + g) ≤ (w + 1) ^ σ := Nat.pow_le_pow_right hw1 h1
-  have hp3 : (w + 1) ^ (3 * eQ) ≤ (w + 1) ^ σ := Nat.pow_le_pow_right hw1 h3
-  have hp0 : w + 1 ≤ (w + 1) ^ σ := by
-    calc w + 1 = (w + 1) ^ 1 := (pow_one _).symm
-      _ ≤ (w + 1) ^ σ := Nat.pow_le_pow_right hw1 h0
-  have hone : 1 ≤ (w + 1) ^ σ := Nat.one_le_pow _ _ (by omega)
-  have hQ1 : Qc * (2 * os + 1) ≤ 2 * CH * (w + 1) ^ σ := by
-    calc Qc * (2 * os + 1) ≤ (CH * (w + 1) ^ eQ) * (2 * (w + 1) ^ g) := Nat.mul_le_mul hQc (by omega)
-      _ = 2 * CH * (w + 1) ^ (eQ + g) := by rw [pow_add]; ring
-      _ ≤ 2 * CH * (w + 1) ^ σ := Nat.mul_le_mul_left _ hp1
-  have hQ3 : 3 * (2 * Qc) ^ 3 ≤ 24 * CH ^ 3 * (w + 1) ^ σ := by
-    calc 3 * (2 * Qc) ^ 3 ≤ 3 * (2 * (CH * (w + 1) ^ eQ)) ^ 3 :=
-          Nat.mul_le_mul_left _ (Nat.pow_le_pow_left (by omega) 3)
-      _ = 24 * CH ^ 3 * (w + 1) ^ (3 * eQ) := by rw [show 3 * eQ = eQ * 3 by ring, pow_mul]; ring
-      _ ≤ 24 * CH ^ 3 * (w + 1) ^ σ := Nat.mul_le_mul_left _ hp3
-  have hmin : minA ≤ minA * (w + 1) ^ σ := Nat.le_mul_of_pos_right _ hone
-  have hmax : max cs dom ≤ 2 * CH * (w + 1) ^ σ + 24 * CH ^ 3 * (w + 1) ^ σ + 1 + (w + minA) :=
-    max_le (by omega) (by omega)
-  have e : (3 * CH + 24 * CH ^ 3 + minA + 3) * (w + 1) ^ σ =
-      3 * CH * (w + 1) ^ σ + 24 * CH ^ 3 * (w + 1) ^ σ + minA * (w + 1) ^ σ + 3 * (w + 1) ^ σ := by ring
-  have hCH : 2 * CH * (w + 1) ^ σ ≤ 3 * CH * (w + 1) ^ σ := Nat.mul_le_mul_right _ (by omega)
-  omega
-
-theorem recSigma_ge : (gateSource l).degrees.queries + 2 ^ RecoveryScheduleEnvelope.oracleDepth (recOracleDeg l) ≤
-      recSigma l ∧ 3 * (gateSource l).degrees.queries ≤ recSigma l ∧ 1 ≤ recSigma l := by
-  unfold recSigma
-  have := Nat.zero_le (2 ^ RecoveryScheduleEnvelope.oracleDepth (recOracleDeg l))
-  omega
-
-end Sizes
+/-- **The clause bound at `d_G`** ((58)): past a width onset, the PCPP output of the request at `H_B` has at most
+`⌈d_G log₂(gateWidth l N+2)⌉` clause bits, for every pair `B` within the cap and every `1 ≤ ν ≤ gateWidth l N`, `d_G = recDG l = e_H a_p + 1`. -/
+theorem clauseBits_le : ∃ q₀ : ℕ, ∀ (ν N : ℕ) (B : Outer.OuterGuess (gateWidth l N)), 1 ≤ ν → ν ≤ gateWidth l N →
+    q₀ ≤ gateWidth l N → B.pf.size ≤ oracleSizeBound (oracleDeg l) (gateWidth l N) →
+    ((gatePCPP l).output
+      (W3.NearCubicWires.RepairSource.Outer3.requestAt (gateMW l) (gateSV l) (gatePCPP l) ν B)).clauseBits ≤
+      clauseWidth (recDG l) (gateWidth l N) := by
+  obtain ⟨Ks, hKs⟩ := datSize_le l
+  set K₀ := (gatePCPP l).coefficient * Ks ^ (gatePCPP l).degree with hK₀
+  refine ⟨K₀ + (gatePCPP l).minimumArity, fun ν N B hν1 hνq hq0 hpf => ?_⟩
+  have hmin : (gatePCPP l).minimumArity ≤ Outer.width (gateMW l) (gateSV l) N := by
+    show (gatePCPP l).minimumArity ≤ gateWidth l N; omega
+  rw [W3.NearCubicWires.RepairSource.Outer3.requestAt_of (gateMW l) (gateSV l) (gatePCPP l) ν B hmin]
+  have hcc := (gatePCPP l).clauseCountBound
+    (W3.NearCubicWires.RepairSource.Outer3.requestOf (gateMW l) (gateSV l) (gatePCPP l) ν B hmin)
+  have hsz : (W3.NearCubicWires.RepairSource.Outer3.requestOf (gateMW l) (gateSV l) (gatePCPP l) ν B hmin).circuit.size
+      + 1 ≤ Ks * (gateWidth l N + 1) ^ eH l := hKs ν N B hν1 hνq hpf
+  have hb : 2 ^ ((gatePCPP l).output
+      (W3.NearCubicWires.RepairSource.Outer3.requestOf (gateMW l) (gateSV l) (gatePCPP l) ν B hmin)).clauseBits ≤
+      (gateWidth l N + 2) ^ recDG l := by
+    calc _ ≤ _ := hcc
+      _ ≤ (gatePCPP l).coefficient * (Ks * (gateWidth l N + 1) ^ eH l) ^ (gatePCPP l).degree :=
+          Nat.mul_le_mul_left _ (Nat.pow_le_pow_left hsz _)
+      _ = K₀ * (gateWidth l N + 1) ^ (eH l * (gatePCPP l).degree) := by rw [mul_pow, ← pow_mul]; ring
+      _ ≤ (gateWidth l N + 2) * (gateWidth l N + 2) ^ (eH l * (gatePCPP l).degree) :=
+          Nat.mul_le_mul (by omega) (Nat.pow_le_pow_left (by omega) _)
+      _ = (gateWidth l N + 2) ^ recDG l := by unfold recDG; ring
+  have hc := Nat.le_pow_clog (by norm_num : 1 < 2) ((gateWidth l N + 2) ^ recDG l)
+  unfold clauseWidth
+  exact (Nat.pow_le_pow_iff_right (by norm_num : 1 < 2)).mp (hb.trans hc)
 
 end NearCubicWires.WireExponent3_5.Transfer
+
+end

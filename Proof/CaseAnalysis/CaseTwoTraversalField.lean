@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CaseTwoTraversalLayout
+import Proof.Amplification.RecoveryTseitinRawIncrement
 
 namespace NearCubicWires.RepairOrdinary.CloseoutCaseTwo.Traversal
 open LocalBitMultitape RepairRepresentation OuterPCPRecovery RecoveryRootRound

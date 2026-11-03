@@ -31,6 +31,25 @@ open NearCubicWires.RepairOrdinary.RecoveryRootRound
 /-- The counter bank: `binary (w+1) j` and the increment's `w+1`-cell workspace. -/
 def counterTapes (w j : ℕ) : Fin 2 → List Bool := ![binary (w + 1) j, List.replicate (w + 1) false]
 
+/-- The layout of an enumeration cell: `t` user tapes, then the counter bank. -/
+def enumTapes {t : ℕ} (D : Fin t → List Bool) (w j : ℕ) : Fin (t + 2) → List Bool :=
+  Fin.addCases (m := t) (n := 2) (motive := fun _ => List Bool) D (counterTapes w j)
+
+def enumHeads {t : ℕ} (H : Fin t → ℕ) : Fin (t + 2) → ℕ :=
+  Fin.addCases (m := t) (n := 2) (motive := fun _ => ℕ) H (fun _ => 0)
+
+/-- A uniform enumeration body: the work machine on the enumeration layout. At every `j < 2^w` it runs
+from the cell with user data `data j out` and counter `j` to the cell with user data
+`data (j+1) (out ++ emit j)` and the counter unchanged. -/
+structure EnumBody (t s w : ℕ) where
+  work : Machine (t + 2) s
+  cost : ℕ
+  heads : Fin t → ℕ
+  data : ℕ → List Bool → Fin t → List Bool
+  emit : ℕ → List Bool
+  step : ∀ j, j < 2 ^ w → ∀ out, Step work cost (enumHeads heads) (enumTapes (data j out) w j)
+    (enumHeads heads) (enumTapes (data (j + 1) (out ++ emit j)) w j)
+
 namespace EnumBody
 variable {t s w : ℕ}
 

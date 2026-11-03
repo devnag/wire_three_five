@@ -1,16 +1,36 @@
+import Lean
 import Proof.Wire_3_5.Foundations.OutMachineHU
 import Proof.Wire_3_5.Foundations.OutMachineSlot0W
 import Proof.Wire_3_5.Primitive.Writers.SBInst
 import Proof.Wire_3_5.UnionMachine.NumsW2
 import Proof.Wire_3_5.FinalPass.SWParts
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.CoreJ11
+import Proof.Wire_3_5.FinalPass.Stage1
+import Proof.Wire_3_5.Primitive.Writers.SBIdent
+import Proof.Wire_3_5.Primitive.Writers.SBTypes
+import Proof.Wire_3_5.Primitive.Writers.SBTypes2
+import Proof.Wire_3_5.UnionMachine.NumsPh3
+import Proof.Wire_3_5.Foundations.OutMachineHUBase
+import Proof.Wire_3_5.Foundations.OutMachineJoinGBase
+import Proof.Wire_3_5.Foundations.OutMachineSlot0WBase
+import Proof.Wire_3_5.Primitive.Writers.SBInstBase
+import Proof.Wire_3_5.UnionMachine.NumsW2Base
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-!
 # The final pass's closure join, step 6
 
-`finalPassClose5` (the final pass from the four pool writers, with the uniformity bundle `hU4` supplied) at the four writers assembled from verified code: SA = `SA.sa` (complete); SB = `sbWriter` over its five arithmetic statements; NW = `nwOf` at the cells `xNW db l` over
-its phases (b) and (d); SW = `swOf` over its five parts. The producers still open, one binder
-each: SB's statements `hI hO hC hF hK`; NW's phase (b) `pb` and phase (d) `pd` (the output machine) with (b)'s cell bound
-`db`; SW's parts `Pg Pt Pf Pl Pn`.
+X6's `finalPassClose5` (the final pass from the four pool writers, with the uniformity bundle `hU4` supplied,
+) at the four writers assembled from verified code: SA = `SA.sa` (complete); SB = PA2's
+`sbWriter` over its five arithmetic statements; NW = the `nwOf` at the cells `xNW db l` over
+its phases (b) and (d); SW = the `swOf` over its five parts. The producers still open, one binder
+each: SB's statements `hI hO hC hF hK`; NW's phase (b) `pb` (T3) and phase (d) `pd` (X6) with (b)'s cell bound
+`db`; SW's parts `Pg Pt Pf Pl Pn` (C6b, C1b).
 
 Paper quantity of the main type: `FinalPassLeaf l`, the final pass of `lem:primitive` (P3:3044-3048, 3170-3181).
 -/
@@ -39,3 +59,5 @@ noncomputable def finalPassClose6
       SW := SWParts.swOf (Pg l) (Pt l) (Pf l) (Pl l) (Pn l) }
 
 end NearCubicWires.WireExponent3_5.FinalPass.Close6
+
+end

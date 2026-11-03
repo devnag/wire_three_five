@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.UnionMachine.Slack
+import Proof.Wire_3_5.UnionMachine.SlackBase
 import Proof.Wire_3_5.FinalPass.WordAux
 
 /-! # C6, part 3a: the arithmetic of the rounding, on bit lists (P3:3484-3491; F1)

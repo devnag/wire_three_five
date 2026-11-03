@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeQueryBody
+import Proof.MachineModel.OrdinaryPartitionWorkspace
 
 /-! Compute the next query base from its actual final copied-node position.
 The shorter old base is overwritten/extended by real writes; both counters

@@ -1,4 +1,6 @@
+import Proof.Wire_3_5.Primitive.SeedFix.TabThrLayout
 import Proof.Wire_3_5.Primitive.SeedFix.TabThrScan
+import Proof.CaseAnalysis.RawRowsThresholdSize
 
 /-! # The THR call's sizes, part 1: the tuple's gates and occurrences (P3:3069-3072, 3176-3178)
 

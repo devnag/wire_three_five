@@ -16,6 +16,7 @@ namespace NearCubicWires.SourceRequest.SelStripLen
 open NearCubicWires.SourceSkeleton.KeptW NearCubicWires.SourceSkeleton.GuardG NearCubicWires.SourceStart.EntryW
 open NearCubicWires.SourceSkeleton.ClassR NearCubicWires.SourceSkeleton.Params NearCubicWires.SourceSkeleton.ClassV4
 open NearCubicWires.SourceSkeleton.ParamsV4
+open NearCubicWires.SourceSkeleton.Fill (XtraW)
 open NearCubicWires.SourceSkeleton.FillV5 NearCubicWires.SourceSkeleton.FirstW
 open NearCubicWires.SourceRequest NearCubicWires.SourceRequest.FactorLoop
 open NearCubicWires.SourceConstruction.Rest NearCubicWires.SourceConstruction.Bridge NearCubicWires.SourceSteps

@@ -19,6 +19,8 @@ open NearCubicWires.SourceSkeleton.FirstW NearCubicWires.SourceStart.EntryW
 noncomputable section
 
 section site2
+variable (selector : CyclicChoice.Laws) (compiler : Packets.CompilerLaws) (xtra : NearCubicWires.SourceSkeleton.Fill.XtraW selector)
+  (G7 : FirstW.G7W selector xtra)
 
 set_option hygiene false in
 local notation "CODE" => skelFamilyR mask packets rows (FillV5.resPV5 selector mask packets rows)

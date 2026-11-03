@@ -1,5 +1,7 @@
 import Proof.PCP.PCPPNativeClauseLiteralReady
 import Proof.PCP.PCPPNativeClauseOffsetSelect
+import Proof.MachineModel.OrdinaryWilliamsUnaryProduct
+import Proof.Hierarchy.HierarchyWidth
 
 /-! Actual literal-reference arithmetic: original code split, sign-selected
 offset, multiplication by the physically supplied stride template, and sum. -/

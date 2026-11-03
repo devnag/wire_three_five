@@ -1,0 +1,37 @@
+import Proof.Packets.NormalizedAdditionData
+import Proof.Packets.NormalizedMultiplyData
+import Proof.Packets.NormalizerCold
+import Proof.Packets.PacketsXCycleSerializedCost
+import Proof.Packets.PacketsXLiteralAlphabet
+import Proof.Packets.PacketsXNormalizedFiniteTransport
+import Proof.Packets.PacketsXNormalizedRing
+import Proof.Packets.PacketsXNormalizerOperations
+import Proof.Packets.PacketsXReusableArithmeticNat
+import Proof.Packets.PacketsXSubstitutionCensus
+import Proof.Packets.PacketsXSubstitutionNatInvariant
+import Proof.Packets.PacketsXVectorWorkerChildLoop
+import Proof.Packets.PacketsXVectorWorkerParentLoop
+import Proof.Packets.ReusableArithmeticLeft
+import Proof.Packets.ReusableNormalizedArithmetic
+import Proof.Packets.SubstitutionOuterLoop
+import Proof.Packets.VectorAccumulatorRight
+import Proof.Packets.VectorChildTransaction
+import Proof.Packets.PacketsXVectorWorkerLevelBody
+
+/-! A complete actual level update. Both nested arithmetic loops, every
+indexed write, and bank turnover are discharged; the remaining two machine
+interfaces are the finite level preparation and finite literal provider. -/
+set_option autoImplicit false
+set_option maxHeartbeats 1400000
+set_option maxRecDepth 120000
+set_option warningAsError true
+namespace PCJ9eff70d512234a4c_Fixed.Materializer.VectorBottomUp
+open NearCubicWires NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdinary
+open NearCubicWires.ExtDecompositionBatch NearCubicWires.RepairSource.VerifierDecoding
+open NormalizedFiniteTransport Theorem25Completion.CycleBounds SubstitutionCensus
+noncomputable section
+
+attribute [local irreducible] prepareLevel parents levelBody
+
+end
+end PCJ9eff70d512234a4c_Fixed.Materializer.VectorBottomUp

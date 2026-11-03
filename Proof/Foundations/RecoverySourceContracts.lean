@@ -1,5 +1,7 @@
-import Proof.Foundations.CaseOneScheduleLedger
 import Proof.Foundations.SourceCore
+import Proof.Foundations.CaseOneScheduleLedger
+import Proof.Foundations.PhysicalRecovery
+import Statement
 
 /-!
 Source-faithful Case-1 amplification for one cutoff schedule at a time.

@@ -1,4 +1,8 @@
 import Proof.Wire_3_5.Primitive.SeedFix.C4Child
+import Proof.Hierarchy.CompetitorCountTableBounds
+import Proof.Hierarchy.CompetitorCountRecordRequestBounds
+import Proof.Hierarchy.CompetitorSameBucketDenseBounds
+import Proof.CaseAnalysis.FinalRoundCursor
 
 /-! # polynomial bounds, part 5: one child's step bound `C4Child.coreCost`
 

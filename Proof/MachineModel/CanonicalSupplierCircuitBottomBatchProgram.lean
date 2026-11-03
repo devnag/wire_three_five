@@ -1,4 +1,6 @@
 import Proof.MachineModel.CanonicalSupplierCircuitBottomProgram
+import Proof.MachineModel.CanonicalSupplierGateBatchProgram
+import Proof.Circuits.CanonicalWitnessCodec
 
 namespace NearCubicWires.CanonicalSupplierCircuitBottomBatchProgram
 

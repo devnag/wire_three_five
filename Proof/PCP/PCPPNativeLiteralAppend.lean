@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeAddressReusable
+import Proof.PCP.ProjectionNormalizationConstants
 
 /-! Fixed native tag/zero fields are printed by the existing literal
 machine at the live native descriptor cursor. No local workspace changes. -/

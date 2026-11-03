@@ -1,4 +1,6 @@
 import Proof.Wire_3_5.FinalPass.S5TW6
+import Proof.Wire_3_5.Primitive.ThresholdWriter.TF3Cost
+import Proof.Wire_3_5.Primitive.Writers.ThrData2
 
 /-! # S5-THR, part 9: the THR front end and the data stage docked (P3:2543-2558, P3:3083-3086)
 

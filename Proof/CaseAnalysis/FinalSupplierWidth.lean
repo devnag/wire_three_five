@@ -1,7 +1,6 @@
-import Proof.CaseAnalysis.FinalExactnessFamily
-import Proof.CaseAnalysis.FinalSupplierAccuracy
-import Proof.CaseAnalysis.FinalSupplierCalls
+import Proof.CaseAnalysis.FinalSiteCoefficientsFit
 import Proof.CaseAnalysis.FinalThresholdWidths
+import Proof.CaseAnalysis.FinalSupplierAccuracy
 
 namespace NearCubicWires.RepairSource.CloseoutFinal.C10SupplierWidth
 
@@ -79,6 +78,17 @@ theorem rowCount_eq_two_pow (spectrum : ExpanderSpectrumContract) (liveScale : �
 the definition is a `max` and both consumers come out of it by
 `le_max_left` / `le_max_right`. -/
 
+/-- **The bank width.**  `coefficientFloor n` is intended as
+`coefficientBound (limits n) (pcpp n)` at the decoded family of input length
+`n`; `arity n` is the supplier's circuit arity there and `scale n` the uniform
+denominator's exponent.  Nothing numeric is chosen: every summand is a consumer
+obligation. -/
+def entryWidth (coefficientFloor arity scale : ℕ → ℕ)
+    {source : RepairRepresentation.PointwisePCPPAlgorithm}
+    (constants : RepairSource.CompetitorRationalGap.Constants source) (n : ℕ) : ℕ :=
+  max (max (coefficientFloor n) (C10ThresholdWidths.thresholdWidth constants))
+    (arity n + scale n + 1)
+
 /-! ## §3 The answer channel — one uniform denominator
 
 `realizes_of_stage` takes ONE `denominator : ℕ`.  A.13.9's own denominator
@@ -99,6 +109,17 @@ def answer {Circuit : CircuitFamily}
     (factors : List (Circuit arity)) : ℕ :=
   rowAnswer rows arity factors * denominator arity scale
     / rowDenominator rows arity factors
+
+theorem denominator_pos (arity scale : ℕ) : 0 < denominator arity scale :=
+  Nat.two_pow_pos _
+
+/-- A.13.9's denominator is positive: `rowCountPositive` and `2 ^ q`. -/
+theorem rowDenominator_pos {Circuit : CircuitFamily}
+    {evaluate : {q : ℕ} → Circuit q → BitInput q → Bool}
+    (rows : FourfoldRowPreprocessor Circuit evaluate) (arity : ℕ)
+    (factors : List (Circuit arity)) :
+    0 < rowDenominator rows arity factors :=
+  Nat.mul_pos (rows.rowCountPositive _) (Nat.two_pow_pos _)
 
 /-- The acceptance count never exceeds the sample count: one `∑_e ∑_z` of bits
 over `|\mathcal E| * 2 ^ q` samples. -/

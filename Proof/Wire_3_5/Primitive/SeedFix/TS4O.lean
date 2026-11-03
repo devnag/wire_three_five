@@ -1,6 +1,17 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.TS4N
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPoly
+import Proof.Wire_3_5.Primitive.SeedFix.TS4OBase
 
-/-! # thrStage4U, part 13: the capacity need is polynomial
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # T (#120, thrStage4U), part 13: the capacity need is polynomial
 
 P3:3114-3115 ("All powers of `n` are fixed before a fixed `r`"): `needT l c_r n ≤ NCoef l c_r·(n+1)^{NDeg l}`, the degree
 `NDeg l` fixed by the literals (the cap's exponents, W6's `Eth`, the sparse bound's `spA`), the coefficient by `c_r`:
@@ -22,9 +33,6 @@ namespace NearCubicWires.WireExponent3_5.PrimT.TS4
 open NearCubicWires NearCubicWires.WireExponent3_5 NearCubicWires.WireExponent3_5.Split
 open NearCubicWires.WireExponent3_5.Transfer NearCubicWires.WireExponent3_5.PrimAsm
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan
-
-theorem two_pow_le (n d : ℕ) : (n + 2) ^ d ≤ 2 ^ d * (n + 1) ^ d := by
-  rw [← mul_pow]; exact Nat.pow_le_pow_left (by omega) d
 
 variable (l : Literals)
 
@@ -125,3 +133,5 @@ theorem needT_le (cr n : ℕ) : needT l cr n ≤ NCoef l cr * (n + 1) ^ NDeg l :
   omega
 
 end NearCubicWires.WireExponent3_5.PrimT.TS4
+
+end

@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RowsSourceDigits
+import Proof.CaseAnalysis.RowsBankPolynomial
 
 /-! The same paper load pays the generated cut family and all executed
 BinLift driver/degree/clear costs plus the fixed110-port loading allowance.

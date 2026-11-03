@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeProjectionLookupTemplate
+import Proof.Amplification.RecoveryUnpairCode
 
 /-! The executed retained-row lookup is specialized to the source's exact
 projection code. The returned kind and index are the fields used by the

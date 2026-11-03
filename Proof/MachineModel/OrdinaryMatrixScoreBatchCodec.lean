@@ -1,4 +1,4 @@
-import Proof.MachineModel.OrdinaryMatrixRightPaperEntry
+import Proof.MachineModel.OrdinaryMatrixRightHandoff
 import Proof.MachineModel.OrdinaryMatrixScorePhi
 
 /-! Literal raw cut input for the ordinary B.3 producer. Scalar frames are

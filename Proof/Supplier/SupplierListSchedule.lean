@@ -235,4 +235,108 @@ theorem gradedFailureBound_le
         add_le_add hterminalReal hlevels
     _ ≤ (1 : ℝ) / 128 := by norm_num
 
+/-- Extend a finite window schedule by zero.  This keeps the recursive degree
+ledger over natural intervals, without manufacturing out-of-range `Fin`
+values. -/
+def listWindowAt {depth : ℕ} (window : Fin depth → ℕ)
+    (level : ℕ) : ℕ :=
+  if hlevel : level < depth then window ⟨level, hlevel⟩ else 0
+
+@[simp] theorem listWindowAt_of_lt
+    {depth : ℕ} (window : Fin depth → ℕ)
+    (level : ℕ) (hlevel : level < depth) :
+    listWindowAt window level = window ⟨level, hlevel⟩ := by
+  unfold listWindowAt
+  rw [dif_pos hlevel]
+
+theorem listDegreeFrom_eq_terminal_add_sum
+    {depth : ℕ} (window : Fin depth → ℕ)
+    (terminalWindow level : ℕ) (hlevel : level ≤ depth) :
+    listDegreeFrom window terminalWindow level =
+      terminalWindow +
+        ∑ index ∈ Finset.Ico level depth,
+          2 * listWindowAt window index := by
+  rw [listDegreeFrom]
+  by_cases hnext : level < depth
+  · rw [dif_pos hnext]
+    rw [listDegreeFrom_eq_terminal_add_sum window terminalWindow
+      (level + 1) (by omega)]
+    rw [← Finset.insert_Ico_add_one_left_eq_Ico hnext]
+    rw [Finset.sum_insert (by simp)]
+    rw [listWindowAt_of_lt window level hnext]
+    omega
+  · rw [dif_neg hnext]
+    have hequal : level = depth := by omega
+    subst level
+    simp
+termination_by depth - level
+decreasing_by omega
+
+theorem listDegree_eq_terminal_add_sum
+    {depth : ℕ} (window : Fin depth → ℕ)
+    (terminalWindow : ℕ) :
+    listDegree window terminalWindow =
+      terminalWindow + ∑ level : Fin depth, 2 * window level := by
+  unfold listDegree
+  rw [listDegreeFrom_eq_terminal_add_sum window terminalWindow
+    0 (Nat.zero_le depth)]
+  rw [Nat.Ico_zero_eq_range]
+  congr 1
+  calc
+    (∑ index ∈ Finset.range depth,
+        2 * listWindowAt window index) =
+        ∑ level : Fin depth,
+          2 * listWindowAt window level.val := by
+      exact (Fin.sum_univ_eq_sum_range
+        (fun index : ℕ => 2 * listWindowAt window index) depth).symm
+    _ = ∑ level : Fin depth, 2 * window level := by
+      apply Finset.sum_congr rfl
+      intro level _
+      rw [listWindowAt_of_lt window level.val level.isLt]
+
+theorem gradedWindow_cast_le
+    (activeBound : ℕ) {depth : ℕ} (level : Fin depth) :
+    (gradedWindow activeBound level : ℝ) ≤
+      (64 : ℝ) *
+          (Real.sqrt activeBound /
+            (2 : ℝ) ^ (level.val / 3) + 1) + 1 := by
+  unfold gradedWindow
+  exact (Nat.ceil_lt_add_one (by positivity)).le
+
+theorem sum_gradedWindow_cast_le
+    (activeBound depth : ℕ) :
+    (∑ level : Fin depth,
+        (gradedWindow activeBound level : ℝ)) ≤
+      384 * Real.sqrt activeBound + 65 * depth := by
+  calc
+    (∑ level : Fin depth,
+        (gradedWindow activeBound level : ℝ)) ≤
+        ∑ level : Fin depth,
+          ((64 : ℝ) * Real.sqrt activeBound *
+              (1 / (2 : ℝ) ^ (level.val / 3)) + 65) := by
+      apply Finset.sum_le_sum
+      intro level _
+      calc
+        (gradedWindow activeBound level : ℝ) ≤
+            (64 : ℝ) *
+              (Real.sqrt activeBound /
+                (2 : ℝ) ^ (level.val / 3) + 1) + 1 :=
+          gradedWindow_cast_le activeBound level
+        _ = (64 : ℝ) * Real.sqrt activeBound *
+              (1 / (2 : ℝ) ^ (level.val / 3)) + 65 := by
+          ring
+    _ = (64 : ℝ) * Real.sqrt activeBound *
+          (∑ level : Fin depth,
+            (1 / (2 : ℝ) ^ (level.val / 3))) +
+          65 * depth := by
+      rw [Finset.sum_add_distrib]
+      rw [← Finset.mul_sum]
+      simp
+      ring
+    _ ≤ (64 : ℝ) * Real.sqrt activeBound * 6 +
+          65 * depth := by
+      gcongr
+      exact sum_inverse_pow_div_three_le depth
+    _ = 384 * Real.sqrt activeBound + 65 * depth := by ring
+
 end NearCubicWires.SupplierListSchedule

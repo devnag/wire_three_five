@@ -1,6 +1,7 @@
-import Proof.Wire_3_5.Compiler.MachineTopLoad
 import Proof.Wire_3_5.Primitive.Writers.C3WMarks
+import Proof.Wire_3_5.Compiler.MachineTopLoad
 import Proof.Wire_3_5.Primitive.Writers.SparseNum
+import Proof.Wire_3_5.Primitive.Writers.WriteNat
 
 set_option autoImplicit false
 set_option linter.unusedSimpArgs false

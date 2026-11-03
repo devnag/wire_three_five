@@ -1,7 +1,9 @@
-import Proof.Circuits.CanonicalBalancedCall
 import Proof.MachineModel.CanonicalBalancedLookupProgram
+import Proof.Circuits.CanonicalBalancedCall
 import Proof.MachineModel.GeneratedBalancedRangeProgram
 import Proof.MachineModel.PreserveRightProgram
+import Proof.Circuits.RegisterBounds
+import Proof.Foundations.VerifiedLinker
 
 /-!
 # Canonical supplier support compression

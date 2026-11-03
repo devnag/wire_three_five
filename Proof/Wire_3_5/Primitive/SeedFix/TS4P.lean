@@ -1,6 +1,8 @@
 import Proof.Wire_3_5.Primitive.SeedFix.TS4Cap
-import Proof.Wire_3_5.Primitive.Writers.NumsX
+import Proof.Wire_3_5.Primitive.Writers.SymDecReq
 import Proof.Wire_3_5.Primitive.Writers.SymDecStreams
+import Proof.Wire_3_5.Primitive.Writers.Emit
+import Proof.Wire_3_5.Primitive.Writers.NumsX
 
 /-! # thrStage4U, part 2: the numbers machine's three inputs `1^{|carriers|}`, `1^{cap_T}`, `1^V`
 

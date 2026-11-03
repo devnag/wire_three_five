@@ -1,6 +1,8 @@
+import Proof.PCP.PCPUnaryCopy
 import Proof.PCP.PCPSerializerCapacityAmbient
 import Proof.PCP.PCPSerializerCountReady
-import Proof.PCP.PCPUnaryCopy
+import Proof.Hierarchy.HierarchyFixedWord
+import Proof.Amplification.RecoveryScratchErase
 
 namespace NearCubicWires.RepairOrdinary.PCPTraversal
 open LocalBitMultitape RecoveryExecution RecoveryRootRound

@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RowsGateNativeMeaning
+import Proof.Amplification.RecoveryTseitinReadOnly
 
 /-! The request writer retains the same physical weight count. Its arity
 guard can therefore run after the request without counting or copying the

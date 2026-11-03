@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryMatrixBatchGateNativeLoop
+import Proof.MachineModel.OrdinaryMatrixBatchWorkspace
 
 /-! The cold full-request caller pays for its independent id-zero word and
 the `U`-sentinel head adjustment, retaining every other tape and cursor.

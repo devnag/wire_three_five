@@ -1,5 +1,6 @@
-import Proof.Circuits.CanonicalPairedCall
 import Proof.MachineModel.CanonicalBitSerialModProgram
+import Proof.Circuits.CanonicalPairedCall
+import Proof.MachineModel.PreserveRightProgram
 
 /-!
 # Fixed projected-random-bit evaluation

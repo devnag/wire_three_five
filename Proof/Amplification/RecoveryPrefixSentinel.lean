@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryQueryStep
+import Proof.Amplification.RecoveryCommittedBitGraph
 
 /-! A high true bit outside the committed count keeps every physical query
 operand canonical, without changing any constrained assignment position. -/

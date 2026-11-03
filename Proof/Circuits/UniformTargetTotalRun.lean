@@ -1,4 +1,6 @@
+import Proof.MachineModel.BankDispatchedTargetBody
 import Proof.MachineModel.BankFramedTargetChains
+import Proof.MachineModel.CanonicalBooleanizeProgram
 
 /-!
 # The uniform target program is total: `hrun` and `hboolean` without a case premise

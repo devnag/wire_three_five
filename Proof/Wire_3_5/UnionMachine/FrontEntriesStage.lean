@@ -1,5 +1,6 @@
 import Proof.Wire_3_5.UnionMachine.FrontEntries
 import Proof.Wire_3_5.UnionMachine.FrontKit
+import Proof.CaseAnalysis.CloseoutScheduleMetadata
 
 /-! # C6 front, U1b: the grid sums' validator as a stage (P3:3669-3671)
 

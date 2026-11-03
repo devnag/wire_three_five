@@ -30,12 +30,36 @@ def slots (a : PointwisePCPPAlgorithm) (k D G E : ℕ) (sym : Bool):=
   HeaderDock.slots (workspace source a k D G E) (offset source a k D G E sym)
     (ColdInput.oracleIndex source k) (ColdLegal.tapes source a k D G (exponent sym))
     (verdictIndex source a k D G E sym) (segment source a k D G E sym)
+def flag (a : PointwisePCPPAlgorithm) (k D G E : ℕ):=HeaderDock.flag (workspace source a k D G E)
+theorem slots_injective (a : PointwisePCPPAlgorithm) (k D G E : ℕ) (sym : Bool) :
+    Function.Injective (slots source a k D G E sym):=HeaderDock.slots_injective _ _ _ _ _ _
+theorem flag_slot (a : PointwisePCPPAlgorithm) (k D G E : ℕ) (sym : Bool) :
+    slots source a k D G E sym (ColdFamily.familySlots source a k D G (exponent sym) E 724)=flag source a k D G E:=by
+  apply HeaderDock.flag_slot
+  · dsimp [ColdInput.oracleIndex];omega
+  · change ColdSource.tapes source k+4+1<
+      ColdSource.tapes source k+4+1385+NativePipeline.Dock.extra a D G+LegalTemplate.Call.extra (exponent sym)
+    omega
+  · dsimp only [verdictIndex,ColdFamily.base];omega
+  · rw [ColdFamily.verdict_fresh]
+    rfl
 
 def first (a : PointwisePCPPAlgorithm) (k D G E : ℕ):=
   TapeEmbedding.machine (workspace source a k D G E+1) CompetitorWitnessBounded.machine
+def input (a : PointwisePCPPAlgorithm) (k D G E : ℕ) (x bits : List Bool):=
+  HeaderDock.input (workspace source a k D G E) (CompetitorWitnessBounded.input x bits)
 def headerValid (x bits : List Bool) : Bool:=by
   classical
   exact decide (16*bits.length ≤ x.length ∧ CompetitorWitnessTriple.headerValid bits)
+def childBudget (a : PointwisePCPPAlgorithm) (k CH Cpad cutoff D G copies E K symDen thrDen : ℕ)
+    (delta : ℚ) (code : List Bool) {n : ℕ} (x : BitInput n) (bits : List Bool) (hpad:k+3 ≤ Cpad) (sym : Bool):=
+  ColdFamily.budget source a k CH Cpad cutoff D G copies (exponent sym) E K
+    (denominator sym symDen thrDen) delta code sym x (BoundedFields.oracle bits) (BoundedFields.family bits) hpad
+def budget (a : PointwisePCPPAlgorithm) (k CH Cpad cutoff D G copies E K symDen thrDen : ℕ)
+    (delta : ℚ) (code : List Bool) {n : ℕ} (x : BitInput n) (bits : List Bool) (hpad:k+3 ≤ Cpad):=
+  CompetitorWitnessBounded.budget (List.ofFn x)+1+
+    if headerValid (List.ofFn x) bits then childBudget source a k CH Cpad cutoff D G copies E K symDen thrDen
+      delta code x bits hpad (BoundedFields.symmetric bits)+1 else 0
 def passed (a : PointwisePCPPAlgorithm) (k CH Cpad cutoff D G copies symDen thrDen : ℕ)
     (delta : ℚ) (code : List Bool) {n : ℕ} (x : BitInput n) (bits : List Bool) (hpad:k+3 ≤ Cpad):=
   let sym:=BoundedFields.symmetric bits

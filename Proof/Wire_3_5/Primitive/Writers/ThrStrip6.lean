@@ -1,6 +1,7 @@
-import Proof.SourceAssembly.SourceFactorSelRunBound
-import Proof.Wire_3_5.Primitive.SeedFix.C4SI
 import Proof.Wire_3_5.Primitive.Writers.ThrStrip5
+import Proof.Wire_3_5.Primitive.SeedFix.C4SI
+import Proof.Wire_3_5.Primitive.Writers.ShellLayout
+import Proof.SourceAssembly.SourceFactorSelRunBound
 
 /-! # c4 THR block, the THR compiler writer on the THR input: **`thrC3`**, **`thrC3_run`**
 

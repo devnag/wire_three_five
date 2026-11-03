@@ -1,4 +1,5 @@
 import Proof.Foundations.Semantics
+import Statement
 
 /-!
 # Typed published-source interfaces
@@ -347,21 +348,6 @@ def PolynomiallyBounded (bound : ℕ → ℕ) : Prop :=
   ∃ coefficient degree : ℕ, 0 < coefficient ∧
     ∀ n, bound n ≤ coefficient * (n + 1) ^ degree
 
-structure WeakNondeterministicMachine where
-  witnessBits : ℕ → ℕ
-  run : (n : ℕ) → BitInput n → BitInput (witnessBits n) → Bool
-  steps : (n : ℕ) → BitInput n → BitInput (witnessBits n) → ℕ
-
-def WeakNondeterministicMachine.accepts (machine : WeakNondeterministicMachine)
-    {n : ℕ} (input : BitInput n) : Prop :=
-  ∃ witness, machine.run n input witness
-
-def RunsInLittleO (machine : WeakNondeterministicMachine)
-    (bound : ℕ → ℕ) : Prop :=
-  ∀ multiplier : ℕ, 0 < multiplier →
-    ∃ onset, ∀ n, onset ≤ n → ∀ input witness,
-      multiplier * machine.steps n input witness ≤ bound n
-
 def blockInput {n k : ℕ} (input : BitInput (k * n)) (block : Fin k) :
     BitInput n :=
   fun index => input ⟨block.val * n + index.val, by
@@ -436,10 +422,5 @@ noncomputable def xorEpsilon (delta : ℝ) (k : ℕ) : ℝ :=
 def WorstCaseHardAt (function : BoolFunction n) (sizeBound : ℕ) : Prop :=
   ∀ circuit : BooleanCircuit n, circuit.size ≤ sizeBound →
     ∃ input, circuit.eval input ≠ function input
-
-structure AmplifiedTruthTable (n : ℕ) where
-  outputArity : ℕ
-  function : BoolFunction outputArity
-  constructionSteps : ℕ
 
 end NearCubicWires.SourceInterfaces

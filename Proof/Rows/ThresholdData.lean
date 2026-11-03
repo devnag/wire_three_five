@@ -1,4 +1,11 @@
-import Proof.Rows.FourfoldPowerMeaning
+import Proof.CaseAnalysis.RowsGateTemplateCheck
+import Proof.CaseAnalysis.RowsOriginalSwitch
+import Proof.Rows.ExpandedThresholdStream
+import Proof.Rows.FourfoldPowerCell
+import Proof.Rows.FourfoldPowerData
+import Proof.Rows.NativeScaleEquation
+import Proof.Rows.PowerBank
+import Proof.Rows.PowerFactorAway
 import Proof.Rows.NativeFlagsMeaning
 
 /-! One actual THR request supplies the same selected children to canonical

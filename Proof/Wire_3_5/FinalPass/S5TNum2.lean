@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.FinalPass.S5TNum1
+import Proof.Wire_3_5.FinalPass.S5TNum1Base
 
 /-! # S5-THR, part 36: the THR half's whole cost as a multiple of `W` (P3:3105-3115)
 

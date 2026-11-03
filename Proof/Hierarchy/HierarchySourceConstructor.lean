@@ -1,4 +1,5 @@
 import Proof.Hierarchy.HierarchySourceInput
+import Proof.Foundations.OrdinaryFramedSource
 
 /-! The actual ordinary two-field hierarchy input invokes the same selected
 PCP source at the exact hierarchy encoding request. Normalization follows

@@ -35,16 +35,15 @@ file depends on Mathlib only. The statements of the cited papers come last.
 20. `Bindings.CTW26_Lemma3_2`: Binding: CTW26 Lemma 3.2 (attributed there to [MTT61]) → `ThresholdNormalizationContract`
 21. `Bindings.HLW06_Theorem8_2`: Binding: HLW06 Construction 8.1 / Theorem 8.2 → `ExpanderSpectrumContract`
 22. `Bindings.RS62_Theorem4`: Binding: RS62 Theorem 4, eq
-23. `Bindings.CLW20_Lemma3_10`: Binding: CLW20 Lemma 3.10 (the projection PCP, from [BV14]) → `ProjectionPCPSource`
-24. `Bindings.CLW20_Lemma3_10_TM2`: Tier 2 binding: CLW20 Lemma 3.10, the constructor in Mathlib's standard model
-25. `Bindings.CLW20_Lemma3_9`: Binding: CLW20 Lemma 3.9 (from [STV01]) → `Nonempty RepairSource.SourceAmplifierFactory`
-26. `Bindings.CLW20_Lemma3_11`: Binding: CLW20 Lemma 3.11 (the two-query PCPP, from [CW19, VW20]) → `PointwisePCPPSource`
-27. `Bindings.CLW20_Lemma3_9_TM2`: Tier 2 binding: CLW20 Lemma 3.9, the truth-table construction in Mathlib's standard model
-28. `Bindings.CLW20_Theorem1_13`: Binding: CLW20 Theorem 1.13 (refuter with an NP oracle) → `RepairSource.HierarchyRefuterSource`
-29. `Bindings.Williams14_Corollary4_4`: Binding: Williams, JACM 2014, Corollary 4.4 (= Corollary C.2) → `RepairRepresentation.WilliamsSource`
-30. `Bindings.CW19_Proposition18_2`: Binding: CW19 Proposition 18(2) → `RepairRepresentation.DecompositionSource`
-31. `Bindings.CW19_Proposition18_2_TM2`: Tier 2 binding: CW19 Proposition 18(2), the construction in Mathlib's standard model
-32. `Bindings.CLW20_Lemma3_11_TM2`: Tier 2 binding: CLW20 Lemma 3.11, the two algorithms in Mathlib's standard model
+23. `Bindings.MW20_OracleCircuitPCP_TM2`: Binding: Murray–Williams 2020 short PCP as an oracle circuit (Fact C.1 of version 3) → `MWSource`
+24. `Bindings.CLW20_Lemma3_9`: Binding: CLW20 Lemma 3.9 (from [STV01]) → `Nonempty RepairSource.SourceAmplifierFactory`
+25. `Bindings.CLW20_Lemma3_11`: Binding: CLW20 Lemma 3.11 (the two-query PCPP, from [CW19, VW20]) → `PointwisePCPPSource`
+26. `Bindings.CLW20_Lemma3_9_TM2`: Tier 2 binding: CLW20 Lemma 3.9, the truth-table construction in Mathlib's standard model
+27. `Bindings.CLW20_Theorem1_13`: Binding: CLW20 Theorem 1.13 (refuter with an NP oracle) → `RepairSource.HierarchyRefuterSource`
+28. `Bindings.Williams14_Corollary4_4`: Binding: Williams, JACM 2014, Corollary 4.4 (= Corollary C.2) → `RepairRepresentation.WilliamsSource`
+29. `Bindings.CW19_Proposition18_2`: Binding: CW19 Proposition 18(2) → `RepairRepresentation.DecompositionSource`
+30. `Bindings.CW19_Proposition18_2_TM2`: Tier 2 binding: CW19 Proposition 18(2), the construction in Mathlib's standard model
+31. `Bindings.CLW20_Lemma3_11_TM2`: Tier 2 binding: CLW20 Lemma 3.11, the two algorithms in Mathlib's standard model
 -/
 
 /-! ## 1. `Proof.Foundations.BitLength`: Shared natural-number bit length below both codecs and machine semantics -/
@@ -1965,115 +1964,146 @@ end NearCubicWires.Bindings.RS62
 
 end
 
-/-! ## 23. `Bindings.CLW20_Lemma3_10`: Binding: CLW20 Lemma 3.10 (the projection PCP, from [BV14]) → `ProjectionPCPSource` -/
+/-! ## 23. `Bindings.MW20_OracleCircuitPCP_TM2`: Binding: Murray–Williams 2020 short PCP as an oracle circuit (Fact C.1 of version 3) → `MWSource` -/
 
 section
 
-namespace NearCubicWires.Bindings.CLW20Lemma310
-
-open NearCubicWires NearCubicWires.SourceInterfaces NearCubicWires.ExecutableInterfaces
-open NearCubicWires.RepairSource NearCubicWires.LocalBitMultitape
+namespace NearCubicWires.Bindings.MW20
+open NearCubicWires NearCubicWires.CanonicalBinary NearCubicWires.ExecutableInterfaces
+open NearCubicWires.RepairSource NearCubicWires.RepairRepresentation NearCubicWires.LocalBitMultitape
 set_option autoImplicit false
 
-/-- Output bit `r·j + i` of `Q : {0,1}^r → {0,1}^{rt}` is bit `i` of `q_j`, where
-"(q1, …, qt) = Q(z)". -/
-def blockIndex {r t : ℕ} (j : Fin t) (i : Fin r) : Fin (r * t) :=
-  ⟨r * j + i,
-    calc r * (j : ℕ) + i < r * (j + 1) :=
-          (Nat.add_lt_add_left i.isLt _).trans_eq (by rw [Nat.mul_add, Nat.mul_one])
-      _ ≤ r * t := Nat.mul_le_mul_left _ j.isLt⟩
+/-- One node of an oracle circuit on `n` inputs whose oracle gates have `arity` inputs: the nodes of
+`BooleanCircuit` (constants, inputs, fan-in-two AND and OR, NOT) and one oracle gate, whose `arity` argument
+wires are earlier nodes. -/
+inductive OracleNode (n arity : ℕ) where
+  | const (value : Bool)
+  | input (index : Fin n)
+  | not (child : ℕ)
+  | and (left right : ℕ)
+  | or (left right : ℕ)
+  | oracle (args : Fin arity → ℕ)
 
-/-- "circuits Q: {0,1}^r → {0,1}^{rt} … and R: {0,1}^t → {0,1}", described as the Complexity
-item says. "Q is a projection, i.e., each output bit of Q is a bit of input, the negation of a
-bit, or a constant": `Q k` is that description of output bit `k`, over Q's input `z`.
-"R is a 3CNF": `R` is the formula. -/
-structure Circuits where
-  r : ℕ
-  t : ℕ
-  Q : Fin (r * t) → ProjectedRandomBit r
-  R : ThreeCNF t
+/-- Every child of the node at position `index` precedes it. -/
+def OracleNode.WellFormedAt {n arity : ℕ} (index : ℕ) : OracleNode n arity → Prop
+  | .const _ => True
+  | .input _ => True
+  | .not child => child < index
+  | .and left right => left < index ∧ right < index
+  | .or left right => left < index ∧ right < index
+  | .oracle args => ∀ j, args j < index
 
-/-- `Q(z) ∈ {0,1}^{rt}`. -/
-def Circuits.evalQ (P : Circuits) (z : BitInput P.r) : BitInput (P.r * P.t) :=
-  fun k => (P.Q k).eval z
+/-- The value of a node, given the values `prior` of the earlier nodes; an oracle gate returns
+`O` applied to the values of its argument wires. -/
+def OracleNode.eval {n arity : ℕ} (O : BitInput arity → Bool) (input : BitInput n)
+    (prior : Array Bool) : OracleNode n arity → Bool
+  | .const value => value
+  | .input index => input index
+  | .not child => !(prior[child]?.getD false)
+  | .and left right => prior[left]?.getD false && prior[right]?.getD false
+  | .or left right => prior[left]?.getD false || prior[right]?.getD false
+  | .oracle args => O fun j => prior[args j]?.getD false
 
-/-- `q_j ∈ {0,1}^r`, where "(q1, …, qt) = Q(z)". -/
-def Circuits.query (P : Circuits) (z : BitInput P.r) (j : Fin P.t) : BitInput P.r :=
-  fun i => P.evalQ z (blockIndex j i)
+/-- "an oracle circuit C^O": a topologically ordered DAG of `OracleNode`s with a designated output node,
+exactly like `BooleanCircuit`, plus oracle gates of arity `arity`. -/
+structure OracleCircuit (n arity : ℕ) where
+  nodes : List (OracleNode n arity)
+  output : Fin nodes.length
+  wellFormed : ∀ index : Fin nodes.length, (nodes.get index).WellFormedAt index.val
 
-/-- `R(π(q1), …, π(qt))`. -/
-def Circuits.accepts (P : Circuits) (π : BitInput P.r → Bool) (z : BitInput P.r) : Bool :=
-  P.R.eval fun j => π (P.query z j)
+/-- The values of all nodes of `C^O` on `input`. -/
+def OracleCircuit.values {n arity : ℕ} (C : OracleCircuit n arity) (O : BitInput arity → Bool)
+    (input : BitInput n) : Array Bool :=
+  C.nodes.foldl (fun prior node => prior.push (node.eval O input prior)) #[]
 
-/-- Tier 1 output word: `r`, `t`, the projection code of each of the `r·t` output bits of Q in
-order, then R's clauses (the explicit format of the import's `RawProjectionPCP.word`). -/
-def Circuits.word (P : Circuits) : List Bool :=
-  frame P.r.bits ++ frame P.t.bits ++
-  (List.ofFn fun k : Fin (P.r * P.t) => frame (projectionCode (P.Q k)).bits).flatten ++
-  frame P.R.clauses.length.bits ++
-  (P.R.clauses.map fun clause =>
-    (List.ofFn fun i : Fin 3 => frame (literalCode (clause i)).bits).flatten).flatten
+/-- `C^O(input)`. -/
+def OracleCircuit.eval {n arity : ℕ} (C : OracleCircuit n arity) (O : BitInput arity → Bool)
+    (input : BitInput n) : Bool :=
+  (C.values O input)[C.output.val]?.getD false
 
-/-- "M … running in time T = T(n) … on inputs of the form (x, y) where |x| = n": on EVERY
-`(x, y)`, M halts within `T(n)` steps. -/
-def RunsInTime (M : OrdinaryVerifier) (T : ℕ → ℕ) : Prop :=
+/-- The size: the number of nodes (input, constant and oracle nodes included), as `BooleanCircuit.size`. -/
+def OracleCircuit.size {n arity : ℕ} (C : OracleCircuit n arity) : ℕ :=
+  C.nodes.length
+
+/-- The word of a node, in the native three-field form of the Boolean nodes (tag, then two numbers, `0` when unused:
+`0` constant, `1` input, `2` NOT, `3` AND, `4` OR); an oracle gate is tag `5` followed by its `arity` argument wires.
+Every field is a self-delimiting `natWord`. -/
+def oracleNodeWord {n arity : ℕ} : OracleNode n arity → List Bool
+  | .const value => natWord 0 ++ natWord value.toNat ++ natWord 0
+  | .input index => natWord 1 ++ natWord index.val ++ natWord 0
+  | .not child => natWord 2 ++ natWord child ++ natWord 0
+  | .and left right => natWord 3 ++ natWord left ++ natWord right
+  | .or left right => natWord 4 ++ natWord left ++ natWord right
+  | .oracle args => natWord 5 ++ (List.ofFn fun j => natWord (args j)).flatten
+
+/-- "an oracle circuit C^O_x" with "ℓ inputs", "each copy of the oracle gate O in C^O_x has ℓ inputs as
+well": the number `ℓ` and the circuit. -/
+structure OracleOutput where
+  ell : ℕ
+  circuit : OracleCircuit ell ell
+
+/-- The output word: `ℓ` (the number of inputs and the oracle arity), the number of nodes, the node words in order,
+then the output address. -/
+def OracleOutput.word (o : OracleOutput) : List Bool :=
+  natWord o.ell ++ natWord o.circuit.nodes.length ++ o.circuit.nodes.flatMap oracleNodeWord ++
+    natWord o.circuit.output.val
+
+/-- The number of satisfying assignments of `C^O`. -/
+def OracleOutput.satCount (o : OracleOutput) (O : BitInput o.ell → Bool) : ℕ :=
+  (Finset.univ.filter fun z : BitInput o.ell => o.circuit.eval O z = true).card
+
+/-- "every verifier algorithm V(x, y) running in time T(n)": on EVERY `(x, y)` with `|x| = n`, `V` halts within `T(n)`
+steps. -/
+def RunsInTime (V : OrdinaryVerifier) (T : ℕ → ℕ) : Prop :=
   ∀ n (x : BitInput n) (y : List Bool), ∃ receipt,
-    run M.machine (T n) (M.inputTapes (List.ofFn x) y) = some receipt
+    run V.machine (T n) (V.inputTapes (List.ofFn x) y) = some receipt
 
-end NearCubicWires.Bindings.CLW20Lemma310
-
-end
-
-/-! ## 24. `Bindings.CLW20_Lemma3_10_TM2`: Tier 2 binding: CLW20 Lemma 3.10, the constructor in Mathlib's standard model -/
-
-section
-
-namespace NearCubicWires.Bindings.CLW20Lemma310TM2
-
-open NearCubicWires NearCubicWires.SourceInterfaces NearCubicWires.ExecutableInterfaces
-open NearCubicWires.RepairSource NearCubicWires.LocalBitMultitape
-open NearCubicWires.Bindings.CLW20Lemma310
-set_option autoImplicit false
-
-/-- CLW20 Lemma 3.10 (PDF p.18) with its properties claimed for `n ≥ n₀` and time hypothesis
-`runsInTime`, the constructor in Mathlib's TM2 model. The conjuncts follow the printed order, as
-in the Tier 1 `lemma3_10Core`. -/
-def lemma3_10CoreTM2 (n₀ : ℕ) (runsInTime : OrdinaryVerifier → (ℕ → ℕ) → Prop) : Prop :=
-  ∀ (M : OrdinaryVerifier) (T : ℕ → ℕ), (∀ n, n ≤ T n) → runsInTime M T →
-  ∃ out : InputRequest → Circuits,
-    -- "Given x ∈ {0,1}^n, one can output in poly(n, log T) time circuits Q … and R" (Tier 2;
-    -- the time bound T(n) is supplied in binary)
+/-- **Input 6: the short PCP as an oracle circuit (Murray–Williams 2020, Section 5, in the proof of Theorem 1.4,
+pp. STOC18-316–STOC18-317, PDF pp. 18–19)**, verbatim:
+"for every verifier algorithm V(x, y) running in time T(n) ≥ n, they give an algorithm A running in
+poly(n, log T(n)) time which, given x ∈ {0,1}^n, outputs an oracle circuit C^O_x with the following
+properties:
+• C^O_x has ℓ = log2(T(n)) + O(log log T(n)) inputs, poly(n, log T(n)) size, and each copy of the oracle
+  gate O in C^O_x has ℓ inputs as well.
+• If there is a y of length T(n) such that V(x, y) accepts, then there is an oracle O : {0,1}^ℓ → {0,1}
+  such that C^O_x is unsatisfiable.
+• If V(x, y) rejects on all y of length T(n), then for every oracle O : {0,1}^ℓ → {0,1}, C^O_x has at
+  least 2^ℓ · (1 − 1/n) satisfying assignments."
+Readings: the hidden constants are chosen after `V` and `T`; `T` is not assumed time-constructible, so `A`
+receives `T(n)` in binary with `x`; `A` is a Mathlib polynomial-time TM2 machine (`Turing.TM2ComputableInPolyTime`);
+the properties are claimed for `n ≥ 1` ("1/n"); `ℓ = log₂T + O(log log T)` is read as its upper half
+`2^ℓ ≤ K·T·L(T)^e` with `L = logScale`. -/
+def MW20_OracleCircuitPCP_TM2 : Prop :=
+  ∀ (V : OrdinaryVerifier) (T : ℕ → ℕ), (∀ n, n ≤ T n) → RunsInTime V T →
+  ∃ out : InputRequest → OracleOutput,
+    -- "an algorithm A running in poly(n, log T(n)) time which, given x ∈ {0,1}^n, outputs an oracle
+    -- circuit C^O_x"
     Nonempty (Turing.TM2ComputableInPolyTime
       (fun x : InputRequest => frame (List.ofFn x.2) ++ frame (T x.1).bits)
       (fun w : List Bool => w) (fun x => (out x).word)) ∧
-    -- "for t = poly(r)"
-    (∃ K e : ℕ, ∀ x : InputRequest, n₀ ≤ x.1 → (out x).t ≤ K * ((out x).r + 1) ^ e) ∧
-    -- "Proof length. 2^r ≤ T · polylogT."
-    (∃ K e : ℕ, ∀ x : InputRequest, n₀ ≤ x.1 →
-      2 ^ (out x).r ≤ K * T x.1 * logScale (T x.1) ^ e) ∧
-    -- "Completeness. If there is a y ∈ {0,1}^{T(n)} such that M(x, y) accepts then there is a
-    -- map π: {0,1}^r → {0,1} such that for all z ∈ {0,1}^r, R(π(q1), …, π(qt)) = 1"
-    (∀ x : InputRequest, n₀ ≤ x.1 →
-      (∃ y : BitInput (T x.1), M.accepts (List.ofFn x.2) (List.ofFn y)) →
-      ∃ π : BitInput (out x).r → Bool, ∀ z, (out x).accepts π z = true) ∧
-    -- "Soundness. If no y ∈ {0,1}^{T(n)} causes M(x, y) to accept, then for every map π, at most
-    -- 2^r/n^10 distinct z ∈ {0,1}^r have R(π(q1), …, π(qt)) = 1"
-    (∀ x : InputRequest, n₀ ≤ x.1 →
-      (¬ ∃ y : BitInput (T x.1), M.accepts (List.ofFn x.2) (List.ofFn y)) →
-      ∀ π : BitInput (out x).r → Bool,
-        ((Finset.univ.filter fun z => (out x).accepts π z = true).card : ℝ) ≤
-          (2 : ℝ) ^ (out x).r / (x.1 : ℝ) ^ 10)
+    -- "ℓ = log2(T(n)) + O(log log T(n)) inputs"
+    (∃ K e : ℕ, ∀ x : InputRequest, 1 ≤ x.1 →
+      2 ^ (out x).ell ≤ K * T x.1 * logScale (T x.1) ^ e) ∧
+    -- "poly(n, log T(n)) size"
+    (∃ K e : ℕ, ∀ x : InputRequest, 1 ≤ x.1 →
+      (out x).circuit.size ≤ K * (x.1 + natBitLength (T x.1) + 1) ^ e) ∧
+    -- "If there is a y of length T(n) such that V(x, y) accepts, then there is an oracle
+    -- O : {0,1}^ℓ → {0,1} such that C^O_x is unsatisfiable."
+    (∀ x : InputRequest, 1 ≤ x.1 →
+      (∃ y : BitInput (T x.1), V.accepts (List.ofFn x.2) (List.ofFn y)) →
+      ∃ O : BitInput (out x).ell → Bool, ∀ z, (out x).circuit.eval O z = false) ∧
+    -- "If V(x, y) rejects on all y of length T(n), then for every oracle O : {0,1}^ℓ → {0,1}, C^O_x has
+    -- at least 2^ℓ · (1 − 1/n) satisfying assignments."
+    (∀ x : InputRequest, 1 ≤ x.1 →
+      (¬ ∃ y : BitInput (T x.1), V.accepts (List.ofFn x.2) (List.ofFn y)) →
+      ∀ O : BitInput (out x).ell → Bool,
+        (2 : ℝ) ^ (out x).ell * (1 - 1 / (x.1 : ℝ)) ≤ ((out x).satCount O : ℝ))
 
-/-- **CLW20 Lemma 3.10, literal (Tier 2)**: time `T` on every input `(x, y)`, properties for
-`n ≥ 1`, the constructor a Mathlib polynomial-time TM2 machine. -/
-def CLW20_Lemma3_10_TM2 : Prop :=
-  lemma3_10CoreTM2 1 RunsInTime
-
-end NearCubicWires.Bindings.CLW20Lemma310TM2
+end NearCubicWires.Bindings.MW20
 
 end
 
-/-! ## 25. `Bindings.CLW20_Lemma3_9`: Binding: CLW20 Lemma 3.9 (from [STV01]) → `Nonempty RepairSource.SourceAmplifierFactory` -/
+/-! ## 24. `Bindings.CLW20_Lemma3_9`: Binding: CLW20 Lemma 3.9 (from [STV01]) → `Nonempty RepairSource.SourceAmplifierFactory` -/
 
 section
 
@@ -2100,7 +2130,7 @@ end NearCubicWires.Bindings.CLW20Lemma39
 
 end
 
-/-! ## 26. `Bindings.CLW20_Lemma3_11`: Binding: CLW20 Lemma 3.11 (the two-query PCPP, from [CW19, VW20]) → `PointwisePCPPSource` -/
+/-! ## 25. `Bindings.CLW20_Lemma3_11`: Binding: CLW20 Lemma 3.11 (the two-query PCPP, from [CW19, VW20]) → `PointwisePCPPSource` -/
 
 section
 
@@ -2168,7 +2198,7 @@ end NearCubicWires.Bindings.CLW20Lemma311
 
 end
 
-/-! ## 27. `Bindings.CLW20_Lemma3_9_TM2`: Tier 2 binding: CLW20 Lemma 3.9, the truth-table construction in Mathlib's standard model -/
+/-! ## 26. `Bindings.CLW20_Lemma3_9_TM2`: Tier 2 binding: CLW20 Lemma 3.9, the truth-table construction in Mathlib's standard model -/
 
 section
 
@@ -2224,7 +2254,7 @@ end NearCubicWires.Bindings.CLW20Lemma39TM2
 
 end
 
-/-! ## 28. `Bindings.CLW20_Theorem1_13`: Binding: CLW20 Theorem 1.13 (refuter with an NP oracle) → `RepairSource.HierarchyRefuterSource` -/
+/-! ## 27. `Bindings.CLW20_Theorem1_13`: Binding: CLW20 Theorem 1.13 (refuter with an NP oracle) → `RepairSource.HierarchyRefuterSource` -/
 
 section
 
@@ -2288,7 +2318,7 @@ end NearCubicWires.Bindings.CLW20Theorem113
 
 end
 
-/-! ## 29. `Bindings.Williams14_Corollary4_4`: Binding: Williams, JACM 2014, Corollary 4.4 (= Corollary C.2) → `RepairRepresentation.WilliamsSource` -/
+/-! ## 28. `Bindings.Williams14_Corollary4_4`: Binding: Williams, JACM 2014, Corollary 4.4 (= Corollary C.2) → `RepairRepresentation.WilliamsSource` -/
 
 section
 
@@ -2350,7 +2380,7 @@ end NearCubicWires.Bindings.Williams14
 
 end
 
-/-! ## 30. `Bindings.CW19_Proposition18_2`: Binding: CW19 Proposition 18(2) → `RepairRepresentation.DecompositionSource` -/
+/-! ## 29. `Bindings.CW19_Proposition18_2`: Binding: CW19 Proposition 18(2) → `RepairRepresentation.DecompositionSource` -/
 
 section
 
@@ -2421,7 +2451,7 @@ end NearCubicWires.Bindings.CW19
 
 end
 
-/-! ## 31. `Bindings.CW19_Proposition18_2_TM2`: Tier 2 binding: CW19 Proposition 18(2), the construction in Mathlib's standard model -/
+/-! ## 30. `Bindings.CW19_Proposition18_2_TM2`: Tier 2 binding: CW19 Proposition 18(2), the construction in Mathlib's standard model -/
 
 section
 
@@ -2449,7 +2479,7 @@ end NearCubicWires.Bindings.CW19TM2
 
 end
 
-/-! ## 32. `Bindings.CLW20_Lemma3_11_TM2`: Tier 2 binding: CLW20 Lemma 3.11, the two algorithms in Mathlib's standard model -/
+/-! ## 31. `Bindings.CLW20_Lemma3_11_TM2`: Tier 2 binding: CLW20 Lemma 3.11, the two algorithms in Mathlib's standard model -/
 
 section
 

@@ -13,5 +13,8 @@ open PCJ45bee56da9f34d5a_NativeCircuitFlags (payload flags)
 open PCJ45bee56da9f34d5a_CircuitFlagBank
 noncomputable section
 
+def uniform (B q : Nat) :=2*(B*(8*(B+1)+10)+14*(B+1)+B+25)+10*U B q (B+1)+
+ 2*(B+1)+10*B+PCJ45bee56da9f34d5a_NativeGateLoop.budget B B q+42
+
 end
 end PCJ45bee56da9f34d5a_CircuitFlagCost

@@ -1,5 +1,7 @@
-import Proof.Circuits.BoundedOracleStructuralTableCompiler
+import Proof.Circuits.BoundedOracleStructuralCircuit
 import Proof.Circuits.CircuitInputClauseBalancedCall
+import Proof.Circuits.BoundedOracleStructuralTableCompiler
+import Proof.MachineModel.GeneratedBalancedRangeProgram
 
 /-!
 # Pointwise structural formula from public projection outputs

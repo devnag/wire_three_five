@@ -1,4 +1,5 @@
 import Proof.Foundations.SourceCore
+import Statement
 
 /-! The literal flat finite-verifier code shared by U and the refuter input.
 The arbitrary Machine.descriptionBits annotation is deliberately absent.

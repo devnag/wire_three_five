@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.FinalWorkerJoin
+import Proof.CaseAnalysis.RowsEstimatorCoefficientsAppend
 
 /-! # W1 -- one AND-four supplier call, emitted as one record word
 
@@ -52,5 +53,21 @@ set_option autoImplicit false
 set_option maxHeartbeats 250000
 set_option maxRecDepth 120000
 set_option warningAsError true
+
+/-- **The answer, as the corpus's own encoder writes it.**  `count` and
+`denominator` are both `1`: the fold's accumulator is the estimate itself, not
+a further supplier call.  The emitted word is the right-hand side of
+`Realizes.hencoded`. -/
+theorem result_record_run (width : ℕ) (estimate : CompetitorValidity.Estimate) :
+    ∃ receipt,
+      run CompetitorCountRecordAppend.machine
+          (CompetitorCountRecordAppend.budget width)
+          (CloseoutRowsEstimatorCoefficients.Append.input width estimate 1 1) = some receipt ∧
+      receipt.steps ≤ CompetitorCountRecordAppend.budget width ∧
+      receipt.final.tapes 28 =
+        CloseoutRowsEstimatorCoefficients.Stream.recordWord width estimate 1 1 := by
+  obtain ⟨receipt, hrun, hsteps, hword, _hheads, _hdriver, _hcount⟩ :=
+    CloseoutRowsEstimatorCoefficients.Append.record_run width estimate 1 1
+  exact ⟨receipt, hrun, hsteps, hword⟩
 
 end NearCubicWires.RepairOrdinary.CloseoutFinalC10WorkerEmit

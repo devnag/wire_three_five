@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.WitnessNodeBody
+import Proof.MachineModel.OrdinaryMaskedReset
+import Proof.PCP.PCPSerializerTapeSupport
 
 /-! One recorded reset surrounds the complete node body. Its descriptor
 cursor remains live; every local head resets. The fixed polynomial capacity

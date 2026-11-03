@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryMatrixScorePhiLayout
+import Proof.Hierarchy.CompetitorReusableDecision
 
 /-! Physical stable-id increment, then the row transform: the assignment of the next record is
 `φ(id+1)`, the center bits of the next row (paper3 `alg:pullback`, P3:1623-1671), computed by

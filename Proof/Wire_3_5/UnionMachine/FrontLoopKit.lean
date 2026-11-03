@@ -1,3 +1,4 @@
+import Proof.Wire_3_5.UnionMachine.LoopWhile
 import Proof.Wire_3_5.UnionMachine.FrontKit
 
 /-! # C6 front: loops by invariant, and docking steps at explicit ambient banks

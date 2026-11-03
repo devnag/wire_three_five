@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.C4Enum
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixJLink
 
 /-! # SEEDFIX C4.L, the enumeration dock: one child's printed objective (P3:2915-2917, 3034-3035)
 

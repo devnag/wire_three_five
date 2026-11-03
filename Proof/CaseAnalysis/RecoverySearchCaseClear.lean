@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoverySearchCaseBank
+import Proof.Amplification.RecoveryFocusRetained
 
 /-! The actual SAT query word is erased before sharing its oracle port with
 the total search. The retained request, answer and capacity are all paid. -/

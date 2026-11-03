@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CaseTwoLive
+import Proof.CaseAnalysis.CaseTwoHardness
 
 /-! The recovery branch supplies the exact canonical description consumed
 by Case2. The selected source length is absorbed into its final dyadic cost. -/

@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.WitnessNodeGuard
+import Proof.PCP.PCPPQueryField
 
 /-! Reuse the native field copier directly. Even an unaccepted natural's
 payload has a bounded unary bit-length header; it is never expanded to a

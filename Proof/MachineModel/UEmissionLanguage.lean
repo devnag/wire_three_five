@@ -1,4 +1,5 @@
 import Proof.MachineModel.UEmissionFields
+import Proof.MachineModel.OrdinaryMemoryCheckerTraceBounds
 
 /-! The pure accepted predicate uses the same decoded verifier, initialized
 memory, bounded claimed walk, and checked chronological events. -/

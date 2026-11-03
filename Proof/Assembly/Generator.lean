@@ -1,5 +1,20 @@
-import Proof.Assembly.NativeBase
+import Proof.Amplification.RecoveryScratchErase
+import Proof.Assembly.NativeNativeSelected
 import Proof.Assembly.NativeValues
+import Proof.CaseAnalysis.FinalModeNativeStageFields
+import Proof.CaseAnalysis.FinalSupplierAccuracyChain
+import Proof.CaseAnalysis.RowsSupportTyped
+import Proof.CaseAnalysis.RowsTupleSeekDock
+import Proof.CaseAnalysis.RowsTupleSeekFamilyRewind
+import Proof.CaseAnalysis.WitnessPaddedReset
+import Proof.MachineModel.CacheRewind
+import Proof.MachineModel.Encoding
+import Proof.MachineModel.ControllerCappedRuntime
+import Proof.MachineModel.TopDownPaidFamilySum
+import Proof.Hierarchy.CompetitorRawRecordEmit
+import Proof.CaseAnalysis.FinalSingleAppend
+import Proof.MachineModel.TopDownPaidFamilyReserves
+
 set_option autoImplicit false
 set_option maxHeartbeats 250000
 set_option maxRecDepth 120000

@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CommonProgramTwoAliases
+import Proof.CaseAnalysis.CommonPortBankAt
 
 /-! Match the five literal Case2 input words and empty work at its actual
 shared-bank boundary. The sixth shared port is its initially empty result. -/

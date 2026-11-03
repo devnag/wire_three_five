@@ -1,6 +1,8 @@
-import Proof.Wire_3_5.FinalPass.HashBuild
 import Proof.Wire_3_5.Primitive.Writers.FiltSetupIface2
+import Proof.Wire_3_5.Primitive.Writers.WriterIfaceBase
 import Proof.Wire_3_5.Primitive.Writers.ThrDataIface
+import Proof.Wire_3_5.FinalPass.HashBuild
+import Proof.Wire_3_5.Lists.ListMachineRowRadixClass
 
 /-! # THR, joins (1), (3), (5): the THR numbers, the RADIX row's entry, the FILTER rows' dock
 

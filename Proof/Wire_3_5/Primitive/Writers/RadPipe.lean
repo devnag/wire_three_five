@@ -1,4 +1,6 @@
 import Proof.Wire_3_5.Primitive.ThresholdWriter.Joins
+import Proof.Wire_3_5.Primitive.Writers.PopPipe
+import Proof.Wire_3_5.Lists.ListMachineRowRadixContract
 
 /-! # The RADIX pipe: C2's RADIX row machine docked on the THR unit's cell (row:radix)
 

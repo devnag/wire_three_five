@@ -1,6 +1,8 @@
 import Proof.Wire_3_5.Foundations.OutMachineCarDock
+import Proof.Wire_3_5.Primitive.Writers.UnaryPow
+import Proof.Wire_3_5.UnionMachine.BinW
 
-/-! # The output machine carrier phase, part 2: the call's `1^n` and `1^L`
+/-! # X6 carrier phase, part 2: the call's `1^n` and `1^L`
 
 PA's carrier blocks (`Data.setup_spec`) need `1^n` on `sNT` and `1^L` on `sLT`, `L = (n+1)^{26} + 1` (every carrier
 atom's description is below `L`: `Call`'s `WithinEnvelope 26`, P3:3071-3086). This stage reads `n` off the framed

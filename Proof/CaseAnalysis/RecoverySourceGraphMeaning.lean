@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoverySourceGraphPrefix
+import Proof.PCP.PCPPNativeHierarchyNodesCircuit
 
 /-! The supplier enters the SAME original verifier circuit and balanced CNF.
 Only the proved names of its paid C and B capacities are reconciled. -/

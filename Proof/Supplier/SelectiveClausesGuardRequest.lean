@@ -1,5 +1,5 @@
 import Batteries.Tactic.OpenPrivate
-import Proof.Circuits.AmbientLinkEntry
+import Proof.Circuits.CallableRelocation
 import Proof.MachineModel.BoundedOracleStructuralSelectiveProgram
 
 /-!

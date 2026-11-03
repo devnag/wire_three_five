@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoverySearchGraphDock
+import Proof.Amplification.RecoveryTseitinNativeSerialize
 
 /-! The fixed final two-call controller, independent of its run proof. -/
 namespace NearCubicWires.RepairSource.RecoveryBoundedColdSearchJoin

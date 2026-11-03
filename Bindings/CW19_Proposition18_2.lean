@@ -1,4 +1,6 @@
+import Proof.Foundations.RepresentationSourceContracts
 import Proof.Circuits.DecompositionSourceBounds
+import Statement
 
 /-!
 # Binding: CW19 Proposition 18(2) → `RepairRepresentation.DecompositionSource`

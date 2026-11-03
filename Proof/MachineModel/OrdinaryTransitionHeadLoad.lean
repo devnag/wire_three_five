@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryTransitionEventRun
+import Proof.MachineModel.OrdinaryFrameLoad
 
 /-! Load the next actual head-array field into the reusable local head tape.
 The existing reset capacity is retained and the array source keeps streaming. -/

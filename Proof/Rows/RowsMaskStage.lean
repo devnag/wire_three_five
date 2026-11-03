@@ -1,6 +1,4 @@
-import Mathlib
-import Proof.Packets.PacketsGlueMetaMul
-import Proof.Rows.RowsBaseLayout
+import Proof.Rows.RowsThrSelBase
 
 set_option autoImplicit false
 set_option maxRecDepth 120000

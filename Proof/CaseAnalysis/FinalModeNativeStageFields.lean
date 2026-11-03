@@ -1,5 +1,5 @@
+import Proof.CaseAnalysis.FinalNaturalStageFields
 import Proof.CaseAnalysis.FinalNaturalModeAtoms
-import Proof.CaseAnalysis.FinalThresholdNaturalSum
 
 /-!
 Paper C10 chooses one carried class and compiles systematic parity into it.
@@ -20,12 +20,14 @@ open NearCubicWires.RepairOrdinary.CloseoutWitness
 open NearCubicWires.RepairOrdinary.CloseoutRowsOriginalSchedule
 open NearCubicWires.RepairOrdinary.CloseoutFinalC10StageFields
 open NearCubicWires.RepairOrdinary.CloseoutFinalC10ExactStagePackage
+open NearCubicWires.RepairOrdinary.CloseoutFinalC10NaturalStageFields (stageTarget_pos)
 open NearCubicWires.RepairOrdinary.CloseoutFinalC10SupplierCalls
 open NearCubicWires.RepairOrdinary.CloseoutFinalC10SupplierAccuracy
 open NearCubicWires.RepairSource.CloseoutFinal.C10SumFamilyTransport
 open NearCubicWires.RepairSource.CloseoutFinal.C10TailComposeUniform
 open NearCubicWires.RepairSource.CloseoutFinal.C10UnionSupplier
 open NearCubicWires.RepairSource.CloseoutFinal.C10NaturalModeAtoms
+open NearCubicWires.RepairSource.CloseoutFinal.C10SupplierWidth (rowDenominator_pos)
 open NearCubicWires.RepairSource.CompetitorRationalGap
 open NearCubicWires.SupplierPipeline NearCubicWires.SupplierEstimator
 open NearCubicWires.SourceInterfaces NearCubicWires.SupplierWalk
@@ -36,7 +38,148 @@ set_option maxRecDepth 120000
 set_option warningAsError true
 noncomputable section
 
+/-- A native integer fraction with only the error and positivity already proved. -/
+structure FractionEstimate (probability : ℝ) (target : ℕ) where
+  num : ℕ
+  den : ℕ
+  positive : 0 < den
+  accurate : |(((num : ℚ) / den : ℚ) : ℝ) - probability| ≤ 1 / (target + 1 : ℕ)
+
+def FractionEstimate.transport {p₁ p₂ : ℝ} {target : ℕ}
+    (h : p₁ = p₂) (E : FractionEstimate p₁ target) : FractionEstimate p₂ target where
+  num := E.num
+  den := E.den
+  positive := E.positive
+  accurate := by rw [← h]; exact E.accurate
+
+variable (sources : EightSources) (liveScale target : ℕ)
+
+def symmetricEstimate (request : FourfoldRequest NormalizedSymmetricThresholdCircuit) :
+    FractionEstimate
+      (conjunctionProbability NormalizedSymmetricThresholdCircuit.eval request.circuits) target where
+  num := rowAnswer (symmetricFourfoldRows (expanderOf sources) liveScale (fun _ => target))
+    request.q request.circuits
+  den := rowDenominator (symmetricFourfoldRows (expanderOf sources) liveScale (fun _ => target))
+    request.q request.circuits
+  positive := rowDenominator_pos _ _ _
+  accurate := by
+    rw [rowSupplier_eq_ratio]
+    exact rowSupplier_error_le _ _ _
+
+def thresholdEstimate (request : FourfoldRequest NormalizedThresholdThresholdCircuit) :
+    FractionEstimate
+      (conjunctionProbability NormalizedThresholdThresholdCircuit.eval request.circuits) target where
+  num := C10ThresholdNaturalSum.nativeNumerator (decompositionOf sources) request liveScale
+    (CloseoutFinalC10ThresholdRows.listDenominator (decompositionOf sources) request target)
+    (CloseoutFinalC10ThresholdRows.primeCutoff (decompositionOf sources) request target)
+  den := C10ThresholdNaturalSum.nativeDenominator request liveScale
+    (CloseoutFinalC10ThresholdRows.listDenominator (decompositionOf sources) request target)
+    (CloseoutFinalC10ThresholdRows.primeCutoff (decompositionOf sources) request target)
+  positive := by
+    unfold C10ThresholdNaturalSum.nativeDenominator
+    exact Nat.mul_pos (Nat.mul_pos
+      (CloseoutFinalC10ThresholdRows.certificate (primeOf sources)
+        (decompositionOf sources) request target).cardPositive
+      (normalizedOccurrenceListCertificate (expanderOf sources)
+        (thresholdFourfoldOccurrences request) liveScale
+        (CloseoutFinalC10ThresholdRows.listDenominator (decompositionOf sources)
+          request target)).cardPositive) (by positivity)
+  accurate := by
+    rw [Rat.cast_div, Rat.cast_natCast, Rat.cast_natCast,
+      ← C10ThresholdNaturalSum.estimate_eq_ratio]
+    exact C10ThresholdNaturalSum.estimate_error_le (decompositionOf sources) request
+      (expanderOf sources) (primeOf sources) liveScale target
+
+def mixedEstimate {q : ℕ} {circuit : BooleanCircuit q} {pcpp : PointwisePCPP circuit}
+    (atoms : List (C10TotalDecode.Atom pcpp)) :
+    FractionEstimate (conjunctionProbability C10TotalDecode.evaluate atoms) target where
+  num := C10ThresholdNaturalFit.numerator sources liveScale target ⟨q, atoms.map atomToUnion⟩
+  den := C10ThresholdNaturalFit.denominator sources liveScale target ⟨q, atoms.map atomToUnion⟩
+  positive := C10ThresholdNaturalFit.denominator_pos sources liveScale target _
+  accurate := by
+    rw [C10ThresholdNaturalFit.ratio_eq]
+    exact C10ThresholdNaturalSum.mixedRatio_atoms_error_le (decompositionOf sources)
+      (expanderOf sources) (primeOf sources) liveScale target atoms
+
+/-- Actual lists choose one native family. The fallback is only for total semantics. -/
+def modeEstimate {q : ℕ} {circuit : BooleanCircuit q} {pcpp : PointwisePCPP circuit}
+    (symmetric : Bool) (atoms : List (C10TotalDecode.Atom pcpp)) :
+    FractionEstimate (conjunctionProbability C10TotalDecode.evaluate atoms) target := by
+  classical
+  exact match symmetric with
+  | true => if h : ∀ atom ∈ atoms, ModeAtom true atom then
+      (symmetricEstimate sources liveScale target ⟨q, atoms.map nativeSymmetricAtom⟩).transport
+        (conjunctionProbability_nativeSymmetric atoms h)
+      else mixedEstimate sources liveScale target atoms
+  | false => if h : ∀ atom ∈ atoms, ModeAtom false atom then
+      (thresholdEstimate sources liveScale target ⟨q, atoms.map nativeThresholdAtom⟩).transport
+        (conjunctionProbability_nativeThreshold atoms h)
+      else mixedEstimate sources liveScale target atoms
+
+/-- Native mode values, useful at the physical printer consumer. -/
+theorem modeEstimate_native {q : ℕ} {circuit : BooleanCircuit q} {pcpp : PointwisePCPP circuit}
+    (symmetric : Bool) (atoms : List (C10TotalDecode.Atom pcpp))
+    (hmode : ∀ atom ∈ atoms, ModeAtom symmetric atom) :
+    ((modeEstimate sources liveScale target symmetric atoms).num,
+      (modeEstimate sources liveScale target symmetric atoms).den) =
+      if symmetric then
+        ((symmetricEstimate sources liveScale target ⟨q, atoms.map nativeSymmetricAtom⟩).num,
+          (symmetricEstimate sources liveScale target ⟨q, atoms.map nativeSymmetricAtom⟩).den)
+      else
+        ((thresholdEstimate sources liveScale target ⟨q, atoms.map nativeThresholdAtom⟩).num,
+          (thresholdEstimate sources liveScale target ⟨q, atoms.map nativeThresholdAtom⟩).den) := by
+  cases symmetric <;> simp only [modeEstimate, dif_pos hmode, FractionEstimate.transport,
+    Bool.false_eq_true, ↓reduceIte]
+
 section Stage
+
+variable (k : ℕ) {gamma : ℝ} (p : Parameters sources gamma)
+
+def stageEstimate (n : ℕ) (x : BitInput n) (bits : List Bool)
+    (atoms : List (Atoms sources k p x bits)) :
+    FractionEstimate (conjunctionProbability C10TotalDecode.evaluate atoms)
+      (stageTarget sources p (stageArity sources k n)) :=
+  modeEstimate sources liveScale (stageTarget sources p (stageArity sources k n))
+    (BoundedFields.symmetric bits) atoms
+
+/-- Actual site membership selects precisely one native request, never the fallback. -/
+theorem stageEstimate_native {n : ℕ} (x : BitInput n) (bits : List Bool) (ph : Phase)
+    (address : Fin (2 ^ (pcppOf sources k p x bits).clauseBits))
+    (monomial : CircuitMonomial (Atoms sources k p x bits) 4)
+    (hmem : monomial ∈ (siteCalls ph (pcppOf sources k p x bits)
+      (stageCoordinate sources k p n x bits) C10TotalDecode.Atom.systematic address).monomials) :
+    ((stageEstimate sources liveScale k p n x bits monomial.factors).num,
+      (stageEstimate sources liveScale k p n x bits monomial.factors).den) =
+      if BoundedFields.symmetric bits then
+        ((symmetricEstimate sources liveScale (stageTarget sources p (stageArity sources k n))
+          ⟨stageArity sources k n, monomial.factors.map nativeSymmetricAtom⟩).num,
+         (symmetricEstimate sources liveScale (stageTarget sources p (stageArity sources k n))
+          ⟨stageArity sources k n, monomial.factors.map nativeSymmetricAtom⟩).den)
+      else
+        ((thresholdEstimate sources liveScale (stageTarget sources p (stageArity sources k n))
+          ⟨stageArity sources k n, monomial.factors.map nativeThresholdAtom⟩).num,
+         (thresholdEstimate sources liveScale (stageTarget sources p (stageArity sources k n))
+          ⟨stageArity sources k n, monomial.factors.map nativeThresholdAtom⟩).den) :=
+  modeEstimate_native sources liveScale _ _ _
+    (actual_site_mode sources k p x bits ph address monomial hmem)
+
+/-- The denominator here is the selected native denominator, not the old union value. -/
+def modeStageData (coefficientFloor : ℕ → ℕ) (extra : ℕ) (st : Phase → ℕ)
+    (stage : (ph : Phase) → LocalBitMultitape.Machine (218 + (60 + extra)) (st ph))
+    (stageFuel : Phase → ℕ → ℕ) (L budget : ℕ → ℕ) : StageData' sources k p :=
+  { exactStageData sources k p liveScale coefficientFloor extra st stage stageFuel L budget with
+    num := fun n x bits _ monomial => (stageEstimate sources liveScale k p n x bits monomial.factors).num
+    den := fun n x bits _ monomial => (stageEstimate sources liveScale k p n x bits monomial.factors).den
+    supplier := fun n x bits atoms =>
+      ((stageEstimate sources liveScale k p n x bits atoms).num : ℚ) /
+        (stageEstimate sources liveScale k p n x bits atoms).den }
+
+variable (coefficientFloor denBits : ℕ → ℕ) (extra : ℕ) (st : Phase → ℕ)
+  (stage : (ph : Phase) → LocalBitMultitape.Machine (218 + (60 + extra)) (st ph))
+  (stageFuel : Phase → ℕ → ℕ) (L budget : ℕ → ℕ)
+
+local notation "S" => modeStageData sources liveScale k p coefficientFloor extra st
+  stage stageFuel L budget
 
 end Stage
 

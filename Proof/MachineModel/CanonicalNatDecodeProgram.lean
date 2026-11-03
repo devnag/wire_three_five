@@ -1,4 +1,6 @@
 import Proof.MachineModel.BalancedClauseStreamFlattenProgram
+import Proof.Circuits.CanonicalBalancedTraversal
+import Proof.Foundations.VerifiedLinker
 
 /-!
 # Canonical balanced-bit to native-natural decoder
@@ -30,6 +32,32 @@ and leaf handler at that intermediate boundary. -/
 /-! ## Reuse the proven balanced stream flattener -/
 
 /-! ## Tagged little-endian bit arithmetic fold -/
+
+def taggedBitFoldValue : List ℕ → ℕ → ℕ → ℕ
+  | [], accumulator, _place => accumulator
+  | bit :: bits, accumulator, place =>
+      taggedBitFoldValue bits
+        (if bit = 0 then accumulator else accumulator + place)
+        (place + place)
+
+private theorem taggedBitFoldValue_bool
+    (bits : List Bool) (accumulator place : ℕ) :
+    taggedBitFoldValue (bits.map Bool.toNat) accumulator place =
+      accumulator + place * bitsValue bits := by
+  induction bits generalizing accumulator place with
+  | nil => simp [taggedBitFoldValue, bitsValue]
+  | cons bit bits ih =>
+      cases bit
+      · simp [taggedBitFoldValue, bitsValue, ih]
+        ring
+      · simp [taggedBitFoldValue, bitsValue, ih]
+        ring
+
+theorem taggedBitFoldValue_boolBits
+    (bits : List Bool) :
+    taggedBitFoldValue (bits.map Bool.toNat) 0 1 =
+      bitsValue bits := by
+  simpa using taggedBitFoldValue_bool bits 0 1
 
 /-! ## One public decoder for `encodeNat` -/
 

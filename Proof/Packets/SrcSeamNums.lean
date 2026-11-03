@@ -1,7 +1,10 @@
-import Proof.SourceAssembly.SourceSkelXtraF
-import Proof.SourceAssembly.SourceStepsCallFacts
-import Proof.SourceAssembly.SourceStepsF6
 import Proof.SourceAssembly.SourceStepsNums
+import Proof.SourceAssembly.SourceStepsF6
+import Proof.SourceAssembly.SourceStepsCallFacts
+import Proof.SourceAssembly.SourceStepsParamsV4
+import Proof.Packets.BudgetEntryCount
+import Proof.SourceAssembly.SourceStepsSat
+import Proof.SourceAssembly.SourceSkelXtraF
 
 section
 set_option autoImplicit false
@@ -24,6 +27,22 @@ attribute [local irreducible] P1TopDownPaidPayload.tapes
 /-! ## The onset -/
 
 section onset
+variable (selector : CyclicChoice.Laws) (mask : MaskProducer)
+  (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector) (rows : PCJc4297ab269d8423a_Source.RowLibrary selector)
+  (sources : EightSources) (gamma : Real) (hg : 0 < gamma) (hh : gamma < 1/2) (p : Parameters sources gamma)
+
+def seamOn (k den : ℕ) (hden : 1 ≤ den) : ℕ :=
+  max (Classical.choose (ClassV4.seam_scalars_Rc4 selector mask packets rows sources gamma hg hh p k))
+    (max (Classical.choose (ClassV4.seam_call_Rc4 selector mask packets rows sources gamma hg hh p k den hden))
+      (max (Classical.choose (SourceBudget.widthAt_ge_eventually sources k
+          (Classical.choose (SourceSteps.enc_sat_at sources k (SourceSteps.rBsel sources p)
+            (ClassV4.siteL4 selector mask packets rows sources gamma hg hh p)))))
+        (SourceSteps.selR sources p k).onset))
+
+/-- **The seam rows' onset at the site** (index `kW`, denominator the fill's cap index `+ 1`), an `XtraW`-shaped onset to fold into `xtra`. -/
+def seamOnW : ℕ :=
+  seamOn selector mask packets rows sources gamma hg hh p (ParamsV4.kW selector mask packets rows sources gamma hg hh p)
+    ((ParamsV4.fPW selector (XtraF.xtraF selector) mask packets rows).capIndex sources gamma hg hh p + 1) (Nat.succ_pos _)
 
 end onset
 
@@ -34,6 +53,10 @@ section helpers
 end helpers
 
 section nums
+variable (mask : MaskProducer) {selector : CyclicChoice.Laws}
+  (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector)
+  (rows : PCJc4297ab269d8423a_Source.RowLibrary selector) (sources : EightSources)
+  (res : Nat) (hres : 19 ≤ res) {gamma : Real} (p : Parameters sources gamma) (k r : Nat)
 
 set_option hygiene false in
 local notation "𝔇" => dimsOf mask packets rows sources res p k r

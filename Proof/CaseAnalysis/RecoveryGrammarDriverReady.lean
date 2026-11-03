@@ -1,4 +1,6 @@
+import Proof.PCP.ProjectionDimensionTemplate
 import Proof.PCP.PCPOuter
+import Proof.PCP.VerifierDecodingCompare
 
 /-! The original successor-template printer on already paid grammar backing.
 The physically written final false sentinel is absorbed by that same backing. -/

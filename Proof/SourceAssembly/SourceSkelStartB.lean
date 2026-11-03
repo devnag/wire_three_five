@@ -1,5 +1,11 @@
 import Proof.SourceAssembly.SourceStepsEntryInv4
 import Proof.SourceAssembly.SourceStepsFirstOut
+import Proof.SourceAssembly.SourceStepsSeam4
+import Proof.SourceAssembly.SourceStepsData
+import Proof.SourceAssembly.SourceSkelFirstStartV
+import Proof.Packets.PacketsMetaPrime
+import Proof.SourceAssembly.SourceRequestResidentProducer
+import Proof.SourceAssembly.SourceTraceData
 
 section
 set_option autoImplicit false
@@ -19,6 +25,10 @@ noncomputable section
 attribute [local irreducible] P1TopDownPaidPayload.tapes
 
 section start
+variable (mask : MaskProducer) {selector : CyclicChoice.Laws}
+  (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector)
+  (rows : PCJc4297ab269d8423a_Source.RowLibrary selector) (sources : EightSources)
+  (res : Nat) (hres : 19 ≤ res) {gamma : Real} (p : Parameters sources gamma) (k r : Nat)
 
 set_option hygiene false in
 local notation "𝔇" => dimsOf mask packets rows sources res p k r
@@ -69,6 +79,8 @@ set_option hygiene false in
 local notation "ℭ" => PCJda54a286946142d3_BranchPhases.cache sources p k r (scratchOf mask packets rows sources res) modeC
 
 section tapes
+variable (ph : Phase) (refill : Σ s, Machine (UOf mask packets rows sources res p k r) s)
+  (preF : Σ s, Machine (UOf mask packets rows sources res p k r + 1) s)
 
 set_option hygiene false in
 local notation "𝒞'" => skelCodeR mask packets rows sources res hres p k r ph refill preF

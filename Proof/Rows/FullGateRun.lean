@@ -17,6 +17,13 @@ open scoped BigOperators
 noncomputable section
 attribute [local irreducible] PCJ45bee56da9f34d5a_CellGate.machine
 
+def masterCaps (H : Nat) (i : Fin 108) := if i=0 ∨ i=1 then H else 0
+
+theorem pad_cold (source mask : List Bool) (q w C R H U : Nat) (out : List Bool) :
+    (fun i=>ZeroPadding.pad (masterCaps H i) (cold (words source mask q w C R) U out i)) =
+      cold (words (ZeroPadding.pad H source) (ZeroPadding.pad H mask) q w C R) U out := by
+  funext i;fin_cases i <;>first |rfl |exact ZeroPadding.pad_zero _
+
 
 end
 end PCJ45bee56da9f34d5a_FullGateRun

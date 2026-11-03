@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.FinalWorkerChain
+import Proof.Hierarchy.CompetitorSumEntry
 
 /-! # W1 -- the AND-four call stream is folded by an actual machine run
 

@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.Primitive.Writers.ThrSide3
+import Proof.Wire_3_5.Primitive.Writers.ThrSide3Base
 
 /-! # c4 THR block, piece 6 part 4: the THR size exponent below the capacity's (twin of the SymCap1)
 

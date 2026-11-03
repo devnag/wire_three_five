@@ -1,5 +1,6 @@
 import Proof.Wire_3_5.Primitive.SeedFix.CarrierFormat
 import Proof.Wire_3_5.Primitive.SeedFix.TabRef
+import Proof.CaseAnalysis.RowsGateRawRun
 
 /-! # The carrier table: one atom's native word (P3:3071-3086, 1645-1650)
 

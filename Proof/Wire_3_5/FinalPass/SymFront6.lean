@@ -1,11 +1,35 @@
-import Proof.Wire_3_5.FinalPass.SymFront4
+import Lean
+import Proof.Wire_3_5.FinalPass.SymFront4Base
 import Proof.Wire_3_5.FinalPass.SymFront5
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.FpInLen
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdR12
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.FinalPass.SymFront3
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.NumsA11
+import Proof.Wire_3_5.UnionMachine.NumsA13
+import Proof.Wire_3_5.UnionMachine.NumsA14
+import Proof.Wire_3_5.UnionMachine.NumsA4
+import Proof.Wire_3_5.UnionMachine.NumsC6
+import Proof.Wire_3_5.UnionMachine.NumsC7
+import Proof.Wire_3_5.UnionMachine.NumsPh2
+import Proof.Wire_3_5.UnionMachine.NumsPh3
+import Proof.Wire_3_5.FinalPass.SymFront6Base
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-! # The SYM front, part 6: the exit with the empty slots' gate tables
 
 `front_runA` over part 5's data stage (`dataPostW2`): the same machine `frontM`, the exit **`FrontOutB`** = `FrontOutA`
 plus **`gates0`** (every gate-table tape past the tuple blank), for the SYM numbers writer's per-circuit width `tabH`
-(`NumsA.tabHW_spec`: `gatesW (tabH G) G` or blank). **`front_runB`**.
+(the `NumsA.tabHW_spec`: `gatesW (tabH G) G` or blank). **`front_runB`**.
 
 Paper quantity of the main type: the SYM call's slices (the gate tables, blank past the tuple, P3:3049-3050) with the
 flat list and the tuple size, in the bank. -/
@@ -29,11 +53,6 @@ open NearCubicWires.SupplierPipeline
 
 section Gate
 variable (x : ℕ) (hx : DataDock.DT + 3 ≤ x) (l : Literals)
-
-/-- **The front's exit with the empty slots' gate tables.** -/
-structure FrontOutB {n a' : ℕ} (Cs : Fin a' → NormalizedSymmetricThresholdCircuit n) (Pl : FlatListParams)
-    (w : List Bool) (B : ℕ) (τ : St x) : Prop extends FrontOutA x hx Cs Pl w B τ where
-  gates0 : ∀ i : Fin 4, a' ≤ i.val → τ.st (tmapA x hx (DataDock.iSym i)) = []
 
 /-- **The SYM front's run** at a SYM request, the empty slots' gate tables exported. -/
 theorem front_runB (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ} (ha' : a' ≤ 4)
@@ -318,3 +337,5 @@ theorem front_runB (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) 
 end Gate
 
 end NearCubicWires.WireExponent3_5.FinalPass.SymFront
+
+end

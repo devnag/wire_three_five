@@ -1,5 +1,6 @@
-import Proof.Amplification.RecoveryCaseOnePaddedBitInput
 import Proof.CaseAnalysis.HierarchyRequestBound
+import Proof.Amplification.RecoveryCaseOnePaddedBitInput
+import Proof.Amplification.RecoveryPrefixPrepareCall
 
 /-! The common recovery program's direct Case1 worker. Genuine original
 input produces the hierarchy request on the existing builder's output tape;

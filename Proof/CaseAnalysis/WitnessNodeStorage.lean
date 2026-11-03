@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.WitnessNodeReset
+import Proof.PCP.PCPSerializerReuseReset
 
 /-! The reusable node workspace has one load target, four retained bounds,
 and one live descriptor. All its other cells start in charged zero padding. -/

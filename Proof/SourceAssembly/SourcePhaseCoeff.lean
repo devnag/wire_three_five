@@ -1,5 +1,6 @@
-import Proof.CaseAnalysis.FinalModeNativeSchedule
 import Proof.SourceAssembly.SourcePhaseMass
+import Proof.CaseAnalysis.FinalModeNativeSchedule
+import Proof.CaseAnalysis.FinalClauseBitsUniform
 
 section
 set_option autoImplicit false

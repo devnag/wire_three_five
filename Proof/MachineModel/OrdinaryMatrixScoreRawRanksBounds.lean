@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryMatrixScoreRawRanks
+import Proof.Amplification.RecoveryTapeSupport
 
 /-! The actual raw sort/rank call has both time and materialized-work bounds
 needed by the enclosing paid clear-and-reuse gate scheduler. -/

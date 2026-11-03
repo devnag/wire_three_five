@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoveryRowRandomReset
+import Proof.Amplification.RecoveryPaddedCopyMeaning
 
 /-! Print the exact fixed-width original prototype fields directly from
 their raw scalar and the paid raw width. Only the output append head is

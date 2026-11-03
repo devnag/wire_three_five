@@ -1,5 +1,6 @@
 import Proof.Hierarchy.HierarchyProjectionBounds
 import Proof.MachineModel.UWholeLanguage
+import Proof.PCP.ProjectionRealization
 
 /-! The actual padded hierarchy word is consumed by the realized fixed U.
 The normalized-PCP assembler now needs only its actual local constructor

@@ -1,3 +1,4 @@
+import Proof.Amplification.RecoveryPrefixPrepareCall
 import Proof.CaseAnalysis.RecoveryCaseQueryRun
 
 /-! The one unconstrained query consumes the already-paid cold prefix bank.

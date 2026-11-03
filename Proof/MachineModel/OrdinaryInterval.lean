@@ -1,4 +1,4 @@
-import Proof.MachineModel.OrdinaryRightCell
+import Proof.MachineModel.OrdinaryBoundaryAdvance
 
 /-! The left bit-plane cell's two boundary tests, fused in one actual scan.
 The coefficient bit is read from its scalar tape; the result is appended to

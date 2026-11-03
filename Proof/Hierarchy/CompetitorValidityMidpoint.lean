@@ -1,4 +1,4 @@
-import Proof.Hierarchy.CompetitorReusableDecision
+import Proof.Hierarchy.CompetitorValidityLoop
 
 /-! Literal C.10 decision parent: the mean test, every second-moment test,
 and the acceptance midpoint are one executed ordinary list computation.

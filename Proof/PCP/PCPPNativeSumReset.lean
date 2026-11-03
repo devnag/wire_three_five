@@ -1,5 +1,6 @@
 import Proof.PCP.PCPPNativeSumAppend
 import Proof.PCP.PCPSerializerTapeSupport
+import Proof.MachineModel.OrdinaryMaskedReset
 
 /-! Reset only the native sum appender's bounded local heads. The live
 descriptor cursor and the two retained input counters are excluded. -/

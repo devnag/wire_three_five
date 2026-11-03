@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPRequestNodeGlobalRun
+import Proof.Circuits.DecompositionStreamReset
 
 /-! The fixed circuit-node serializer executes from the actual original
 framed input. No caller-supplied capacity or count remains. Its one output

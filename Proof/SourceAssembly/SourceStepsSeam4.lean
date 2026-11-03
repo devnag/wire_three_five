@@ -1,9 +1,12 @@
-import Proof.Packets.PacketsClog
-import Proof.Packets.PacketsTouch
 import Proof.SourceAssembly.SourceClauseChain4
+import Proof.SourceAssembly.SourceStepsEnc
+import Proof.SourceAssembly.SourceStepsData
 import Proof.SourceAssembly.SourceStepsCode
-import Proof.SourceAssembly.SourceStepsTrace
 import Proof.SourceAssembly.SourceStepsViewRefute
+import Proof.SourceAssembly.SourceStepsTrace
+import Proof.Packets.PacketsMetaPrime
+import Proof.SourceAssembly.SourceRequestResidentProducer
+import Proof.SourceAssembly.SourceTraceData
 
 section
 set_option autoImplicit false
@@ -23,6 +26,10 @@ noncomputable section
 attribute [local irreducible] P1TopDownPaidPayload.tapes
 
 section code
+variable (mask : MaskProducer) {selector : CyclicChoice.Laws}
+  (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector)
+  (rows : PCJc4297ab269d8423a_Source.RowLibrary selector) (sources : EightSources)
+  (res : Nat) (hres : 19 ≤ res) {gamma : Real} (p : Parameters sources gamma) (k r : Nat)
 
 set_option hygiene false in
 local notation "𝔇" => dimsOf mask packets rows sources res p k r
@@ -34,6 +41,21 @@ local notation "𝒞" => skelCodeR mask packets rows sources res hres p k r ph r
 end code
 
 section clause
+variable (mask : MaskProducer) (selector : CyclicChoice.Laws)
+    (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector)
+    (rows : PCJc4297ab269d8423a_Source.RowLibrary selector) (compiler : Packets.CompilerLaws)
+    (sources : EightSources) {gamma : Real} (p : Parameters sources gamma)
+    (den : Nat) (hden : 0 < den) (k r scratch n : Nat) (x : BitInput n) (bits : List Bool)
+    (hp : P1Independent.CappedLegalAdmission.passed sources p
+      (ControllerCappedSelected.reference den hden k (PolynomialClock.ordinaryClock k))
+      (WorkspaceSelectedAdmission.coldCutoff sources) n x bits = true)
+    (site : Bool → Phase → Σ states, Machine (ControllerSelectedContinuation.bodyTapes sources p k r scratch) states)
+    (code : (ph : Phase) → RCFive.Source.SourceCode mask selector packets rows sources p k r scratch ph) (ph : Phase)
+    (ci : Fin (NC sources k (PolynomialClock.ordinaryClock k) x (C10TotalDecode.oracleOf sources k (PolynomialClock.ordinaryClock k) p.degree n bits))) (L : Nat)
+    (lay : TraceData.LayoutFamily (PCJd04de0277f804fcc_.coordinate sources k (PolynomialClock.ordinaryClock k) p den x (C10TotalDecode.oracleOf sources k (PolynomialClock.ordinaryClock k) p.degree n bits) bits) ph ci sources L (C10SupplierAccuracyChain.accuracyTargetAll (constantsOf sources) (CloseoutFinalC10StageFields.stageLimits sources p)) (PCJ374c44bb8b7f47d9_.S.mode sources p den hden k r scratch n x bits hp) selector) (deg : Nat → Nat) (V : Nat)
+    (dflt : P1TopDownPaidReusable.Datum) (b Dw capw logw resetw : Nat)
+    (H : Nat → Fin (code ph).sourceTapes → Nat) (A : Nat → Fin (code ph).sourceTapes → List Bool)
+    (Rc familyCost refillCost firstCost counterReserve : Nat)
 
 set_option hygiene false in
 local notation "coordC" => PCJd04de0277f804fcc_.coordinate sources k (PolynomialClock.ordinaryClock k) p den x (C10TotalDecode.oracleOf sources k (PolynomialClock.ordinaryClock k) p.degree n bits) bits
@@ -47,6 +69,10 @@ local notation "vdO" => clauseVals mask selector packets rows compiler sources p
 end clause
 
 section seam
+variable (mask : MaskProducer) {selector : CyclicChoice.Laws}
+  (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector)
+  (rows : PCJc4297ab269d8423a_Source.RowLibrary selector) (sources : EightSources)
+  (res : Nat) (hres : 19 ≤ res) {gamma : Real} (p : Parameters sources gamma) (k r : Nat)
 
 set_option hygiene false in
 local notation "𝔇" => dimsOf mask packets rows sources res p k r

@@ -116,4 +116,17 @@ theorem exists_witness (values : List Nat) : Nonempty (Witness values) := by
         change (2:Nat)=1 at hk
         omega
 
+theorem bounded_certificate {code : Nat} {values : List Nat}
+    (hd : decodeBalancedList code=some values) :
+    ∃ rows root,checkFrom [] rows=true ∧ root∈rows ∧ root.code=code ∧
+      rows.length≤2*natBitLength code+1 ∧
+      ∀ row∈rows,row.code≤code ∧ row.payload≤code ∧ row.count≤natBitLength code ∧ row.kind≤2 := by
+  obtain ⟨w⟩ := exists_witness values
+  have he : w.root.code=code := w.rootCode.trans (encodeBalancedList_of_decode hd)
+  have hn := decoded_balanced_length hd
+  refine ⟨w.rows,w.root,w.checked,w.member,he,by have h:=w.lengthBound; omega,?_⟩
+  intro row hm
+  exact ⟨(w.codeBound row hm).trans_eq he,(w.payloadBound row hm).trans_eq he,
+    (w.countBound row hm).trans hn,w.kindBound row hm⟩
+
 end NearCubicWires.RepairSource.RecoveryOracle.BalancedCertificate

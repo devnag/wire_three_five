@@ -11,5 +11,6 @@ set_option maxRecDepth 120000
 set_option warningAsError true
 
 noncomputable def machine := RepeatMachine.machine RowTupleMaskBody.machine (fun _ _=>true)
+def budget (N w M k : ℕ) := k*(RowTupleMaskBody.budget N w M+3)+3
 
 end NearCubicWires.RepairOrdinary.RowTupleMaskLoop

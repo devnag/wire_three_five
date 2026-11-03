@@ -1,5 +1,6 @@
-import Proof.PCP.ProjectionDimensionPowerBounds
+import Proof.PCP.ProjectionNormalizationFieldList
 import Proof.PCP.ProjectionNormalizationCursorRestore
+import Proof.PCP.ProjectionDimensionPowerBounds
 
 /-! Count every physical byte of one framed field into a unary mass tape.
 This is a finite transducer over the source framing, not a supplied length. -/

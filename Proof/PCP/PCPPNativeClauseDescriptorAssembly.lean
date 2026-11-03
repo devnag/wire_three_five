@@ -1,4 +1,6 @@
 import Proof.PCP.PCPPNativeClauseQueryForward
+import Proof.PCP.PCPPNativeDescriptorTail
+import Proof.MachineModel.GeneratedAmplifierCopy
 
 /-! Actual header, native-node bytes and padding/footer form the source
 descriptor. The framed node stream is copied physically at the header's

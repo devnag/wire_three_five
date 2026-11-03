@@ -1,6 +1,7 @@
-import Proof.CaseAnalysis.CaseTwoOccurrenceRunnerCalls
 import Proof.MachineModel.CanonicalLiteralDecodeProgram
 import Proof.MachineModel.CaseTwoOccurrenceParityProgram
+import Proof.CaseAnalysis.CaseTwoOccurrenceRunnerCalls
+import Proof.MachineModel.TaggedProgramChoice
 
 /-!
 # The assembled Case-2 occurrence program

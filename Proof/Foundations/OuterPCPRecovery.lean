@@ -1,8 +1,9 @@
-import Proof.Foundations.BooleanCircuitSizePadding
-import Proof.Foundations.CaseOnePadding
-import Proof.Foundations.PhysicalRecovery
+import Proof.Foundations.RecoveryPipeline
 import Proof.Foundations.ProjectionPCPPadding
 import Proof.Foundations.RefuterClockClosure
+import Proof.Foundations.CaseOnePadding
+import Proof.Foundations.PhysicalRecovery
+import Proof.Foundations.BooleanCircuitSizePadding
 
 /-!
 # Outer-PCP Case-1/Case-2 extraction
@@ -467,45 +468,6 @@ theorem existsCanonicalAcceptingOracle
       candidate, hcandidateSize, hcandidateAccepts, rfl⟩
 
 /-! ## Genuine hierarchy-PCP instantiation -/
-
-/-- The outer PCP attached to the timed hierarchy machine returned by the
-fixed-refuter source.  Its runner bounds and semantic guarantees are retained
-for the weak-machine and resource ledgers. -/
-structure HierarchyOuterPCP {bound : ℕ → ℕ}
-    (source : ExecutableRefuterSource bound) where
-  runnerDegree : ℕ
-  queryExponent : ℕ
-  substitutionExponent : ℕ
-  pcp : ExecutableProjectionPCP source.hierarchyMachine bound
-  proofExponent : ℕ
-  substitution : ExecutableProjectionSubstitution pcp
-  shapeDegree : pcp.shape.degree ≤ runnerDegree
-  queryDegree : pcp.query.degree ≤ runnerDegree
-  decisionDegree : pcp.decisionRunner.degree ≤ runnerDegree
-  substitutionDegree : substitution.runner.degree ≤ runnerDegree
-  queryCountBound : ∀ n, pcp.queryCount n ≤ pcp.shape.budget n
-  compactQueryCountBound : ∀ n,
-    pcp.queryCount n ≤
-      pcp.shape.coefficient *
-        (pcp.nativeWidth n + 1) ^ queryExponent
-  decisionLengthBound : ∀ n input randomness,
-    (pcp.decision (n := n) input randomness).clauses.length ≤
-      pcp.decisionRunner.budget (pcp.decisionRequest input randomness)
-  proofSizeBound : ∀ n,
-    2 ^ pcp.nativeWidth n ≤
-      pcp.shape.coefficient * bound n *
-        logScale (bound n) ^ proofExponent
-  substitutionSizeBound : ∀ request,
-    (substitution.circuit request).size ≤
-      substitution.sizeCoefficient *
-        (pcp.nativeWidth request.inputArity +
-          request.oracle.size + 1) ^ substitutionExponent
-  complete : ∀ n input, source.hierarchyMachine.accepts n input →
-    ∃ proof, ∀ randomness,
-      pcp.toSemantic.accepts input proof randomness
-  sound : ∀ n input, ¬source.hierarchyMachine.accepts n input →
-    ∀ proof, pcp.toSemantic.acceptanceFraction input proof ≤
-      1 / ((n + 1 : ℕ) : ℝ) ^ 10
 
 /-! ## Canonical Case-2 honest table -/
 

@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryQueryKernel
+import Proof.MachineModel.OrdinaryOracleComposeGraph
 
 /-! A literal charged oracle ask followed by one physical answer write.
 The input query and every head are retained, including query padding. -/

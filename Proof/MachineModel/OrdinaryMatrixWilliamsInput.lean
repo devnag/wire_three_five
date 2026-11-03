@@ -10,6 +10,11 @@ set_option maxHeartbeats 250000
 set_option maxRecDepth 120000
 set_option warningAsError true
 
+def slots : Fin 7 → Fin 424 := ![410,409,420,407,394,422,423]
+noncomputable def first := TapeEmbedding.machine 2 MatrixWilliamsDimensions.machine
+noncomputable def last := RecoveryFocus.machine slots MatrixWilliamsFrame.machine
+noncomputable def machine := Composition.machine first last
+def input (r : Request) : Fin 424 → List Bool := fun i => if i=0 then physicalInput r else []
 noncomputable def budget (r : Request) := MatrixWilliamsDimensions.budget r+1+(6*(2*r.d+3)+12*(r.U*r.Capacity)+38)
 
 theorem header_length (r : Request) : (natWord r.U).length=2*r.d+3 := by

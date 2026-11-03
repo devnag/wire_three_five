@@ -1,3 +1,5 @@
+import Proof.CaseAnalysis.RowsMetadataCopy
+import Proof.CaseAnalysis.RowsOriginalSwitch
 import Proof.SourceAssembly.SLoadMaskFrame
 
 set_option autoImplicit false
@@ -113,10 +115,23 @@ theorem copy_step {U : Nat} (s d v l : Fin U) (h1 : s ≠ d) (h2 : s ≠ v) (h3 
 
 /-- Copy local tape `s` onto descriptor tape `d` (driver `9`, log `10`). -/
 def cp (s d : Fin 27) := copyM s d (9 : Fin 27) (10 : Fin 27)
+/-- Frame the code bits (tape `3`, driver `8`) onto descriptor tape `d` (log `10`). -/
+def fr (d : Fin 27) := SLoad.MaskFrame.machine (3 : Fin 27) (8 : Fin 27) d (10 : Fin 27)
 
 /-- The systematic writer: bitmap → 0, 2; template → 1, 3; flag S → 14. -/
 def sysW := Composition.machine (cp 2 11) (Composition.machine (cp 4 12)
   (Composition.machine (cp 2 13) (Composition.machine (cp 4 14) (cp 0 25))))
+
+/-- The original writer: `frame bits` → 4, 9; template → 5, 10; `1^P` → 6, 11; `1^W` → 7, 12;
+`1^L` → 8, 13; flag O → 15. -/
+def origW := Composition.machine (fr 15) (Composition.machine (cp 4 16) (Composition.machine (cp 5 17)
+  (Composition.machine (cp 6 18) (Composition.machine (cp 7 19) (Composition.machine (fr 20)
+  (Composition.machine (cp 4 21) (Composition.machine (cp 5 22) (Composition.machine (cp 6 23)
+  (Composition.machine (cp 7 24) (cp 1 26))))))))))
+
+/-- **The descriptor writer**: flag S → systematic writer; else flag O → original writer; else stop. -/
+def machine := CloseoutRowsOriginalSwitch.machine sysW
+  (CloseoutRowsOriginalSwitch.machine origW (CloseoutRowsOriginalSwitch.stop 27) (1 : Fin 27)) (0 : Fin 27)
 
 def sysCost (D : Nat) : Nat := 5 * (2 * D + 4) + 4
 

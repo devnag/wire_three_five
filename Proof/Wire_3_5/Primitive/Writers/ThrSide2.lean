@@ -1,6 +1,21 @@
-import Proof.Wire_3_5.Primitive.Writers.ThrSide1
+import Lean
+import Proof.Wire_3_5.FinalPass.SymBuildBase
+import Proof.Wire_3_5.Primitive.Writers.ThrCap4Base
+import Proof.Wire_3_5.Primitive.SeedFix.TabThrLayout
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
 
-/-! # c4 THR block, piece 6 part 2: the THR majorant's numbers below `2^{cL}`, uniformly in `F`
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2 c4 THR block, piece 6 part 2: the THR majorant's numbers below `2^{cL}`, uniformly in `F`
 
 P3:2121-2157 (filt:majorant: `M`, `A`, `B_*`, `J`, `t`, `ℓ₀`), P3:2551-2558 (the cutoff, the digits), P3:1189 (`4c_r ≤ k`,
 so `2c_r + 2 ≤ n + 2`): at a THR call of the gate, with `L = ⌈log₂(n+2)⌉`, the fixed hash's numbers are
@@ -294,3 +309,5 @@ theorem hbC_le : (ThrCap.hbC (callInputs l F kclk coef A a ha) (gate0 l F).alg C
 end Call
 
 end NearCubicWires.WireExponent3_5.PrimAsm.ThrSide
+
+end

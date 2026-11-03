@@ -1,4 +1,5 @@
 import Proof.SourceAssembly.SourceSkelXtraF
+import Proof.SourceAssembly.SourceSkelInitE2
 
 section
 set_option autoImplicit false
@@ -15,10 +16,14 @@ open NearCubicWires.SourceConstruction NearCubicWires.SourceConstruction.InitRun
 namespace NearCubicWires.SourceSkeleton.EntrySite
 open NearCubicWires.SourceSkeleton.ClassR NearCubicWires.SourceSkeleton.Params NearCubicWires.SourceSkeleton.ClassV4
 open NearCubicWires.SourceSkeleton.ParamsV4
+open NearCubicWires.SourceSkeleton.Fill (XtraW)
 open NearCubicWires.SourceSkeleton.FillV5 NearCubicWires.SourceSkeleton.FirstW NearCubicWires.SourceSkeleton.XtraF
 noncomputable section
 
 section site
+variable (selector : CyclicChoice.Laws) (mask : MaskProducer)
+  (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector) (rows : PCJc4297ab269d8423a_Source.RowLibrary selector)
+  (sources : EightSources) (gamma : Real) (hg : 0 < gamma) (hh : gamma < 1/2) (p : Parameters sources gamma)
 
 set_option hygiene false in
 local notation "𝔮" => C10PartsSchedule.widthAt sources (kW selector mask packets rows sources gamma hg hh p) n

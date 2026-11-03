@@ -1,5 +1,5 @@
 import Proof.CaseAnalysis.FinalLedgerBounds
-import Proof.CaseAnalysis.FinalCallFuelMono
+import Proof.CaseAnalysis.FinalSupplierCall
 
 namespace NearCubicWires.RepairSource.CloseoutFinal.C10PartsSchedule
 

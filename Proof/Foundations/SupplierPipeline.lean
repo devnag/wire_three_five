@@ -1,9 +1,14 @@
-import Mathlib
-import Proof.Foundations.CanonicalEncodedListLengthProgram
+import Proof.Foundations.CanonicalBinary
 import Proof.Foundations.CompilerSemantics
+import Proof.Foundations.ExecutableInterfaces
+import Proof.Foundations.CanonicalEncodedListLengthProgram
 import Proof.Foundations.ExecutableProgramTightRefuterSource
 import Proof.Foundations.OperationalWilliamsSourceCore
 import Proof.Foundations.TseitinCNF
+import Proof.Foundations.VerifiedLinker
+import Mathlib
+import Proof.Foundations.Semantics
+import Proof.Foundations.ThresholdCompiler
 
 /-!
 # Constructive supplier pipeline
@@ -744,6 +749,21 @@ structure FourfoldRequest (Circuit : CircuitFamily) where
   q : ℕ
   circuits : List (Circuit q)
 
+def batchDescription {Circuit : Type} (description : Circuit → ℕ)
+    (circuits : List Circuit) : ℕ :=
+  (circuits.map description).sum
+
+/-- Canonical nonnegative-rational decoding.  Both components remain canonical
+binary syntax at the executable ABI; no later weak-machine controller has to
+recover a native numerator or denominator hidden inside an opaque pair.  The
+denominator predecessor keeps zero denominators unrepresentable. -/
+def decodeSupplierRational (code : ℕ) : ℚ :=
+  let pair := Nat.unpair code
+  match decodeNat pair.1, decodeNat pair.2 with
+  | some numerator, some denominatorTail =>
+      (numerator : ℚ) / (denominatorTail + 1 : ℕ)
+  | _, _ => 0
+
 noncomputable def booleanMean {Index : Type} [Fintype Index]
     (value : Index → Bool) : ℝ :=
   (∑ index, bitAsReal (value index)) / Fintype.card Index
@@ -821,6 +841,35 @@ structure AmplifiedListCertificate (Input Seed : Type) [Fintype Seed] where
   failureNonnegative : 0 ≤ failure
   pointwise : ∀ input,
     booleanMean (fun seed => !(succeeds input seed)) ≤ failure
+
+theorem booleanMean_le_one {Index : Type} [Fintype Index]
+    [Nonempty Index] (value : Index → Bool) :
+    booleanMean value ≤ 1 := by
+  unfold booleanMean
+  have hcard : (0 : ℝ) < Fintype.card Index := by
+    exact_mod_cast Fintype.card_pos
+  apply (div_le_one hcard).2
+  calc
+    (∑ index, bitAsReal (value index)) ≤ ∑ _index : Index, (1 : ℝ) := by
+      apply Finset.sum_le_sum
+      intro index _
+      cases value index <;> simp [bitAsReal]
+    _ = Fintype.card Index := by simp
+
+theorem sum_pointwise_error
+    {Index : Type} [Fintype Index]
+    (exact approximate : Index → ℝ) (error : ℝ)
+    (herror : ∀ index, |approximate index - exact index| ≤ error) :
+    |(∑ index, approximate index) - ∑ index, exact index| ≤
+      Fintype.card Index * error := by
+  rw [← Finset.sum_sub_distrib]
+  calc
+    |∑ index, (approximate index - exact index)| ≤
+        ∑ index, |approximate index - exact index| :=
+      Finset.abs_sum_le_sum_abs _ _
+    _ ≤ ∑ _index : Index, error :=
+      Finset.sum_le_sum fun index _ => herror index
+    _ = Fintype.card Index * error := by simp
 
 /-! ## Source-contract consequences available without new assumptions -/
 

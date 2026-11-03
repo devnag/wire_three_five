@@ -1,5 +1,6 @@
 import Proof.Wire_3_5.Primitive.SeedFix.C4KW
-import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4Base
+import Proof.Wire_3_5.Primitive.SeedFix.C4SI
 
 /-! # C4KW: the three docks in the HASH setup (types, for the assembly)
 

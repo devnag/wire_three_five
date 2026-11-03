@@ -1,6 +1,8 @@
-import Proof.Wire_3_5.Primitive.Writers.SymDecStreams
 import Proof.Wire_3_5.UnionMachine.C1Rat
 import Proof.Wire_3_5.UnionMachine.FrontClog
+import Proof.Wire_3_5.Primitive.Writers.SymDecStreams
+import Proof.Wire_3_5.Ledger.LedgerLoad
+import Proof.Wire_3_5.Ledger.LedgerGrowth
 
 /-! # C6 front, the C1 dock: C1's request word (P3:1326-1330, 3673; `Plan.selWord`)
 

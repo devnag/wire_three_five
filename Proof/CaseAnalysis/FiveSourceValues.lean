@@ -18,6 +18,61 @@ open PCJc4297ab269d8423a_Source
 attribute [local irreducible] P1TopDownPaidPayload.tapes
 
 /- Per-call values for one already fixed SourceCode. -/
+structure CallValues (Atom : Type) (sourceTapes : Nat) where
+  order :
+    List (CircuitMonomial Atom 4)
+  L :
+    Nat
+  target :
+    Nat
+  dflt :
+    P1TopDownPaidReusable.Datum
+  ds :
+    Nat → List P1TopDownPaidReusable.Datum
+  xs :
+    Nat → List Nat
+  S :
+    Nat → Nat
+  R :
+    Nat → Nat
+  B :
+    Nat → Nat
+  rowWidth :
+    Nat → Nat
+  total :
+    Nat → Nat
+  denominator :
+    Nat → Nat
+  D :
+    Nat → Nat
+  cap :
+    Nat → Nat
+  logSize :
+    Nat → Nat
+  resetSize :
+    Nat → Nat
+  coefficient :
+    Nat → CompetitorValidity.Estimate
+  old :
+    Nat → List Bool
+  phasePrefix :
+    List Stream.Entry
+  entries :
+    List Stream.Entry
+  H :
+    Nat → Fin sourceTapes → Nat
+  A :
+    Nat → Fin sourceTapes → List Bool
+  reserveSize :
+    Nat
+  familyCost :
+    Nat
+  refillCost :
+    Nat
+  firstCost :
+    Nat
+  counterReserve :
+    Nat
 
 
 

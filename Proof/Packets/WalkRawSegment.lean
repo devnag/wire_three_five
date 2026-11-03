@@ -1,4 +1,5 @@
 import Proof.Packets.WalkUnframe
+import Proof.MachineModel.OrdinaryUnaryTemplate
 
 /-! Copy a raw bit segment with an actual unary driver. A noninitial driver
 position permits the upper Toeplitz diagonal to have one fewer bit. -/

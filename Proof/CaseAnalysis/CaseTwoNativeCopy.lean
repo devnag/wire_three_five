@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CaseTwoFieldReady
+import Proof.PCP.PCPPQueryField
 
 /-! Reuse the existing native field copier at a live output cursor. Its
 source and scratch heads are physically rewound using paid reusable space. -/

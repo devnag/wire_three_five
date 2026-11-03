@@ -1,7 +1,9 @@
+import Proof.Wire_3_5.Compiler.MachineC3aPO
 import Proof.Packets.PacketsGlueMetaMul
 import Proof.SourceAssembly.SourceLiveCount
 import Proof.SourceAssembly.SourceRequestCurComp
-import Proof.Wire_3_5.Compiler.MachineC3aPO
+import Proof.Hierarchy.HierarchyAllocation
+import Proof.MachineModel.UWalkUnary
 
 /-! # C3a′'s machine: the layout, the stages, the capacities and the cost (P3:1596-1664, 1896-1906)
 

@@ -1,22 +1,34 @@
+import Lean
 import Proof.Wire_3_5.Recovery.RecoveryLeaf
-import Proof.Wire_3_5.Transfer.PadCast
+import Proof.Foundations.ProjectionPCPPadding
+import Proof.Foundations.RecoveryScheduleEnvelope
+import Proof.PCP.PCPPSubstitutionCircuit
+import Proof.PCP.PCPPSubstitutionRequest
+import Proof.Wire_3_5.Stars.StarSelectionChoice
+import Proof.Wire_3_5.Transfer.TransferSeedCalls
+import Proof.CaseAnalysis.NativeWidthStep
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Recovery.RecoveryLanguage
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.UnionSetup
 
-/-! # The re-pinned union setup `S₂`: the hierarchy language's own PCP (P3:3632-3653; D1.6)
 
-Realizes "Let `H` be the hierarchy language [...] Apply the outer PCP to `H` and pad the outer verifier to the exact
-width `q(N)`" (P3:3632-3644) with `H` the refuter's hierarchy itself: at the recovered language `L = recL` the setup
-uses the refuter hierarchy's own PCP (base's universal-source hierarchy PCP, which is the Theorem 2.5 repository's
-`SelectedRecoveryIntegration.outer` PCP definitionally), padded to `q(N)`; at every other language it is `S₁`.
-accepted this re-pin: `S₁`'s choice `choose (recL_inNTIME …)` was an artifact.
+noncomputable section
 
-Paper quantities:
-* `refH l kclk` (the refuter's hierarchy at `N^{kclk+2}`) with `refH_spec` (it decides `recL`);
-* `recPCP l kclk`: its native outer PCP (width `R(N)`);
-* **`recSetup2`**: the setup at `recL` (the native PCP padded to `max(R(N), q(N))`, the `clw311` PCPP, the explicit
-  constants, the oracle degree `17·c_STV`, the gate's grid);
-* **`unionSetupS2 l G : G.Setup`** (classical `if L = recL`) and `unionSetupS2_recL`;
-* `recSetup2_width` (the padded width is `q(N)` eventually), `native_lower` (`R(2^s) ≥ s + 1`, base's
-  `native_dyadic_lower`), `recSetup2_hind`, `recPCP_complete`. -/
+
+/-! # The re-pinned union setup `S₂`: the outer step at the refuter's hierarchy (Lemma H.7; order of the constants)
+
+Realizes the union setup at the recovered language `L = recL`: the refuter's hierarchy `refH l kclk` itself, its
+succinct verifier `𝒱_G` at `λ_a` (`recSV`; Lemma H.6), the short PCP (§H.1 item 1), the pointwise PCPP, the explicit
+constants and the oracle degree; live. Elsewhere it is `S₁` (dead: the machine rejects outright).
+
+Paper quantities: `refH l kclk` with `refH_spec`; `recSV`, `recWidth` (`q(N)`, (57)); **`recSetup2`**;
+**`unionSetupS2 l G : G.Setup`** and `unionSetupS2_recL`; at the gate's clock `kclk = 41`: `recSV_kclk`
+(`= gateSV l`), `recWidth_kclk`, and `recSetup2_width` (the setup's width IS the ledger's `q(N)` at `A_pad`, by the
+width bridge `widthOf_eq_nativeWidth`); `native_lower` (`q(2^s) ≥ s + 1`). -/
 
 set_option autoImplicit false
 
@@ -35,21 +47,24 @@ theorem refH_spec (kclk : ℕ) :
     ∀ n (x : BitInput n), recL l kclk n x = true ↔ (refH l kclk).verifier.language (refH l kclk).time n x :=
   fun n x => hierarchy_language_exact _ n x
 
-/-- The refuter hierarchy's native outer PCP (width `R(N)`). -/
-noncomputable def recPCP (kclk : ℕ) := (hierarchyPCP l (refH l kclk)).data
+/-- **`𝒱_G`** (Lemma H.6) for the refuter's hierarchy at the clock `N^{kclk+2}`, at the description length `λ_a`; at the
+gate's clock it is the gate's `gateSV` (`recSV_kclk`). -/
+noncomputable def recSV (kclk : ℕ) : NearCubicGates.Close.Outer.SuccinctVerifier (refH l kclk) (lenG l) :=
+  Classical.choice (NearCubicGates.Close.Succinct.succinctVerifier_exists (refH l kclk) (lenG l))
 
-/-- **The setup at the recovered language**: the refuter hierarchy's own PCP padded to `q(N)`. -/
+/-- **The setup at the recovered language**: the outer data at the refuter's hierarchy (`𝒱_G = recSV`), live. -/
 noncomputable def recSetup2 (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) : UnionSetup (G.inputs kclk coef A a ha) :=
-  setupOfResult (G.inputs kclk coef A a ha) (recL l kclk) (refH l kclk) (refH_spec l kclk) (recPCP l kclk)
-    (paddedWidth l G (refH l kclk)) (fun _ => le_max_left _ _) (gatePCPP l) (recOracleDeg l) (gateParams1 l)
+  setupOf (G.inputs kclk coef A a ha) (recL l kclk) (refH l kclk) (refH_spec l kclk) (gateMW l) (lenG l)
+    (recSV l kclk) (gatePCPP l) true (recOracleDeg l) (gateParams1 l) (gateOuterError_pos l)
     (gridMassOf (gateCδ1 l) G.row.sp) (fun _ => by unfold gridMassOf; positivity) G.row.sp
 
-/-- **The re-pinned union setup `S₂`**: the refuter hierarchy's own PCP at `recL`, `S₁` elsewhere. -/
+/-- **The re-pinned union setup `S₂`**: the outer data at the refuter's hierarchy at `recL` (live), `S₁` (dead)
+elsewhere. -/
 noncomputable def unionSetupS2 : G.Setup := fun kclk coef A a ha L hL => by
   classical
   exact if h : L = recL l kclk then
-    setupOfResult (G.inputs kclk coef A a ha) L (refH l kclk) (by subst h; exact refH_spec l kclk) (recPCP l kclk)
-      (paddedWidth l G (refH l kclk)) (fun _ => le_max_left _ _) (gatePCPP l) (recOracleDeg l) (gateParams1 l)
+    setupOf (G.inputs kclk coef A a ha) L (refH l kclk) (by subst h; exact refH_spec l kclk) (gateMW l) (lenG l)
+      (recSV l kclk) (gatePCPP l) true (recOracleDeg l) (gateParams1 l) (gateOuterError_pos l)
       (gridMassOf (gateCδ1 l) G.row.sp) (fun _ => by unfold gridMassOf; positivity) G.row.sp
   else unionSetupS1 l G kclk coef A a ha L hL
 
@@ -59,40 +74,14 @@ theorem unionSetupS2_recL (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) (hL : InNT
   rw [dif_pos rfl]
   rfl
 
-/-- The padded width is the ledger's `q(N)` eventually. -/
-theorem recSetup2_width (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) (hApad : (gateSource l).degrees.proofLog + 6 ≤ G.Apad) :
-    ∃ N₀, ∀ N, N₀ ≤ N →
-      (recSetup2 l G kclk coef A a ha).pcp.nativeWidth N = Ledger.nativeWidth kclk G.Apad N := by
-  obtain ⟨N₀, hN₀⟩ := width_le_nativeWidth kclk (5 + (gateSource l).degrees.proofLog)
-    (recPCP l kclk).coefficient (refH l kclk).coefficient
-    (fun N => (recPCP l kclk).pcp.nativeWidth N)
-    (fun n hn => (recPCP l kclk).proofBound n hn)
-  refine ⟨N₀, fun N hN => ?_⟩
-  have h1 := hN₀ N hN
-  have hmono : Ledger.nativeWidth kclk (5 + (gateSource l).degrees.proofLog + 1) N ≤
-      Ledger.nativeWidth kclk G.Apad N := by
-    unfold Ledger.nativeWidth
-    have : 5 + (gateSource l).degrees.proofLog + 1 ≤ G.Apad := by omega
-    have := Nat.mul_le_mul_right (Nat.clog 2 (Nat.clog 2 (N ^ (kclk + 2)) + 2)) this
-    omega
-  show max _ _ = _
-  exact max_eq_right (h1.trans hmono)
-
-/-- The native width at dyadic lengths is at least the index plus one (base's `native_dyadic_lower`). -/
-theorem native_lower (kclk s : ℕ) : s + 1 ≤ (recPCP l kclk).pcp.nativeWidth (2 ^ s) :=
-  CloseoutNativeWidth.native_dyadic_lower (gateSource l) (refH l kclk) _ s
-
-theorem recSetup2_hind (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {N : ℕ} (z : BitInput N) :
-    ∀ u v, (recSetup2 l G kclk coef A a ha).pcp.decision z u = (recSetup2 l G kclk coef A a ha).pcp.decision z v :=
-  fun _ _ => (recPCP l kclk).decisionIndependent _ z _ _
-
-/-- Perfect completeness of the native PCP at a hierarchy yes-instance. -/
-theorem recPCP_complete (kclk : ℕ) {N : ℕ} (z : BitInput N) (hyes : recL l kclk N z = true) :
-    ∃ proof, ∀ randomness, (recPCP l kclk).pcp.accepts z proof randomness = true := by
-  have hacc : (refH l kclk).timedView.accepts N z = true :=
-    (hierarchy_language_exact _ N z).2 ((refH_spec l kclk N z).1 hyes)
-  exact (recPCP l kclk).complete N z hacc
+/-- At the gate's clock the setup's width is the ledger's `q(N)` exactly, once the gate's `A_pad` is `gateApad`
+(order item (5)). -/
+theorem recSetup2_width (coef A a : ℕ) (ha : a ≤ kclk + 1) (hApad : G.Apad = gateApad l) (N : ℕ) :
+    (recSetup2 l G kclk coef A a ha).width N = Ledger.nativeWidth kclk G.Apad N := by
+  rw [hApad]; rfl
 
 end S2
 
 end NearCubicWires.WireExponent3_5.Transfer
+
+end

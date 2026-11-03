@@ -15,6 +15,7 @@ open RepairSource CloseoutFinal CloseoutRawRows
 open C10ExternalRowLoop C10ThresholdNaturalRowPrint C10ThresholdParityRow
 open C10ThresholdEstimateRowJoin CloseoutFinalC10RowAnswerWord
 open CloseoutFinalC10SupplierAccuracy (rowAnswer)
+open C10ThresholdNaturalSum (nativeNumerator)
 attribute [local irreducible] BinaryPool.pool CompactBounds.radix
   symDatum thrDatum familyPolynomial pairList
 

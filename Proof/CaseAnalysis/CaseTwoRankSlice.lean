@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.CaseTwoRankField
+import Proof.PCP.PCPSerializerCapacityFocus
+import Proof.MachineModel.OrdinaryRewindWorkspace
 
 /-! One paid fixed-width field lookup in the original canonical description,
 followed by its existing unary-to-binary converter.  The actual source word,

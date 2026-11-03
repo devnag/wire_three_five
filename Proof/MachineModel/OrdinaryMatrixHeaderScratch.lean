@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryMatrixScoreHeaders
+import Proof.MachineModel.OrdinaryZeroPadding
 
 /-! Scratch fields of the existing header parsers. The same executed runs as `template_run`,
 `prepare_run`, `header_run` and `headers_run`, with the tapes they leave all-`false` (the dimension

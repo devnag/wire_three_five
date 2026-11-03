@@ -1,5 +1,6 @@
-import Proof.CaseAnalysis.RecoverySearchRequest
 import Proof.CaseAnalysis.RecoverySearchWhole
+import Proof.CaseAnalysis.RecoverySearchRequest
+import Proof.Amplification.RecoveryPrefixColdBudget
 
 /-! A sufficient cubic bound in the actual payload width and description
 length includes the one case query, its reset and the total prefix search. -/

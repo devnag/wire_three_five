@@ -1,4 +1,5 @@
-import Proof.Wire_3_5.UnionMachine.Plan
+import Proof.Wire_3_5.UnionMachine.PlanBase
+import Proof.Wire_3_5.MachineModel.BlockCost
 
 /-! # C1, coset selection: the enclosing term of `C1Impl` (P3:1324-1362, 3071-3072, 3673)
 

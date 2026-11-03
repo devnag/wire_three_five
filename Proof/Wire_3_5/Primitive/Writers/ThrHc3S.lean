@@ -1,8 +1,25 @@
+import Lean
+import Proof.Wire_3_5.Primitive.Writers.ThrHc3
+import Proof.Wire_3_5.Primitive.Writers.ThrK7Base
 import Proof.Wire_3_5.Primitive.Writers.ThrB7
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.C3ReqIface3
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.ThrB7Base
+import Proof.Wire_3_5.Primitive.Writers.ThrDataH
+import Proof.Wire_3_5.Primitive.Writers.ThrStrip7
+import Proof.Wire_3_5.Primitive.SeedFix.C3ReqIface
 
-/-! # c4 THR block, piece 7 part 3: the THR stage's compiler run from the contract's strip field
 
-`thr_hc3` at the strip's premises of `ThrStripAt` (the v7 contract's `strip`) and the codes' bound
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2 c4 THR block, piece 7 part 3: the THR stage's compiler run from the contract's strip field
+
+`thr_hc3` (M53) at the strip's premises of `ThrStripAt` (the v7 contract's `strip`) and the codes' bound
 `Kb = kbT n` (`ThrSide.kbT_codes`): **`thr_hc3S`**, the consumer's form of `hc3` at a THR call.
 
 Paper quantity of the main type: the THR call's compiler request fields `PRE`/`POST`. -/
@@ -51,3 +68,5 @@ theorem thr_hc3S (l : Literals) (F : GateFree l) (EW : Envelope) (cW cN DN kclk 
     hKb hKc c1 c2 c3 c4 c5 c6 c7 cw
 
 end NearCubicWires.WireExponent3_5.PrimAsm.ThrSet
+
+end

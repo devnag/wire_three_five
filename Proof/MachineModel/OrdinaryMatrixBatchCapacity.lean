@@ -1,4 +1,6 @@
 import Proof.MachineModel.OrdinaryMatrixBatchNativeFields
+import Proof.Hierarchy.CompetitorDimensions
+import Proof.Hierarchy.HierarchyFixedWord
 
 /-! Paid shared storage for the raw gate scheduler. Its two runtime inputs
 are the scalar capacity and the already constructed assignment template. -/

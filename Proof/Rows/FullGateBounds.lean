@@ -14,10 +14,13 @@ open NearCubicWires.P1Closure NearCubicWires.SupplierPipeline NearCubicWires.Sup
 open C10NaturalHardwireScore (positiveSum selectedSum)
 open CloseoutRowsPoolMinimum (negSum liveSum)
 open C10NaturalHardwireTarget (pPart nPart)
+open OffsetSourceGate (items)
 open scoped BigOperators
 noncomputable section
 
 
+def source {q : Nat} (g : NormalizedThresholdGate q) :=
+  (List.ofFn g.weight).flatMap intWord++intWord (g.threshold-1)
 
 end
 end PCJ45bee56da9f34d5a_FullGateBounds

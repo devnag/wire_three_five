@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.Writers.ThrDataCost
+import Proof.Wire_3_5.Primitive.SeedFix.TabCost
 
 /-! # PA (d): the SYM data stage's cost is polynomial
 

@@ -1,6 +1,10 @@
-import Mathlib.Algebra.Order.Floor.Semifield
-import Proof.SourceAssembly.SourcePhaseEntry
 import Proof.SourceAssembly.SourceRequestCoordBridge
+import Proof.SourceAssembly.SourcePhaseEntry
+import Proof.MachineModel.ControllerCappedSelected
+import Proof.CaseAnalysis.WitnessBoundedFamilyDecoded
+import Proof.CaseAnalysis.WitnessDyadicGuards
+import Proof.CaseAnalysis.WitnessInputCutoff
+import Proof.CaseAnalysis.NaturalWireCaps
 
 set_option autoImplicit false
 set_option maxRecDepth 120000
@@ -12,6 +16,7 @@ open NearCubicWires SourceInterfaces RepairSource RepairRepresentation
 open SelectedRecoveryIntegration CanonicalWitnessCodec SupplierPipeline
 open NearCubicWires.RepairOrdinary
 open CloseoutWitness CloseoutWitness.SelectedSource
+open private decode_cast size_cast from Proof.CaseAnalysis.WitnessDyadicGuards
 noncomputable section
 
 section site

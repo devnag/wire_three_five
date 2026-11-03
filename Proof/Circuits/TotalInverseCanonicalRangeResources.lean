@@ -1,6 +1,7 @@
 import Proof.Circuits.PaddedRunnerBudgetDomination
-import Proof.Circuits.TotalInverseCanonicalCompiledBodyRun
 import Proof.Circuits.TotalInverseCanonicalCompilerResources
+import Proof.Circuits.ValidatorCompositeLeafBounds
+import Proof.Circuits.TotalInverseCanonicalCompiledBodyRun
 
 /-! # Canonical structural-callee and range resources
 

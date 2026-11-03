@@ -1,5 +1,6 @@
 import Proof.Circuits.CanonicalBalancedCall
 import Proof.Circuits.VerifiedPlaneRequestBuilder
+import Proof.Foundations.VerifiedLinker
 
 /-!
 # Width-safe signed-plane rectangular calls

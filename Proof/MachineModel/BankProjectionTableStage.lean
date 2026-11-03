@@ -1,4 +1,7 @@
 import Proof.MachineModel.BankAtomContextRegisters
+import Proof.MachineModel.BankRefuterWordFrameProgram
+import Proof.MachineModel.CanonicalBitSerialMulProgram
+import Proof.MachineModel.CanonicalTwoPowProgram
 
 /-!
 # The projection-runner table, executed from the numeral bank's frame

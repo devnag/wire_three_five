@@ -1,4 +1,6 @@
 import Proof.Wire_3_5.UnionMachine.CWIface
+import Proof.Hierarchy.HierarchyFixedWord
+import Proof.Hierarchy.CompetitorRationalProducts
 
 /-! # C6 front, U5: the constant atom's code writer (v2 interface)
 

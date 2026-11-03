@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.CaseTwoShape
+import Proof.PCP.PCPPNativeLiteralSplit
+import Proof.PCP.PCPPNativeClauseOffsetSelect
 
 /-! Decode the actual two-literal native query packet. The original native
 reader supplies the two compact literal templates; the existing literal

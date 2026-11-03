@@ -1,7 +1,7 @@
 import Proof.Wire_3_5.Ledger.LedgerCap
 import Proof.Wire_3_5.Rows.RowBSchedule
 import Proof.Wire_3_5.Rows.RowBAsymptotics
-import Proof.Wire_3_5.Foundations.Skeleton
+import Proof.Wire_3_5.Foundations.SkeletonBase
 
 /-! # D2: the target comparisons (P3:3774-3779, 3831-3846)
 

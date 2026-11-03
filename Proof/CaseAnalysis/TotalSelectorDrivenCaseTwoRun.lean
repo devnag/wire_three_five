@@ -1,4 +1,5 @@
 import Proof.Circuits.TotalSelectorDrivenOccurrenceClosure
+import Proof.Circuits.SelectorDrivenRegisterTargetChainBase
 
 /-! # Live-branch total selector Case-two run -/
 

@@ -1,4 +1,11 @@
-import Proof.Wire_3_5.Recovery.RecoveryAssembly
+import Bindings.CLW20_Lemma3_8
+import Proof.CaseAnalysis.CaseOneHardness
+import Proof.CaseAnalysis.CaseTwoDirect
+import Proof.CaseAnalysis.Parameters
+import Proof.Wire_3_5.Recovery.RecoveryEventualBase
+import Proof.Wire_3_5.Recovery.RecoveryFamily
+import Proof.Wire_3_5.UnionMachine.UnionCodecBase
+import Proof.Wire_3_5.UnionMachine.UnionSchedule
 
 /-! # The recovery leaf `RecoveryLeaf G S₁` (P3:3699-3756, 3831-3852; D1.7)
 
@@ -26,21 +33,10 @@ open NearCubicWires.WireExponent3_5.Schedule
 open NearCubicWires.RepairSource.CloseoutLanguage (core clauseWidth)
 open Filter
 
-/-- The length schedule at the gate constants. -/
-noncomputable def recSched (l : Literals) (G : Split.Gate) (kclk : ℕ) : LengthSchedule :=
-  recSchedule (gateZeta_pos l) (gateZeta_lt l) kclk G.Apad (recDG l)
-
-/-- The width `q(2^{a(n)})` of the slice `n`. -/
-noncomputable def recWidth (l : Literals) (G : Split.Gate) (kclk n : ℕ) : ℕ :=
-  nativeWidth kclk G.Apad (2 ^ (recSched l G kclk).sourceIdx n)
-
 theorem tendsto_two_pow_sourceIdx (T : LengthSchedule) : Tendsto (fun n => 2 ^ T.sourceIdx n) atTop atTop :=
   tendsto_atTop_atTop.2 fun b => by
     obtain ⟨N, hN⟩ := tendsto_atTop_atTop.1 T.tendsto_sourceIdx b
     exact ⟨N, fun n hn => (hN n hn).trans (Nat.lt_two_pow_self).le⟩
-
-theorem tendsto_recWidth (l : Literals) (G : Split.Gate) (kclk : ℕ) : Tendsto (recWidth l G kclk) atTop atTop :=
-  (tendsto_nativeWidth kclk G.Apad).comp (tendsto_two_pow_sourceIdx (recSched l G kclk))
 
 /-- The slice length is at most `(q+1)⁴` once `K₀ ≤ q`. -/
 theorem n_succ_le (K₀ q n : ℕ) (hK : K₀ ≤ q) (hn : n ≤ K₀ * q * (Nat.log 2 (Lq q) + 1)) : n + 1 ≤ (q + 1) ^ 4 := by

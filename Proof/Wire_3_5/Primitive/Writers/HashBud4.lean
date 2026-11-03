@@ -1,10 +1,37 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.HashBud3
 import Proof.Wire_3_5.Primitive.SeedFix.C4HashLf3
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.HashFree
+import Proof.Wire_3_5.FinalPass.HashFree2
+import Proof.Wire_3_5.FinalPass.HashSz1
+import Proof.Wire_3_5.FinalPass.HashSz2
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.ThrB7
+import Proof.Wire_3_5.Primitive.Writers.ThrBud2
+import Proof.Wire_3_5.Primitive.Writers.ThrLf2
+import Proof.Wire_3_5.Primitive.Writers.ThrSide1
+import Proof.Wire_3_5.Primitive.SeedFix.C4GateThrB
+import Proof.Wire_3_5.Primitive.SeedFix.C4HashLf
+import Proof.Wire_3_5.Primitive.SeedFix.C4HashLf2
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymNB
+import Proof.Wire_3_5.Primitive.SeedFix.TS4L
+import Proof.Wire_3_5.Primitive.SeedFix.TS4W
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.HashBud2
+import Proof.Wire_3_5.Primitive.SeedFix.C4HashLf2Base
 
-/-! # c4 HASH budget (C), part 4: `hash_steps_gen` (`HashStepsAt2` at the HASH leaf's instance)
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2 c4 HASH budget (C), part 4: `hash_steps_gen` (the `HashStepsAt2` at the HASH leaf's instance)
 
 P3:3098-3100, 3105-3115 (`E₄` before `F`, `c₄` after): at the HASH leaf's instance (the layout
-`symLay wa S3 (hDl l Dnw)`, `C_L = C_nw + 1`, `C_d = hCd l F C_nw`, `stage4At`, `topFront3`, `numsW6`, the kept
+`symLay wa S3 (hDl l Dnw)`, `C_L = C_nw + 1`, `C_d = hCd l F C_nw`, the `stage4At`, `topFront3`, `numsW6`, the kept
 words writer `Wk`), with the THR and HASH free numbers' fits at `C_c` (`hash_fits`), one `c₄` bounds the HASH stage's
 steps at every THR call whose cell fits (`CellFit`, `B_m ≤ cap`): every term at its rate (`hash_steps_core`), the
 cell and the writer at rate `7` (`hX_ex`), the loop's bound `L_b = ℓ + 2tℓ₀` linear in `n`.
@@ -61,3 +88,5 @@ theorem hc_le (l : Literals) (F : GateFree l) (kclk coef A a0 : ℕ) (ha0 : a0 �
   omega
 
 end NearCubicWires.WireExponent3_5.PrimAsm.HashBud
+
+end

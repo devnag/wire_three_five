@@ -1,4 +1,19 @@
-import Proof.Wire_3_5.FinalPass.Core14
+import Lean
+import Proof.Wire_3_5.FinalPass.Core13Base
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.Core11
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.S5Seam2
+import Proof.Wire_3_5.FinalPass.Core15Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S5Core, part 15: the core half's exit (P3:3044-3048, 3170-3181)
 
@@ -67,11 +82,9 @@ theorem exitA_blank (r : FReq l F kclk coef A a ha) (y : Fin L.t) (hw : ∀ k, y
 end Exit
 
 section Final
-variable {l : Literals} (W : CoreWriters l) {mTh : ℕ} (L : S5Lay Sw0.nw) (hR : Bank.HalfRoom2 L mTh (mCoreOf W))
-
-/-- The final pad's cost. -/
-def finCost (m c : ℕ) : ℕ := m * (6 * c + 17) + 1 + (6 * c + 10)
 
 end Final
 
 end NearCubicWires.WireExponent3_5.FinalPass.Core
+
+end

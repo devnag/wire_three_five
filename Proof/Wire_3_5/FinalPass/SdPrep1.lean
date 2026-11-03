@@ -1,4 +1,6 @@
 import Proof.Wire_3_5.FinalPass.SdNum
+import Proof.Wire_3_5.Primitive.Writers.WriteNat
+import Proof.Wire_3_5.Primitive.Writers.UnaryArith
 
 /-! # S4 (the seeds phase), part 23: reading a unary list into registers (P3:3170-3178)
 

@@ -1,6 +1,7 @@
 import Proof.Wire_3_5.Foundations.OutMachineCarPipe
+import Proof.Wire_3_5.Primitive.SeedFix.CarCost
 
-/-! # The output machine carrier phase, part 7: the bound `T`
+/-! # X6 carrier phase, part 7: the bound `T`
 
 "This takes polynomial time" (P3:3175-3178). The masked stages' costs, below one power of the input's length:
 

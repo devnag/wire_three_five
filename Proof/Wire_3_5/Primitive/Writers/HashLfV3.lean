@@ -1,11 +1,42 @@
-import Proof.Wire_3_5.Primitive.SeedFix.C4HashLf4
+import Lean
+import Proof.Wire_3_5.Primitive.SeedFix.C4HashLf2Base
 import Proof.Wire_3_5.Primitive.Writers.HashSetH3
+import Proof.Wire_3_5.Primitive.Writers.KWT2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.C4ThrClosed
+import Proof.Wire_3_5.FinalPass.HashFree
+import Proof.Wire_3_5.FinalPass.HashFree2
+import Proof.Wire_3_5.FinalPass.HashFreeBuild
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.C3ReqIface3
+import Proof.Wire_3_5.Primitive.Writers.C3W3Leaf
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.HashLeaf
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.ThrLf1
+import Proof.Wire_3_5.Primitive.SeedFix.C4HashLf
+import Proof.Wire_3_5.Primitive.SeedFix.C4HashLf2
+import Proof.Wire_3_5.Primitive.SeedFix.C4HashLf3
+import Proof.Wire_3_5.Primitive.SeedFix.C4HkJ
+import Proof.Wire_3_5.Primitive.SeedFix.C4KIface
+import Proof.Wire_3_5.Primitive.SeedFix.C4LeafA
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTypes
+import Proof.Wire_3_5.Primitive.SeedFix.TS4O
+import Proof.Wire_3_5.Primitive.SeedFix.TS4W
+import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPoly
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.HashSetH2Base
 
-/-! # The HASH part of C4Leaf, v3: T-c at its true cost (`QCopy2`, `qCost2 q = 14q + 14`)
 
-The HashLf/HashLf3 (M77/M78) with the setup's copy `1^{Q'}` charged `qCost2` (`QCopy` at `10q + 10` is below the
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # The HASH part of C4Leaf, v3 (#204, PA2): T-c at its true cost (`QCopy2`, `qCost2 q = 14q + 14`)
+
+The HashLf/HashLf3 (M77/M78) with the setup's copy `1^{Q'}` charged `qCost2` (the `QCopy` at `10q + 10` is below the
 copy's `14q + 4`): the setup's cost **`hashC0Q`** (`hashC0` with `qCost2`), **`HashStepsAt3`** (`HashStepsAt2` at
-`hashC0Q`), `hash_at_call3` (`setupH_run2`, then `hash_call_run`), **`HashObl3`** (`HashSideAt2` unchanged,
+`hashC0Q`), `hash_at_call3` (the `setupH_run2`, then the `hash_call_run`), **`HashObl3`** (`HashSideAt2` unchanged,
 `HashStepsAt3`), `hashLeafC4_of3`, `hashLeafC4_3`, **`c4Leaf_of_obl3 : … → ∀ l, C4Leaf l`** (T-c's hypothesis
 `QCopy2`). Same shapes otherwise; M77/M78 untouched.
 
@@ -51,7 +82,7 @@ noncomputable def hashC0Q (l : Literals) (F : GateFree l) (EW : Envelope) (cW K3
             (HashCell.callCost ((gate0 l F).alg) (callInputs l F kclk coef A a0 ha0) hs ha Cs carriers translation T N F.cr (UnaryCalc.value L.D Cd n) (2 ^ PrimT.C4Cap.capExp2 Cc n) Bm Sm + 1 +
               (Wk.cost (PrimT.C4H.hashDataOf (gate0 l F).alg (callInputs l F kclk coef A a0 ha0) hs Cs carriers) ((Fp.val (FinalPass.HashFr.hashX (callInputs l F kclk coef A a0 ha0) (gate0 l F).alg Cs carriers hs)) 1) + 1 + PrimT.C4KW.qCost2 ((Fp.val (FinalPass.HashFr.hashX (callInputs l F kclk coef A a0 ha0) (gate0 l F).alg Cs carriers hs)) 2))))))
 
-/-- **(C): the HASH stage's steps within the seed budget** at every THR call of the family (`hash_steps_gen`,
+/-- **(C): the HASH stage's steps within the seed budget** at every THR call of the family (the `hash_steps_gen`,
 the twin of `thr_steps_gen`): the setup's cost `hashC0Q`, the pre-loop stage, the pad, the loop over the HASH child
 family `hashFamCall`, the finisher. -/
 def HashStepsAt3 (l : Literals) (F : GateFree l) (wa : RepairRepresentation.WilliamsAlgorithm) (K3 D3 Kp Dp : ℕ)
@@ -195,7 +226,7 @@ noncomputable def hashLeafC4_3 (l : Literals) (Wk : PrimT.C4KW.KWW)
   hashLeafC4_of3 l (C4LeafA.waOf l) cnw dnw (Classical.choose_spec (Classical.choose_spec PrimT.C4GateSym.needW_pb)).2
     (C3Leaf.c3ReqLeaf3 l) Wk hDR hKW hQC hobl
 
-/-- **The c4 leaf's finish shape** (`C4Stage6.StageT = ∀ l, C4Leaf l`): the dock `C4ThrClosed.c4Leaf_of_hash` at
+/-- **The c4 leaf's finish shape** (`C4Stage6.StageT = ∀ l, C4Leaf l`): root's dock `C4ThrClosed.c4Leaf_of_hash` at
 the HASH part, from the kept words writer, the three stage contracts' producers and the obligations. -/
 noncomputable def c4Leaf_of_obl3 (Wk : PrimT.C4KW.KWW)
     (hDR : ∀ {alg : RepairRepresentation.DecompositionAlgorithm} {Dexp : ℕ} {capT : ℕ → ℕ} (L : Lay)
@@ -216,3 +247,5 @@ noncomputable def c4Leaf_of_obl3 (Wk : PrimT.C4KW.KWW)
   C4ThrClosed.c4Leaf_of_hash (fun l => hashLeafC4_3 l Wk hDR hKW hQC (hobl l))
 
 end NearCubicWires.WireExponent3_5.PrimT.C4HL
+
+end

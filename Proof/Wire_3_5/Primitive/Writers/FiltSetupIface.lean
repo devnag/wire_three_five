@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.Writers.CellState
+import Proof.Wire_3_5.Primitive.Writers.Enum
 
 /-! # PA (d): the FILTER-setup machine's interface (built once by C6; docked by SYM, THR, HASH)
 

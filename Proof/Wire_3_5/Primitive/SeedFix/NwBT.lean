@@ -1,9 +1,28 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.ThrDecQ5
-import Proof.Wire_3_5.UnionMachine.NumsPh3
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDecR2
+import Proof.Wire_3_5.Primitive.SeedFix.TS4OBase
+import Proof.Wire_3_5.Primitive.Writers.SymDecNums
+import Proof.Wire_3_5.UnionMachine.NumsPh3Base
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.TS4N
+import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPoly
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.NumsPh2
+import Proof.Wire_3_5.Primitive.SeedFix.NwBTBase
 
-/-! # NW phase (b), the types: the value (b) computes, its link, its capacity atoms, its dock cost
 
-Phase (b) (`NumsPh3.PhB`) computes, at a THR call on the star, from W6's numbers `|𝒢|`, `cut`, `Σp`,
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # T3 NW phase (b), the types: the value (b) computes, its link, its capacity atoms, its dock cost
+
+Phase (b) (the `NumsPh3.PhB`) computes, at a THR call on the star, from W6's numbers `|𝒢|`, `cut`, `Σp`,
 `#primes` (ports 3, 5, 7, 6), the gap numbers' `2^{sb}` and the star numbers' `n`, `k_h = s·⌊r/2⌋`:
 
 * **`vVal`**: `V = 2^e·B·2^{sb}·#primes` with `q = 2|𝒢|·cut + 1`, `B = (|𝒢|·Σp·2^{sb}·q² + 1)·8192·n²`,
@@ -27,11 +46,6 @@ set_option autoImplicit false
 namespace NearCubicWires.WireExponent3_5.PrimT.NwB
 open NearCubicWires NearCubicWires.WireExponent3_5 NearCubicWires.WireExponent3_5.Split
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.SupplierPipeline
-
-/-- **The value** `V = 2^e·B·2^{sb}·#primes`, `e = ⌊(5k_h+3)/4⌋`, `B = (|𝒢|·Σp·2^{sb}·q²+1)·8192·n²`,
-`q = 2|𝒢|·cut + 1`. -/
-def vVal (g c ps sb np n kh : ℕ) : ℕ :=
-  2 ^ ((kh * 5 + 3) / 4) * ((g * ps * sb * (2 * (g * c) + 1) * (2 * (g * c) + 1) + 1) * 8192 * n * n) * sb * np
 
 section Call
 variable (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n : ℕ}
@@ -95,3 +109,5 @@ def NeedB : Prop :=
 end Props
 
 end NearCubicWires.WireExponent3_5.PrimT.NwB
+
+end

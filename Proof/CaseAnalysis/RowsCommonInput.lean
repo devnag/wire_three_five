@@ -1,5 +1,9 @@
+import Proof.Amplification.RecoveryFocusDock
+import Proof.Hierarchy.CompetitorCountTableBounds
 import Proof.Hierarchy.CompetitorCountTableRecordRow
-import Proof.Hierarchy.CompetitorRowCountPermutation
+import Proof.Hierarchy.CompetitorMonomialEntry
+import Proof.Hierarchy.CompetitorSelectedDimensions
+import Proof.PCP.ProjectionNormalizationDriverAtoms
 import Proof.Supplier.RowOffsetFamilies
 import Proof.Supplier.RowTupleTerms
 

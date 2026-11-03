@@ -1,5 +1,29 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.UnionSetup
 import Proof.Wire_3_5.Transfer.LiteralSources
+import W3.Proof.Foundations.SourceRegistry
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Bindings.CLW20_Lemma3_10
+import Bindings.CLW20_Lemma3_11_TM2
+import Bindings.CLW20_Lemma3_8
+import Bindings.CLW20_Lemma3_9_TM2
+import Bindings.CLW20_Theorem1_13
+import Bindings.CTW26_Lemma3_2
+import Bindings.CW19_Proposition18_2_TM2
+import Bindings.HLW06_Theorem8_2
+import Bindings.RS62_Theorem4
+import Bindings.TuringBridge.Budget
+import Bindings.Williams14_Corollary4_4
+import Proof.CaseAnalysis.FinalTapeLocality
+import Statement
+import Proof.Wire_3_5.UnionMachine.UnionSetupBase
+
+
+noncomputable section
+
 
 /-! # The pinned union setup with explicit constants `S₁` (P3:3485-3491, 3610-3614, 3685-3697; D1)
 
@@ -9,7 +33,7 @@ small enough to leave slack in all three tests" (P3:3610-3614), and the oracle d
 "Before fixing this machine, choose `G` large enough that `G/c_STV` exceeds a general-Boolean simulation exponent for
 both target classes and the desired polynomial advantage exponent, with a fixed positive margin" (P3:3685-3692).
 
-`unionSetupS0` chose its constants by choice from `exists_unionParams`; the recovery needs the completeness
+`unionSetupS0` (M9) chose its constants by choice from `exists_unionParams`; the recovery needs the completeness
 constants' `ζ` POSITIVE (the XOR lemma's accuracy `δ = ζ`, P3:3715-3724), which an opaque choice does not certify.
 `unionSetupS1` is `S₀` with the explicit constants `unionSoundParams`/`unionCompleteParams` at a chosen rational
 `ε ∈ (0, min(1, g/1000))` and threshold `τ` (`gateEps`, `gateTau`).
@@ -112,18 +136,25 @@ end Constants
 
 variable (l : Literals) (G : Split.Gate)
 
-/-- **The pinned union setup `S₁`**: `S₀` with the explicit constants and the oracle degree `17·c_STV`. -/
-noncomputable def unionSetupS1 : G.Setup := fun kclk coef A a ha L hL =>
-  setupOfResult (G.inputs kclk coef A a ha) L (hierarchyOf hL) (Classical.choose_spec hL)
-    (hierarchyPCP l (hierarchyOf hL)).data (paddedWidth l G (hierarchyOf hL)) (fun _ => le_max_left _ _) (gatePCPP l)
-    (recOracleDeg l) (gateParams1 l) (gridMassOf (gateCδ1 l) G.row.sp) (fun _ => by unfold gridMassOf; positivity)
-    G.row.sp
+/-- The masked verifier's outer error `ε/6` is positive (the reserve of Lemma H.3's proof is then met past an onset). -/
+theorem gateOuterError_pos : (0 : ℝ) < ((gateParams1 l).outerError : ℝ) := by
+  have h : (gateParams1 l).outerError = gateEps l / 6 := rfl
+  rw [h]
+  have := gateEps_pos l
+  exact_mod_cast (show (0 : ℚ) < gateEps l / 6 by positivity)
 
-/-- The padded width is the ledger's `q(N)` eventually. -/
-theorem unionSetupS1_width (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) (L : Language)
-    (hL : InNTIME (fun n => n ^ (kclk + 2)) L) (hApad : (gateSource l).degrees.proofLog + 6 ≤ G.Apad) :
-    ∃ N₀, ∀ N, N₀ ≤ N →
-      (unionSetupS1 l G kclk coef A a ha L hL).pcp.nativeWidth N = Ledger.nativeWidth kclk G.Apad N :=
-  unionSetupS0_width l G (recOracleDeg l) kclk coef A a ha L hL hApad
+/-- **The setup off the recovered language** (`S₁`): the hierarchy `choose (L ∈ NTIME(T))`, its succinct verifier at
+`λ_a`, the explicit constants, the oracle degree `17·c_STV`, and `live = false`: the machine rejects outright there, so
+soundness and time hold trivially and completeness is vacuous. -/
+noncomputable def unionSetupS1 : G.Setup := fun kclk coef A a ha L hL =>
+  setupOf (G.inputs kclk coef A a ha) L (hierarchyOf hL) (Classical.choose_spec hL) (gateMW l) (lenG l)
+    (Classical.choice (NearCubicGates.Close.Succinct.succinctVerifier_exists (hierarchyOf hL) (lenG l))) (gatePCPP l)
+    false (recOracleDeg l) (gateParams1 l) (gateOuterError_pos l) (gridMassOf (gateCδ1 l) G.row.sp)
+    (fun _ => by unfold gridMassOf; positivity) G.row.sp
+
+theorem unionSetupS1_live (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) (L : Language)
+    (hL : InNTIME (fun n => n ^ (kclk + 2)) L) : (unionSetupS1 l G kclk coef A a ha L hL).live = false := rfl
 
 end NearCubicWires.WireExponent3_5.Transfer
+
+end

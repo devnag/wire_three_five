@@ -1,14 +1,36 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.PlanW3
 import Proof.Wire_3_5.Assembly.Ok
 import Proof.Wire_3_5.UnionMachine.SetupFactsE
 import Proof.Wire_3_5.UnionMachine.Decision
 import Proof.Wire_3_5.UnionMachine.UnionCallCount
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Assembly.Free
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.UnionAtomsOk
+import Proof.Wire_3_5.UnionMachine.UnionCodec
+import Proof.Wire_3_5.UnionMachine.Plan
+import Proof.Wire_3_5.UnionMachine.PlanW2
+import Proof.Wire_3_5.UnionMachine.Slack
+import Proof.Wire_3_5.Assembly.FreeBase
+import Proof.Wire_3_5.UnionMachine.UnionCallCountBase
+import Proof.Wire_3_5.UnionMachine.UnionCodecBase
+import Proof.Wire_3_5.UnionMachine.PlanW2Base
+import Proof.Wire_3_5.UnionMachine.SetupFactsBase
+import Proof.Wire_3_5.UnionMachine.UnionSchedule
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # C6: leaf U with the atom test's completeness
 
 "It rejects malformed descriptions, oversized atoms, and coefficients outside the fixed grid" (P3:3669-3671); the
 completeness the atom test leaves is for accepting guesses whose atoms pass it (P3:3711-3716). PlanW3's worker
-(`workerMeaning2`, the front at `FrontsFWE3`) meets `CompleteForEventuallyOk` directly: the padded
+(`workerMeaning2`, the front at `FrontsFWE3`) meets the `CompleteForEventuallyOk` directly: the padded
 encoding of an accepting guess `g` with `AtomsOkG g` is accepted (`completeOk`, PlanW3's argument with `g` itself).
 * **`completeOk`**; `leafAtPosE4` (`Split.UnionLeafAt2`), the coefficient-`0` branch `(PlanW2.leafAtZeroE …).toOk`;
   `unionLeafF_of_workersE4`, `unionLeafF_planE4`, `union_planW4G`;
@@ -35,7 +57,7 @@ variable {kclk : ℕ} {E : Envelope} {B : TimeBudget kclk E} {I : PrimitiveInput
 padded to the `⌊N/16⌋`-bit witness, is accepted. -/
 theorem completeOk (W : WorkerAt3 S P) : CompleteForEventuallyOk S P W.machine := by
   refine ⟨W.onset, fun N hN z g hg hat => ?_⟩
-  have hlen : g.word.length ≤ N / 16 := hg.2.2.1
+  have hlen : g.word.length ≤ N / 16 := hg.2.2.2.2.2.2.2.2.1
   set w := encodeGuess g ++ List.replicate (N / 16 - g.word.length) false with hw
   have hwl : w.length = N / 16 := by
     simp only [hw, List.length_append, List.length_replicate, encodeGuess]
@@ -92,7 +114,7 @@ noncomputable def leafAtPosE4 (e : ℕ) (F : GateFree l) (coef A : ℕ) (facts :
 noncomputable def unionLeafF_of_workersE4 (e : ℕ) (facts : SetupFactsFE l e) (acc : AcceptsCallFE l e)
     (W : ∀ F : GateFree l, GateFreeOK l F → WorkersFE3 l e F) : UnionLeafF2 l :=
   fun F hF =>
-  ⟨kE l e, (W F hF).1, aE l e, haE l e, fun coef =>
+  ⟨(W F hF).1, aE l e, haE l e, fun coef =>
     if hc : 1 ≤ coef then leafAtPosE4 l e F coef (W F hF).1 facts ((W F hF).2.2 coef hc) (W F hF).2.1
     else (leafAtZeroE l e F coef (W F hF).1 (W F hF).2.1 hc acc).toOk⟩
 
@@ -116,7 +138,9 @@ noncomputable def union_planW4 (c1 : C1Impl)
     (fronts : ∀ l : Literals, Σ e : ℕ, ∀ F : GateFree l, GateFreeOK l F → FrontsFWE3 e l F) :
     ∀ l : Literals, UnionLeafF2 l :=
   union_planW4G c1 Decision.decideF fronts
-    (fun l kclk coef A a ha F L hL => Transfer.UnionCallCount.setupF_calls_le l kclk coef A a ha F L hL)
+    Transfer.UnionCallCount.callCountF
     SetupFactsE.acceptsCallFE SetupFactsE.setupFactsFE
 
 end NearCubicWires.WireExponent3_5.UnionMachine.PlanW4
+
+end

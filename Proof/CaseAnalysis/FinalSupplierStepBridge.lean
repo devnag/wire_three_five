@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.FinalSupplierTotality
+import Proof.MachineModel.Runs
 
 namespace NearCubicWires.RepairOrdinary.CloseoutWitness.Weak
 open LocalBitMultitape SourceInterfaces RepairSource ExtDecompositionBatch

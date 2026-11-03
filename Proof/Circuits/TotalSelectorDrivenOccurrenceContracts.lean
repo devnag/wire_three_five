@@ -1,4 +1,5 @@
 import Proof.Circuits.TotalSelectorDrivenOccurrenceEncodingRuns
+import Proof.Circuits.InverseSelectorOccurrenceEncodingClosure
 
 /-! # Onset-free selector occurrence contracts -/
 

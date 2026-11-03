@@ -23,6 +23,12 @@ structure Descriptor where
   degree_fit : CloseoutRawRows.RawMonomialDegreeAtMost degree polynomial
   select : Fin (2^((s+1)/2)) → Fin (2^((s+1)/2)) → Bool
 
+noncomputable def commonWidth : Nat :=
+  (live.card+1)+(2*((s+1)/2)+
+    2*(CompactBounds.radix a live occ*
+      (min degree (BinaryPool.pool a live occ s harity).length*(live.card+1))+
+      (live.card+1)+1)+4)
+
 attribute [local irreducible] BinaryPool.pool CompactBounds.radix
 
 end NearCubicWires.P1TopDownFamilyAudit

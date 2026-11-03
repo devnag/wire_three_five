@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryOuterTableWhole
+import Proof.Foundations.OrdinaryTapeRenaming
 
 namespace NearCubicWires.RepairOrdinary.RecoveryOuterRoot
 open LocalBitMultitape RecoveryExecution RecoveryRootRound RecoveryRowStructure

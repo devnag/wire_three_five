@@ -1,8 +1,8 @@
-import Proof.Wire_3_5.FinalPass.FreeGen
-import Proof.Wire_3_5.Primitive.SeedFix.C4KIface
-import Proof.Wire_3_5.Primitive.SeedFix.C4SymKA4
-import Proof.Wire_3_5.Primitive.Writers.ThrFam2
 import Proof.Wire_3_5.Primitive.Writers.ThrG3
+import Proof.Wire_3_5.FinalPass.FreeGen
+import Proof.Wire_3_5.Primitive.Writers.ThrFam2
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTypesBase
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymKA4
 import Proof.Wire_3_5.Primitive.Writers.ThrN4
 
 /-! # c4 THR block, the THR stage at one call (twin of `sym_call_run4`)

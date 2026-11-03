@@ -1,5 +1,6 @@
-import Proof.Wire_3_5.FinalPass.SeamsProg3
-import Proof.Wire_3_5.FinalPass.AssemblyDock
+import Proof.Wire_3_5.FinalPass.SeamsProg3Base
+import Proof.Wire_3_5.FinalPass.SeamsProg2Base
+import Proof.Wire_3_5.FinalPass.SeamsS4
 
 /-! # The final pass's assembly dock, v2: S4's words with the filter's parameters
 

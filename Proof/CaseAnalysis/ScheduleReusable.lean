@@ -1,4 +1,8 @@
 import Proof.CaseAnalysis.ScheduleTest
+import Proof.Circuits.DecompositionCountDrivers
+import Proof.Circuits.MatrixBucketDimensionsIncrement
+import Proof.PCP.PCPPairReusable
+import Proof.Amplification.RecoveryFocusRetained
 
 /-! Reusable schedule calls preserve exact input fields and paid blank
 workspace. The full test's physical time bounds every materialized port. -/

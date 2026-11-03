@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoveryTableSavedClear
+import Proof.Amplification.RecoveryEraseWidth
 
 /-! Restore the original first-field index twice, advance the actual graph
 count and advance the actual prior-reference count in the retained bank. -/

@@ -1,4 +1,5 @@
 import Proof.Foundations.AsymptoticAdapters
+import Proof.Foundations.SupplierPipeline
 import Proof.MachineModel.SupplierRuntime
 
 /-!

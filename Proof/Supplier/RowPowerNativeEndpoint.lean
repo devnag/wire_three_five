@@ -1,4 +1,5 @@
 import Proof.Supplier.RowPowerNativeReusable
+import Proof.MachineModel.ClockScalarFields
 
 /-! Exact reusable endpoint and binary meaning of the executed native-field
 appender. Its output is ready for the next call on the same physical bank. -/
@@ -10,6 +11,12 @@ set_option maxHeartbeats 250000
 set_option maxRecDepth 120000
 set_option warningAsError true
 
+def tapes (source : List Bool) (w C : ℕ) (positive negative : List Bool) : Fin 15 → List Bool :=
+  ![source,List.replicate C false,List.replicate C false,List.replicate C false,
+    List.replicate C false,List.replicate C false,List.replicate C false,
+    List.replicate C false,List.replicate C false,List.replicate w true,
+    positive++[false],negative++[false],List.replicate C false,
+    List.replicate C true,List.replicate (C+1) false]
 def block (w : ℕ) (z : ℤ) (negative : Bool) :=
   RowPowerBlock.digits negative (decide (z<0))
     (ClockNormalize.resize w (binary (natBitLength z.natAbs) z.natAbs))

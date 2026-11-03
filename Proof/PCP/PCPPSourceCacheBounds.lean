@@ -40,4 +40,18 @@ theorem budget_bound (a : PointwisePCPPAlgorithm) (request : PCPPRequest a.minim
   unfold budget
   omega
 
+theorem polynomial_run (a : PointwisePCPPAlgorithm) (request : PCPPRequest a.minimumArity) :
+    ∃ r,run (machine a) (totalBudget a request) (input a request)=some r ∧
+      (∀ j : Fin 19,r.final.tapes (cacheSlots a j)=
+        PCPPQueryIndexPadding.clauseData (pcppOutput request (a.output request)) request.arity 0
+          (PCPPQueryCachedBounds.capacity a (request.circuit.size+request.arity)) [] j) ∧
+      (∀ j : Fin 19,r.final.heads (cacheSlots a j)=PCPPQueryClauseReuse.heads j) ∧
+      r.final.tapes (sizeSlot a)=List.replicate request.circuit.size true ∧
+      r.final.heads (sizeSlot a)=0 ∧ r.steps ≤ totalBudget a request := by
+  obtain ⟨r,hr,ht,hh,hs,hsh,hb⟩:=prepare_run a request
+  have hm:=runFrom_moreFuel (machine a) (budget a request)
+    (totalBudget a request-budget a request) _ r hr
+  rw [Nat.add_sub_of_le (budget_bound a request)] at hm
+  exact ⟨r,hm,ht,hh,hs,hsh,hb.trans (charge_bound a request)⟩
+
 end NearCubicWires.RepairOrdinary.PCPPSourceCache

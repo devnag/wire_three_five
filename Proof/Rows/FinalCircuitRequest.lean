@@ -1,4 +1,5 @@
 import Proof.Rows.FinalDominanceEncoder
+import Proof.Supplier.RowBinLiftInput
 
 set_option autoImplicit false
 set_option maxHeartbeats 250000

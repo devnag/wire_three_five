@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryBoundedNativeUnarySchedule
+import Proof.PCP.PCPUnaryStackPush
 
 /-! The emitted grammar literal's actual output address is base plus its
 runtime polarity bit. Its unary stack entry and both reset logs are

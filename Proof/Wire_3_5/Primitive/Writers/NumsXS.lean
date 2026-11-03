@@ -1,5 +1,6 @@
 import Proof.Wire_3_5.Primitive.Writers.NumsXT
 import Proof.Wire_3_5.Primitive.Writers.SymDecStar
+import Proof.Wire_3_5.Primitive.Writers.LevelW
 
 /-! # The SYM dimension stage at `m_S`, part 1: the POP term
 

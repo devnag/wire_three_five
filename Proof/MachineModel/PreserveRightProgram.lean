@@ -1,4 +1,6 @@
 import Proof.Foundations.CanonicalBinaryProgram
+import Proof.Foundations.PolynomialClock
+import Proof.Foundations.VerifiedLinker
 
 /-!
 # Count-preserving program adapter

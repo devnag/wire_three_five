@@ -1,12 +1,32 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.HashCost3
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.HashCost1
+import Proof.Wire_3_5.FinalPass.HashCost2
+import Proof.Wire_3_5.FinalPass.HashOcc
+import Proof.Wire_3_5.FinalPass.HashPad
+import Proof.Wire_3_5.FinalPass.HashPre1
+import Proof.Wire_3_5.FinalPass.HashPre2
+import Proof.Wire_3_5.FinalPass.HashS
+import Proof.Wire_3_5.FinalPass.HashSz2
+import Proof.Wire_3_5.FinalPass.SymCost4
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.HashCost3Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The HASH child's cost, part 4: **`hcost_hash`** (`HashEAt`'s `hcost`)
 
 P3:2253-2290, 3011-3016, 3098-3107: at every prefix `p ++ [b]` of at most `s_h = 2tℓ₀` bits and every printer request
 `r` of the child request's word, the HASH child's steps `hCoreCost` are at most `K_ch = symKch = 2^{n − k + d_A L − 4}`:
-the Hb prep `≤ 2^{32}(hbS + Cap + 1)^3 ≤ 2^{3e_C + 38}` (`HbPrepBound`, `hbS ≤ Cap`), the cells
+the Hb prep `≤ 2^{32}(hbS + Cap + 1)^3 ≤ 2^{3e_C + 38}` (the `HbPrepBound`, `hbS ≤ Cap`), the cells
 `n_{Hb}(K_c + 2) + 1 ≤ 2^{2e_C + 2}` (`K_c = Cap`), the terminator `64(|w| + 64) ≤ 2^{e_W + 13}`, and C6's assembler with
-the printer child `≤ 2^{n − k + (d_A−1)L − 4}` (`asmCost_le`, `childCost_le` at `q = 2^{e_C}2^{e_X}`,
+the printer child `≤ 2^{n − k + (d_A−1)L − 4}` (the `asmCost_le`, `childCost_le` at `q = 2^{e_C}2^{e_X}`,
 `c3Cost_le_B`, `kch_pow`); the exponents are those of `hcostH_exp`.
 
 * **`hcost_hash`**.
@@ -225,3 +245,5 @@ theorem hcost_hash (c : SymC) (wa : WilliamsAlgorithm) (hc : HpreH l (gate0 l F)
 end Gate
 
 end NearCubicWires.WireExponent3_5.FinalPass.HashFr
+
+end

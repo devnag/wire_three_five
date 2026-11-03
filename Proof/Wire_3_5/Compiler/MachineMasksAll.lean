@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Compiler.MachineMasksAtom
+import Proof.Wire_3_5.Compiler.MachineStream
 
 /-! # C3.3, the monomial masks: one monomial's masks as a machine (P3:1924-1926)
 
@@ -220,6 +221,7 @@ theorem dockH_nAtoms (H : Fin 12 → ℕ) (v : Fin 11 → ℕ) :
   · exact dockH_slot nAtoms nAtoms_inj H v 9
   · exact dockH_slot nAtoms nAtoms_inj H v 10
   · exact dockH_other nAtoms H v 11 (by decide)
+
 
 theorem init_run (BWA z : List Bool) (cap cap3 : ℕ) (hcap : 2 * z.length + 1 ≤ cap)
     (hcap3 : 2 * (2 * z.length + 1) + 2 + 1 + 1 ≤ cap3) :

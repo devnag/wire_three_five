@@ -1,4 +1,7 @@
+import Proof.MachineModel.CanonicalBalancedNatSumProgram
 import Proof.MachineModel.CanonicalConditionalTouchProgram
+import Proof.MachineModel.CanonicalIntPredecessorProgram
+import Proof.Circuits.CanonicalPairedCall
 import Proof.MachineModel.CanonicalStructuralGF2EvaluationProgram
 
 open Finset

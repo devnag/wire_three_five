@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.MachineModel.BlockJoin
+import Proof.Wire_3_5.MachineModel.BlockWhile
 
 /-! # C3 machines: the stream-and-register kit on Block v3
 

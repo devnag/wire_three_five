@@ -1,5 +1,5 @@
+import Proof.CaseAnalysis.RowsEnumeratedCuts
 import Proof.CaseAnalysis.RowsCommonInput
-import Proof.Supplier.RowTupleCutList
 
 /-! The native cache fixes the actual common coordinate width. Incidence
 lists retain every monomial occurrence, including empty monomials. Native

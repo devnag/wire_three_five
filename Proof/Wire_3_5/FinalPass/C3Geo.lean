@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.FinalPass.SymFr3
+import Proof.Wire_3_5.FinalPass.SymFr3Base
 
 /-! # The compiler request's geometry clauses (mode-generic)
 

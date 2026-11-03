@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryMatrixScoreConstantsEntry
+import Proof.Hierarchy.HierarchyBinaryMultiplyEntry
 
 /-! Every assignment physically erases its twelve scalar work tapes, then
 copies the retained native constants into its two accumulators. Cold empty

@@ -1,6 +1,7 @@
+import Proof.CaseAnalysis.ScheduleClog
+import Proof.PCP.ProjectionDimensionPolynomialBounds
 import Proof.Amplification.RecoveryTseitinRawIncrement
 import Proof.CaseAnalysis.Language
-import Proof.CaseAnalysis.ScheduleClog
 
 /-! One cold ordinary program computes the literal selected clause width
 clog(2,(q+2)^D). The degree is fixed before the hierarchy clock; no ceiling

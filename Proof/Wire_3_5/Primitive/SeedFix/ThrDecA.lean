@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.Writers.HashNum
+import Proof.Wire_3_5.Primitive.Writers.SymDecReq2
 
 /-! # THR decode front, part A: the call's request and counts, register-only
 

@@ -1,4 +1,5 @@
 import Proof.SourceAssembly.SourceSkelEntrySite2
+import Proof.SourceAssembly.SourceSkelKeptW2
 
 section
 set_option autoImplicit false
@@ -16,10 +17,14 @@ namespace NearCubicWires.SourceSkeleton.StartGuard
 open NearCubicWires.SourceSkeleton.EntrySite NearCubicWires.SourceSkeleton.EntrySite2 NearCubicWires.SourceSkeleton.KeptW
 open NearCubicWires.SourceSkeleton.ClassR NearCubicWires.SourceSkeleton.Params NearCubicWires.SourceSkeleton.ClassV4
 open NearCubicWires.SourceSkeleton.ParamsV4
+open NearCubicWires.SourceSkeleton.Fill (XtraW)
 open NearCubicWires.SourceSkeleton.FillV5 NearCubicWires.SourceSkeleton.FirstW NearCubicWires.SourceSkeleton.XtraF
 noncomputable section
 
 section site
+variable (selector : CyclicChoice.Laws) (mask : MaskProducer)
+  (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector) (rows : PCJc4297ab269d8423a_Source.RowLibrary selector)
+  (sources : EightSources) (gamma : Real) (hg : 0 < gamma) (hh : gamma < 1/2) (p : Parameters sources gamma)
 
 set_option hygiene false in
 local notation "𝔮" => C10PartsSchedule.widthAt sources (kW selector mask packets rows sources gamma hg hh p) n
@@ -35,6 +40,14 @@ local notation "𝔭𝔩" => plSite selector (XtraF.xtraF selector) mask packets
 set_option hygiene false in
 local notation "𝔡" => dSite selector (XtraF.xtraF selector) mask packets rows sources gamma hg hh p
 
+
+/-- **The init's strip words** at the site constants. -/
+def resWSite (mode : Bool) (n b : ℕ) : ℕ → List Bool := fun i =>
+  InitS.initResVal ℜ 𝔮 𝔏 (pC sources gamma hg hh p) (pE sources gamma hg hh p) 1 3 (ldC sources gamma hg hh p)
+    (ldE sources gamma hg hh p) mode (SourceBudget.Params.tgOf sources gamma hg hh p)
+    (InitS.valAllX mode 𝔏 𝔮 ℜ (dE sources gamma hg hh p) (dC sources gamma hg hh p) (cwE sources gamma hg hh p)
+      (cwC sources gamma hg hh p) (ldC sources gamma hg hh p) (ldE sources gamma hg hh p) b
+      (NearCubicWires.SourceStart.MetaRun.MBof selector sources p packets 𝔏 𝔮)) i
 
 end site
 

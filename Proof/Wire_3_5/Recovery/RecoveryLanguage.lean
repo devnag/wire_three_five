@@ -1,6 +1,21 @@
-import Proof.Wire_3_5.Ledger.LedgerLengths
-import Proof.Wire_3_5.Recovery.RecoveryCaseTwo
+import Lean
+import Proof.Wire_3_5.Recovery.RecoveryFamily
+import Proof.Wire_3_5.UnionMachine.UnionCodecBase
+import Proof.Wire_3_5.UnionMachine.UnionSchedule
 import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Transfer.LiteralSources
+import Proof.Wire_3_5.Ledger.LedgerLengths
+import Proof.CaseAnalysis.Language
+import W3.Proof.Foundations.SourceRegistry
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.Recovery.RecoveryLanguageBase
+
+
+noncomputable section
+
 
 /-! # The canonical language with the row-B XOR schedule (P3:3699-3756; D1.3)
 
@@ -15,7 +30,7 @@ Paper quantities:
   (`recRefuter`), whose hierarchy language `recL` is in `NTIME(N^{kclk+2})` (`recL_inNTIME`);
 * the union setup at that language (`recSetup`: `unionSetupS1` at `recL`), the machine `recMachine U P = U.build P recL`;
 * the XOR schedule `t(q) + 1` (`recCopies`; one copy beyond `sched(L(q))`, so the Case-2 advantage is strictly below
-  `e_{t(q)}`) on the ledger's width `q(2^a)` (`recSchedule`, `LengthSchedule` with its length lemmas);
+  `e_{t(q)}`) on the ledger's width `q(2^a)` (`recSchedule`, the `LengthSchedule` with its length lemmas);
 * **`recLanguage`**: at length `n`, the core of the selected source index `a(n)`, of the padded PCP of `recSetup`, at the
   refuter's output for `recMachine` at `2^{a(n)}`;
 * **`rejected_yes_eventually`**: past an onset, the refuter's output is a yes-instance the machine rejects
@@ -34,7 +49,7 @@ variable (l : Literals) (G : Split.Gate)
 
 /-- The hierarchy and its refuter at the clock `N^{kclk+2}` (P3:3633, 3699-3702). -/
 noncomputable def recRefuter (kclk : ℕ) : HierarchyRefuterAlgorithm (fun n => n ^ (kclk + 2)) :=
-  l.eightSources.hierarchy (fun n => n ^ (kclk + 2)) (PolynomialClock.ordinaryClock kclk)
+  l.eightSources.hierarchy kclk
 
 /-- The hierarchy language. -/
 noncomputable def recL (kclk : ℕ) : Language := fun n x => (recRefuter l kclk).hierarchy.timedView.accepts n x
@@ -42,23 +57,8 @@ noncomputable def recL (kclk : ℕ) : Language := fun n x => (recRefuter l kclk)
 theorem recL_inNTIME (kclk : ℕ) : InNTIME (fun n => n ^ (kclk + 2)) (recL l kclk) :=
   ⟨(recRefuter l kclk).hierarchy, fun n x => hierarchy_language_exact _ n x⟩
 
-variable {ζ : ℚ} (h0 : 0 < ζ) (h1 : ζ < 1 / 2)
-
-/-- The XOR schedule `t(q) + 1`. -/
-def recCopies (q : ℕ) : ℕ := rowBt h0 h1 q + 1
-
-/-- The length schedule on the ledger's width with `t + 1` copies (`rowBLengthSchedule`, one copy more). -/
-noncomputable def recSchedule (kclk Apad dG : ℕ) : LengthSchedule :=
-  let S := rowBLengthSchedule h0 h1 kclk Apad dG
-  { S with
-    t := fun q => S.t q + 1
-    J := S.J + 1
-    t_pos := fun q => by omega
-    t_jump := fun q q' hcw hqq' hq' => by have := S.t_jump q q' hcw hqq' hq'; omega
-    t_tendsto := Filter.tendsto_atTop_atTop.2 fun b => by
-      obtain ⟨N, hN⟩ := Filter.tendsto_atTop_atTop.1 S.t_tendsto b
-      exact ⟨N, fun q hq => by have := hN q hq; omega⟩
-    t_log := fun q => by have := S.t_log q; nlinarith }
+-- The canonical language of the old outer step (`recLanguage`, the core of the hierarchy PCP) is replaced by the
+-- three-way core of the recovery (Cases 1a, 1b, 2 at the pair `Γ*`).
 
 end Language
 
@@ -69,3 +69,5 @@ section Refuter
 end Refuter
 
 end NearCubicWires.WireExponent3_5.Transfer
+
+end

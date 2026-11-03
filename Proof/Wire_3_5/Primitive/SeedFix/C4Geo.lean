@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.Primitive.Writers.WriterIface
+import Proof.Wire_3_5.Primitive.Writers.WriterIfaceBase
 import Proof.Wire_3_5.Compiler.MachineReqContract3
 
 /-! # SEEDFIX C4.L, value link V1: the pool geometry of a call (P3:1188-1216, 1655-1664, 1709-1737)
@@ -16,7 +16,7 @@ This module fixes, per call (`P : StarParams`, translation `σ`), the C3 request
   basis, data positions `i` with `i + 1` not a power of two) and unit vectors for the unblocked coordinates;
 * `offset σ`: a point of the coset `σ` (the unit vector of column `σ_j` in block `j`);
 * `flips`: the flip pattern of corner `k` of cell `x`, `offset ⊕ corner k of (e_L(x.1), e_R(x.2))`, at index
-  `4·cellNumC x + k` ('s atom numbering `(4·rowIdx + k)·G + gi`);
+  `4·cellNumC x + k` ( atom numbering `(4·rowIdx + k)·G + gi`);
 * `centerAt row col`: the center at table position `(row, col)`, the pulled-back point of the offset at
   `(φ row, φ col)`;
 * the fields the C3 compiler reads (`sideField`, `flipsField`, `colsField`, `gateField`): the machine interface of the

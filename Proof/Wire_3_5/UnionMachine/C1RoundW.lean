@@ -1,7 +1,8 @@
+import Proof.Wire_3_5.UnionMachine.GateConv
+import Proof.Wire_3_5.UnionMachine.C1Cnt
+import Proof.Wire_3_5.UnionMachine.C1Rat
 import Proof.Wire_3_5.FinalPass.LiftR
 import Proof.Wire_3_5.Primitive.Writers.SymDecStreams
-import Proof.Wire_3_5.UnionMachine.C1Cnt
-import Proof.Wire_3_5.UnionMachine.GateConv
 
 /-! # C6 front, the C1 dock: one variable's round, the register program (P3:1326-1330, 3395-3399, 3673)
 

@@ -13,6 +13,7 @@ set_option warningAsError true
 noncomputable def body := Composition.machine RowMaskLookup.machine RowMaskBankClear.machine
 def selected (i : Fin 9) : Bool := decide (i=0)
 noncomputable def machine := MaskedReset.machine body selected
+def capacity (N w M : ℕ) := RowMaskLookup.budget N w M+2*N+4*w+8
 
 
 end NearCubicWires.RepairOrdinary.RowMaskLookupReusable

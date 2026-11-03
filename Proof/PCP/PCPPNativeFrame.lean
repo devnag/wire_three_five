@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeForwardQuery
+import Proof.Assembly.AppendOutputFrame
 
 /-! The existing physical append-output framer also retains every original
 native tape, in particular the actual raw domain and padded size counters. -/

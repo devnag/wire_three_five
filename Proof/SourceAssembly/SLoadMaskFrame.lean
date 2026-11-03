@@ -1,3 +1,4 @@
+import Proof.SourceAssembly.SLoadFrames
 import Proof.SourceAssembly.SLoadCore
 
 /-! Framing the mask worker's output.
@@ -41,6 +42,10 @@ theorem quad_injective {u : Nat} (a b c d : Fin u) (hab : a ≠ b) (hac : a ≠ 
       | (exact absurd hij hbc) | (exact absurd hij.symm hbc)
       | (exact absurd hij hbd) | (exact absurd hij.symm hbd)
       | (exact absurd hij hcd) | (exact absurd hij.symm hcd)
+
+/-- The docked mask framer. -/
+noncomputable def machine {U : Nat} (src drv dst log : Fin U) : Machine U 5 :=
+  RecoveryFocus.machine (![src, drv, dst, log] : Fin 4 → Fin U) AppendFrameKernel.machine
 
 
 end

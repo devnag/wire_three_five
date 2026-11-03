@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.UnionMachine.NumsA6
+import Proof.Wire_3_5.UnionMachine.NumsA6Base
 import Proof.Wire_3_5.UnionMachine.NumsC2
 
 /-! # NW phase (a), part 7: the data stage's width from the input

@@ -1,4 +1,16 @@
-import Proof.Wire_3_5.UnionMachine.FrontSemTopS
+import Lean
+import Proof.Wire_3_5.UnionMachine.FrontSemTopSBase
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.FrontCaps
+import Proof.Wire_3_5.UnionMachine.PlanW2
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-! # C6 front, the time (1): the per-call budget dominates every fixed-degree polynomial of `N` (P3:3637-3655, 3797-3811)
 
@@ -103,3 +115,5 @@ theorem cb_dom (hcoef : 1 ≤ coef) (c d D : ℕ) (hD : D + 1 ≤ kE l e) : ∀�
 end Dom
 
 end NearCubicWires.WireExponent3_5.UnionMachine.FrontCostLedger
+
+end

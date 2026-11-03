@@ -1,3 +1,4 @@
+import Proof.Amplification.RecoveryPaddedCopyWhole
 import Proof.Amplification.RecoveryProjectionInitializeBank
 
 /-! The whole actual row initializer allocates scratch, writes all R random

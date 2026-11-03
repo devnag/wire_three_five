@@ -1,5 +1,6 @@
 import Proof.CaseAnalysis.FinalStageSeam
 import Proof.CaseAnalysis.FinalTailCompose
+import Proof.Amplification.RecoveryTseitinReadOnly
 
 /-! # S2 -- the stage seam, as T3's `BlockRuns`
 

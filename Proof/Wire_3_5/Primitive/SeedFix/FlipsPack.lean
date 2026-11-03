@@ -1,5 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.FlipsRun
-import Proof.Wire_3_5.Primitive.SeedFix.GeoPack
+import Proof.Wire_3_5.Primitive.SeedFix.GeoPackBase
 
 /-! # FLIPS, part 14: the flips writer at every call, within the selection class
 

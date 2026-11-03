@@ -1,4 +1,18 @@
-import Proof.Wire_3_5.FinalPass.Core13
+import Lean
+import Proof.Wire_3_5.FinalPass.Core13Base
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.Core11
+import Proof.Wire_3_5.FinalPass.CoreIfaceM
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S5Core, part 14: the SYM branch (P3:3170-3181)
 
@@ -28,3 +42,5 @@ section Run
 end Run
 
 end NearCubicWires.WireExponent3_5.FinalPass.Core
+
+end

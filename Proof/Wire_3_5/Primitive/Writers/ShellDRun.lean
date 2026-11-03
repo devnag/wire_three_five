@@ -1,5 +1,5 @@
 import Proof.Wire_3_5.Primitive.Writers.ShellDPre
-import Proof.Wire_3_5.Primitive.Writers.WriterIfaceJ
+import Proof.Wire_3_5.Primitive.Writers.WriterIfaceJBase
 
 /-! # PA (d), the writer shell with per-call data, part 5: the whole writer run (`WriterRun`)
 

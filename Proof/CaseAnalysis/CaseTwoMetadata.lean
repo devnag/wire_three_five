@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CaseTwoShape
+import Proof.PCP.PCPPNativeTemplateRaw
 
 /-! Read the actual PCPP header and copy its actual arity driver. The native
 source and the caller's entire cache survive; no dimension is an extra input. -/

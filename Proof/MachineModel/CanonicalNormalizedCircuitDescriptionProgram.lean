@@ -1,4 +1,8 @@
+import Proof.MachineModel.CanonicalBalancedLengthProgram
+import Proof.MachineModel.CanonicalBalancedNatSumProgram
+import Proof.MachineModel.CanonicalNormalizedCircuitValidationProgram
 import Proof.MachineModel.CanonicalNormalizedCircuitResourceProgram
+import Proof.MachineModel.CanonicalSupplierCompressedGateProgram
 
 /-!
 # Exact description size from validated normalized-circuit summaries

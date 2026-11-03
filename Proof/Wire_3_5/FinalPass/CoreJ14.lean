@@ -1,4 +1,18 @@
-import Proof.Wire_3_5.FinalPass.CoreJ13
+import Lean
+import Proof.Wire_3_5.FinalPass.CoreJ10
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.CoreIfaceMJ
+import Proof.Wire_3_5.FinalPass.CoreJ11
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S5Core over the writers with arbitrary residues, part J14: the SYM branch (P3:3170-3181)
 
@@ -68,3 +82,5 @@ theorem stageSJ (r : FReq l F kclk coef A a ha) (c : ℕ) (A5 : Fin L.t → List
 end Run
 
 end NearCubicWires.WireExponent3_5.FinalPass.Core
+
+end

@@ -1,5 +1,6 @@
 import Proof.Wire_3_5.Primitive.Writers.HashCall
-import Proof.Wire_3_5.Primitive.Writers.ShellH
+import Proof.Wire_3_5.Primitive.Writers.ShellERun
+import Proof.Wire_3_5.Primitive.Writers.ThrDataIface3
 
 /-! # (HASH (d1)): the HASH writer's run at one call, with the budgets as hypotheses
 

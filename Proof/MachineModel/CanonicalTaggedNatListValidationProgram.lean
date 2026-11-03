@@ -1,6 +1,9 @@
+import Proof.MachineModel.BalancedClauseStreamFlattenProgram
+import Proof.Circuits.CanonicalBalancedBuilder
 import Proof.Circuits.CanonicalBalancedCall
 import Proof.MachineModel.CanonicalNatValidationProgram
 import Proof.MachineModel.CanonicalTaggedListValidationProgram
+import Proof.MachineModel.PreserveRightProgram
 
 /-!
 # Canonical natural validation over one tagged field list

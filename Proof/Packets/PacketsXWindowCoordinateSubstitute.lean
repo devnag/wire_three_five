@@ -1,0 +1,28 @@
+import Proof.Packets.SubstitutionPrepareCopies
+import Proof.Packets.WindowNativeDock
+import Proof.Packets.WindowWorkspace
+import Proof.Packets.PacketsXWindowSubstitutionDock
+import Proof.Packets.PacketsXWindowLevelAtoms
+import Proof.Assembly.FixedCore
+import Proof.Packets.DenseAtomMaterialize
+import Proof.Packets.PacketsXLiteralAlphabet
+import Proof.Packets.PacketsXNormalizedFiniteTransport
+import Proof.Packets.PacketsXNormalizedRing
+
+/-! One actual whole-coordinate substitution after the complete literal
+vector has been built. Private backing is reset physically on every call. -/
+set_option autoImplicit false
+set_option maxHeartbeats 650000
+set_option maxRecDepth 120000
+set_option warningAsError true
+namespace PCJ9eff70d512234a4c_Fixed.Materializer.WindowProvider
+open NearCubicWires NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdinary
+open NearCubicWires.ExtDecompositionBatch NearCubicWires.CanonicalFourfoldRowProgram
+open NearCubicWires.SupplierToeplitz NearCubicWires.SupplierToeplitzCore
+open NearCubicWires.SupplierListPolynomial NearCubicWires.RepairSource.CloseoutRawRows
+open NormalizedFiniteTransport SubstitutionCensus Theorem25Completion.CycleBounds
+
+attribute [local irreducible] Workspace.machine substitute
+noncomputable def coordinateSubstitute := Composition.machine Workspace.machine substitute
+
+end PCJ9eff70d512234a4c_Fixed.Materializer.WindowProvider

@@ -1,14 +1,37 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SymFront3
 import Proof.Wire_3_5.UnionMachine.NumsA14
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.FpInLen
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdR12
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.FinalPass.SymFront1
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.NumsA11
+import Proof.Wire_3_5.UnionMachine.NumsA13
+import Proof.Wire_3_5.UnionMachine.NumsA4
+import Proof.Wire_3_5.UnionMachine.NumsC6
+import Proof.Wire_3_5.UnionMachine.NumsC7
+import Proof.Wire_3_5.UnionMachine.NumsPh2
+import Proof.Wire_3_5.UnionMachine.NumsPh3
+import Proof.Wire_3_5.FinalPass.SymFront4Base
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-! # The SYM front, part 4: the circuit count exported
 
-`front_run` with `numsBankG2` (the whole register export plus `dA = a'`, NumsA14) in place of `numsBankG`: the same
+`front_run` with the `numsBankG2` (the whole register export plus `dA = a'`, NumsA14) in place of `numsBankG`: the same
 machine `frontM`, the exit **`FrontOutA`** = `FrontOut` plus `vA` (the circuit count `a'` in `dA`, register `321`), `vJ` (the base
-list's `J = ⌈log₂B⌉ + 9` in `G 35`) and `vW` (the walk length in `G 39`), for the SYM numbers writer (`symNums`:
+list's `J = ⌈log₂B⌉ + 9` in `G 35`) and `vW` (the walk length in `G 39`), for the SYM numbers writer (the `symNums`:
 `a`, the flat tables' length). **`front_runA`**.
 
-Paper quantity of the main type: the SYM call's tuple size `a` (P3:3170-3178, `symNums 0`) with the flat list
+Paper quantity of the main type: the SYM call's tuple size `a` (P3:3170-3178, the `symNums 0`) with the flat list
 and the slices, in the bank. -/
 
 set_option autoImplicit false
@@ -30,13 +53,6 @@ open NearCubicWires.SupplierPipeline
 
 section Gate
 variable (x : ℕ) (hx : DataDock.DT + 3 ≤ x) (l : Literals)
-
-/-- **The front's exit with the circuit count.** -/
-structure FrontOutA {n a' : ℕ} (Cs : Fin a' → NormalizedSymmetricThresholdCircuit n) (Pl : FlatListParams)
-    (w : List Bool) (B : ℕ) (τ : St x) : Prop extends FrontOut x hx Cs Pl w B τ where
-  vA : τ.val SymDec.dA = a'
-  vJ : τ.val (SymDec.G 35) = Pl.base.J
-  vW : τ.val (SymDec.G 39) = Pl.walkLen
 
 /-- **The SYM front's run** at a SYM request, the circuit count exported. -/
 theorem front_runA (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ} (ha' : a' ≤ 4)
@@ -320,3 +336,5 @@ theorem front_runA (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) 
 end Gate
 
 end NearCubicWires.WireExponent3_5.FinalPass.SymFront
+
+end

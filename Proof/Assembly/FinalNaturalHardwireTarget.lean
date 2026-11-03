@@ -1,7 +1,10 @@
 import Proof.Assembly.FinalNaturalHardwireScore
 import Proof.Assembly.RowsPoolSignedNative
+import Proof.Amplification.RecoveryLiteralSignFrame
 import Proof.CaseAnalysis.CaseTwoNativeCopy
+import Proof.CaseAnalysis.RowsSignedAppend
 import Proof.CaseAnalysis.FinalSelectorLoadMasks
+import Proof.CaseAnalysis.WitnessGcdPolicy
 
 /-! Physical target preparation for an exact hardwired child. The signed
 target is read from the original native stream; the two resident score halves
@@ -240,6 +243,11 @@ def input (source out : List Bool) (w C positiveScore negativeScore : ℕ) : Fin
 noncomputable def machine := Composition.machine (TapeEmbedding.machine 18 pairMachine)
   (RecoveryFocus.machine writerSlots writer)
 def budget (target : ℤ) (w : ℕ) := pairBudget target w + 1 + writerBudget w
+
+theorem budget_le (target : ℤ) (w : ℕ) (hw : natBitLength target.natAbs ≤ w) :
+    budget target w ≤ 76*w+122 := by
+  unfold budget pairBudget writerBudget CloseoutRowsPoolMagnitude.budget RowPowerNativeReset.rawTime
+  omega
 
 private theorem dock_heads (pos : ℕ) (out next : List Bool) :
     dockH writerSlots (heads pos out) (writerHeads next) = heads pos next := by

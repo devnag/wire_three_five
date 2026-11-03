@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.C4H
+import Proof.Wire_3_5.Primitive.Writers.Enum
 
 /-! # C4HD: the HASH call's printed-objective data (definitions)
 

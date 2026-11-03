@@ -1,5 +1,6 @@
-import Proof.CaseAnalysis.CloseoutRecoveryGrammarBank
 import Proof.CaseAnalysis.RecoveryCountResultSupport
+import Proof.CaseAnalysis.CloseoutRecoveryGrammarBank
+import Proof.Amplification.RecoveryQueryCellReuse
 
 /-! Reuse the paid save/count/erase/reload worker directly after the
 original fixed-count graph. An erased suffix remains the same stack backing. -/

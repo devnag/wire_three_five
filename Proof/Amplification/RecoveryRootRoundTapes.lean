@@ -1,5 +1,6 @@
-import Proof.Amplification.RecoveryCallController
 import Proof.Amplification.RecoveryRootCandidates
+import Proof.Amplification.RecoveryCallController
+import Proof.MachineModel.OrdinaryCompare
 import Proof.MachineModel.OrdinaryFrameLoad
 
 namespace NearCubicWires.RepairOrdinary.RecoveryRootRound

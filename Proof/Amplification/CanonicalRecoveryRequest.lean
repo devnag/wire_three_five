@@ -1,5 +1,7 @@
 import Proof.MachineModel.CanonicalRecoveryProgram
+import Proof.Foundations.PolynomialClock
 import Proof.MachineModel.PreserveRightProgram
+import Proof.Foundations.VerifiedLinker
 
 /-!
 # Raw weak-request extraction for recovery validation

@@ -14,5 +14,20 @@ open RepairSource.CloseoutFinal.C10GuardedMachineConsumer
 noncomputable section
 attribute [local irreducible] WorkspaceSelectedAdmission.originalTapes
 
+structure ContinuationData (sources : EightSources) {gamma : Real}
+    (p : Parameters sources gamma) where
+  k : Nat
+  clock : OrdinaryClock (fun n => n^(k+2))
+  base : Nat
+  extra : Nat
+  states : Nat
+  machine : LocalBitMultitape.Machine (WorkspaceSelectedAdmission.originalTapes sources p k+1+1+extra) states
+  result : Fin (WorkspaceSelectedAdmission.originalTapes sources p k+1+1+extra)
+  fuel : Nat → Nat
+
+def programData {sources : EightSources} {gamma : Real} {p : Parameters sources gamma}
+    (C : ContinuationData sources p) : GuardedAssembly.ProgramData :=
+  WorkspaceSelectedProgram.programData sources p C.k C.clock C.base C.extra C.machine C.result C.fuel
+
 end
 end NearCubicWires.P1TopDown.SelectedAssembly

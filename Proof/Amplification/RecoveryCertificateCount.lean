@@ -1,5 +1,6 @@
 import Proof.Amplification.RecoveryCertificateWord
 import Proof.Amplification.RecoveryTimedExecution
+import Proof.PCP.VerifierDecodingUnary
 import Proof.PCP.VerifierDecodingCompare
 
 /-! Physical capped unary count parsing for the one flat NP certificate.

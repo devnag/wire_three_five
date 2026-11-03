@@ -1,3 +1,4 @@
+import Proof.Hierarchy.CompetitorRawCount
 import Proof.Hierarchy.CompetitorReusableDecision
 
 /-! The native raw plane and retained raw P/N fields load into the same paid

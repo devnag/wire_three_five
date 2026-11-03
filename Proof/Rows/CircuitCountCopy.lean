@@ -1,5 +1,5 @@
-import Proof.Rows.CellGatePalette
-import Proof.Rows.HeaderRewind
+import Proof.Rows.TopArity
+import Proof.PCP.PCPPQueryField
 
 /-! Skip exactly four native headers and physically copy only the fifth field.
 The original target is never decoded as unary. -/
@@ -17,6 +17,8 @@ noncomputable section
 
 def source (tag q L target N : Nat) (tail : List Bool):=
   natWord tag++natWord q++natWord L++natWord target++natWord N++tail
+def budget (tag q L target N : Nat):=
+  2*(natBitLength tag+natBitLength q+natBitLength L+natBitLength target+natBitLength N)+19
 
 end
 end PCJ45bee56da9f34d5a_CircuitCountCopy

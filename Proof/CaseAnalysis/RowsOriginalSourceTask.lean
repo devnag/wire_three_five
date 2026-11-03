@@ -1,7 +1,7 @@
-import Proof.CaseAnalysis.CaseTwoMetadata
-import Proof.CaseAnalysis.CaseTwoVariablePrep
-import Proof.CaseAnalysis.RowsOriginalClause
 import Proof.CaseAnalysis.RowsOriginalTask
+import Proof.CaseAnalysis.RowsOriginalBranches
+import Proof.CaseAnalysis.RowsOriginalSource
+import Proof.MachineModel.OrdinaryMatrixBucketRootPower
 
 /-! One ordinary source-backed action reads the original clause and
 executes its selected fixed template, producing exact original-term tuples. -/

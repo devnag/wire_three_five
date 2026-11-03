@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.UnionMachine.C1Rat
+import Proof.Wire_3_5.Primitive.Writers.ParseNat
 
 /-! # C6 front, the C1 dock: a variable's incidence count `c_X` (P3:3395-3399)
 

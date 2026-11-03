@@ -1,4 +1,6 @@
-import Proof.Wire_3_5.UnionMachine.NumsPh3
+import Proof.Wire_3_5.Primitive.SeedFix.CarWM
+import Proof.Wire_3_5.Primitive.Writers.SymDecPre
+import Proof.Wire_3_5.UnionMachine.NumsPh3Base
 
 /-! # NW phase (b), part 1: the request copied onto the decode's request stream
 

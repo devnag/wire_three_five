@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.ScheduleBounds
+import Proof.Foundations.PolynomialSchedule
 
 /-! Uniform native-width bound along the actual source lengths N=2^s.
 The same source and hierarchy encoding are retained. -/

@@ -17,6 +17,7 @@ noncomputable section
 def word {q : Nat} (g : NormalizedThresholdGate q) := frame (PoolEntryLoad.word (strict g))
 def stream {q : Nat} (gs : List (NormalizedThresholdGate q)) :=gs.flatMap word
 
+def budget (N B q : Nat) :=N*(PCJ45bee56da9f34d5a_CountedGateCell.cost B q (B+1)+3)+3
 
 end
 end PCJ45bee56da9f34d5a_NativeGateLoop

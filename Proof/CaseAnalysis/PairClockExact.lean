@@ -33,4 +33,9 @@ theorem size_guard (G q size : Nat) :
   change size≤pairClock (oracleDepth G) q ↔ size+1≤pairClock (oracleDepth G) q+1
   omega
 
+theorem size_guard_produced (G q size : Nat) :
+    size≤oracleSizeBound G q ↔
+      size+1≤ProjectionNormalization.DimensionPolynomial.value (2^(oracleDepth G)) 1 q:=by
+  simpa only [ProjectionNormalization.DimensionPolynomial.value,one_mul] using size_guard G q size
+
 end NearCubicWires.RepairSource.CloseoutPairClock

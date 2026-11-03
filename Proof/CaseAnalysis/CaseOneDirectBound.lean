@@ -1,5 +1,6 @@
 import Proof.CaseAnalysis.CaseOneConstructionBound
 import Proof.CaseAnalysis.CaseOneDirect
+import Proof.Hierarchy.HierarchyStreamReady
 
 /-! The complete direct original-input Case1 worker fits C.12 at the actual
 final address. The same source, clock, original formula and amplifier remain

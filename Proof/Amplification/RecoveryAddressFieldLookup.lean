@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryFormulaValueFields
+import Proof.PCP.ProjectionNormalizationFieldList
 
 /-! A physical unary-indexed address lookup. Existing counted field copying
 and selected-field copying execute the lookup; the existing logger restores

@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Selection.CosLoop
+import Proof.Wire_3_5.Primitive.Writers.WriteNat
 
 /-! # C1.5: a raw `natWord` from a unary register (P3:1360, 3673)
 

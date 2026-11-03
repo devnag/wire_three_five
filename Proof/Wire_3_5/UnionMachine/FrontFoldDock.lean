@@ -1,6 +1,7 @@
+import Proof.Wire_3_5.UnionMachine.FrontFoldCat
 import Proof.Wire_3_5.UnionMachine.CWEnvCode
 import Proof.Wire_3_5.UnionMachine.CWIface
-import Proof.Wire_3_5.UnionMachine.FrontFoldCat
+import Proof.Wire_3_5.UnionMachine.FrontLoopKit
 
 /-! # C6 front, U5, the writers' fold (b): docking the round's stages on any bank
 

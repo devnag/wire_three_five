@@ -1,15 +1,85 @@
+import Lean
+import Proof.Wire_3_5.Foundations.Skeleton
+import Proof.Wire_3_5.Assembly.Ok
 import Proof.Wire_3_5.Assembly.FreeRecoveryOk
-import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTop2
-import Proof.Wire_3_5.Primitive.Writers.ComposeGlue
-import Proof.Wire_3_5.Primitive.Writers.Reduce
-import Proof.Wire_3_5.Primitive.Writers.WritersJoin
 import Proof.Wire_3_5.Recovery.HybridProgCertificate
-import Proof.Wire_3_5.Selection.CosFill
 import Proof.Wire_3_5.UnionMachine.PlanW4
 import Proof.Wire_3_5.UnionMachine.PreProof
+import Proof.Wire_3_5.Selection.Plan
+import Proof.Wire_3_5.Selection.CosFill
+import Proof.Wire_3_5.Primitive.Writers.Reduce
+import Proof.Wire_3_5.Primitive.Writers.Endpoint
+import Proof.Wire_3_5.Primitive.Writers.Compose
+import Proof.Wire_3_5.Primitive.Writers.ComposeGlue
+import Proof.Wire_3_5.Primitive.Writers.ComposeEnv
+import Proof.Wire_3_5.Primitive.Writers.WritersJoin
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTop2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.PreLink
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTypes
+import Proof.Wire_3_5.Assembly.Free
+import Proof.Wire_3_5.UnionMachine.PlanW3
+import Proof.Amplification.RecoveryCaseOnePaddedBitInput
+import Proof.Amplification.RecoveryPCPFormulaResumeHierarchyActual
+import Proof.CaseAnalysis.CaseOneHeaderLive
+import Proof.CaseAnalysis.CaseTwoDirect
+import Proof.CaseAnalysis.CaseTwoDirectInput
+import Proof.CaseAnalysis.CaseTwoSelectedDescription
+import Proof.CaseAnalysis.CommonPortBankAt
+import Proof.CaseAnalysis.CommonPrefixFields
+import Proof.CaseAnalysis.CommonPrefixProgram
+import Proof.CaseAnalysis.CommonPrefixSelected
+import Proof.CaseAnalysis.CommonPrepareBudget
+import Proof.CaseAnalysis.CommonQueryBudget
+import Proof.CaseAnalysis.NativeWidthStep
+import Proof.CaseAnalysis.RecoveryCapacitySource
+import Proof.CaseAnalysis.RecoveryMeaning
+import Proof.CaseAnalysis.RecoverySharedInput
+import Proof.Foundations.ProjectionPCPPadding
+import Proof.Foundations.RecoveryScheduleEnvelope
+import Proof.Hierarchy.HierarchyFixedWord
+import Proof.MachineModel.OrdinaryOracleComposeInitial
+import Proof.MachineModel.OrdinaryOracleComposeReadyAt
+import Proof.PCP.PCPPSubstitutionCircuit
+import Proof.PCP.PCPPSubstitutionRequest
+import Proof.Wire_3_5.Foundations.SkeletonBase
+import Proof.Wire_3_5.Recovery.CaseTwoCost
+import Proof.Wire_3_5.Recovery.CertRefuter
+import Proof.Wire_3_5.Recovery.HybridAssembly
+import Proof.Wire_3_5.Primitive.Writers.CallIndexBase
+import Proof.Wire_3_5.Primitive.Writers.ComposeBase
+import Proof.Wire_3_5.Primitive.Writers.ComposeEnvBase
+import Proof.Wire_3_5.Primitive.Writers.EndpointBase
+import Proof.Wire_3_5.Primitive.Writers.PlanBase
+import Proof.Wire_3_5.Primitive.Writers.PreLinkBase
+import Proof.Wire_3_5.Primitive.Writers.StarNums
+import Proof.Wire_3_5.Primitive.Writers.UnaryArith
+import Proof.Wire_3_5.Primitive.Writers.WritersJoinBase
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTopBase
+import Proof.Wire_3_5.Recovery.RecoveryEventualBase
+import Proof.Wire_3_5.Recovery.RecoveryFamily
+import Proof.Wire_3_5.Recovery.RecoveryLeaf
+import Proof.Wire_3_5.Assembly.FreeBase
+import Proof.Wire_3_5.Stars.StarSelectionChoice
+import Proof.Wire_3_5.Transfer.TransferSeedCalls
+import Proof.Wire_3_5.Transfer.TransferUnionCompleteBase
+import Proof.Wire_3_5.UnionMachine.UnionCallCountBase
+import Proof.Wire_3_5.UnionMachine.UnionCodecBase
+import Proof.Wire_3_5.UnionMachine.Decision
+import Proof.Wire_3_5.UnionMachine.PlanW2Base
+import Proof.Wire_3_5.UnionMachine.PreProofBase
+import Proof.Wire_3_5.UnionMachine.SetupFactsBase
+import Proof.Wire_3_5.UnionMachine.UnionSchedule
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-!
-# Root producer with the atom test
+# The top-level producer with the atom test
 
 "The weak machine guesses one size-`q^G` general oracle, a class tag, and one sparse grid sum for each distinct PCPP
 variable. It rejects malformed descriptions, oversized atoms, and coefficients outside the fixed grid"
@@ -63,3 +133,5 @@ theorem rowB_root3
   literals_rowB_of_parts (Split.literals_parts_of_leavesF2 p u r)
 
 end NearCubicWires.WireExponent3_5.SplitRootTop3
+
+end

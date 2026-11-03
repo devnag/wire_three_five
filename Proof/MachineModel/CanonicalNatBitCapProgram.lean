@@ -1,6 +1,7 @@
 import Proof.MachineModel.BitInputPrefixProgram
 import Proof.MachineModel.CanonicalNatCeilLogProgram
 import Proof.MachineModel.CanonicalNativeEqualityProgram
+import Proof.MachineModel.PreserveRightProgram
 
 /-!
 # Executable natural-number bit-cap validation

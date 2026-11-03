@@ -1,10 +1,22 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.FreeGen9
-import Proof.Wire_3_5.FinalPass.SymSz2
+import Proof.Wire_3_5.FinalPass.SymSz1Base
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SymFr3Base
 
-/-! # The SYM free numbers, part 4: the SYM constants and the pad and load bounds
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # The SYM free numbers (root #145 (ii)), part 4: the SYM constants and the pad and load bounds
 
 At a SYM call the free numbers are `freeVal2 (symK2 c) (symX …)` (`FreeGen.freeProg2`): `m = max(8·nc + 16·a·W, 8)`
-(the degenerate call's padded batch has one constant row), `Q' = dQ(2kh+β)`, `h = dH(n+1)^{eH}`,
+(the degenerate call's padded batch has one constant row, #146 (c′)), `Q' = dQ(2kh+β)`, `h = dH(n+1)^{eH}`,
 `pr = dP(n+1)^{eP}` (P3:1886-1906; P3:1596-1615 for `h`), and the requests' degree bound is
 `dF c x = dD·(⌊√B_S⌋ + β)`, the paper's `d_S = C_D(√B + L)` (P3:3094-3100).
 * `SymC`, **`symK2`**, **`symDF`**;
@@ -22,40 +34,8 @@ open NearCubicWires.SupplierPipeline NearCubicWires.WireExponent3_5.Stars NearCu
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.PrimAsm.WriterIface
 open NearCubicWires.WireExponent3_5.FinalPass.FreeGen
 
-/-- The SYM exponents and coefficients. -/
-structure SymC where
-  dT : ℕ
-  dC : ℕ
-  dQ : ℕ
-  dH : ℕ
-  eH : ℕ
-  dP : ℕ
-  eP : ℕ
-  dA : ℕ
-  dR : ℕ
-  dD : ℕ
-
-/-- **The SYM constants**: `m = max(8·nc + 16·a·W, 8)`. -/
-def symK2 (c : SymC) : FreeK2 := ⟨⟨c.dT, c.dC, c.dQ, c.dH, 8, 16, 0, 0, 0, 0, c.dP, c.dA, c.dR⟩, c.eH, c.eP, 8⟩
-
-/-- **The requests' degree bound** `dD·(⌊√B_S⌋ + β)`: the paper's `d_S = C_D(√B + L)` (P3:3094-3100). -/
-def symDF (c : SymC) (x : FreeIn) : ℕ := c.dD * (Nat.sqrt x.capS + β x)
-
-/-- **`k + L ≤ ψ` once `C_D ≥ 1`**, through `Ψ_aux = C_D[k + L² + (k+L³)L²(k+L)]` (P3:3101-3102). -/
-theorem kL_le_loadPsi (CD k L BT BS : ℕ) (hCD : 1 ≤ CD) : k + L ≤ loadPsi CD k L BT BS := by
-  have h1 : loadAux CD k L ≤ loadPsi CD k L BT BS := by
-    unfold loadPsi; exact le_trans (le_max_right _ _) (le_max_right _ _)
-  have h2 : L ≤ L ^ 2 := Nat.le_self_pow (by norm_num) L
-  have h3 : k + L ^ 2 + (k + L ^ 3) * L ^ 2 * (k + L) ≤ loadAux CD k L := by
-    unfold loadAux
-    exact Nat.le_mul_of_pos_left _ hCD
-  omega
-
 section Gate
 variable (l : Literals) (F : GateFree l)
-
-/-- The load bound's coefficient. -/
-def c3K2 (c : SymC) : ℕ := c.dH + c.dQ + 400 + c.dP
 
 /-- **The load bound** (`SymFreeOk4.c3_le` at `freeProg2 (symK2 c)`, `K3 = c3K2 c`, `D3 = eH + eP`). -/
 theorem c3_sym2 (c : SymC) : 1 ≤ F.CD → ∀ (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) (n a' : ℕ) (ha' : a' ≤ 4)
@@ -115,3 +95,4 @@ end Gate
 
 end NearCubicWires.WireExponent3_5.FinalPass.SymFr
 
+end

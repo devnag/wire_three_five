@@ -32,4 +32,14 @@ macro "budget_poly" : tactic => `(tactic|
   | apply sub
   | apply max)
 
+theorem power_cost {f : ℕ→ℕ} (hf:SourcePoly f) (C D : ℕ) :
+    SourcePoly (fun n=>DimensionPower.cost C (f n) D) := by
+  have upper:SourcePoly (fun n=>2*C+2+D*(6*C*(f n+1)^(D+1)+7)) := by budget_poly
+  exact upper.mono (fun n=>DimensionPower.cost_bound D C (f n) D le_rfl)
+
+theorem polynomial_cost {f : ℕ→ℕ} (hf:SourcePoly f) (C D : ℕ) :
+    SourcePoly (fun n=>DimensionPolynomial.budget D C (f n)) := by
+  have upper:SourcePoly (fun n=>DimensionPolynomial.coefficient D C*(f n+2)^(2*D+2)) := by budget_poly
+  exact upper.mono (fun n=>DimensionPolynomial.budget_bound D C (f n))
+
 end NearCubicWires.RepairOrdinary.CloseoutWitness.BudgetTools

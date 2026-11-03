@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryTransitionEvent
+import Proof.Foundations.OrdinaryRewindCarrier
 
 /-! A whole physical transition event, including paid serial increment. The
 two short coordinate fields are consumed by the same stream serializer. -/

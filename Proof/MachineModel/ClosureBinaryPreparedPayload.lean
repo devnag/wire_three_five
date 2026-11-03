@@ -1,3 +1,6 @@
+import Proof.CaseAnalysis.RowsMetadataCopy
+import Proof.MachineModel.Layout
+import Proof.MachineModel.Runs
 import Proof.MachineModel.ClosureBinaryPreparedWriter
 import Proof.MachineModel.ClosureBinaryReusableRow
 

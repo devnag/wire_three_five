@@ -1,3 +1,4 @@
+import Proof.Foundations.SourceRegistry
 import Proof.CaseAnalysis.RawRowsThresholdAccuracy
 
 /-! The four `EightSources` fields that no closeout consumer binds yet.
@@ -24,6 +25,11 @@ set_option maxHeartbeats 250000
 set_option maxRecDepth 120000
 set_option warningAsError true
 noncomputable section
+
+/-- The selected exact rectangular-product algorithm (paper Appendix B). Every
+estimator machine is built over this one value. -/
+def williamsOf (sources : EightSources) : WilliamsAlgorithm :=
+  Classical.choice sources.williams
 
 /-- The selected disjoint exact-decomposition algorithm (paper A.12). -/
 def decompositionOf (sources : EightSources) : DecompositionAlgorithm :=

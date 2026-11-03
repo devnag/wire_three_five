@@ -1,4 +1,5 @@
-import Proof.CaseAnalysis.RecoveryMetadataResources
+import Proof.CaseAnalysis.RecoveryGrammarAllocationFits
+import Proof.CaseAnalysis.RecoveryMetadataRun
 
 /-! Allocate the thirty initially empty scalar destinations and scratch
 tapes by one existing erase sweep. The five paid raw inputs remain retained. -/

@@ -1,4 +1,5 @@
 import Proof.Hierarchy.CompetitorCountProducerHeads
+import Proof.MachineModel.OrdinaryMatrixMaskAndPass
 
 /-! A residual-offset selector masks each complete natural-count cell.
 The selector is one actual bit per cropped row-major column; duplicating it

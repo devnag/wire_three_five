@@ -1,8 +1,22 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.S5TChB
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.S5TChA
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Primitive.SeedFix.TS4N
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.FinalPass.S5TChCBase
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-! # S5-THR, part 25: the THR path (P3:2150-2157, 2543-2558, 2596-2599, 3083-3086)
 
-The THR half's THR branch on its layout, from the parse's exit: the first docks (`chainA_spec`: the fill count, the prep, W6), the next docks (`chainB_spec`: the front end, the data stage's inputs, the data stage), and the tail
+The THR half's THR branch on its layout, from the parse's exit: the first docks (`chainA_spec`: the fill count, T's
+prep, W6), the next docks (`chainB_spec`: the front end, the data stage's inputs, the data stage), and the tail
 (`tail_spec` on the named streams `tailSN` and registers `tailRg`): all eight THR slots written.
 
 * `thrPathM`, `thrPathCost`, **`thrPath_spec`**.
@@ -40,19 +54,6 @@ noncomputable abbrev vOf (l : Literals) (cr : ℕ) (P : Shared.StarParams) {a' :
     (alg : RepairRepresentation.DecompositionAlgorithm) (Dexp : ℕ) (carriers : List (Stars.Carrier P.n)) :
     PrimThrW.Joins.ThrNumVals :=
   PrimThrW.Joins.thrNumVals P Cs alg Dexp carriers.length (PrimT.TS4.capTL l cr P.n)
-
-/-- The fixed hash's parameters from the W6 numbers. -/
-abbrev mpOf (v : PrimThrW.Joins.ThrNumVals) : MajorantParams := PrimThrW.Joins.thrMP v.M v.A v.Bs v.den
-
-theorem tail_hi (k : Fin 19) (hk : 10 ≤ k.val) :
-    (14 + D ≤ tailA k + tailB k * D ∧ tailA k + tailB k * D ≤ 20 + D) ∨
-      (7 ≤ tailA k + tailB k * D ∧ tailA k + tailB k * D ≤ 8) := by
-  fin_cases k <;> simp [tailA, tailB] at hk ⊢ <;> omega
-
-theorem tail_hi9 (k : Fin 19) (hk : 9 ≤ k.val) :
-    (14 + D ≤ tailA k + tailB k * D ∧ tailA k + tailB k * D ≤ 739 + D) ∨
-      (7 ≤ tailA k + tailB k * D ∧ tailA k + tailB k * D ≤ 8) := by
-  fin_cases k <;> simp [tailA, tailB] at hk ⊢ <;> omega
 
 theorem thrPath_spec (l : Literals) (cr j0 jL j1 : ℕ) (hj0 : j0 ≤ D) (hjL : jL ≤ D) (hj1 : j1 ≤ D)
     (σ : WState (nsL D (PrimT.W6.numsW6 alg Dexp).x (PrimThrW.TF3Cost.topFront3 alg).x) nrL)
@@ -211,3 +212,5 @@ theorem thrPath_spec (l : Literals) (cr j0 jL j1 : ℕ) (hj0 : j0 ≤ D) (hjL : 
 end Path
 
 end NearCubicWires.WireExponent3_5.FinalPass.S5T
+
+end

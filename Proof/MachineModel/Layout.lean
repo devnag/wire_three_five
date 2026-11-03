@@ -1,4 +1,6 @@
+import Proof.MachineModel.Runs
 import Proof.MachineModel.Semantics
+import Proof.Circuits.DecompositionSourceRecords
 
 /-! P25: the fixed finite layout of the ordered decomposition-source batch.
 
@@ -45,10 +47,13 @@ def str := ex a 0   -- circuit stream
 def cnt := ex a 1   -- occurrence counts, `counts.flatMap natWord`
 def bod := ex a 2   -- child body, `GS.flatMap exactWord`
 def tot := ex a 3   -- unary total, `false :: 1^m`, head at its end
+def cch := ex a 4   -- native child cache
+def scr := ex a 6   -- incidence row scratch
 def fcp := ex a 7   -- framed-copy marker counter
 def drv := ex a 8   -- erase driver, `replicate C true`
 def wsp := ex a 9   -- erase workspace
 def dom := ex a 10  -- retained domain template `UnaryTemplate.tape q`, head 1
+def hdr := ex a 11  -- header staging
 
 /-! ## Bank ports, and the value arithmetic that separates them -/
 
@@ -111,6 +116,9 @@ theorem pad_template (cap k : ℕ) (h : k+2 ≤ cap) :
   have : cap - (k+1) = 1 + (cap - (k+1+1)) := by omega
   rw [this, List.replicate_add]
   rfl
+
+theorem pad_exact (cap : ℕ) (w : List Bool) :
+    ZeroPadding.pad cap w = w ++ List.replicate (cap - w.length) false := rfl
 
 
 end NearCubicWires.ExtDecompositionBatch

@@ -1,5 +1,4 @@
-import Proof.SourceAssembly.SourceFirstCore3
-import Proof.SourceAssembly.SourceRefillSeam3
+import Proof.SourceAssembly.SourceFirstFront3
 
 section
 set_option autoImplicit false
@@ -20,6 +19,10 @@ noncomputable section
 attribute [local irreducible] P1TopDownPaidPayload.tapes
 
 section concrete
+variable (mask : MaskProducer) {selector : CyclicChoice.Laws}
+  (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector)
+  (rows : PCJc4297ab269d8423a_Source.RowLibrary selector) (sources : EightSources) (res : Nat)
+  {gamma : Real} (p : Parameters sources gamma) (k r : Nat)
 
 set_option hygiene false in
 local notation "𝔇" => dimsOf mask packets rows sources res p k r

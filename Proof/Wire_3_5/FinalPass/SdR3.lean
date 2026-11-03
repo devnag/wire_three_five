@@ -1,4 +1,18 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SdR2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdI3
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SdR2Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S4 v2, part R3: the call's sizes below `X = KX·(n+2)^{ZX}` with `ZX` on `(l, fe)` (P3:3170-3178)
 
@@ -171,3 +185,5 @@ theorem x_tfn (hT : ThrSizeOK l F kclk coef A a ha Ctz Dtz) (n : ℕ) (hs : (cal
 end Family
 
 end NearCubicWires.WireExponent3_5.FinalPass.Sd.R
+
+end

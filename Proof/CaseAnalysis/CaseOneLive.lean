@@ -1,7 +1,12 @@
+import Proof.Amplification.RecoveryCaseOneEntryPair
+import Proof.Amplification.RecoveryCaseOnePaddedBitInput
+import Proof.Assembly.SelectedRecoveryIntegration
+import Proof.CaseAnalysis.CaseOneDirect
 import Proof.CaseAnalysis.CaseOneDirectBound
 import Proof.CaseAnalysis.Language
-import Proof.CaseAnalysis.NativeWidthStep
+import Proof.MachineModel.UInputFields
 import Proof.CaseAnalysis.Parameters
+import Proof.CaseAnalysis.NativeWidthStep
 
 /-! The live schedule itself supplies every size premise of the complete
 Case1 worker. No extra runtime arity test or independent resource choice is

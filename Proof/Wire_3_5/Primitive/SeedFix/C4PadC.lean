@@ -1,6 +1,7 @@
 import Proof.Wire_3_5.Primitive.SeedFix.C4PadB
-import Proof.Wire_3_5.Primitive.SeedFix.C4SJ
 import Proof.Wire_3_5.Primitive.SeedFix.C4WA
+import Proof.Wire_3_5.Primitive.SeedFix.C4SJ
+import Proof.Wire_3_5.MachineModel.BlockJoin
 
 /-! # (c′) (B), part 3: the branched stage (mode-generic)
 

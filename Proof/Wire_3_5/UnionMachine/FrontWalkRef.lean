@@ -1,4 +1,6 @@
 import Proof.Wire_3_5.UnionMachine.RoundBits
+import Proof.Wire_3_5.UnionMachine.UnionCodecBase
+import Proof.PCP.VerifierDecodingLookup
 
 /-! # C6 front, U1a: the oracle field of the guess, as a list reference (P3:3669-3671)
 
@@ -14,7 +16,7 @@ the reference the front's walker computes.
 * **`scan_of_readNat`**: `readNat` succeeds only on a passing scan; hence **`readNat_isSome`**.
 
 The payload is the oracle's code in binary (low bit first), whose `value` (`RadixSemantics.value`) is the code: the
-input of the Theorem 2.5 repository's cold oracle decoder (`CloseoutWitness.Oracle.cold_run`, `decodeBooleanCircuit (value arityBits)
+input of v8's cold oracle decoder (`CloseoutWitness.Oracle.cold_run`, `decodeBooleanCircuit (value arityBits)
 (value bits)`). Paper quantity: the guess's oracle field (its code) and the rest of the guess. -/
 
 set_option autoImplicit false

@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RowsDegreeReset
+import Proof.Amplification.RecoveryScratchErase
 
 /-! The actual degree call's reset is followed by a paid coarse sweep.
 The native row context and append cursor survive; all 57 degree-work tapes

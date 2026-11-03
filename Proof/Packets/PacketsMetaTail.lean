@@ -22,10 +22,17 @@ abbrev fl : Fin 17 := 1
 abbrev zo : Fin 17 := 2
 abbrev rF : Fin 17 := 3
 abbrev rC : Fin 17 := 4
+abbrev rT : Fin 17 := 5
 abbrev rP : Fin 17 := 6
 abbrev rE : Fin 17 := 7
 abbrev rF1 : Fin 17 := 8
+abbrev rD : Fin 17 := 9
+abbrev rV : Fin 17 := 10
+abbrev rS : Fin 17 := 11
+abbrev r24 : Fin 17 := 12
 abbrev rK : Fin 17 := 13
+abbrev rt : Fin 17 := 14
+abbrev rm : Fin 17 := 15
 abbrev ou : Fin 17 := 16
 
 /-- The tail's roles. -/
@@ -38,6 +45,8 @@ def incI (x : Fin 17) := swAt addF true true rl x zo fl
 def decI (x : Fin 17) := swAt subF true true rl x zo fl
 def ltI (x y : Fin 17) := swAt subF false false rl x y fl
 def shlI (x : Fin 17) := swAt shlF false true rl x zo fl
+def addI (x y : Fin 17) := swAt addF false true rl x y fl
+def mulI (x y z : Fin 17) := RecoveryFocus.machine ![rl, x, y, z, rt, rm, fl, zo] Mul.machine
 def appI := RecoveryFocus.machine ![ou] append
 
 /-! ## The output loop: `K` in unary -/
@@ -163,7 +172,176 @@ theorem segB_run {W : ℕ} (F C T : ℕ) (hF : 2 * (F + 1) ≤ 2 ^ W) :
 
 /-! ## Segment C: the denominator, the scale, the square -/
 
+def segC1 := Composition.machine (incI rE) (Composition.machine (incI rT)
+  (Composition.machine (mulI rC rT rD) (Composition.machine (shlI rD) (incI rD))))
+
+theorem segC1_run {W : ℕ} (F C T P k F1 : ℕ) (hW : 1 ≤ W) (hk : k + 1 < 2 ^ W) (hT : T + 1 < 2 ^ W)
+    (hd : 2 * (C * (T + 1)) + 1 < 2 ^ W) :
+    LRuns W segC1 ((2 * W + 3) + 1 + ((2 * W + 3) + 1 + ((13 * W * W + 60 * W + 40) + 1 +
+      ((2 * W + 3) + 1 + (2 * W + 3)))))
+      (tst F C T P k F1 0 0 0 0 0 false 0)
+      (tst F C (T + 1) P (k + 1) F1 (2 * (C * (T + 1)) + 1) 0 0 0 0 false 0) := by
+  have hall := (inc_at (W := W) (tst F C T P k F1 0 0 0 0 0 false 0) rl rE zo fl (by decide) k 0 false rfl rfl rfl rfl
+      rfl hk).seq
+    ((inc_at (W := W) _ rl rT zo fl (by decide) T 0 false (by rfl) (by rfl) (by rfl) (by rfl) rfl hT).seq
+    ((Mul.at_run (W := W) _ rl rC rT rD rt rm fl zo (by decide) C (T + 1) 0 0 0 false (by rfl) (by rfl) (by rfl)
+      (by rfl) (by rfl) (by rfl) (by rfl) (by rfl) hT (by omega) hW).seq
+    ((shl_at' (W := W) _ rl rD zo fl (by decide) (C * (T + 1)) 0 false (by rfl) (by rfl) (by rfl) (by rfl)
+      (by omega)).seq
+    (inc_at (W := W) _ rl rD zo fl (by decide) (2 * (C * (T + 1))) 0 false (by rfl) (by rfl) (by rfl) (by rfl) rfl
+      hd))))
+  refine hall.congr_out ?_
+  funext j
+  fin_cases j <;> rfl
+
+def segC2 := Composition.machine (mulI rE rD rV) (Composition.machine (cpyI rS rV)
+  (Composition.machine (shlI rS) (Composition.machine (addI rS rV) (shlI rS))))
+
+theorem segC2_run {W : ℕ} (F C T P E F1 D : ℕ) (hW : 1 ≤ W) (hD : D < 2 ^ W)
+    (hV : 2 * (2 * (E * D) + E * D) < 2 ^ W) :
+    LRuns W segC2 ((13 * W * W + 60 * W + 40) + 1 + ((2 * W + 3) + 1 + ((2 * W + 3) + 1 +
+      ((2 * W + 3) + 1 + (2 * W + 3)))))
+      (tst F C T P E F1 D 0 0 0 0 false 0)
+      (tst F C T P E F1 D (E * D) (2 * (2 * (E * D) + E * D)) 0 0 false 0) := by
+  have hall := (Mul.at_run (W := W) (tst F C T P E F1 D 0 0 0 0 false 0) rl rE rD rV rt rm fl zo (by decide) E D 0 0 0
+      false rfl rfl rfl rfl rfl rfl rfl rfl hD (by omega) hW).seq
+    ((cpy_at (W := W) _ rl rS rV fl (by decide) 0 (E * D) false (by rfl) (by rfl) (by rfl) (by rfl) (by omega)).seq
+    ((shl_at' (W := W) _ rl rS zo fl (by decide) (E * D) 0 false (by rfl) (by rfl) (by rfl) (by rfl) (by omega)).seq
+    ((add_at (W := W) _ rl rS rV fl (by decide) (2 * (E * D)) (E * D) false (by rfl) (by rfl) (by rfl) (by rfl)
+      (by omega) (by omega) (by omega)).seq
+    (shl_at' (W := W) _ rl rS zo fl (by decide) (2 * (E * D) + E * D) 0 false (by rfl) (by rfl) (by rfl) (by rfl)
+      hV))))
+  refine hall.congr_out ?_
+  funext j
+  fin_cases j <;> rfl
+
+def segC3 := Composition.machine (incI r24) (Composition.machine (incI r24) (Composition.machine (incI r24)
+  (Composition.machine (shlI r24) (Composition.machine (shlI r24) (shlI r24)))))
+
+theorem segC3_run {W : ℕ} (F C T P E F1 D V S : ℕ) (hW : 5 ≤ W) :
+    LRuns W segC3 ((2 * W + 3) + 1 + ((2 * W + 3) + 1 + ((2 * W + 3) + 1 + ((2 * W + 3) + 1 +
+      ((2 * W + 3) + 1 + (2 * W + 3))))))
+      (tst F C T P E F1 D V S 0 0 false 0) (tst F C T P E F1 D V S 24 0 false 0) := by
+  have h32 : 32 ≤ 2 ^ W := by
+    calc 32 = 2 ^ 5 := by norm_num
+      _ ≤ 2 ^ W := Nat.pow_le_pow_right (by norm_num) hW
+  have hall := (inc_at (W := W) (tst F C T P E F1 D V S 0 0 false 0) rl r24 zo fl (by decide) 0 0 false rfl rfl rfl
+      rfl rfl (by omega)).seq
+    ((inc_at (W := W) _ rl r24 zo fl (by decide) 1 0 false (by rfl) (by rfl) (by rfl) (by rfl) rfl (by omega)).seq
+    ((inc_at (W := W) _ rl r24 zo fl (by decide) 2 0 false (by rfl) (by rfl) (by rfl) (by rfl) rfl (by omega)).seq
+    ((shl_at' (W := W) _ rl r24 zo fl (by decide) 3 0 false (by rfl) (by rfl) (by rfl) (by rfl) (by omega)).seq
+    ((shl_at' (W := W) _ rl r24 zo fl (by decide) 6 0 false (by rfl) (by rfl) (by rfl) (by rfl) (by omega)).seq
+    (shl_at' (W := W) _ rl r24 zo fl (by decide) 12 0 false (by rfl) (by rfl) (by rfl) (by rfl) (by omega))))))
+  refine hall.congr_out ?_
+  funext j
+  fin_cases j <;> rfl
+
+def segC4 := Composition.machine (Ite (ltI rS r24) (cpyI rS r24) (nop 17) fl)
+  (Composition.machine (cpyI rV rS) (mulI rS rV rK))
+
+theorem segC4_run {W : ℕ} (F C T P E F1 D V S : ℕ) (hW : 5 ≤ W)
+    (hS : max 24 S * max 24 S < 2 ^ W) :
+    LRuns W segC4 (((2 * W + 3) + (2 * W + 3) + 0 + 2) + 1 + ((2 * W + 3) + 1 + (13 * W * W + 60 * W + 40)))
+      (tst F C T P E F1 D V S 24 0 false 0)
+      (tst F C T P E F1 D (max 24 S) (max 24 S) 24 (max 24 S * max 24 S) false 0) := by
+  have h32 : 32 ≤ 2 ^ W := by
+    calc 32 = 2 ^ 5 := by norm_num
+      _ ≤ 2 ^ W := Nat.pow_le_pow_right (by norm_num) hW
+  have hM1 : 1 ≤ max 24 S := le_trans (by norm_num) (le_max_left 24 S)
+  have hM : max 24 S < 2 ^ W := lt_of_le_of_lt (Nat.le_mul_of_pos_left _ hM1) hS
+  have hSS : S < 2 ^ W := lt_of_le_of_lt (le_max_right 24 S) hM
+  have hI : LRuns W (Ite (ltI rS r24) (cpyI rS r24) (nop 17) fl) ((2 * W + 3) + (2 * W + 3) + 0 + 2)
+      (tst F C T P E F1 D V S 24 0 false 0) (tst F C T P E F1 D V (max 24 S) 24 0 false 0) :=
+    Ite.runs (W := W) (nc := 2 * W + 3) (np := 2 * W + 3) (nq := 0) (ltI rS r24) (cpyI rS r24) (nop 17) fl
+      (decide (S < 24))
+      (lt_at (W := W) (tst F C T P E F1 D V S 24 0 false 0) rl rS r24 fl (by decide) S 24 false rfl rfl rfl rfl
+        hSS (by omega)) rfl
+      (fun hb => by
+        have hb' : S < 24 := by simpa using hb
+        have h := cpy_at (W := W) (Function.update (Function.update (tst F C T P E F1 D V S 24 0 false 0) rS (.reg S))
+          fl (.flag (decide (S < 24)))) rl rS r24 fl (by decide) S 24 _ rfl rfl rfl rfl (by omega)
+        refine h.congr_out ?_
+        rw [max_eq_left hb'.le]
+        funext j
+        fin_cases j <;> rfl)
+      (fun hb => by
+        have hb' : ¬ S < 24 := by simpa using hb
+        have h := nop_lruns (W := W) (Function.update (Function.update (tst F C T P E F1 D V S 24 0 false 0) rS
+          (.reg S)) fl (.flag (decide (S < 24))))
+        refine h.congr_out ?_
+        rw [max_eq_right (by omega), hb]
+        funext j
+        fin_cases j <;> rfl)
+  have hall := hI.seq
+    ((cpy_at (W := W) (tst F C T P E F1 D V (max 24 S) 24 0 false 0) rl rV rS fl (by decide) V (max 24 S) false
+      rfl rfl rfl rfl hM).seq
+    (Mul.at_run (W := W) _ rl rS rV rK rt rm fl zo (by decide) (max 24 S) (max 24 S) 0 0 0 false (by rfl) (by rfl)
+      (by rfl) (by rfl) (by rfl) (by rfl) (by rfl) (by rfl) hM hS (by omega)))
+  refine hall.congr_out ?_
+  funext j
+  fin_cases j <;> rfl
+
 /-! ## The two tails -/
+
+/-- The cutoff tail. -/
+def tailM := Composition.machine segA (Composition.machine segB (Composition.machine segC1
+  (Composition.machine segC2 (Composition.machine segC3 (Composition.machine segC4 outLoop)))))
+
+/-- The cutoff value the tail writes. -/
+def cutOf (F C T : ℕ) : ℕ := canonicalPrimeCutoff (Nat.clog 2 (F + 1)) (2 * C * (T + 1))
+
+/-- The scale `max 24 (6(e+1)(d+1))`. -/
+def scaleOf (F C T : ℕ) : ℕ :=
+  max 24 (2 * (2 * ((Nat.clog 2 (F + 1) + 1) * (2 * (C * (T + 1)) + 1)) +
+    (Nat.clog 2 (F + 1) + 1) * (2 * (C * (T + 1)) + 1)))
+
+theorem cutOf_eq (F C T : ℕ) : cutOf F C T = scaleOf F C T * scaleOf F C T := by
+  have e : 2 * (2 * ((Nat.clog 2 (F + 1) + 1) * (2 * (C * (T + 1)) + 1)) +
+      (Nat.clog 2 (F + 1) + 1) * (2 * (C * (T + 1)) + 1)) =
+      6 * (Nat.clog 2 (F + 1) + 1) * (2 * C * (T + 1) + 1) := by ring
+  unfold cutOf scaleOf canonicalPrimeCutoff canonicalPrimeScale
+  rw [e, sq]
+
+def tailCost (W F C T : ℕ) : ℕ :=
+  ((2 * W + 3) + 1 + ((2 * W + 3) + 1 + (2 * W + 3))) + 1 +
+  (((Nat.clog 2 (F + 1) + 1) * ((2 * W + 3) + ((2 * W + 3) + 1 + (2 * W + 3)) + 2)) + 1 +
+  (((2 * W + 3) + 1 + ((2 * W + 3) + 1 + ((13 * W * W + 60 * W + 40) + 1 + ((2 * W + 3) + 1 + (2 * W + 3))))) + 1 +
+  (((13 * W * W + 60 * W + 40) + 1 + ((2 * W + 3) + 1 + ((2 * W + 3) + 1 + ((2 * W + 3) + 1 + (2 * W + 3))))) + 1 +
+  (((2 * W + 3) + 1 + ((2 * W + 3) + 1 + ((2 * W + 3) + 1 + ((2 * W + 3) + 1 + ((2 * W + 3) + 1 + (2 * W + 3)))))) + 1 +
+  ((((2 * W + 3) + (2 * W + 3) + 0 + 2) + 1 + ((2 * W + 3) + 1 + (13 * W * W + 60 * W + 40))) + 1 +
+  ((cutOf F C T + 1) * ((2 * W + 3) + ((2 * W + 3) + 1 + 1) + 2)))))))
+
+/-- **The cutoff tail.** -/
+theorem tail_run {W : ℕ} (F C T : ℕ) (b : Bool) (hW : 5 ≤ W) (hF : 2 * (F + 1) ≤ 2 ^ W) (hT : T + 1 < 2 ^ W)
+    (hcut : cutOf F C T < 2 ^ W) :
+    LRuns W tailM (tailCost W F C T) (tst F C T 0 0 0 0 0 0 0 0 b 0)
+      (tst F C (T + 1) (2 ^ Nat.clog 2 (F + 1)) (Nat.clog 2 (F + 1) + 1) (F + 1)
+        (2 * (C * (T + 1)) + 1) (scaleOf F C T) (scaleOf F C T) 24 0 false (cutOf F C T)) := by
+  set k := Nat.clog 2 (F + 1) with hk
+  set d1 := 2 * (C * (T + 1)) + 1 with hd1
+  set V0 := (k + 1) * d1 with hV0
+  have hW1 : 1 ≤ W := by omega
+  have hSc : scaleOf F C T = max 24 (2 * (2 * V0 + V0)) := rfl
+  have hcut' := hcut
+  rw [cutOf_eq] at hcut'
+  have hM1 : 1 ≤ scaleOf F C T := le_trans (by norm_num) (le_max_left _ _)
+  have hMc : scaleOf F C T ≤ scaleOf F C T * scaleOf F C T := Nat.le_mul_of_pos_left _ hM1
+  have h6 : 2 * (2 * V0 + V0) ≤ scaleOf F C T := by rw [hSc]; exact le_max_right _ _
+  have hk1 : k + 1 ≤ V0 := Nat.le_mul_of_pos_right _ (by omega)
+  have hdV : d1 ≤ V0 := Nat.le_mul_of_pos_left _ (by omega)
+  have hA := segA_run (W := W) F C T b (by omega) hW1
+  have hB := segB_run (W := W) F C T hF
+  have hC1 := segC1_run (W := W) F C T (2 ^ k) k (F + 1) hW1 (by omega) hT (by omega)
+  have hC2 := segC2_run (W := W) F C (T + 1) (2 ^ k) (k + 1) (F + 1) d1 hW1 (by omega) (by omega)
+  have hC3 := segC3_run (W := W) F C (T + 1) (2 ^ k) (k + 1) (F + 1) d1 V0 (2 * (2 * V0 + V0)) hW
+  have hC4 := segC4_run (W := W) F C (T + 1) (2 ^ k) (k + 1) (F + 1) d1 V0 (2 * (2 * V0 + V0)) hW
+    (by rw [← hSc]; exact hcut')
+  have hO := outLoop_run (W := W) F C (T + 1) (2 ^ k) (k + 1) (F + 1) d1 (max 24 (2 * (2 * V0 + V0)))
+    (max 24 (2 * (2 * V0 + V0))) 24 (max 24 (2 * (2 * V0 + V0)) * max 24 (2 * (2 * V0 + V0))) false
+    (by rw [← hSc]; exact hcut')
+  have hall := hA.seq (hB.seq (hC1.seq (hC2.seq (hC3.seq (hC4.seq hO)))))
+  rw [← hSc, ← cutOf_eq] at hall
+  exact hall
 
 /-- The `|Sel|` tail: `CNT` in unary. -/
 def selTailM := Composition.machine (cpyI rK rC) outLoop

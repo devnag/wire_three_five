@@ -1,4 +1,6 @@
 import Proof.Wire_3_5.Primitive.SeedFix.W6K
+import Proof.Wire_3_5.Primitive.ThresholdWriter.Joins
+import Proof.Wire_3_5.Primitive.Writers.ThrQ
 
 /-! # W6, part 12: the prime rows (port `17`), their count and their sum
 

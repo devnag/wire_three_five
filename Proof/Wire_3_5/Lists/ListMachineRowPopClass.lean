@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Lists.ListMachineRowPopContract
+import Proof.Wire_3_5.MachineModel.BlockCost
 
 /-! # C2 rows, part 17: the POP row's machine contract
 
@@ -11,7 +12,8 @@ The per-row contract of POP rows in the seed's `c2` shape:
   cost bound `2^t · 128 · (|record|+1)^3` is within the preprocessing class at `(n, k, Ψ) = (n, B.kOf n, B.psiOf n)`
   — the ledger's class arguments;
 * `ref`/`encode`: the computable reference expression `popRefC` and `exprWord`;
-* `errSpec`: at EVERY assignment of the corner pool the reference takes the value `[flatReport(Z^±) = s]` of the amplified list at the population point (P3:1519-1526).
+* `errSpec`: at EVERY assignment of the corner pool the reference takes the value `[flatReport(Z^±) = s]` of M2's
+  amplified list at the population point (P3:1519-1526).
 
 **`popBlocks`**: the `ClassBlocks` of the contract (the POP row machine, all heads rewound by a masked reset from an
 empty log); **`popCertified`**: `Certified popContract`. -/

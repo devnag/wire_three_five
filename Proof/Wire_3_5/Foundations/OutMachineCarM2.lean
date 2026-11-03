@@ -1,6 +1,7 @@
 import Proof.Wire_3_5.Foundations.OutMachineCarM1
+import Proof.Wire_3_5.FinalPass.S5TUtil
 
-/-! # The output machine carrier phase, part 3: the carrier tables
+/-! # X6 carrier phase, part 3: the carrier tables
 
 "One-sided scores may be computed directly at a sampled row in polynomial time" (P3:3049-3050): the final pass reads
 each named carrier `X` as the table `gatesW h (maskGates X)` (P3:3071-3086). From the request with `1^n`, `1^L`, PA's

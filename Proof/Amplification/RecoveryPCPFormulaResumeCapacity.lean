@@ -1,4 +1,6 @@
 import Proof.Amplification.RecoveryPCPFormulaResumeSparse
+import Proof.Amplification.RecoveryProjectionCapacity
+import Proof.MachineModel.ClockUnarySum
 
 /-! From the original binary R/Q fields, execute both unary parsers, the
 existing row capacity, the physical R+Q sum and the exact source-clause

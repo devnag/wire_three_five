@@ -1,4 +1,27 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SdI9
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.FpInLen
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdI1
+import Proof.Wire_3_5.FinalPass.SdI2
+import Proof.Wire_3_5.FinalPass.SdI3
+import Proof.Wire_3_5.FinalPass.SdI5
+import Proof.Wire_3_5.FinalPass.SdI8
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.FinalPass.SeamsProg
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.FinalPass.SeamsPt
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.S5SeamB
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SdI10Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S4 (the seeds phase), part 59: the run at a star call of the family (P3:3044-3048, 3170-3178)
 
@@ -35,3 +58,4 @@ end Family
 
 end NearCubicWires.WireExponent3_5.FinalPass.Sd
 
+end

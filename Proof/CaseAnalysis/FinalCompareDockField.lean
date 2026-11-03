@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.FinalCompareDockLit
+import Proof.PCP.ProjectionNormalizationField
 
 /-! **Decision tail, stage 2a-ii — lift one field out of a record word.**
 

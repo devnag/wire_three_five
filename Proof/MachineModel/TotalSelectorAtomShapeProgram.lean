@@ -1,5 +1,7 @@
 import Proof.Circuits.SelectorDrivenAtomContextRuns
 import Proof.Circuits.TotalInverseCompilerRuns
+import Proof.MachineModel.StructuralAtomCalleeProgram
+import Proof.MachineModel.TotalSelectiveCountCasesProgram
 
 /-!
 # The guarded atom-count shape stage at the selector frame

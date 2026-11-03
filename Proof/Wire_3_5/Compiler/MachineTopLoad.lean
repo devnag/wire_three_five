@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Compiler.MachineEmitRun
+import Proof.MachineModel.GeneratedAmplifierCopy
 
 /-! # C3 v2 top level, T1: the input record and its load (P3:1876-1906)
 

@@ -1,5 +1,5 @@
-import Proof.MachineModel.ClockUnaryProduct
 import Proof.MachineModel.Machine
+import Proof.MachineModel.ClockUnaryProduct
 
 /-! Fixed physical stream reindexer. Tape 1 is the retained unary displacement
 with a leading false sentinel; every address block gets that many new marks.

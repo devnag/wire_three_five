@@ -1,5 +1,7 @@
 import Proof.SourceAssembly.SourceStepsHw
-import Proof.SourceAssembly.SourceStepsSeamRc
+import Proof.Packets.BudgetSeamScalars
+import Proof.SourceAssembly.SourceStepsClassR
+import Proof.CaseAnalysis.FinalBandRecycle
 
 section
 set_option autoImplicit false
@@ -20,6 +22,13 @@ attribute [local irreducible] P1TopDownPaidPayload.tapes WorkspaceSelectedAdmiss
   WorkspaceSelectedEntry.size SelectedRecoveryIntegration.outer
 
 section clause
+variable (sources : EightSources) {gamma : Real} (p : Parameters sources gamma)
+    (den : Nat) (hden : 0 < den) (k r scratch n : Nat) (x : BitInput n) (bits : List Bool)
+    (hp : P1Independent.CappedLegalAdmission.passed sources p
+      (ControllerCappedSelected.reference den hden k (PolynomialClock.ordinaryClock k))
+      (WorkspaceSelectedAdmission.coldCutoff sources) n x bits = true)
+    (ph : Phase)
+    (ci : Fin (NC sources k (PolynomialClock.ordinaryClock k) x (C10TotalDecode.oracleOf sources k (PolynomialClock.ordinaryClock k) p.degree n bits))) (L : Nat)
 
 set_option hygiene false in
 local notation "oracleC" => C10TotalDecode.oracleOf sources k (PolynomialClock.ordinaryClock k) p.degree n bits

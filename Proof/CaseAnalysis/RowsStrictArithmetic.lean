@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.RowsStrictMagnitude
+import Proof.Amplification.RecoveryPrefixCounter
+import Proof.Amplification.RecoveryListPredecessor
 
 /-! The two unbounded branches of threshold-minus-one use only binary
 arithmetic. Both start with the actual canonical magnitude frame and return

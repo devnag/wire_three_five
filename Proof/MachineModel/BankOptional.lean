@@ -1,5 +1,6 @@
 import Proof.CaseAnalysis.WitnessHeaderSwitch
 import Proof.MachineModel.BankZero
+import Proof.CaseAnalysis.RowsPacketOptional
 
 /-! One actual raw stream runs through the positive or empty bank entry.
 The caller supplies the existing native ports; no separate marker, count pass

@@ -1,5 +1,6 @@
 import Proof.Foundations.OrdinaryMachine
 import Proof.Foundations.PolynomialClock
+import Statement
 
 /-! Shared source/consumer boundary for the correspondence repair. These
 aliases use the already implemented ordinary carrier. A hierarchy's semantic

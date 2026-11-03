@@ -1,6 +1,23 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SymF10
 import Proof.Wire_3_5.FinalPass.SymF12
 import Proof.Wire_3_5.FinalPass.SymFront3
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SymF11
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.NumsC7
+import Proof.Wire_3_5.UnionMachine.NumsPh2
+import Proof.Wire_3_5.UnionMachine.NumsPh3
+import Proof.Wire_3_5.FinalPass.SymF13Base
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-! # SWf (the SYM words writer's flat tables), part 13: the flat part's machine and its run at a SYM request
 
@@ -28,9 +45,6 @@ open NearCubicWires.WireExponent3_5.PrimAsm.SymLayout NearCubicWires.WireExponen
 open NearCubicWires.WireExponent3_5.FinalPass.PlanFP NearCubicWires.WireExponent3_5.Split
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.Lists NearCubicWires.WireExponent3_5.Primitive
 open NearCubicWires.WireExponent3_5.PrimT.WalkBank NearCubicWires.SupplierPipeline NearCubicWires.BlockPlatform
-
-/-- The front's region. -/
-abbrev xFw : ℕ := DataDock.DT + 3
 
 section Layout
 variable (l : Literals) (W : WalkBankProducer)
@@ -182,3 +196,5 @@ theorem swf_run {n a' : ℕ} (ha' : a' ≤ 4) (Cs : Fin a' → NormalizedSymmetr
 end Gate
 
 end NearCubicWires.WireExponent3_5.FinalPass.SymF
+
+end

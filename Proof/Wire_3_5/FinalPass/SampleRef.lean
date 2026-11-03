@@ -1,3 +1,4 @@
+import Proof.Wire_3_5.FinalPass.Mask
 import Proof.Wire_3_5.FinalPass.FiltTabRef
 
 /-! # Final pass, stage 0: a sampled half from its index (P3:1188-1193, 1220-1222, 3044-3053)

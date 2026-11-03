@@ -1,3 +1,4 @@
+import Proof.Amplification.RecoveryCertificateWord
 import Proof.Amplification.RecoveryCommittedBitLookup
 
 /-! The selected physical certificate starts with the shared finite valuation.

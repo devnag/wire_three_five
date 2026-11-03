@@ -1,11 +1,12 @@
 import Proof.Wire_3_5.UnionMachine.FrontAtomCopy
-import Proof.Wire_3_5.UnionMachine.FrontAtomDecoder
 import Proof.Wire_3_5.UnionMachine.FrontAtomTail
+import Proof.Wire_3_5.UnionMachine.FrontAtomDecoder
 import Proof.Wire_3_5.UnionMachine.FrontLoopKit
+import Proof.Amplification.RecoveryScratchErase
 
 /-! # C6 front, U1b: the atom loop's tapes
 
-The atom loop's `1703 + 11` tapes: the Theorem 2.5 repository's decoder bank first (`dm`), then `0` the guess rest, `1` the copy's cell, `2–4`
+The atom loop's `1703 + 11` tapes: v8's decoder bank first (`dm`), then `0` the guess rest, `1` the copy's cell, `2–4`
 the copy's registers `PG PT K`, `5` the loop's condition, `6–7` the verdict's registers `J BAD`, `8` the ruler `1^H`,
 `9–10` the erasers' capacity tapes. The decoder's private tapes (every tape but the raw, template, output, driver and
 policy tapes) are enumerated by `priv`. Main declarations: the slot maps `dm sm cm tm em pm` with injectivity, `priv`

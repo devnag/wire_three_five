@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.PlanBase
 
 /-! # PA library (b): the SYM sample count `Q` as a closed formula
 

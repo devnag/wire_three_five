@@ -1,4 +1,5 @@
 import Proof.Hierarchy.HierarchyBinaryKernel
+import Proof.MachineModel.OrdinaryCompare
 
 /-! Actual final signed comparison for the fast competitor. Four bounded
 natural scalar words represent two signed numerators. Two paid additions,

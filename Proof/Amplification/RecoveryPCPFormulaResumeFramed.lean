@@ -1,5 +1,6 @@
 import Proof.Amplification.RecoveryPCPFormulaResumePosition
 import Proof.Amplification.RecoveryTseitinForward
+import Proof.Assembly.AppendOutputFrame
 
 /-! Measure the actual complete formula append cursor, execute its rewind,
 and frame those same emitted bytes for the existing balanced serializer. -/

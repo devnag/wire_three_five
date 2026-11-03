@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.WitnessNodeSmall
+import Proof.Amplification.RecoveryPrefixCompare
 
 /-! One fixed scalar worker is shared by all three node fields. It compares
 binary payloads to the physically supplied arity and current-node bounds,

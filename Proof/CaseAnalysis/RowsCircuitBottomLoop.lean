@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RowsCircuitBottomRound
+import Proof.CaseAnalysis.RowsFamilyLoop
 
 /-! The actual serialized bottom count drives the complete reusable worker.
 Every original field is parsed once; only retained fields emit native words,

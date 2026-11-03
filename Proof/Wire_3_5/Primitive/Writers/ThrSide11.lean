@@ -1,9 +1,28 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.ThrSide10
 import Proof.Wire_3_5.Primitive.Writers.ThrEAt3
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SymCost4
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.ThrSide1
+import Proof.Wire_3_5.Primitive.Writers.ThrSide3
+import Proof.Wire_3_5.Primitive.Writers.ThrSide5
+import Proof.Wire_3_5.Primitive.Writers.ThrSide7
+import Proof.Wire_3_5.Primitive.Writers.ThrSide8
+import Proof.Wire_3_5.Primitive.Writers.ThrSide9
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.ThrSide10Base
 
-/-! # c4 THR block, piece 6 part 11: `ThrEAt3` at every THR call (piece 6's deliverable)
 
-The THR twin of the SYM side's assembly (the SymBuild `side`, RULING): at a THR call of the gate, under the THR
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2 c4 THR block, piece 6 part 11: `ThrEAt3` at every THR call (piece 6's deliverable)
+
+The THR twin of the SYM side's assembly (the SymBuild `side`): at a THR call of the gate, under the THR
 constants' constraints (`ThrHpreC`, `d_Q ≥ cST + 1`, `d_T ≥ 2e_N`, `d_C ≥ 12d_T`, `symDAc ≤ d_A`, all fixed before `F`)
 and the THR floors (`occCDT`, `16·thrC1`, `symHC(d_C, cDa + c_m, …)` below `C_D`), the free program
 `freeProg2 (thrK2 c)` with the degree bound `thrDF c`, `K = symKn c` (the capacity `2^{⌊n/16⌋ + d_C L²}`) and
@@ -58,3 +77,5 @@ theorem thrEAt (c : SymC) (wa : WilliamsAlgorithm) (E3 : Envelope) (hc : ThrHpre
 end Gate
 
 end NearCubicWires.WireExponent3_5.PrimAsm.ThrSide
+
+end

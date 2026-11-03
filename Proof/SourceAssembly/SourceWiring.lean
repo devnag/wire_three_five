@@ -1,4 +1,5 @@
 import Proof.SourceAssembly.SourceCycle
+import Proof.SourceAssembly.SourceLayout
 
 section
 set_option autoImplicit false
@@ -62,6 +63,15 @@ namespace Dims
 end Dims
 
 section concrete
+variable (mask : MaskProducer) {selector : CyclicChoice.Laws}
+  (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector)
+  (rows : PCJc4297ab269d8423a_Source.RowLibrary selector) (sources : EightSources) (res : Nat)
+  {gamma : Real} (p : Parameters sources gamma) (k r : Nat)
+
+theorem dims_ext (hres : 19 ≤ res) : (dimsOf mask packets rows sources res p k r).Ext where
+  hF := by simp only [dimsOf]; omega
+  hres := hres
+  hlast := by simp only [dimsOf, rowTapes, rowWork, PCJ38fbfed565f64139_Ready.tapes]; omega
 
 end concrete
 

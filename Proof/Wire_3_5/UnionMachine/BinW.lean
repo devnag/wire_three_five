@@ -1,3 +1,4 @@
+import Proof.Wire_3_5.FinalPass.WordAux
 import Proof.Wire_3_5.UnionMachine.SeedIdx
 
 /-! # X1, part (b): the binary writer `binW` (a register's value as a framed binary word)

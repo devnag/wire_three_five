@@ -1,6 +1,7 @@
-import Proof.Wire_3_5.FinalPass.DigsIface
+import Proof.Wire_3_5.Primitive.Writers.Emit
 import Proof.Wire_3_5.FinalPass.ThrPtPad
 import Proof.Wire_3_5.Primitive.SeedFix.HbPops
+import Proof.Wire_3_5.FinalPass.DigsIface
 
 /-! # HASH setup (C), P2a part 1: the populations loop's layout, tracked state and bit copies
 

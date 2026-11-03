@@ -1,4 +1,8 @@
-import Proof.Rows.FinalCellComparator
+import Proof.Hierarchy.CompetitorCountTable
+import Proof.MachineModel.OrdinaryCompare
+import Proof.Rows.FinalDominanceEncoder
+import Proof.CaseAnalysis.RowsDegreeLoop
+import Proof.MachineModel.Runs
 
 /-! A.3's fixed-column comparison scan with ONE retained target tuple.
 The source stream is consumed once. The target is physically rewound after

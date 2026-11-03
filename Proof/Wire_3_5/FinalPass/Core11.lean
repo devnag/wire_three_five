@@ -1,5 +1,18 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.Core10
 import Proof.Wire_3_5.FinalPass.CoreIfaceM
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.FinalPass.Core11Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S5Core, part 11: the core half's layout and machine (P3:3170-3181)
 
@@ -44,55 +57,23 @@ def oS : ℕ := oN W + szN W
 /-- **The core's room** at `l`: the count, the mode, the four writers' blocks. -/
 def mCoreOf : ℕ := oS W + szS W
 
+theorem h5W : 0 + (3 + 2 + 0) ≤ mCoreOf W := by unfold mCoreOf oS oN oB; omega
 
 end Lay
 
 section Tapes
 variable {l : Literals} (W : CoreWriters l) {mTh : ℕ} (L : S5Lay Sw0.nw) (hR : Bank.HalfRoom2 L mTh (mCoreOf W))
 
-/-- Part A's outputs: S4's slots `0 … 3`. -/
-def outA (k : Fin 4) : Fin L.t := L.wd (s4SlotA k)
-/-- Part B's outputs: S4's slots `4 … 7`. -/
-def outB (k : Fin 4) : Fin L.t := L.wd (s4SlotB k)
-/-- The numbers' outputs. -/
-def outN : Fin 2 → Fin L.t := ![L.tN, L.tD]
-/-- The SYM words' outputs: the SYM slots. -/
-def outS (k : Fin 17) : Fin L.t := L.wd (symSlot k)
+/-- The reference's index in the room: the count's output stream. -/
+def iTc : Fin (mCoreOf W) :=
+  ⟨(sTape (ns := 3) (nr := 0) (cOut L.Dc)).val, by
+    have := (sTape (ns := 3) (nr := 0) (cOut L.Dc)).isLt; have := h5W W; omega⟩
 
-theorem outA_inj : Function.Injective (outA L) := fun a b h => by
-  have := congrArg Fin.val (L.wdInj h); simp [s4SlotA] at this; exact Fin.ext this
-theorem outB_inj : Function.Injective (outB L) := fun a b h => by
-  have := congrArg Fin.val (L.wdInj h); simp [s4SlotB] at this; exact Fin.ext this
-theorem outS_inj : Function.Injective (outS L) := fun a b h => by
-  have := congrArg Fin.val (L.wdInj h); simp [symSlot] at this; exact Fin.ext this
-theorem outN_inj : Function.Injective (outN L) := fun a b h => by
-  fin_cases a <;> fin_cases b <;> simp [outN] at h ⊢ <;> first | exact absurd h L.hND | exact absurd h.symm L.hND
+/-- **The reference** `sent c`: the count's output tape. -/
+noncomputable def Tc : Fin L.t := hR.coreE (iTc W L)
 
-theorem wd_ne0 (k : Fin (17 + Sw0.nw)) : L.wd k ≠ i0 L := fun e => L.in0 k (by rw [e]; rfl)
-
-theorem outN_ne0 (k : Fin 2) : outN L k ≠ i0 L := by
-  fin_cases k
-  · exact fun e => L.inN (by simp [outN] at e; rw [e]; rfl)
-  · exact fun e => L.inD (by simp [outN] at e; rw [e]; rfl)
-
-/-- **Every register tape off the words, the numbers and the reference.** -/
-noncomputable def regList (T : Fin L.t) : List (Fin L.t) := by
-  classical
-  exact (List.finRange L.t).filter (fun y => L.reg y = true ∧ (∀ k, y ≠ L.wd k) ∧ y ≠ L.tN ∧ y ≠ L.tD ∧ y ≠ T)
-
-theorem mem_regList (T y : Fin L.t) :
-    y ∈ regList L T ↔ L.reg y = true ∧ (∀ k, y ≠ L.wd k) ∧ y ≠ L.tN ∧ y ≠ L.tD ∧ y ≠ T := by
-  classical
-  unfold regList; simp
-
-theorem regList_nodup (T : Fin L.t) : (regList L T).Nodup := by
-  classical
-  unfold regList; exact (List.nodup_finRange _).filter _
-
-theorem regList_length (T : Fin L.t) : (regList L T).length ≤ L.t := by
-  classical
-  unfold regList
-  exact (List.length_filter_le _ _).trans (by simp)
+/-- The count's template `sent N`. -/
+noncomputable def cTt : Fin L.t := blk L hR 0 (3 + 2 + 0) (h5W W) (sTape (nr := 0) cT)
 
 end Tapes
 
@@ -101,3 +82,5 @@ section Mach
 end Mach
 
 end NearCubicWires.WireExponent3_5.FinalPass.Core
+
+end

@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.TabConv
+import Proof.Wire_3_5.Primitive.Writers.WriteNat
 import Proof.Wire_3_5.Primitive.Writers.Emit
 
 /-! # G1, the gate converter, part 1: a table number's length pass (P3:1645-1650, 1655-1664)

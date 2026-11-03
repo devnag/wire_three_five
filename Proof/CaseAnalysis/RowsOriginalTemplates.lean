@@ -1,5 +1,5 @@
-import Proof.CaseAnalysis.RowsScalarFits
 import Proof.Hierarchy.CompetitorSourceValidity
+import Proof.CaseAnalysis.RowsScalarFits
 
 /-! Exact signed templates for the three original source tests. The parity
 field denotes a carried systematic atom, never an original family index.
@@ -26,6 +26,7 @@ def auxiliary (side : Fin 2) : List Row :=
   [plain 1 [side,side],plain (-2) [side,side,side],plain 1 [side,side,side,side]]
 def systematic (side : Fin 2) : List Row :=
   [carried 1 side [],carried (-2) side [side],plain 1 [side,side]]
+def moment : List Row := [plain 1 [0,0]]
 def clause : Bool → Bool → List Row
   | false,false => [plain 1 [0],plain 1 [1],plain (-1) [0,1]]
   | false,true => [plain 1 [],plain (-1) [1],plain 1 [0,1]]
@@ -41,6 +42,9 @@ theorem systematic_value (side : Fin 2) (x e : Fin 2 → ℝ) (expected : Bool)
     (he : e side=bitAsReal expected) :
     value (systematic side) x e=systematicPenalty expected (x side) := by
   cases expected <;> simp [value,systematic,plain,carried,Row.value,systematicPenalty,he,bitAsReal] <;> ring
+
+theorem moment_value (x e : Fin 2 → ℝ) : value moment x e=(x 0)^2 := by
+  simp [value,moment,plain,Row.value,pow_two]
 
 theorem clause_value (leftNegative rightNegative : Bool) (x e : Fin 2 → ℝ) :
     value (clause leftNegative rightNegative) x e=clauseValue leftNegative rightNegative (x 0) (x 1) := by

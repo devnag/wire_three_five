@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryPrefixBodyInvariant
+import Proof.Amplification.RecoveryCanonicalChoice
 
 /-! The executed compact query has the same zero-first choice as the
 existing canonical proof/circuit self-reduction on its guarded source formulas. -/

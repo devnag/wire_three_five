@@ -1,5 +1,7 @@
 import Proof.Wire_3_5.UnionMachine.FrontArity
 import Proof.Wire_3_5.UnionMachine.FrontKit
+import Proof.CaseAnalysis.WitnessOracleCallRun
+import Proof.CaseAnalysis.CloseoutScheduleMetadata
 
 /-! # C6 front, U1a: the oracle stage — tag, oracle field and decoded oracle (P3:3669-3672)
 
@@ -12,7 +14,7 @@ from the framed input `x` (tape `0`), the framed witness `w` (tape `1`) and the 
 2. the walker (`FrontOracleField.walkP_spec`): the tag, the verdict on the oracle field, the code's bits framed, the
    rest of the guess framed;
 3. the fill from `1^q` and the arity program (`FrontArity.arP_spec`): `frame (binary ℓ q)`;
-4. The Theorem 2.5 repository's checked oracle call (`CloseoutWitness.OracleCall.call_run`, docked): the exact public decoder flag
+4. v8's checked oracle call (`CloseoutWitness.OracleCall.call_run`, docked): the exact public decoder flag
    `decodeBooleanCircuit q (value bits)` and the typed native descriptor `PCPPNative.descriptor c`.
 
 Main statement: **`oracle_ready`**. Paper quantity: the guess's tag, its oracle (decoded at arity `q`), and the rest of
@@ -106,7 +108,7 @@ noncomputable def osCost (x w : List Bool) (q : ℕ) : ℕ :=
       CloseoutWitness.OracleCall.budget x (payload w.tail) (binary (natBitLength q) q)))))))
 
 /-- **The oracle stage**: the tag on tape `14`, the rest of the guess on `13`, the verdict on the oracle field in the
-walker's cell `11`, and the Theorem 2.5 repository's decoder flag and descriptor of the field's code at arity `q`; the input, the witness and
+walker's cell `11`, and v8's decoder flag and descriptor of the field's code at arity `q`; the input, the witness and
 the width kept. -/
 theorem oracle_ready (x w : List Bool) (q : ℕ) (hN : 2 ≤ x.length) (hw : 16 * w.length ≤ x.length)
     (hℓx : natBitLength q ≤ x.length + 1) (hq : 3 * natBitLength q ≤ q) :

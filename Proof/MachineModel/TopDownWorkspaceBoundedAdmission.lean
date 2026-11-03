@@ -1,4 +1,5 @@
 import Proof.MachineModel.TopDownWorkspaceGuardedWorker
+import Proof.CaseAnalysis.WitnessBoundedFamilyBudget
 
 /-! A sealed state-count package for the existing bounded parser, exposing its
 actual total receipt without normalizing the source compiler's state arithmetic
@@ -25,6 +26,26 @@ def tapes (source : ProjectionSourceAlgorithm UWhole.verifier UWhole.time)
   ⟨_,BoundedFamilySupport.actualMachine source a k CH Cpad cutoff D G copies E K symDen thrDen
     (CloseoutMassThreshold.literalWidth delta copies) delta
     (CloseoutSampledWitness.massCap delta copies) code⟩
+
+theorem input_eq (source : ProjectionSourceAlgorithm UWhole.verifier UWhole.time)
+    (a : PointwisePCPPAlgorithm) (k D G E : Nat) (x bits : List Bool) :
+    BoundedFamilySupport.input source a k D G E x bits = input x bits := by
+  funext j
+  change SupportDock.lift (HeaderDock.input (BoundedFamily.workspace source a k D G E)
+    (CompetitorWitnessBounded.input x bits)) [] j = _
+  refine Fin.addCases (m:=HeaderDock.tapes (BoundedFamily.workspace source a k D G E)) (n:=1) ?_ ?_ j
+  · intro j
+    rw [SupportDock.lift,Fin.addCases_left]
+    refine Fin.addCases (m:=150) (n:=BoundedFamily.workspace source a k D G E+1) ?_ ?_ j
+    · intro j
+      simp only [HeaderDock.input,Fin.addCases_left,input,Fin.val_castAdd]
+      exact CompetitorWitnessBounded.input_eq x bits j
+    · intro j
+      simp only [HeaderDock.input,Fin.addCases_right,input,Fin.val_castAdd,Fin.val_natAdd]
+      rw [if_neg (by omega),if_neg (by omega)]
+  · intro j
+    simp only [SupportDock.lift,Fin.addCases_right,input,Fin.val_natAdd]
+    rw [if_neg (by dsimp [HeaderDock.tapes];omega),if_neg (by dsimp [HeaderDock.tapes];omega)]
 
 def uniformFuel (source : ProjectionSourceAlgorithm UWhole.verifier UWhole.time)
     (a : PointwisePCPPAlgorithm) {k : Nat} (H : OrdinaryHierarchy (fun n => n^(k+2)))

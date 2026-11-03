@@ -1,4 +1,6 @@
 import Proof.MachineModel.OrdinaryTransitionWalkMachine
+import Proof.MachineModel.OrdinaryMemoryInitialEmission
+import Proof.MachineModel.OrdinaryClaimedTrace
 
 /-! The array's physical stream is the chronological memory batch of the
 symbolic trace, with the initialization serial continued without reset. -/

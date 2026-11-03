@@ -1,4 +1,5 @@
 import Proof.Hierarchy.CompetitorPlaneEntry
+import Proof.Amplification.RecoveryCursorCalls
 
 /-! One fixed ordinary plane machine reads the actual sign tape once,
 executes the corresponding complete cold pass, and returns with every head

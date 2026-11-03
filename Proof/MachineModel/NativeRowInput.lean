@@ -1,4 +1,6 @@
 import Proof.MachineModel.NativeFamily
+import Proof.CaseAnalysis.RowsSharedInput
+import Proof.CaseAnalysis.RowsEstimatorHeader
 
 /-! The actual raw family has the literal row type consumed by the estimator.
 The occurrence list and shared digit width are unchanged. -/

@@ -1,3 +1,4 @@
+import Proof.MachineModel.OrdinaryMaskedReset
 import Proof.PCP.PCPSerializerTapeSupport
 
 /-! The existing masked reset, with a reusable local capacity. Abstract tape

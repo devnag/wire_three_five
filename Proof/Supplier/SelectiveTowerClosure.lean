@@ -1,6 +1,7 @@
+import Proof.MachineModel.BankEmittedAtomLoop
+import Proof.MachineModel.BoundedOracleStructuralSelectiveProgram
 import Batteries.Tactic.OpenPrivate
 import Proof.Circuits.StructuralTaggedReverseEntry
-import Proof.MachineModel.BankEmittedAtomLoop
 
 namespace NearCubicWires.SelectiveCountCasesInverse
 

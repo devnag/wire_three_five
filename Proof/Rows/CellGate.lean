@@ -1,4 +1,5 @@
 import Proof.Rows.CellGatePalette
+import Proof.Rows.ClosureOffsetSourceMeaning
 
 /-! Actual paid gate call from eight resident masters. Fanout constructs the
 entire evaluator bank, the canonical native evaluator appends its verdict,

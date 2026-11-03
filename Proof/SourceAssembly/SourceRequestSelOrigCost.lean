@@ -1,4 +1,5 @@
 import Proof.SourceAssembly.SourceRequestSymOriginal
+import Proof.Circuits.DecompositionSourceRealization
 
 set_option autoImplicit false
 set_option maxRecDepth 120000
@@ -30,6 +31,9 @@ theorem wFuel_le (P q N S : Nat) (hP : P ≤ S) (hq : q ≤ S) (hN : N ≤ S) :
   omega
 
 /-! ## The THR original factor -/
+
+/-- The THR original factor's coefficient. -/
+def thrOC (a : DecompositionAlgorithm) : Nat := 3000 * (a.coefficient + 2) ^ 2 + 30000
 
 /-- The THR original factor's exponent. -/
 def thrOE (a : DecompositionAlgorithm) : Nat := 2 * a.degree + 2

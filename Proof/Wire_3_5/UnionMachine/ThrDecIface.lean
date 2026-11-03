@@ -1,8 +1,23 @@
-import Proof.Wire_3_5.Primitive.Writers.SymDecBr
-import Proof.Wire_3_5.Primitive.Writers.ThrDataIface3
+import Lean
 import Proof.Wire_3_5.UnionMachine.RadSetupB3
+import Proof.Wire_3_5.Primitive.Writers.FiltSetupIface2
+import Proof.Wire_3_5.Primitive.Writers.CellLoopD
+import Proof.Wire_3_5.Primitive.Writers.SymDecBr
+import Proof.Wire_3_5.Primitive.Writers.WriterIfaceBase
+import Proof.Wire_3_5.Primitive.Writers.ThrDataIface3
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.ThresholdWriter.RadSetup
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.ThrDecIfaceBase
 
-/-! # The THR unit's decode front: the contract between the decode and the unit machine
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # The THR unit's decode front: the contract between the decode (T3) and the unit machine (C6b)
 
 P3:2543-2558 (the THR call's numbers once per call), P3:2019-2054 (the FILTER rows), P3:2585-2623 (the RADIX row);
 the THR tape's units as in `SymFlat.symEmit (|carriers|+1) 0` (per entry `[true]`, per row `[true]`, the row's
@@ -33,22 +48,6 @@ open NearCubicWires.WireExponent3_5.Cost NearCubicWires.WireExponent3_5.Split Ne
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.PrimThrW.Joins
 open NearCubicWires.WireExponent3_5.PrimThrW.RadSetup
 open NearCubicWires.WireExponent3_5.UnionMachine.RadSetupB3
-
-/-- The RADIX branch's marker register. -/
-def rRadK : Fin LNR := ⟨398, by decide⟩
-
-/-- The FILTER branch's marker register. -/
-def rFltK : Fin LNR := ⟨399, by decide⟩
-
-/-- The units per entry of the THR tape: `[true]`, per row `[true]`, the request, `[false]`, then `[false]`. -/
-def thrEU (nc : ℕ) : ℕ := (nc + 1) * (0 + 3) + 2
-
-/-- Unit `j` is a request unit (the middle unit of a row) of the first `TOT` units. -/
-def IsReqU (TOT nc j : ℕ) : Prop :=
-  j < TOT ∧ j % thrEU nc ≠ 0 ∧ j % thrEU nc < thrEU nc - 1 ∧ (j % thrEU nc - 1) % 3 = 1
-
-/-- A request unit's row index `r` (`r < nc`: FILTER, `r = nc`: RADIX). -/
-def rowOfU (nc j : ℕ) : ℕ := (j % thrEU nc - 1) / 3
 
 section Call
 variable (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n : ℕ}
@@ -138,7 +137,7 @@ structure ThrDecOut (x : ℕ) (cap : ℕ) (σ : WState (LNS x) LNR) (out : List 
 
 end Call
 
-/-- **The THR unit's decode front** (builds it): one machine on the cell layout `LNS x` per gate, with
+/-- **The THR unit's decode front** (#186; T3 builds it): one machine on the cell layout `LNS x` per gate, with
 capacity `need` and cost `bound` quasi-bounded in `n`; at every THR call, every output `out`, unit `j` and capacity
 `≥ need n + j`, from the unit's fresh cell to `ThrDecOut`. -/
 structure ThrDecFront (x : ℕ) (l : Literals) (F : GateFree l) where
@@ -168,3 +167,5 @@ structure ThrDecFront (x : ℕ) (l : Literals) (F : GateFree l) where
       ThrDecOut l F kclk coef A a ha hs ha' Cs carriers translation x cap σD out j
 
 end NearCubicWires.WireExponent3_5.UnionMachine.ThrDec
+
+end

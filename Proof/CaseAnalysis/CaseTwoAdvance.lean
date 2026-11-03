@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CaseTwoFieldNative
+import Proof.MachineModel.ClockUnarySum
 
 /-! In-place advance of the paid raw description offset by the paid field
 width. The two scans and their complete rewind are charged; both drivers

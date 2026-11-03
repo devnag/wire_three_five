@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryFixedUnpair
+import Proof.Foundations.SourceCore
 import Proof.Circuits.CanonicalWitnessCodec
 
 /-! The actual canonical recovery witness begins with one fixed tagged

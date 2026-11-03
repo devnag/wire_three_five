@@ -1,4 +1,15 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTypes
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTypesBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # C4.K, the per-mode contract: one C4 stage per class mode, in `C4Leaf`'s order of choice
 
@@ -68,13 +79,15 @@ def ModeLeaf (l : Literals)
   ∀ fe : ℕ, Σ E : Envelope, Σ CD : ℕ, ∀ F : GateFree l, F.filterErrDeg = fe → ClassLE E F.E → CD ≤ F.CD →
     Σ c : ℕ, ∀ (kclk coef A a : ℕ) (ha : a ≤ kclk + 1), P F E c kclk coef A a ha
 
-/-- **The SYM part**. -/
+/-- **The SYM part** (T). -/
 abbrev SymLeafC4 (l : Literals) : Type := ModeLeaf l (SymAt l)
 
-/-- **The HASH part** (setup, child family, stage T). -/
+/-- **The HASH part** (setup PA2, child family C6b, stage T). -/
 abbrev HashLeafC4 (l : Literals) : Type := ModeLeaf l (HashAt l)
 
-/-- **The THR part**. -/
+/-- **The THR part** (PA2). -/
 abbrev ThrLeafC4 (l : Literals) : Type := ModeLeaf l (ThrAt l)
 
 end NearCubicWires.WireExponent3_5.PrimT.C4K
+
+end

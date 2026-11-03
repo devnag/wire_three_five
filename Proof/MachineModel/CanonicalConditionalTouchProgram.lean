@@ -1,3 +1,5 @@
+import Proof.Circuits.CanonicalBalancedCall
+import Proof.MachineModel.CanonicalBalancedNatSumProgram
 import Proof.MachineModel.CanonicalOccurrencePopulationProgram
 import Proof.MachineModel.CanonicalTouchingStepProgram
 

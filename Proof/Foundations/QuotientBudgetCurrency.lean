@@ -35,13 +35,6 @@ end ExecutableRecoveryMachine
 
 /-! ## §1 The frozen saving constants -/
 
-/-- **The quotient budget** — the declared-budget currency:
-`⌊coefficient · (measure+1)^degree / L(measure)^saving⌋`.
-Floor division only SHRINKS the declared budget, so `halts` stated at this
-budget is harder, never easier, than the paper's real-valued quotient. -/
-def quotientBudget (coefficient degree saving measure : ℕ) : ℕ :=
-  coefficient * (measure + 1) ^ degree / logScale measure ^ saving
-
 /-! ## §2 Elementary `logScale` facts -/
 
 /-! ## §3 Lemma one — `K` meets the saving threshold -/

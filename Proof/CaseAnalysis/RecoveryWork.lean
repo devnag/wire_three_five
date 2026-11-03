@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoveryScalarMetadata
+import Proof.CaseAnalysis.RecoveryRowErase
 
 /-! One actual sweep allocates the initial original row work, empty outer
 stack and two grammar drivers. The graph, clause source and metadata remain. -/

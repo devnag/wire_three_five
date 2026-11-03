@@ -1,3 +1,4 @@
+import Proof.MachineModel.ClockUnarySum
 import Proof.PCP.PCPPNativeCopyNodes
 
 /-! The exact shared DAG address, produced by actual bounded unary scans.

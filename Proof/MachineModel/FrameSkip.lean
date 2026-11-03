@@ -84,19 +84,6 @@ end FrameSkip
 
 namespace FrameSkipMark
 
-/-- Tape 0 stream, tape 1 measure (one `true` appended per scanned byte). -/
-def machine : Machine 2 3 where
-  descriptionBits := 0
-  start := 0
-  halted := fun q => q.val == 2
-  rule := fun q bits =>
-    if q.val = 0 then some (if bits 0 then ⟨1, ![none, some true], ![.right, .right]⟩
-      else ⟨2, ![none, some true], ![.right, .right]⟩)
-    else if q.val = 1 then some ⟨0, ![none, some true], ![.right, .right]⟩
-    else none
-
-@[simp] theorem halted_two : machine.halted 2 = true := rfl
-
 end FrameSkipMark
 
 end NearCubicWires.ExtDecompositionBatch

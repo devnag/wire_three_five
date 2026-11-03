@@ -1,7 +1,9 @@
-import Proof.Wire_3_5.Compiler.MachinePoolSpec
-import Proof.Wire_3_5.FinalPass.MaskRef
-import Proof.Wire_3_5.Lists.ListMachineRowFiltClass
 import Proof.Wire_3_5.Primitive.SeedFix.SeedFixSampExpr
+import Proof.Wire_3_5.Lists.ListMachineRowPopClass
+import Proof.Wire_3_5.Lists.ListMachineRowFiltClass
+import Proof.Wire_3_5.Lists.ListMachineRowRadixClass
+import Proof.Wire_3_5.FinalPass.MaskRef
+import Proof.Wire_3_5.Compiler.MachinePoolSpec
 
 /-! # PA (d), part 1: the entry → row-record map and the product lemmas
 

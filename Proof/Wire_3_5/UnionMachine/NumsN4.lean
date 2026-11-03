@@ -1,11 +1,13 @@
-import Proof.Wire_3_5.Primitive.Writers.SBEmit
 import Proof.Wire_3_5.UnionMachine.NumsN3
+import Proof.Wire_3_5.Primitive.Writers.SBEmit
+import Proof.Wire_3_5.FinalPass.ThrPtRS17
 
 /-! # SWn, part 4: the post program `postN` and its run from the front exit
 
 After the SYM front (`FrontOutB`) on NW's bank `x ≥ DT + 8`, **`postN`** clears the scratch block
 `100 … 159`, runs phases H, T, Q (NumsN3; the template length program `tp` an argument with `TplIface`), writes the
-eighteen registers `[dA, G41, rL j, rH j, rT j, rQ j]` as a unary list onto the output stream `oOut = sT (DT+7)` (`SBEmit.emitList`), rewinds it and clears every register.
+eighteen registers `[dA, G41, rL j, rH j, rT j, rQ j]` as a unary list onto the output stream `oOut = sT (DT+7)` (PA2's
+`SBEmit.emitList`), rewinds it and clears every register.
 
 **`postRun`**: for any SYM call `k` whose front exit is `FrontOutB x _ k.Cs k.Pl w Bnd τ0`, at every capacity above
 `capP Kt Et Bnd`, the output stream holds `unaryList (ofFn (symNums k))` (the eighteen call numbers), the request is

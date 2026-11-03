@@ -98,6 +98,12 @@ theorem clearAll_spec (σ : WState ns nr) (h : ∀ r, σ.val r ≤ cap) :
   rw [List.length_finRange] at e
   exact ⟨τ, e, h1, h2, h3, fun r => h4 r (List.mem_finRange r)⟩
 
+/-- The erase loop: overwrite ones by zeros. -/
+def eraseLoop (X : Fin (ns + 1)) (K : Fin nr) : WM ns nr := .whs X (.seq (.wr X false) (WM.fwdC X K))
+
+/-- **Erase a sentinel word**: `sent W` becomes `W + 1` zeros, the head back at `0`. -/
+def eraseS (X : Fin (ns + 1)) (K : Fin nr) : WM ns nr := .seq (WM.fwdC X K) (.seq (eraseLoop X K) (WM.rewind X K))
+
 /-- PA's `appendO` at an end head is the written state. -/
 theorem appendO_wSt (σ : WState ns nr) (O : Fin (ns + 1)) (KW : Fin nr) (u : List Bool)
     (hO : σ.sh O = (σ.st O).length) : PrimAsm.WriteNat.appendO σ O KW u = wSt O KW σ u := by

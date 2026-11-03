@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeQueryConjunction
+import Proof.PCP.PCPPQueryFieldChain
 
 /-! Skip exactly the three native natural fields of an original oracle
 node. This uses their actual native codec and preserves the source tape. -/

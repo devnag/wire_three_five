@@ -1,4 +1,19 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SymCost1
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SymHp2
+import Proof.Wire_3_5.FinalPass.SymOcc3
+import Proof.Wire_3_5.FinalPass.SymOcc4
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SymCost2Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The SYM child's cost, part 2: the SYM request's numbers at a call
 
@@ -21,20 +36,6 @@ open NearCubicWires.WireExponent3_5.Shared NearCubicWires.WireExponent3_5.Cost N
 open NearCubicWires.SupplierPipeline NearCubicWires.WireExponent3_5.Stars NearCubicWires.WireExponent3_5.Split
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.PrimAsm.WriterIface
 open NearCubicWires.WireExponent3_5.FinalPass.FreeGen NearCubicWires.WireExponent3_5.CompilerMachine
-
-/-- `C_D·L² ≤ ψ` (through `Ψ_aux`). -/
-theorem L2_mul_le (CD k L BT BS : ℕ) : CD * (L * L) ≤ loadPsi CD k L BT BS := by
-  have h1 : loadAux CD k L ≤ loadPsi CD k L BT BS := by
-    unfold loadPsi; exact le_trans (le_max_right _ _) (le_max_right _ _)
-  refine le_trans ?_ h1
-  unfold loadAux
-  apply Nat.mul_le_mul_left
-  rw [← sq]
-  omega
-
-/-- The displayed parameters' sum (the polynomial factor of `c3Cost_le_B`). -/
-def bnOf (a : RepairRepresentation.DecompositionAlgorithm) (R : Req.C3Req) : ℕ :=
-  R.p + R.P.width + (Pool.poolChildren a R.P.gates R.P.flips).length + R.P.h + R.P.Q + R.d + 1
 
 section Gate
 variable (l : Literals) (F : GateFree l)
@@ -162,3 +163,5 @@ theorem symOcc_le (c : SymC) (eT T : ℕ) (kclk coef A a : ℕ) (ha : a ≤ kclk
 end Gate
 
 end NearCubicWires.WireExponent3_5.FinalPass.SymFr
+
+end

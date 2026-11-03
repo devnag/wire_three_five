@@ -1,4 +1,7 @@
 import Proof.CaseAnalysis.RecoveryUniversalGateCall
+import Proof.Assembly.AppendFrameKernel
+import Proof.PCP.PCPSerializerCapacityFocus
+import Proof.Hierarchy.CompetitorPaddedAppend
 
 /-! Physically copy an actual unary reference as its length driver, then
 frame it in reusable C-backed storage for the original five tag choices. -/

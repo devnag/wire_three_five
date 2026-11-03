@@ -1,5 +1,6 @@
-import Proof.Amplification.CanonicalRecoveryLanguage
 import Proof.Amplification.RecoveryQueryPairSuccessor
+import Proof.Foundations.RecoveryCaseOne
+import Proof.Amplification.CanonicalRecoveryLanguage
 
 /-! Shared case predicate and canonical objects for repaired recovery and
 hardness.  The selectors use the existing zero-first table/typed-description

@@ -1,4 +1,6 @@
 import Proof.PCP.PCPPQueryCachedReaders
+import Proof.PCP.PCPSerializerCapacityPower
+import Proof.MachineModel.ClockUnarySum
 
 /-! Physical cached-query capacity from the two actual native emitter counts.
 The sum and fixed polynomial are evaluated once; both counts are retained. -/

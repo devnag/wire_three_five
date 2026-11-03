@@ -1,5 +1,7 @@
 import Proof.MachineModel.CanonicalBalancedValidationMapProgram
+import Proof.Foundations.CanonicalBinaryProgram
 import Proof.MachineModel.CanonicalRationalValidationProgram
+import Proof.Circuits.CanonicalWitnessCodec
 
 /-!
 # Canonical integer-list validation

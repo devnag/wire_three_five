@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CaseOneBounds
+import Proof.CaseAnalysis.Language
 
 /-! Both physical hardness bounds for the Case-1 branch of the same
 canonical language core, using its actually searched proof table. -/

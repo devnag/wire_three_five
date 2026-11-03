@@ -1,5 +1,6 @@
-import Proof.MachineModel.BlockScrubEntry
 import Proof.Packets.PacketsRoot
+import Proof.MachineModel.BlockScrubEntry
+import Proof.Circuits.DecompositionCountPosition
 
 set_option autoImplicit false
 set_option maxHeartbeats 250000

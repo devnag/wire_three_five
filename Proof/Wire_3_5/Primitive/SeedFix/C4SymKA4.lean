@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.Primitive.SeedFix.C4SymKA3
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymKA
 import Proof.Wire_3_5.Primitive.SeedFix.C4SymWG
 
 /-! # C4.K SYM, the stage at a call, v4 (capacity `2^{⌊n/8⌋ + Cc}`, any degree bound `dg`)

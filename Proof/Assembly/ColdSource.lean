@@ -1,4 +1,8 @@
+import Proof.MachineModel.OccurrenceRun
+import Proof.PCP.PCPPQueryNatural
 import Proof.MachineModel.FrameSkip
+import Proof.Hierarchy.HierarchyFixedWord
+import Proof.MachineModel.FinalState
 import Proof.MachineModel.SourceEnvelope
 
 /-! Run the existing occurrence loop on the actual produced unary

@@ -1,5 +1,5 @@
-import Proof.Amplification.RecoveryPCPFormulaResumeRowReusable
 import Proof.CaseAnalysis.RecoveryRowAddressRaw
+import Proof.Amplification.RecoveryPCPFormulaResumeRowReusable
 
 /-! The framed source projector and raw original-graph query consumer
 name exactly the same addresses. The adapter uses the existing quadratic C. -/

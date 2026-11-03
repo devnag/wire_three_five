@@ -1,5 +1,6 @@
-import Proof.Amplification.RecoveryFocusDock
+import Proof.PCP.PCPPNativeNodeRead
 import Proof.PCP.PCPPNativeTag
+import Proof.Amplification.RecoveryFocusDock
 
 /-! One original native node is parsed and physically classified. The
 source cursor advances across exactly its three native natural fields;

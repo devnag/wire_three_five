@@ -1,7 +1,8 @@
 import Proof.Wire_3_5.Primitive.PrimitiveMeans
 import Proof.Wire_3_5.Primitive.PrimitiveSymRow
-import Proof.Wire_3_5.Stars.StarCarrierConsumer
 import Proof.Wire_3_5.Stars.StarPartition
+import Proof.Wire_3_5.Filters.FilterGap
+import Proof.Wire_3_5.Stars.StarCarrierConsumer
 
 /-! # Primitive: the two errors of a symmetric-top call (P3:3147-3168)
 
@@ -249,7 +250,7 @@ noncomputable def symEstimate : ℝ :=
   uMean fun c : {c // P.IsCenter σ c} => uMean fun s : GapSeed FP × Pl.FlatSeed =>
     sampleMean S (symCell P σ Cs carriers FP Pl eqv c s)
 
-/-- `𝔐 = Π_j(m_j+1)²·Π_jP_j` (row:sampler-interface for SYM, 5). -/
+/-- `𝔐 = Π_j(m_j+1)²·Π_jP_j` (row:sampler-interface for SYM, plan F5). -/
 noncomputable def symMass : ℝ := ((∏ j, ((symM P Cs j + 1) ^ 2 : ℕ) : ℝ) * ∏ j, (symModulus (symM P Cs j) : ℝ))
 
 theorem symMass_nonneg : 0 ≤ symMass P Cs := by unfold symMass; positivity

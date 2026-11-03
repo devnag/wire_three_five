@@ -1,4 +1,19 @@
-import Proof.Wire_3_5.FinalPass.Core12
+import Lean
+import Proof.Wire_3_5.FinalPass.Core11Base
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.Core11
+import Proof.Wire_3_5.FinalPass.CoreIfaceM
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.FinalPass.Core13Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S5Core, part 13: the writers' stages (P3:3044-3048, 3170-3181)
 
@@ -27,23 +42,9 @@ open NearCubicWires.WireExponent3_5.FinalPass.S5T (sent sent_length)
 open NearCubicWires.RepairOrdinary.SignedSortKey (binary)
 
 section Run
-variable {l : Literals} (W : CoreWriters l) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {mTh : ℕ}
-  (L : S5Lay Sw0.nw) (hR : Bank.HalfRoom2 L mTh (mCoreOf W))
-
-theorem outA_ne_outB (k k' : Fin 4) : outA L k ≠ outB L k' := fun e => by
-  have := congrArg Fin.val (L.wdInj e); simp [s4SlotA, s4SlotB] at this; omega
-
-theorem wd_ne_outN (k : Fin (17 + Sw0.nw)) (i : Fin 2) : L.wd k ≠ outN L i := by
-  fin_cases i
-  · exact L.wdN k
-  · exact L.wdD k
-
-theorem outS_ne_outA (k : Fin 17) (k' : Fin 4) : outS L k ≠ outA L k' := fun e => by
-  have := congrArg Fin.val (L.wdInj e); simp [symSlot, s4SlotA] at this; omega
-
-theorem outS_ne_outB (k : Fin 17) (k' : Fin 4) : outS L k ≠ outB L k' := fun e => by
-  have := congrArg Fin.val (L.wdInj e); simp [symSlot, s4SlotB] at this; omega
 
 end Run
 
 end NearCubicWires.WireExponent3_5.FinalPass.Core
+
+end

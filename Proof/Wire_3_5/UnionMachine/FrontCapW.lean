@@ -1,3 +1,4 @@
+import Proof.Wire_3_5.FinalPass.WordLib
 import Proof.Wire_3_5.Primitive.Writers.SparseNum
 
 /-! # C6 front, the capacity writer: `1^{capQ q}` and `1^{RQ q}` as unary streams

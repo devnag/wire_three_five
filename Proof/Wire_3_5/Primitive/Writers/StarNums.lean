@@ -1,6 +1,7 @@
-import Proof.Wire_3_5.Ledger.LedgerLoad
-import Proof.Wire_3_5.Primitive.Writers.CopyNat
 import Proof.Wire_3_5.Primitive.Writers.UnaryArith
+import Proof.Wire_3_5.Primitive.Writers.CopyNat
+import Proof.Wire_3_5.Ledger.LedgerLoad
+import Proof.Wire_3_5.Foundations.S0
 
 /-! # PA library (b), part 2: the call's star numbers, computed from `n`
 

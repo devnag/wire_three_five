@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.WitnessOracleNodes
+import Proof.PCP.PCPTripleGlobalLayout
 
 /-! The output address is compared against the retained final node counter.
 The same payload frame then feeds the native footer; no padded-field copy or

@@ -1,4 +1,19 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SymCost4
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SymCost2
+import Proof.Wire_3_5.FinalPass.SymHp2
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.FinalPass.SymSz2
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SymCost5Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The SYM child's cost, part 5: the pad over the family's cell (`hR`)
 
@@ -24,9 +39,6 @@ open NearCubicWires.SupplierPipeline NearCubicWires.WireExponent3_5.Stars NearCu
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.PrimAsm.WriterIface
 open NearCubicWires.WireExponent3_5.FinalPass.FreeGen NearCubicWires.WireExponent3_5.CompilerMachine
 open NearCubicWires.RepairRepresentation
-
-theorem cmpCost_eq (W : ℕ) (p : List Bool) : PrimT.C4Loop.cmpCost W p = 73 * W + 5 * p.length + 35 := by
-  unfold PrimT.C4Loop.cmpCost; omega
 
 section Gate
 variable (l : Literals) (F : GateFree l)
@@ -110,3 +122,5 @@ theorem symHR (c : SymC) (wa : WilliamsAlgorithm) (eT : ℕ)
 end Gate
 
 end NearCubicWires.WireExponent3_5.FinalPass.SymFr
+
+end

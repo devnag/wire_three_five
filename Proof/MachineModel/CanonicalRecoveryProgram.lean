@@ -1,3 +1,4 @@
+import Proof.Foundations.CanonicalBinaryProgram
 import Proof.Circuits.CanonicalWitnessCodec
 
 /-!

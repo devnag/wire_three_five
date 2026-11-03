@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.UnionMachine.NumsA2
+import Proof.Wire_3_5.Primitive.Writers.UnaryPow
 
 /-! # NW phase (a), part 5: the unary kit, continued
 

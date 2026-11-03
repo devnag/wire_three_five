@@ -1,7 +1,21 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.ThrDecQ9
 import Proof.Wire_3_5.UnionMachine.WalkStage
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SeamsUni
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDecQ5
+import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPoly
+import Proof.Wire_3_5.UnionMachine.ThrDecIface
+import Proof.Wire_3_5.UnionMachine.ThrUnitIface
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDecQ9Base
 
-/-! # THR decode front, packaging part 10: the decode fronts at the thr closure's cells
+
+noncomputable section
+set_option maxRecDepth 120000
+
+
+/-! # T3 THR decode front, packaging part 10: the decode fronts at the thr closure's cells
 
 The thr closure join (`ThrClose.thrClose tail xF hx dec`) takes the unit cells `xF` with
 `walkBank.x ≤ xF l F` and the decode fronts `dec` as a uniform family at `xF`. **`xT l F = max walkBank.x (dX (TW l)
@@ -36,3 +50,5 @@ noncomputable def decT : ∀ l : Literals, FinalPass.Seams.StageU l (fun F _ _ _
   decOf xT xT_dec
 
 end NearCubicWires.WireExponent3_5.PrimT.ThrDecF
+
+end

@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.Primitive.Writers.SBCost
+import Proof.Wire_3_5.Primitive.Writers.SBCostBase
 
 /-! # SB: the capacity target, part 1 — P1's phase sums within one majorant
 

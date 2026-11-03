@@ -1,6 +1,23 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.TS4L
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.TS4N
+import Proof.Wire_3_5.Primitive.SeedFix.TS4O
+import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPoly
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.SeedFix.TS4WBase
 
-/-! # thrStage4U, part 16: **`thrStage4U : ∀ l, ThrStage4U l`**
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # T (#120, thrStage4U), part 16: **`thrStage4U : ∀ l, ThrStage4U l`**
 
 P3:2543-2558, 2596-2604, 2150-2157, 2220-2231 (the THR call's numbers, computed once per call), P3:3083-3086 (the named
 carriers), P3:3425-3430 (the THR filter's cap `B_T`), P3:3071-3091 ("the preprocessing … runs in time polynomial in
@@ -41,9 +58,6 @@ theorem fuel_le (cr : ℕ) {n a' : ℕ} (Cs : Fin a' → NormalizedThresholdThre
     2 * m3Fuel (W6.litAlg l) 1 cr (gateZeta_pos l) (gateZeta_lt l) (gateCδ1 l) (gateCap l) Cs carriers L W hs + 2 + 1 ≤
       cost3G l cr Cs carriers L W := by
   unfold m3Fuel cost3G; omega
-
-theorem unary_len_left (a b : List ℕ) : (unaryList a).length ≤ (unaryList (a ++ b)).length := by
-  rw [W6.unaryList_append, List.length_append]; omega
 
 /-- **`ThrDataStage4.run3` at the gate** (`alg = litAlg l`, `D = 1`, the THR cap `capTOf c_r n …`). -/
 theorem run3G (cr : ℕ) (P : StarParams) {a' : ℕ} (Cs : Fin a' → NormalizedThresholdThresholdCircuit P.n)
@@ -121,3 +135,5 @@ noncomputable def thrStage4U : ∀ l, ThrData.ThrStage4U l := fun l _ =>
     ⟨CcG l F.cr + NCoef l F.cr, fun kclk coef A a ha => ⟨stage4At l F kclk coef A a ha, le_refl _, le_refl _⟩⟩⟩
 
 end NearCubicWires.WireExponent3_5.PrimT.TS4
+
+end

@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.UnionMachine.FrontSlots
+import Proof.Wire_3_5.UnionMachine.FrontKit
 import Proof.Wire_3_5.UnionMachine.WalkKit
 
 /-! # C6 front, the chain's kit: a register program with its own registers' fill

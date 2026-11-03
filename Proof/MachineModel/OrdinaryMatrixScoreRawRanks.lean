@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryMatrixScoreRawGateBounds
+import Proof.MachineModel.OrdinaryKeyDominanceScan
 
 /-! Cold raw cut through actual score enumeration, ordinary sort and rank
 annotation. The executed local return exposes the exact existing bucket

@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.ScheduleFramed
+import Proof.MachineModel.OrdinaryOracleCompose
+import Proof.CaseAnalysis.ScheduleBounds
 
 /-! The actual ordinary schedule feeds the same selected source refuter.
 The existing compositor pays both word handoffs and resets. -/

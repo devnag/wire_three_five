@@ -1,7 +1,15 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.C1Gates
 import Proof.Wire_3_5.UnionMachine.C1Asm
 import Proof.Wire_3_5.UnionMachine.FrontSelReq
 import Proof.Wire_3_5.UnionMachine.FrontTWBridge3
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.C1RefBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # C6 front, the C1 dock: the loop's pieces are C1's request (P3:1326-1330, 3395-3399, 3673)
 
@@ -23,67 +31,6 @@ open NearCubicWires NearCubicWires.WireExponent3_5.UnionMachine.C1Gates
 open NearCubicWires.RepairRepresentation (natWord natListWord)
 
 section Lists
-variable {q : ℕ} (Cs : ℕ → Stars.Carrier q) (lits : List ℕ) (cb : ℕ)
-
-/-- The positive-count variables below `j`. -/
-def vsN (j : ℕ) : List ℕ := (List.range j).filter fun x => decide (pos lits x)
-
-theorem vsN_succ (j : ℕ) : vsN lits (j + 1) = vsN lits j ++ if pos lits j then [j] else [] := by
-  unfold vsN; rw [List.range_succ, List.filter_append]
-  by_cases h : pos lits j <;> simp [h]
-
-theorem GF_eq (j : ℕ) : GF Cs lits j = (vsN lits j).flatMap fun x => (Cs x).flatMap GateConv.selGate := by
-  induction j with
-  | zero => rfl
-  | succ j ih => rw [GF, ih, vsN_succ]; by_cases h : pos lits j <;> simp [h]
-
-theorem gtF_eq (j : ℕ) : gtF Cs lits j = ((vsN lits j).map fun x => (Cs x).length).sum := by
-  induction j with
-  | zero => rfl
-  | succ j ih => rw [gtF, ih, vsN_succ]; by_cases h : pos lits j <;> simp [h]
-
-theorem npF_eq (j : ℕ) : npF lits j = (vsN lits j).length := by
-  induction j with
-  | zero => rfl
-  | succ j ih => rw [npF, ih, vsN_succ]; by_cases h : pos lits j <;> simp [h]
-
-/-- The populations over a list of variables. -/
-def popsW (w : ℕ → ℚ) (vs : List ℕ) : List Bool :=
-  (List.range vs.length).flatMap fun i =>
-    natListWord (List.range' (FrontSelReq.segStart Cs vs i) (Cs (vs.getD i 0)).length) ++
-      NearCubicWires.WireExponent3_5.ratWord (w (vs.getD i 0))
-
-theorem segStart_append (vs : List ℕ) (y : List ℕ) (i : ℕ) (hi : i ≤ vs.length) :
-    FrontSelReq.segStart Cs (vs ++ y) i = FrontSelReq.segStart Cs vs i := by
-  unfold FrontSelReq.segStart; rw [List.take_append_of_le_length hi]
-
-theorem segStart_len (vs : List ℕ) : FrontSelReq.segStart Cs vs vs.length = (vs.map fun x => (Cs x).length).sum := by
-  unfold FrontSelReq.segStart; rw [List.take_length]
-
-theorem popsW_snoc (w : ℕ → ℚ) (vs : List ℕ) (x : ℕ) :
-    popsW Cs w (vs ++ [x]) = popsW Cs w vs ++ (natListWord (List.range' ((vs.map fun x => (Cs x).length).sum)
-      (Cs x).length) ++ NearCubicWires.WireExponent3_5.ratWord (w x)) := by
-  unfold popsW
-  rw [List.length_append, List.length_singleton, List.range_succ, List.flatMap_append]
-  congr 1
-  · apply List.flatMap_congr
-    intro i hi
-    rw [List.mem_range] at hi
-    rw [segStart_append Cs vs [x] i hi.le, List.getD_append _ _ _ _ hi]
-  · simp only [List.flatMap_cons, List.flatMap_nil, List.append_nil]
-    rw [segStart_append Cs vs [x] vs.length le_rfl, segStart_len, List.getD_append_right _ _ _ _ le_rfl]
-    simp
-
-theorem PF_eq (j : ℕ) :
-    PF Cs lits cb j = popsW Cs (fun x => ((C1Cnt.cntOf x lits : ℚ) / 2 ^ (cb + 1))) (vsN lits j) := by
-  induction j with
-  | zero => rfl
-  | succ j ih =>
-    rw [PF, ih, vsN_succ]
-    by_cases h : pos lits j
-    · simp only [h, if_true]
-      rw [popsW_snoc, ← gtF_eq]
-    · simp [h]
 
 end Lists
 
@@ -104,15 +51,6 @@ def CsG (x : ℕ) : Stars.Carrier g.q := if h : x < VG g then g.carrier ⟨x, h�
 def litsG : List ℕ :=
   FrontTW.pairsOf (fun i : Fin (2 ^ g.pcpp.clauseBits) => RepairRepresentation.literalIndex (g.pcpp.clauses i).left)
     (fun i => RepairRepresentation.literalIndex (g.pcpp.clauses i).right)
-
-theorem countP_pairsOf {M : ℕ} (a b : Fin M → ℕ) (p : ℕ → Bool) :
-    (FrontTW.pairsOf a b).countP p = ∑ i : Fin M, ((if p (a i) then 1 else 0) + (if p (b i) then 1 else 0)) := by
-  unfold FrontTW.pairsOf
-  rw [List.countP_flatMap, Fin.sum_univ_def]
-  congr 1
-  apply List.map_congr_left
-  intro i _
-  simp [List.countP_cons]; omega
 
 theorem cnt_eq (X : PcppVar g.pcpp) :
     C1Cnt.cntOf X.val (litsG g) =
@@ -229,3 +167,5 @@ theorem reqWord_selWord (cr : ℕ) (hr : B.rOf g.q = Ledger.rowBr cr g.q) :
 end Req
 
 end NearCubicWires.WireExponent3_5.UnionMachine.C1Ref
+
+end

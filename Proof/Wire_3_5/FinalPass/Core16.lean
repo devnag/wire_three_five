@@ -1,4 +1,27 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.Core15
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.Core11
+import Proof.Wire_3_5.FinalPass.Core12
+import Proof.Wire_3_5.FinalPass.Core13
+import Proof.Wire_3_5.FinalPass.Core14
+import Proof.Wire_3_5.FinalPass.Core9
+import Proof.Wire_3_5.FinalPass.CoreIfaceM
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.FinalPass.SeamsProg2
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.S5Seam2
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.Core15Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S5Core, part 16: the core half's run (P3:3044-3048, 3170-3181)
 
@@ -30,3 +53,5 @@ section Run
 end Run
 
 end NearCubicWires.WireExponent3_5.FinalPass.Core
+
+end

@@ -1,4 +1,6 @@
 import Proof.Foundations.CanonicalBinaryProgram
+import Proof.Foundations.ExecutableInterfaces
+import Proof.Foundations.VerifiedLinker
 
 /-!
 # Canonical run-time bit slice

@@ -1,4 +1,8 @@
+import Proof.MachineModel.ClosureRawRelabelMachine
 import Proof.MachineModel.ClosureRawRelabelRun
+import Proof.Amplification.RecoveryEraseWidth
+import Proof.CaseAnalysis.RowsDegreeLoop
+import Proof.CaseAnalysis.RowsFamilyLoop
 
 /-! A.12's complete raw-index family, constructed from the retained lowered
 stream by a fixed physical loop. Each iteration calls the checked relabeler

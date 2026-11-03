@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryMatrixScoreWeightWiden
+import Proof.Amplification.RecoveryCursorCalls
 
 /-! Reusable selected-weight carrier. The common capacity is real allocated
 zero storage; its producer and the paid clearing loop remain enclosing calls. -/

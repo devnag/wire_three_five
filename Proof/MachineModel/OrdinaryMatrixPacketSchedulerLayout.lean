@@ -1,6 +1,7 @@
 import Proof.MachineModel.OrdinaryMatrixPacketReset
 import Proof.MachineModel.OrdinaryMatrixPacketSchedulerBounds
 import Proof.MachineModel.OrdinaryMatrixSchedulerTarget
+import Proof.Foundations.OrdinaryTapeRenaming
 
 /-! A fixed physical tape relabel puts the retained original request on
 ordinary input tape zero. It moves no data and changes no execution cost. -/

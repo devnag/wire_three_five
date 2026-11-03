@@ -1,0 +1,26 @@
+import Proof.Packets.PacketsXVectorPaletteCollect
+import Proof.Rows.PhysicalFocusBoundary
+import Proof.Packets.PacketsXVectorLiteralPaletteBoot
+import Proof.Packets.PacketsXVectorLiteralPaletteProgram
+
+/-! Complete literal-vector construction followed by paid append of every
+coordinate, preserving its exact ordinal and polynomial list ordering. -/
+set_option autoImplicit false
+set_option maxHeartbeats 1200000
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedSimpArgs false
+namespace PCJ9eff70d512234a4c_Fixed.Materializer.VectorBottomUp
+open NearCubicWires NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdinary
+open NearCubicWires.ExtDecompositionBatch NearCubicWires.RepairSource.VerifierDecoding
+open NearCubicWires.SupplierToeplitz NearCubicWires.SupplierToeplitzCore NearCubicWires.SupplierWalkBridge
+open NearCubicWires.CanonicalFourfoldRowProgram NearCubicWires.RepairSource.CloseoutRawRows
+open NearCubicWires.ExtIncidence
+open CloseoutRowsModeCache NormalizedFiniteTransport Theorem25Completion.CycleBounds SubstitutionCensus
+noncomputable section
+
+
+attribute [local irreducible] literalPaletteProgram collectMachine
+
+end
+end PCJ9eff70d512234a4c_Fixed.Materializer.VectorBottomUp

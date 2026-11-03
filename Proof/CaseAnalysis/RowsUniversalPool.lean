@@ -1,5 +1,4 @@
-import Proof.CaseAnalysis.RawRowsMonomials
-import Proof.CaseAnalysis.RowsRawLogShape
+import Proof.CaseAnalysis.RawRowsChildren
 
 /-! Appendix A.2's universal X/C pool for the actual ordinary decomposition.
 The interleaved list is independent of the frozen column: both original and

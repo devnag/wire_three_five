@@ -1,5 +1,8 @@
-import Proof.SourceAssembly.SourceRequestSelDockP
-import Proof.SourceAssembly.SourceRequestSelOk
+import Proof.SourceAssembly.SourceFactorSelItem4Top
+import Proof.SourceAssembly.SourceRequestSelDockSym
+import Proof.SourceAssembly.SourceRequestSelFrontA
+import Proof.SourceAssembly.SourceRequestSelLocalMach
+import Proof.SourceAssembly.SourceRequestSelSymMach
 import Proof.SourceAssembly.SourceFactorSelItem4AtS
 
 section
@@ -18,6 +21,10 @@ open NearCubicWires.RepairSource NearCubicWires.RepairSource.CloseoutFinal
 open NearCubicWires.SourceRequest NearCubicWires.SourceRequest.FactorLoop
 open NearCubicWires.SourceConstruction NearCubicWires.SourceConstruction.Rest
 open NearCubicWires.SourceFactorSel.Words NearCubicWires.SourceFactorSel.WordsHost
+open NearCubicWires.SourceRequest.SelLocal (resW resWS)
+open NearCubicWires.SourceRequest.CurContract (curBig rhoW)
+open NearCubicWires.SourceRequest.TermReader (rawTerms)
+open NearCubicWires.SourceRequest.LitInfo (litCost)
 open NearCubicWires.RepairOrdinary.CloseoutRowsOriginalClause (index negative)
 open NearCubicWires.RepairRepresentation (PCPPRequest PointwisePCPPAlgorithm pcppOutput)
 namespace NearCubicWires.SourceRequest.SelHG7
@@ -26,6 +33,10 @@ noncomputable section
 attribute [local irreducible] NearCubicWires.P1TopDownPaidPayload.tapes
 
 section S
+variable (mask : MaskProducer) {selector : CyclicChoice.Laws}
+  (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector)
+  (rows : PCJc4297ab269d8423a_Source.RowLibrary selector) (sources : EightSources) (res : Nat)
+  {gamma : Real} (p : Parameters sources gamma) (k r : Nat)
 
 set_option hygiene false in
 local notation "𝔇" => dimsOf mask packets rows sources res p k r

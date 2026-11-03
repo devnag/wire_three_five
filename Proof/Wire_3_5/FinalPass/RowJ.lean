@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.FinalPass.RowI
+import Proof.Wire_3_5.FinalPass.DigsLink4
 
 /-! # `RowW`, part 10: the row program writes `Term.rowWord` of row `(g, p)` (P3:2585-2599)
 

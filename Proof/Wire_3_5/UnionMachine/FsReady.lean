@@ -1,5 +1,6 @@
-import Proof.Wire_3_5.UnionMachine.FiltSetupIface5
 import Proof.Wire_3_5.UnionMachine.FsRun
+import Proof.Wire_3_5.UnionMachine.FiltSetupIface5
+import Proof.Wire_3_5.UnionMachine.SeedIdx
 
 /-! # C6, the FILTER setup, part 6: the FILTER-ready state
 

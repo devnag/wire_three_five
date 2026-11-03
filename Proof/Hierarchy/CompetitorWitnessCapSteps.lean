@@ -1,6 +1,4 @@
-import Proof.Amplification.RecoveryRowLeafTapes
-import Proof.Hierarchy.CompetitorWitnessHeader
-import Proof.Hierarchy.HierarchyBinaryMultiplyEntry
+import Proof.Hierarchy.CompetitorWitnessHeaderReady
 
 /-! The whole witness cap is checked before decoding. Each witness bit costs
 sixteen input bits; an overlong witness is rejected without scanning its
@@ -28,5 +26,70 @@ def machine : Machine 3 34 where
       some (if q.val=32 then action 0 .right .right
         else action ⟨q.val-15,by omega⟩ .right .stay)
     else none
+def cfg (q : Fin 34) (x w : List Bool) (px pw : ℕ) (flag : List Bool := []) : Configuration 3 34 :=
+  ⟨q,![px,pw,0],![x,w,flag]⟩
+def marker (k : ℕ) (hk : k<16) : Fin 34 := ⟨k+1,by omega⟩
+def payload (k : ℕ) (hk : k<16) : Fin 34 := ⟨k+17,by omega⟩
+
+theorem witness_step (x pre tail : List Bool) (px : ℕ) :
+    step machine (cfg 0 x (pre++true::tail) px pre.length)=
+      some (cfg 1 x (pre++true::tail) px (pre.length+1)) := by
+  simp [step,machine,cfg,Configuration.scanned,Streaming.read_append]
+  apply configuration_ext
+  · rfl
+  · funext i; fin_cases i <;> simp [applyAction,action,HeadMove.apply]
+  · funext i; fin_cases i <;> rfl
+
+theorem accept_step (x pre : List Bool) (px : ℕ) :
+    step machine (cfg 0 x (pre++[false]) px pre.length)=
+      some (cfg 33 x (pre++[false]) px pre.length [true]) := by
+  have hr := Streaming.read_append pre [] false
+  simp [step,machine,cfg,Configuration.scanned,hr]
+  apply configuration_ext
+  · rfl
+  · funext i; fin_cases i <;> simp [applyAction,action,HeadMove.apply]
+  · funext i; fin_cases i <;> rfl
+
+theorem input_step (k : ℕ) (hk : k<16) (pre tail w : List Bool) (pw : ℕ) :
+    step machine (cfg (marker k hk) (pre++true::tail) w pre.length pw)=
+      some (cfg (payload k hk) (pre++true::tail) w (pre.length+1) pw) := by
+  have h1 : k+1≤16 := by omega
+  simp [step,machine,cfg,marker,Configuration.scanned,Streaming.read_append,h1]
+  apply configuration_ext
+  · apply Fin.ext; simp [applyAction,action,payload]
+  · funext i; fin_cases i <;> simp [applyAction,action,HeadMove.apply]
+  · funext i; fin_cases i <;> rfl
+
+theorem reject_step (k : ℕ) (hk : k<16) (pre w : List Bool) (pw : ℕ) :
+    step machine (cfg (marker k hk) (pre++[false]) w pre.length pw)=
+      some (cfg 33 (pre++[false]) w pre.length pw [false]) := by
+  have h1 : k+1≤16 := by omega
+  have hr := Streaming.read_append pre [] false
+  simp [step,machine,cfg,marker,Configuration.scanned,hr,h1]
+  apply configuration_ext
+  · rfl
+  · funext i; fin_cases i <;> simp [applyAction,action,HeadMove.apply]
+  · funext i; fin_cases i <;> rfl
+
+theorem payload_step (k : ℕ) (hk : k<15) (x w : List Bool) (px pw : ℕ) :
+    step machine (cfg (payload k (by omega)) x w px pw)=
+      some (cfg (marker (k+1) (by omega)) x w (px+1) pw) := by
+  have h1 : ¬k+17≤16 := by omega
+  have h2 : k+17≤32 := by omega
+  have h3 : k+17≠32 := by omega
+  simp [step,machine,cfg,payload,h1,h2,h3]
+  apply configuration_ext
+  · apply Fin.ext; simp [applyAction,action,marker]
+  · funext i; fin_cases i <;> simp [applyAction,action,HeadMove.apply]
+  · funext i; fin_cases i <;> rfl
+
+theorem payload_last (x w : List Bool) (px pw : ℕ) :
+    step machine (cfg (payload 15 (by decide)) x w px pw)=
+      some (cfg 0 x w (px+1) (pw+1)) := by
+  simp [step,machine,cfg,payload]
+  apply configuration_ext
+  · rfl
+  · funext i; fin_cases i <;> simp [applyAction,action,HeadMove.apply]
+  · funext i; fin_cases i <;> rfl
 
 end NearCubicWires.RepairOrdinary.CompetitorWitnessCap

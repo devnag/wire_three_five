@@ -1,5 +1,6 @@
-import Proof.CaseAnalysis.Parameters
 import Proof.CaseAnalysis.ScheduleBounds
+import Proof.CaseAnalysis.Parameters
+import Proof.Amplification.CaseOneRecoveryAssembly
 
 /-! Apply the existing physical simulation bound at the actual final length.
 One extra power of q pays the fixed schedule factor after a finite onset;

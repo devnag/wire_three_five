@@ -1,4 +1,6 @@
 import Proof.Supplier.RowPowerNativeReset
+import Proof.Amplification.RecoveryScratchErase
+import Proof.Amplification.RecoveryReadyCalls
 
 /-! A native signed field with physically reusable scratch. The source and
 two append cursors survive; the capacity driver pays for every erased cell. -/

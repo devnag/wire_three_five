@@ -1,8 +1,22 @@
-import Proof.Wire_3_5.FinalPass.SdI3
-import Proof.Wire_3_5.Primitive.Writers.SymSizes
+import Lean
 import Proof.Wire_3_5.UnionMachine.SymSize1
+import Proof.Wire_3_5.FinalPass.SdI3
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.SeedFix.TabCost
+import Proof.Wire_3_5.Primitive.SeedFix.TabSym
+import Proof.Wire_3_5.Primitive.Writers.SymSizes
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.SymSize2Base
 
-/-! # hS, part 2: **the SYM size polynomial** `symSize_poly`
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # C6b hS, part 2: **the SYM size polynomial** `symSize_poly`
 
 At a SYM call of the family (`Sd.SymSizeOK`'s hypotheses: carriers `≤ 2`, descriptions `≤ (n+1)^26`), the atoms of
 part 1 are below `Y = c_S(c_r)·N^{Z_S}`, `N = n + 2`, `Z_S = flatZR l + capZR l + 52` (the literals only):
@@ -11,7 +25,7 @@ the bottom gates `≤ (n+1)^26`, their table width `≤ 35N^52` (`Sd.hof35`), th
 8192·capK·N^{capZR}` (`CallIndexR.cap_leR`), the population `M ≤ 4(n+1)^26`, and `|FlatSeed| ≤ flatK·N^{flatZR}`
 (`CallIndexR.flatSeed_leR`). So `symSize ≤ 600Y⁴ ≤ C_sz·(n+1)^{4Z_S}`:
 
-* `gate_enc_le`, **`tabH_sym`**, `ZS`, `cS`, `YS`, **`atoms_call`**, **`symSize_poly`** ('s statement:
+* `gate_enc_le`, **`tabH_sym`**, `ZS`, `cS`, `YS`, **`atoms_call`**, **`symSize_poly`** (#124's statement:
   `∀ l, ∃ D_sz, ∀ F, ∃ C_sz, ∀ kclk coef A a ha, Sd.SymSizeOK l F kclk coef A a ha PrimT.S3.symPtEval C_sz D_sz`).
 
 Paper quantity of the main type: the SYM per-point evaluator's input size, polynomial in `n` (P3:3176-3178). -/
@@ -25,44 +39,11 @@ open NearCubicWires.WireExponent3_5.PrimT.S3 NearCubicWires.WireExponent3_5.Spli
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.Stars
 open NearCubicWires.WireExponent3_5.FinalPass.Seams (SymCall symCallOf)
 
-theorem gate_enc_le {n : ℕ} (C : NormalizedSymmetricThresholdCircuit n) (i : Fin C.bottomCount) :
-    (C.bottom i).gate.encodingBits ≤ C.descriptionBits := by
-  have h := PrimT.SymTab.gate_desc_le C i
-  unfold SupportedNormalizedGate.descriptionBits at h
-  omega
-
-/-- **The SYM bottom gates' table width** at descriptions `≤ L`. -/
-theorem tabH_sym {n : ℕ} (C : NormalizedSymmetricThresholdCircuit n) (L : ℕ) (hL : C.descriptionBits ≤ L) :
-    PrimT.tabH (Stars.symGates C) ≤ L * (8 * n + 8 * L + 19) := by
-  have hlen : (Stars.symGates C).length ≤ L := by
-    unfold Stars.symGates
-    rw [List.length_map, List.length_finRange]
-    have := PrimT.TabCost.symDesc_pos C
-    omega
-  unfold PrimT.tabH PrimT.tabSeg
-  rw [List.length_flatMap]
-  have hsum := List.sum_le_card_nsmul ((Stars.symGates C).map fun g => (frame (PrimT.tabGW g)).length)
-    (8 * n + 8 * L + 19) (fun x hx => by
-      obtain ⟨g, hg, rfl⟩ := List.mem_map.mp hx
-      unfold Stars.symGates at hg
-      obtain ⟨i, _, rfl⟩ := List.mem_map.mp hg
-      have h1 := ThrSz.tabGW_len (C.bottom i).gate
-      have h2 := (gate_enc_le C i).trans hL
-      rw [frame_len]
-      omega)
-  rw [smul_eq_mul, List.length_map] at hsum
-  exact hsum.trans (Nat.mul_le_mul_right _ hlen)
-
 /-- The size exponent (the literals only). -/
 noncomputable def ZS (l : Literals) : ℕ := CallIndexR.flatZR l + CallIndexR.capZR l + 52
 
-/-- The size coefficient (`c_r` only). -/
-def cS (cr : ℕ) : ℕ := 2 ^ 26 * (CallIndexR.capK cr + 1) + CallIndexR.flatK cr + 100
-
 /-- **The atoms' bound** at length `n`. -/
 noncomputable def YS (l : Literals) (cr n : ℕ) : ℕ := cS cr * (n + 2) ^ ZS l
-
-theorem clog_self (x : ℕ) : Nat.clog 2 x ≤ x := Nat.clog_le_of_le_pow (Nat.lt_two_pow_self).le
 
 section Call
 variable (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1)
@@ -181,7 +162,7 @@ theorem atoms_call {n a' : ℕ} (hs : (callInputs l F kclk coef A a ha).StarAt n
 
 end Call
 
-/-- **: the SYM size polynomial** — `D_sz = 4Z_S` from the literals, `C_sz` after `F`. -/
+/-- **#124: the SYM size polynomial** — `D_sz = 4Z_S` from the literals, `C_sz` after `F`. -/
 theorem symSize_poly (l : Literals) : ∃ Dsz : ℕ, ∀ F : GateFree l, ∃ Csz : ℕ, ∀ (kclk coef A a : ℕ) (ha : a ≤ kclk + 1),
     Sd.SymSizeOK l F kclk coef A a ha PrimT.S3.symPtEval Csz Dsz := by
   refine ⟨4 * ZS l, fun F => ⟨600 * cS F.cr ^ 4 * 2 ^ (4 * ZS l), fun kclk coef A a ha => ?_⟩⟩
@@ -199,3 +180,5 @@ theorem symSize_poly (l : Literals) : ∃ Dsz : ℕ, ∀ F : GateFree l, ∃ Csz
     _ = 600 * cS F.cr ^ 4 * 2 ^ (4 * ZS l) * (n + 1) ^ (4 * ZS l) := by ring
 
 end NearCubicWires.WireExponent3_5.UnionMachine.SymSize
+
+end

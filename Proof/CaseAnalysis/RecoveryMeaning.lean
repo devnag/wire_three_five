@@ -1,5 +1,7 @@
 import Proof.CaseAnalysis.CloseoutRecoveryColdBudget
 import Proof.CaseAnalysis.RecoverySourceIdentity
+import Proof.Amplification.RecoveryPCPFormulaResumeHierarchyActual
+import Proof.Assembly.SelectedRecoveryIntegration
 
 /-! The physical cold worker asks the global selected PCP's exact full
 formula, hence returns its case flag and original canonical description. -/

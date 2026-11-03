@@ -1,9 +1,22 @@
+import Proof.MachineModel.CanonicalRecoveryProgram
+import Proof.MachineModel.CanonicalBalancedLengthProgram
+import Proof.Circuits.CanonicalBalancedTraversal
+import Proof.MachineModel.CanonicalBalancedValidationMapProgram
+import Proof.MachineModel.CanonicalBinaryArithmeticProgram
 import Proof.MachineModel.CanonicalBooleanCircuitValidationProgram
 import Proof.MachineModel.CanonicalLegalTermValidationProgram
+import Proof.MachineModel.CanonicalNativeCallProgram
+import Proof.MachineModel.CanonicalNativeEqualityProgram
 import Proof.MachineModel.CanonicalNatBitCapProgram
+import Proof.MachineModel.CanonicalNatValidationProgram
 import Proof.MachineModel.CanonicalNormalizedCircuitDescriptionProgram
+import Proof.MachineModel.CanonicalNormalizedCircuitResourceProgram
+import Proof.MachineModel.CanonicalNormalizedCircuitValidationProgram
+import Proof.Circuits.CanonicalPairedCall
 import Proof.MachineModel.CanonicalRationalMassProgram
-import Proof.MachineModel.CanonicalRecoveryProgram
+import Proof.MachineModel.CanonicalTaggedTupleProgram
+import Proof.MachineModel.PreserveRightProgram
+import Proof.Foundations.VerifiedLinker
 
 /-!
 # Canonical executable recovery-witness validator construction

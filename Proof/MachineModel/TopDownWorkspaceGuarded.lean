@@ -1,8 +1,5 @@
-import Mathlib.Algebra.Order.Floor.Semifield
+import Proof.CaseAnalysis.FinalLegalAdmission
 import Proof.CaseAnalysis.FinalCacheAtAdmission
-import Proof.CaseAnalysis.FinalGuardedMachineConsumer
-import Proof.CaseAnalysis.RawRowsThresholdAccuracy
-import Proof.CaseAnalysis.WitnessSelectedSourceRequest
 
 /-! Checked admission-sensitive upper application. Rejected descriptions need
 an actual rejecting run, never phase records or a decoder-fallback identity.

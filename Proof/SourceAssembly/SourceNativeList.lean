@@ -14,6 +14,8 @@ open RepairSource.VerifierDecoding
 open PCPPQueryField (saved store nat_run payload selected)
 noncomputable section
 
+def stream (xs : List Nat) := xs.flatMap natWord
+def savedFields (xs : List Nat) (backing : List Bool) := xs.foldl (fun old n=>saved n old) backing
 def machine := RepeatMachine.machine (PCPPQueryField.machine true) (fun _ _=>true)
 
 end

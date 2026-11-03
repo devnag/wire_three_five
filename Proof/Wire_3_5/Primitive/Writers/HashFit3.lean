@@ -1,5 +1,29 @@
-import Proof.Wire_3_5.Primitive.SeedFix.C4HashLf2
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.HashFit2
+import Proof.Wire_3_5.Primitive.SeedFix.C4HashLf2
+import Proof.Wire_3_5.Primitive.Writers.HashF1
+import Proof.Wire_3_5.Primitive.Writers.ThrCap3
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.HashLeaf
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.ThrLf1
+import Proof.Wire_3_5.Primitive.SeedFix.C4GateThrB
+import Proof.Wire_3_5.Primitive.SeedFix.TS4N
+import Proof.Wire_3_5.Primitive.SeedFix.TS4O
+import Proof.Wire_3_5.Primitive.SeedFix.TS4W
+import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPoly
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.HashF1Base
+import Proof.Wire_3_5.Primitive.Writers.HashFit2Base
+import Proof.Wire_3_5.Primitive.Writers.ThrCap3Base
+import Proof.Wire_3_5.Primitive.SeedFix.C4HashLf2Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # HASH setup (C), fit part 3: the setup's side conditions at the HASH leaf's instance
 
@@ -96,3 +120,5 @@ theorem hash_fits (l : Literals) (F : GateFree l) (Fp : PrimT.C4Set.FreeProg)
       h3 Cc (by omega) kclk coef A a0 ha0 n a ha Cs carriers translation hcall hs⟩⟩
 
 end NearCubicWires.WireExponent3_5.PrimAsm.HashFit
+
+end

@@ -1,4 +1,18 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.ThrSz5
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.BudgetIface
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.ThrSz6Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The THR word-size lemma, part 2: the primes, stage 4's table, the numbers; the theorem
 
@@ -61,9 +75,6 @@ theorem DJ_eq : (kOf l F kclk coef A a ha n hs ha' Cs carriers translation).D.J 
 
 theorem DW_eq : (kOf l F kclk coef A a ha n hs ha' Cs carriers translation).D.W =
     (MPof l F kclk coef A a ha n hs Cs carriers).W := rfl
-
-/-- The coefficient of stage 4's table. -/
-def levK (K : ℕ) : ℕ := K + 2 + (K + 1) * (5 * (16 * K + 20 * (K * K + 2)) + 5 + K)
 
 theorem w6_le (Kt Dt : ℕ) (hv : ∀ i : Fin 14, (valsOf l F kclk coef A a ha n hs Cs carriers).get i ≤ Kt * (n + 1) ^ Dt) :
     (Seams.thrWords (kOf l F kclk coef A a ha n hs ha' Cs carriers translation) 6).length ≤
@@ -172,3 +183,5 @@ theorem thrSize_poly (l : Literals) (hT : BudgetIface.ThrNumsPoly l) :
   omega
 
 end NearCubicWires.WireExponent3_5.FinalPass.ThrSz
+
+end

@@ -1,11 +1,13 @@
-import Proof.Wire_3_5.UnionMachine.CodecBound
 import Proof.Wire_3_5.UnionMachine.FrontOracleField
+import Proof.Wire_3_5.UnionMachine.CodecBound
+import Proof.CaseAnalysis.PairClockExact
+import Proof.PCP.PCPPNativeRequestSchema
 
 /-! # C6 front, U1a: the oracle's size check (P3:3669)
 
 Realizes the size bound of "The weak machine guesses one size-`q^G` general oracle" (P3:3669), the conjunct
 `decide (g.oracle.size ≤ oracleSizeBound S.G (S.pcp.nativeWidth N))` of `unionSlackCheck` (and `FrontAtW.len`): a
-register program (C5's `WM`) reads the Theorem 2.5 repository's decoder flag `[b]`, the raw typed descriptor `PCPPNative.descriptor c` (whose
+register program (C5's `WM`) reads v8's decoder flag `[b]`, the raw typed descriptor `PCPPNative.descriptor c` (whose
 second field is `natWord c.size`, base `descriptor_eq`) and the width `1^q`, and sets its cell to
 `decide (c.size ≤ oracleSizeBound G q)` (to `false` when `b = false`).
 
@@ -250,7 +252,7 @@ def tailP : WM 2 6 := .seq (.ifr rX (.setc false) (.setc true)) (.seq (WM.clear 
 /-- The check on a decoded oracle. -/
 def coreP (Dg : ℕ) : WM 2 6 := .seq parse (.seq (divs Dg) tailP)
 
-/-- **The size check**: on the Theorem 2.5 repository's flag, the check; else the cell stays `false`. -/
+/-- **The size check**: on v8's flag, the check; else the cell stays `false`. -/
 def sizeP (Dg : ℕ) : WM 2 6 := .ifs sF (coreP Dg) (.setc false)
 
 /-! ## The field's reads -/

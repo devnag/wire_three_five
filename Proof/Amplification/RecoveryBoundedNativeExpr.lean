@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeClauseDescriptorSource
+import Proof.Circuits.BoundedOracleStructuralCircuit
 
 /-! Exact append schedule used by the original bounded verifier's grammar
 and universal-query guards. Addresses are the original postorder compiler

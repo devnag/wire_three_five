@@ -1,4 +1,6 @@
 import Proof.Amplification.RecoverySourceClausePadded
+import Proof.Hierarchy.CompetitorFieldEmit
+import Proof.Amplification.RecoveryScratchErase
 
 /-! Physical reusable layout for the original PCP source clause. The source
 and address streams are retained; the formula keeps its append cursor. -/

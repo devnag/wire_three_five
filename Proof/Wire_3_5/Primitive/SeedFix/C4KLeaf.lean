@@ -1,6 +1,18 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.C4KIface
 import Proof.Wire_3_5.Primitive.SeedFix.C4Front
 import Proof.Wire_3_5.Primitive.Writers.CallSize
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTypes
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.SeedFix.C4KLeafBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # C4.K, the consumer of the per-mode contract: `c4Leaf_of`
 
@@ -32,41 +44,6 @@ open NearCubicWires.WireExponent3_5.PrimT.SeedFixTypes
 
 /-! ## The floors -/
 
-/-- The componentwise maximum of two envelopes. -/
-def emax (E₁ E₂ : Envelope) : Envelope where
-  sigma := max E₁.sigma E₂.sigma
-  callDeg := max E₁.callDeg E₂.callDeg
-  Amain := max E₁.Amain E₂.Amain
-  Atable := max E₁.Atable E₂.Atable
-  Asel := max E₁.Asel E₂.Asel
-  csel := max E₁.csel E₂.csel
-  Apre := max E₁.Apre E₂.Apre
-  cpsi := max E₁.cpsi E₂.cpsi
-
-theorem classLE_trans {E₁ E₂ E₃ : Envelope} (h₁ : ClassLE E₁ E₂) (h₂ : ClassLE E₂ E₃) : ClassLE E₁ E₃ :=
-  ⟨h₁.Amain.trans h₂.Amain, h₁.Atable.trans h₂.Atable, h₁.Asel.trans h₂.Asel, h₁.csel.trans h₂.csel,
-    h₁.Apre.trans h₂.Apre, h₁.cpsi.trans h₂.cpsi⟩
-
-theorem le_emax_left (E₁ E₂ : Envelope) : ClassLE E₁ (emax E₁ E₂) :=
-  ⟨le_max_left _ _, le_max_left _ _, le_max_left _ _, le_max_left _ _, le_max_left _ _, le_max_left _ _⟩
-
-theorem le_emax_right (E₁ E₂ : Envelope) : ClassLE E₂ (emax E₁ E₂) :=
-  ⟨le_max_right _ _, le_max_right _ _, le_max_right _ _, le_max_right _ _, le_max_right _ _, le_max_right _ _⟩
-
-/-- **The seed-fixing classes grow with the envelope** at `q ≥ 1`. -/
-theorem seedClasses_mono {E E' : Envelope} (hE : ClassLE E E') (q k psi : ℕ) (hq : 1 ≤ q) :
-    seedClasses E q k psi ≤ seedClasses E' q k psi := by
-  unfold seedClasses
-  have h1 : classBound E .selection q k psi ≤ classBound E' .selection q k psi :=
-    Nat.mul_le_mul (Nat.pow_le_pow_right (by norm_num) (Nat.add_le_add_left (Nat.mul_le_mul_right k hE.csel) _))
-      (Nat.pow_le_pow_right hq hE.Asel)
-  have h2 : classBound E .preprocessing q k psi ≤ classBound E' .preprocessing q k psi :=
-    Nat.mul_le_mul (Nat.pow_le_pow_right (by norm_num) (Nat.mul_le_mul_right psi hE.cpsi))
-      (Nat.pow_le_pow_right hq hE.Apre)
-  have h3 : classBound E .table q k psi ≤ classBound E' .table q k psi :=
-    Nat.mul_le_mul_left _ (Nat.pow_le_pow_right hq hE.Atable)
-  omega
-
 section Budget
 variable (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1)
 
@@ -77,36 +54,7 @@ theorem seedBudget_mono {E E' : Envelope} (hE : ClassLE E E') {c c' : ℕ} (hc :
 
 end Budget
 
-/-- **A stage's run stays a run under a larger budget.** -/
-theorem stage3Run_mono {S : Stage3} {B B' : ℕ} {w v y : List Bool} (h : Stage3Run S B w v y) (hB : B ≤ B') :
-    Stage3Run S B' w v y := by
-  obtain ⟨J, hJ, hr⟩ := h
-  exact ⟨J, fun j => (hJ j).trans hB, ClockJoin.enlarge _ _ _ _ _ hr hB⟩
-
 /-! ## The front's budget -/
-
-/-- The request word's coefficient (`CallSize.wordBound_poly`). -/
-noncomputable def wC : ℕ := Classical.choose PrimAsm.CallSize.wordBound_poly
-
-/-- The request word's degree. -/
-noncomputable def wD : ℕ := Classical.choose (Classical.choose_spec PrimAsm.CallSize.wordBound_poly)
-
-theorem word_le (n : ℕ) : PrimAsm.CallSize.wordBound 26 26 2 n ≤ wC * (n + 1) ^ wD :=
-  (Classical.choose_spec (Classical.choose_spec PrimAsm.CallSize.wordBound_poly)).2 n
-
-/-- The front's floor: the selection class at the word's degree. -/
-noncomputable def frontE : Envelope where
-  sigma := 0
-  callDeg := 0
-  Amain := 0
-  Atable := 0
-  Asel := wD
-  csel := 0
-  Apre := 0
-  cpsi := 0
-
-/-- The front's coefficient. -/
-noncomputable def frontC : ℕ := 70 * wC * 2 ^ wD + 64
 
 /-- **The front's steps are within its budget** at every call. -/
 theorem front_budget (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) (E : Envelope)
@@ -181,3 +129,5 @@ noncomputable def c4Leaf_of (l : Literals) (hS : SymLeafC4 l) (hT : ThrLeafC4 l)
           (seedBudget_mono l F kclk coef A a ha e4T (by omega) n (SeedFix.starAt_pos _ hs)) }
 
 end NearCubicWires.WireExponent3_5.PrimT.C4K
+
+end

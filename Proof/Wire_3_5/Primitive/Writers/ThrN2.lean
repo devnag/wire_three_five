@@ -1,5 +1,6 @@
-import Proof.Wire_3_5.Primitive.SeedFix.C4SB
 import Proof.Wire_3_5.Primitive.Writers.ThrN1
+import Proof.Wire_3_5.Primitive.SeedFix.C4SB
+import Proof.Wire_3_5.Primitive.Writers.ThrQ
 
 /-! # c4 THR block, numbers part 2: the star numbers, the THR filter's seeds, the THR count `Q`
 

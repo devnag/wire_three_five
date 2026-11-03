@@ -1,4 +1,5 @@
-import Proof.Wire_3_5.UnionMachine.Plan
+import Proof.Wire_3_5.UnionMachine.PlanBase
+import Proof.CaseAnalysis.FinalLengthGate
 
 /-! # C6, U0: the length gate and the rejecting bank (P3:3675-3680)
 

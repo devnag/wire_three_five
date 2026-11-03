@@ -1,7 +1,12 @@
-import Proof.MachineModel.CanonicalBooleanNodeValidationProgram
-import Proof.MachineModel.CanonicalBooleanRangeAggregationProgram
 import Proof.MachineModel.CanonicalFourfoldRowProgram
+import Proof.MachineModel.CanonicalBalancedLookupProgram
+import Proof.MachineModel.CanonicalBooleanRangeAggregationProgram
+import Proof.MachineModel.CanonicalBooleanNodeValidationProgram
 import Proof.MachineModel.CanonicalNativeCallProgram
+import Proof.Circuits.CanonicalPairedCall
+import Proof.MachineModel.PreserveRightProgram
+import Proof.Circuits.RegisterBounds
+import Proof.Foundations.VerifiedLinker
 
 /-!
 # Indexed Boolean-node topology validation

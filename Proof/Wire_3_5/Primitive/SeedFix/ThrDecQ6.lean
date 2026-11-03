@@ -1,4 +1,6 @@
-import Proof.Wire_3_5.Primitive.SeedFix.ThrDecQ5
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDecQ5Base
+import Proof.Wire_3_5.Primitive.Writers.SymCosts
+import Proof.Wire_3_5.Primitive.Writers.ThrN2
 
 /-! # THR decode front, packaging part 6: the front's cost at its virtual capacity
 

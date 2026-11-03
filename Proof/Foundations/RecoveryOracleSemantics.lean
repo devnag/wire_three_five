@@ -1,5 +1,8 @@
-import Proof.Foundations.NestedBalancedCNFSATEncoding
 import Proof.Foundations.SourceCore
+import Proof.Foundations.TseitinCNF
+import Proof.Foundations.NestedBalancedCNFSATEncoding
+import Proof.Foundations.BalancedCNFSATEncodingConservativeExtension
+import Statement
 
 /-! Production statement vocabulary for the corrected recovery oracle.
 These are the banked bounded-validation semantics and proofs, lifted without

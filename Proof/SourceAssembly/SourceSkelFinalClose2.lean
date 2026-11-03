@@ -1,7 +1,8 @@
-import Proof.Packets.SrcK0W2
 import Proof.SourceAssembly.SourceSkelFinalClose
-import Proof.SourceAssembly.SourceStepsInv6
 import Proof.SourceAssembly.SourceStepsSite2
+import Proof.SourceAssembly.SourceStepsInv6
+import Proof.Packets.SrcLayRows
+import Proof.Packets.SrcK0W2
 
 section
 set_option autoImplicit false
@@ -23,6 +24,7 @@ open NearCubicWires.SourceSkeleton.FirstW NearCubicWires.SourceStart.EntryW
 noncomputable section
 
 section close2
+variable (selector : CyclicChoice.Laws)
 
 set_option hygiene false in
 local notation "CODE" => skelFamilyR mask packets rows (FillV5.resPV5 selector mask packets rows)
@@ -96,6 +98,94 @@ set_option hygiene false in
 local notation "capCI" => capC sources kI (PolynomialClock.ordinaryClock kI) x oracleI
 set_option hygiene false in
 local notation "BTSI" => ControllerSelectedContinuation.bodyTapes sources p kI rI (scratchOf mask packets rows sources resI)
+
+/-- The trivial equation row (the default datum's row). -/
+def dfltRow : RepairOrdinary.EquationRow.Input :=
+  ⟨0, 0, false, [], by simp, by simp, by simp, by simp⟩
+
+/-- **The default datum** (`TraceNums`/`C2` are generic in it). -/
+def dfltD : P1TopDownPaidReusable.Datum := ⟨dfltRow, 0, 0, fun _ _ => 0, fun _ _ => false⟩
+
+/-- `dflt` at the site. -/
+def dfltFS (mask : MaskProducer) (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector) (rows : PCJc4297ab269d8423a_Source.RowLibrary selector)
+    (sources : EightSources) (gamma : Real) (hg : 0 < gamma) (hh : gamma < 1/2) (p : Parameters sources gamma) (n : Nat) (x : BitInput n) (bits : List Bool)
+    (hn : (ControllerCappedSelected.workerData sources p ((𝔉).capIndex sources gamma hg hh p+1) (Nat.succ_pos ((𝔉).capIndex sources gamma hg hh p)) (ControllerCappedSelected.programData ((𝔉).capIndex sources gamma hg hh p+1) (ControllerCappedRuntime.continuation sources p ((𝔉).capIndex sources gamma hg hh p+1) ((𝔉).remainingDegree sources gamma hg hh p) ((𝔉).r sources gamma hg hh p) ((𝔉).base sources gamma hg hh p) ((𝔉).scratch sources gamma hg hh p) ((CODE).site sources gamma hg hh p) ((𝔉).remainingFuel sources gamma hg hh p)))).onset ≤ n)
+    (hp : P1Independent.CappedLegalAdmission.passed sources p (ControllerCappedSelected.reference (denI) (Nat.succ_pos _) kI (PolynomialClock.ordinaryClock kI))
+        (WorkspaceSelectedAdmission.coldCutoff sources) n x bits = true) (ph : Phase) : P1TopDownPaidReusable.Datum := dfltD
+
+def costFS (mask : MaskProducer) (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector) (rows : PCJc4297ab269d8423a_Source.RowLibrary selector)
+    (sources : EightSources) (gamma : Real) (hg : 0 < gamma) (hh : gamma < 1/2) (p : Parameters sources gamma) (n : Nat) (x : BitInput n) (bits : List Bool)
+    (hn : (ControllerCappedSelected.workerData sources p ((𝔉).capIndex sources gamma hg hh p+1) (Nat.succ_pos ((𝔉).capIndex sources gamma hg hh p)) (ControllerCappedSelected.programData ((𝔉).capIndex sources gamma hg hh p+1) (ControllerCappedRuntime.continuation sources p ((𝔉).capIndex sources gamma hg hh p+1) ((𝔉).remainingDegree sources gamma hg hh p) ((𝔉).r sources gamma hg hh p) ((𝔉).base sources gamma hg hh p) ((𝔉).scratch sources gamma hg hh p) ((CODE).site sources gamma hg hh p) ((𝔉).remainingFuel sources gamma hg hh p)))).onset ≤ n)
+    (hp : P1Independent.CappedLegalAdmission.passed sources p (ControllerCappedSelected.reference (denI) (Nat.succ_pos _) kI (PolynomialClock.ordinaryClock kI))
+        (WorkspaceSelectedAdmission.coldCutoff sources) n x bits = true) (ph : Phase) : Nat :=
+  NearCubicWires.SourceFactorSel.ClauseCost.Bsplit selector mask packets rows sources gamma hg hh p kI n
+
+/-- The steps guard gives `extraW xtraFin ≤ n`. -/
+theorem hextFS (mask : MaskProducer) (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector) (rows : PCJc4297ab269d8423a_Source.RowLibrary selector)
+    (sources : EightSources) (gamma : Real) (hg : 0 < gamma) (hh : gamma < 1/2) (p : Parameters sources gamma) (n : Nat) (x : BitInput n) (bits : List Bool)
+    (hn : (ControllerCappedSelected.workerData sources p ((𝔉).capIndex sources gamma hg hh p+1) (Nat.succ_pos ((𝔉).capIndex sources gamma hg hh p)) (ControllerCappedSelected.programData ((𝔉).capIndex sources gamma hg hh p+1) (ControllerCappedRuntime.continuation sources p ((𝔉).capIndex sources gamma hg hh p+1) ((𝔉).remainingDegree sources gamma hg hh p) ((𝔉).r sources gamma hg hh p) ((𝔉).base sources gamma hg hh p) ((𝔉).scratch sources gamma hg hh p) ((CODE).site sources gamma hg hh p) ((𝔉).remainingFuel sources gamma hg hh p)))).onset ≤ n)
+    (hp : P1Independent.CappedLegalAdmission.passed sources p (ControllerCappedSelected.reference (denI) (Nat.succ_pos _) kI (PolynomialClock.ordinaryClock kI))
+        (WorkspaceSelectedAdmission.coldCutoff sources) n x bits = true) : ParamsV4.extraW selector 𝔛 mask packets rows sources gamma hg hh p ≤ n :=
+  NearCubicWires.SourceSkeleton.OnsetW.extraW_le_of_onset selector 𝔛 mask packets rows (FillV5.resPV5 selector mask packets rows)
+    sources gamma hg hh p ((CODE).site sources gamma hg hh p) n hn
+
+theorem hcutFS (mask : MaskProducer) (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector) (rows : PCJc4297ab269d8423a_Source.RowLibrary selector)
+    (sources : EightSources) (gamma : Real) (hg : 0 < gamma) (hh : gamma < 1/2) (p : Parameters sources gamma) (n : Nat) (x : BitInput n) (bits : List Bool)
+    (hn : (ControllerCappedSelected.workerData sources p ((𝔉).capIndex sources gamma hg hh p+1) (Nat.succ_pos ((𝔉).capIndex sources gamma hg hh p)) (ControllerCappedSelected.programData ((𝔉).capIndex sources gamma hg hh p+1) (ControllerCappedRuntime.continuation sources p ((𝔉).capIndex sources gamma hg hh p+1) ((𝔉).remainingDegree sources gamma hg hh p) ((𝔉).r sources gamma hg hh p) ((𝔉).base sources gamma hg hh p) ((𝔉).scratch sources gamma hg hh p) ((CODE).site sources gamma hg hh p) ((𝔉).remainingFuel sources gamma hg hh p)))).onset ≤ n)
+    (hp : P1Independent.CappedLegalAdmission.passed sources p (ControllerCappedSelected.reference (denI) (Nat.succ_pos _) kI (PolynomialClock.ordinaryClock kI))
+        (WorkspaceSelectedAdmission.coldCutoff sources) n x bits = true) : CloseoutWitnessPolicy.inputCutoff sources ≤ n :=
+  (NearCubicWires.SourceStart.LayRP.layF_adm selector mask packets rows sources gamma hg hh p 𝔛 n (hextFS selector mask packets rows sources gamma hg hh p n x bits hn hp)).1
+
+theorem hden0FS (mask : MaskProducer) (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector) (rows : PCJc4297ab269d8423a_Source.RowLibrary selector)
+    (sources : EightSources) (gamma : Real) (hg : 0 < gamma) (hh : gamma < 1/2) (p : Parameters sources gamma) (n : Nat) (x : BitInput n) (bits : List Bool)
+    (hn : (ControllerCappedSelected.workerData sources p ((𝔉).capIndex sources gamma hg hh p+1) (Nat.succ_pos ((𝔉).capIndex sources gamma hg hh p)) (ControllerCappedSelected.programData ((𝔉).capIndex sources gamma hg hh p+1) (ControllerCappedRuntime.continuation sources p ((𝔉).capIndex sources gamma hg hh p+1) ((𝔉).remainingDegree sources gamma hg hh p) ((𝔉).r sources gamma hg hh p) ((𝔉).base sources gamma hg hh p) ((𝔉).scratch sources gamma hg hh p) ((CODE).site sources gamma hg hh p) ((𝔉).remainingFuel sources gamma hg hh p)))).onset ≤ n)
+    (hp : P1Independent.CappedLegalAdmission.passed sources p (ControllerCappedSelected.reference (denI) (Nat.succ_pos _) kI (PolynomialClock.ordinaryClock kI))
+        (WorkspaceSelectedAdmission.coldCutoff sources) n x bits = true) : SourceSkeleton.layDen0 sources p.clauseDegree tgtI LI ≤ denI :=
+  (NearCubicWires.SourceStart.LayRP.layF_adm selector mask packets rows sources gamma hg hh p 𝔛 n (hextFS selector mask packets rows sources gamma hg hh p n x bits hn hp)).2.1
+
+theorem hq0FS (mask : MaskProducer) (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector) (rows : PCJc4297ab269d8423a_Source.RowLibrary selector)
+    (sources : EightSources) (gamma : Real) (hg : 0 < gamma) (hh : gamma < 1/2) (p : Parameters sources gamma) (n : Nat) (x : BitInput n) (bits : List Bool)
+    (hn : (ControllerCappedSelected.workerData sources p ((𝔉).capIndex sources gamma hg hh p+1) (Nat.succ_pos ((𝔉).capIndex sources gamma hg hh p)) (ControllerCappedSelected.programData ((𝔉).capIndex sources gamma hg hh p+1) (ControllerCappedRuntime.continuation sources p ((𝔉).capIndex sources gamma hg hh p+1) ((𝔉).remainingDegree sources gamma hg hh p) ((𝔉).r sources gamma hg hh p) ((𝔉).base sources gamma hg hh p) ((𝔉).scratch sources gamma hg hh p) ((CODE).site sources gamma hg hh p) ((𝔉).remainingFuel sources gamma hg hh p)))).onset ≤ n)
+    (hp : P1Independent.CappedLegalAdmission.passed sources p (ControllerCappedSelected.reference (denI) (Nat.succ_pos _) kI (PolynomialClock.ordinaryClock kI))
+        (WorkspaceSelectedAdmission.coldCutoff sources) n x bits = true) : SourceSkeleton.layOnset sources p.clauseDegree tgtI LI ≤ vQI := by
+  rw [Admission.req_arity sources kI (PolynomialClock.ordinaryClock kI) x oracleI (hcutFS selector mask packets rows sources gamma hg hh p n x bits hn hp)]
+  exact (NearCubicWires.SourceStart.LayRP.layF_adm selector mask packets rows sources gamma hg hh p 𝔛 n (hextFS selector mask packets rows sources gamma hg hh p n x bits hn hp)).2.2
+
+theorem h201FS (mask : MaskProducer) (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector) (rows : PCJc4297ab269d8423a_Source.RowLibrary selector)
+    (sources : EightSources) (gamma : Real) (hg : 0 < gamma) (hh : gamma < 1/2) (p : Parameters sources gamma) (n : Nat) (x : BitInput n) (bits : List Bool)
+    (hn : (ControllerCappedSelected.workerData sources p ((𝔉).capIndex sources gamma hg hh p+1) (Nat.succ_pos ((𝔉).capIndex sources gamma hg hh p)) (ControllerCappedSelected.programData ((𝔉).capIndex sources gamma hg hh p+1) (ControllerCappedRuntime.continuation sources p ((𝔉).capIndex sources gamma hg hh p+1) ((𝔉).remainingDegree sources gamma hg hh p) ((𝔉).r sources gamma hg hh p) ((𝔉).base sources gamma hg hh p) ((𝔉).scratch sources gamma hg hh p) ((CODE).site sources gamma hg hh p) ((𝔉).remainingFuel sources gamma hg hh p)))).onset ≤ n)
+    (hp : P1Independent.CappedLegalAdmission.passed sources p (ControllerCappedSelected.reference (denI) (Nat.succ_pos _) kI (PolynomialClock.ordinaryClock kI))
+        (WorkspaceSelectedAdmission.coldCutoff sources) n x bits = true) : 201 * normalizedLiveCount vQI LI ≤ vQI := by
+  rw [Admission.req_arity sources kI (PolynomialClock.ordinaryClock kI) x oracleI (hcutFS selector mask packets rows sources gamma hg hh p n x bits hn hp)]
+  exact (NearCubicWires.SourceStart.LayRP.layOnW_spec selector mask packets rows sources gamma hg hh p n
+    (NearCubicWires.SourceFactorSel.OnsetFin.pastE_layOnW selector mask packets rows sources gamma hg hh p n (hextFS selector mask packets rows sources gamma hg hh p n x bits hn hp))).1
+
+theorem hAFS (mask : MaskProducer) (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector) (rows : PCJc4297ab269d8423a_Source.RowLibrary selector)
+    (sources : EightSources) (gamma : Real) (hg : 0 < gamma) (hh : gamma < 1/2) (p : Parameters sources gamma) (n : Nat) (x : BitInput n) (bits : List Bool)
+    (hn : (ControllerCappedSelected.workerData sources p ((𝔉).capIndex sources gamma hg hh p+1) (Nat.succ_pos ((𝔉).capIndex sources gamma hg hh p)) (ControllerCappedSelected.programData ((𝔉).capIndex sources gamma hg hh p+1) (ControllerCappedRuntime.continuation sources p ((𝔉).capIndex sources gamma hg hh p+1) ((𝔉).remainingDegree sources gamma hg hh p) ((𝔉).r sources gamma hg hh p) ((𝔉).base sources gamma hg hh p) ((𝔉).scratch sources gamma hg hh p) ((CODE).site sources gamma hg hh p) ((𝔉).remainingFuel sources gamma hg hh p)))).onset ≤ n)
+    (hp : P1Independent.CappedLegalAdmission.passed sources p (ControllerCappedSelected.reference (denI) (Nat.succ_pos _) kI (PolynomialClock.ordinaryClock kI))
+        (WorkspaceSelectedAdmission.coldCutoff sources) n x bits = true) (ph : Phase) (ci : Fin NCI) (j : Nat) :
+    Admission.Admitted (denI) p.clauseDegree (SourceRequest.FactorLoop.factorsAt coordI ph ci j) :=
+  SourceSkeleton.admitted_at sources kI (PolynomialClock.ordinaryClock kI) p (denI) x oracleI bits (hcutFS selector mask packets rows sources gamma hg hh p n x bits hn hp) ph ci j
+
+def layFS (mask : MaskProducer) (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector) (rows : PCJc4297ab269d8423a_Source.RowLibrary selector)
+    (sources : EightSources) (gamma : Real) (hg : 0 < gamma) (hh : gamma < 1/2) (p : Parameters sources gamma) (n : Nat) (x : BitInput n) (bits : List Bool)
+    (hn : (ControllerCappedSelected.workerData sources p ((𝔉).capIndex sources gamma hg hh p+1) (Nat.succ_pos ((𝔉).capIndex sources gamma hg hh p)) (ControllerCappedSelected.programData ((𝔉).capIndex sources gamma hg hh p+1) (ControllerCappedRuntime.continuation sources p ((𝔉).capIndex sources gamma hg hh p+1) ((𝔉).remainingDegree sources gamma hg hh p) ((𝔉).r sources gamma hg hh p) ((𝔉).base sources gamma hg hh p) ((𝔉).scratch sources gamma hg hh p) ((CODE).site sources gamma hg hh p) ((𝔉).remainingFuel sources gamma hg hh p)))).onset ≤ n)
+    (hp : P1Independent.CappedLegalAdmission.passed sources p (ControllerCappedSelected.reference (denI) (Nat.succ_pos _) kI (PolynomialClock.ordinaryClock kI))
+        (WorkspaceSelectedAdmission.coldCutoff sources) n x bits = true) (ph : Phase) (ci : Fin NCI) : TraceData.LayoutFamily coordI ph ci sources LI tgtI modeI selector :=
+  NearCubicWires.SourceStart.LayRP.layF selector sources coordI ph ci LI tgtI modeI
+    (SourceBudget.Params.COf selector sources p (C10PartsSchedule.widthAt sources kI n)) p.clauseDegree (denI)
+    (hden0FS selector mask packets rows sources gamma hg hh p n x bits hn hp) (hq0FS selector mask packets rows sources gamma hg hh p n x bits hn hp) (hAFS selector mask packets rows sources gamma hg hh p n x bits hn hp ph ci) (h201FS selector mask packets rows sources gamma hg hh p n x bits hn hp)
+
+def K0FS (mask : MaskProducer) (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector) (rows : PCJc4297ab269d8423a_Source.RowLibrary selector)
+    (sources : EightSources) (gamma : Real) (hg : 0 < gamma) (hh : gamma < 1/2) (p : Parameters sources gamma) (n : Nat) (x : BitInput n) (bits : List Bool)
+    (hn : (ControllerCappedSelected.workerData sources p ((𝔉).capIndex sources gamma hg hh p+1) (Nat.succ_pos ((𝔉).capIndex sources gamma hg hh p)) (ControllerCappedSelected.programData ((𝔉).capIndex sources gamma hg hh p+1) (ControllerCappedRuntime.continuation sources p ((𝔉).capIndex sources gamma hg hh p+1) ((𝔉).remainingDegree sources gamma hg hh p) ((𝔉).r sources gamma hg hh p) ((𝔉).base sources gamma hg hh p) ((𝔉).scratch sources gamma hg hh p) ((CODE).site sources gamma hg hh p) ((𝔉).remainingFuel sources gamma hg hh p)))).onset ≤ n)
+    (hp : P1Independent.CappedLegalAdmission.passed sources p (ControllerCappedSelected.reference (denI) (Nat.succ_pos _) kI (PolynomialClock.ordinaryClock kI))
+        (WorkspaceSelectedAdmission.coldCutoff sources) n x bits = true) (ph : Phase) (ci : Fin NCI) : Fin UI → List Bool :=
+  KeptW.K0Site selector 𝔛 mask packets rows sources gamma hg hh p UI (UOf_le mask packets rows sources resI p kI rI) modeI
+    (RepairOrdinary.frame bits) (ZeroPadding.pad capCI (SourceSteps.qwordAt sources p kI n x bits ci.val))
+    (Function.update (SourceSteps.cdAt sources p kI n x bits ci.val) 15 (List.replicate capCI false))
+    (StartGuard.resWSite selector mask packets rows sources gamma hg hh p modeI n bI) VI NCI
 
 set_option hygiene false in
 local notation "SPI" => (fun (ci : Fin NCI) (A : Fin (ControllerSelectedContinuation.bodyTapes sources p kI rI (scratchOf mask packets rows sources resI)) → List Bool)

@@ -1,4 +1,5 @@
-import Proof.CaseAnalysis.WitnessLegalPolicy
+import Proof.CaseAnalysis.WitnessLegalPolicyRun
+import Proof.Amplification.RecoveryScratchErase
 
 /-! The existing parallel erase allocates exactly a fixed selected bank.
 Its driver and log are physical tapes; all other policy and output fields

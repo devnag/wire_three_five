@@ -1,11 +1,23 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.CoreIfaceM
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Foundations.OutMachineCarIfaceBase
 
-/-! # The output machine: the carrier phase, types only
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # X6: the carrier phase, types only
 
 "For each name, use the regular filter of filt:gap on its signed mixed-residual population" (P3:3071-3076); a call
 carries each named carrier `X` only as its code, and the final pass reads the carrier's atoms and their negations as
 the table `gatesW h (maskGates X)` (P3:3049-3050, 3074-3080). The carrier phase is the pool writers' shared piece:
-from the final pass's input `frame (fpIn r)` it runs `carTableM` per named carrier (the DataSetup carrier
+from the final pass's input `frame (fpIn r)` it runs the `carTableM` per named carrier (the DataSetup carrier
 blocks, `DataTabs.carT`) and leaves
 
 * the two mask tables `carTab carriers k` (`k = 0, 1`; SA's slots 2–3),
@@ -28,21 +40,6 @@ open NearCubicWires NearCubicWires.WireExponent3_5 NearCubicWires.WireExponent3_
 open NearCubicWires.WireExponent3_5.Stars NearCubicWires.WireExponent3_5.FinalPass
 open NearCubicWires.WireExponent3_5.FinalPass.PlanFP NearCubicWires.WireExponent3_5.FinalPass.Seams
 
-/-- Carrier `k`'s gate count `|X_k|` (`0` past the carriers). -/
-def carCnt {n : ℕ} (carriers : List (Carrier n)) (k : ℕ) : ℕ :=
-  if h : k < carriers.length then (carriers.get ⟨k, h⟩).length else 0
-
-/-- The mask table's gate count is twice the carrier's. -/
-theorem carLen_eq {n : ℕ} (carriers : List (Carrier n)) (k : ℕ) : carLen carriers k = 2 * carCnt carriers k := by
-  unfold carLen carCnt
-  split_ifs with h
-  · unfold Corner.maskGates
-    simp only [List.length_flatMap, List.length_cons, List.length_nil]
-    induction (carriers.get ⟨k, h⟩) with
-    | nil => rfl
-    | cons g X ih => simp only [List.map_cons, List.sum_cons, List.length_cons, ih]; ring
-  · rfl
-
 /-- **The carrier phase's five words** at a request: the mask tables of carriers `0`, `1` (SA's slots 2–3), their
 gate counts in unary, the carrier count in unary. -/
 noncomputable def carWords (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1)
@@ -55,3 +52,5 @@ residues `0^ℓ`, heads and registers `0`, at the machine-level writer contract.
 abbrev CarPhaseM (l : Literals) : Type := Finish.CoreWordsM l 5 (carWords l)
 
 end NearCubicWires.WireExponent3_5.FinalPass.Out.Car
+
+end

@@ -1,4 +1,6 @@
+import Proof.Amplification.RecoveryBoundedWordPrefix
 import Proof.Amplification.RecoveryPrefixLoop
+import Proof.PCP.ProjectionDimensionPower
 
 /-! The existing bounded word copier removes the two high-sentinel bits by
 an actual length-driven copy. Padding is retained on the source and is never

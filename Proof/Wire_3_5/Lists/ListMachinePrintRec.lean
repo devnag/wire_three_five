@@ -96,10 +96,31 @@ theorem install_U3 (A : Fin 3 → List Bool) (v : Fin 1 → List Bool) :
   · exact RecoveryRootRound.install_slot slU3 slU3_inj A v 0
   · exact RecoveryRootRound.install_other slU3 A v 2 (by decide)
 
+/-- The arm at a one: copy the position's pairs, close the coordinate, extend the position word. -/
+noncomputable def armT := Composition.machine
+  (Composition.machine (Composition.machine (RecoveryFocus.machine slUO Rec.CopyOpen.machine)
+    (RecoveryFocus.machine slO3 (Put.machine true))) (RecoveryFocus.machine slO3 (Put.machine false)))
+  (RecoveryFocus.machine slU3 UExtend.machine)
+
+/-- The arm at a zero: extend the position word. -/
+noncomputable def armF := Composition.machine (RecoveryFocus.machine slU3 Seek.machine)
+  (RecoveryFocus.machine slU3 UExtend.machine)
+
 /-! ## The branch on the bit, with the position word rewound -/
+
+/-- The branch on the bitmap's bit (tape 0). -/
+noncomputable def br := NearCubicWires.WireExponent3_5.Block.branchM 0 armT armF
+
+def selU3 : Fin 3 → Bool := ![false, true, false]
 
 /-! ## The positions of the bitmap (tapes: 0 the bitmap, 1 the position word, 2 the output, 3 the word's log) -/
 
+def sl0 : Fin 1 → Fin 4 := ![0]
+
+/-- One position: pass the marker, the masked branch on the bit, pass the bit. -/
+noncomputable def body := Composition.machine
+  (Composition.machine (RecoveryFocus.machine sl0 Rec.Skip.machine) (MaskedReset.machine br selU3))
+  (RecoveryFocus.machine sl0 Rec.Skip.machine)
 
 /-! ## The record -/
 

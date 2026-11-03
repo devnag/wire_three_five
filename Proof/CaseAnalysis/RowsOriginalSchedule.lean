@@ -21,8 +21,12 @@ def divisor : Phase→ℕ
   | .penalty=>2
   | .moment=>1
   | .clause=>1
+def denominator (phase : Phase) (clauseBits : ℕ):=divisor phase*2^clauseBits
 def value (phase : Phase) (bits : Fin 4→Bool) (x e : Fin 2→ℝ) : ℝ:=
   ((tasks phase).map (fun t=>(row t bits).value x e)).sum
+
+theorem lengths : (tasks .penalty).length=6 ∧ (tasks .moment).length=1 ∧ (tasks .clause).length=3 := by
+  simp [tasks]
 
 theorem side_value (aux : Bool) (side : Fin 2) (x e : Fin 2→ℝ) (constraint : Option Bool)
     (ha : aux=constraint.isNone) (he : ∀ b,constraint=some b→e side=bitAsReal b) :

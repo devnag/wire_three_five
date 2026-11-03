@@ -1,4 +1,5 @@
-import Proof.Assembly.Values
+import Proof.Assembly.Parent
+import Proof.MachineModel.ClosureCompactFamily
 
 /-! The actual normalized packets through the fixed cold header writer.
 Every cache, dimension word and raw packet byte is an entry requirement.

@@ -1,5 +1,5 @@
+import Proof.Supplier.RowCoefficientWhole
 import Proof.Circuits.MatrixBucketDimensionsIncrement
-import Proof.Supplier.RowCoefficientField
 
 /-! Advance the coordinate template physically and retain its head-one ABI.
 The existing unary increment allocates its new terminator and rewinds; the

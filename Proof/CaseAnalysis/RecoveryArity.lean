@@ -1,3 +1,4 @@
+import Proof.MachineModel.ClockUnaryProduct
 import Proof.CaseAnalysis.RecoveryScalarMetadata
 
 /-! The retained row width and bound driver physically produce the original

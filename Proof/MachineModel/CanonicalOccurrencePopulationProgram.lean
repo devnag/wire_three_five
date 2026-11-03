@@ -1,4 +1,6 @@
+import Proof.Circuits.CanonicalBalancedCall
 import Proof.MachineModel.CanonicalBalancedNatSumProgram
+import Proof.MachineModel.CanonicalNatDecodeProgram
 import Proof.MachineModel.CanonicalRowCountExponentProgram
 
 /-!

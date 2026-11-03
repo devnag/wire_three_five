@@ -1,3 +1,4 @@
+import Proof.Assembly.AppendOutputFrame
 import Proof.SourceAssembly.SourceNativeList
 
 /- The exact packet-index producer: real native header, real count stream,
@@ -11,6 +12,7 @@ namespace PCJ6e421fabe2aa4155_SourceIndexExact
 open NearCubicWires LocalBitMultitape ExtDecompositionBatch
 open RepairOrdinary RepairOrdinary.RecoveryExecution RepairOrdinary.RecoveryRootRound RepairRepresentation
 open RepairSource.VerifierDecoding RepairSource.ProjectionNormalization
+open PCJ6e421fabe2aa4155_SourceNativeList (stream savedFields)
 noncomputable section
 
 def copySlots : Fin 4 → Fin 5 := ![3,1,2,4]
@@ -20,6 +22,7 @@ def advance := DecompositionCountPosition.move directions
 def copies := RecoveryFocus.machine copySlots PCJ6e421fabe2aa4155_SourceNativeList.machine
 def machine := Composition.machine (Composition.machine header advance) copies
 
+def budget (xs : List Nat) := 2*natBitLength xs.length+(stream xs).length+5*xs.length+9
 
 def framed := AppendOutputFrame.machine machine 2
 

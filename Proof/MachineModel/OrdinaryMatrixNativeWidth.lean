@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryMatrixBatchBucketSizesBounds
+import Proof.MachineModel.ClockNumericPrep
 
 /-! Recover the actual common width from a retained framed scalar, using
 the existing length/reset program and unary field-copy program. -/

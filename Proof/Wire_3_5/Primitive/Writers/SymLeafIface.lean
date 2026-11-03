@@ -1,6 +1,6 @@
-import Proof.Wire_3_5.Primitive.Writers.BudgetIface2
 import Proof.Wire_3_5.Primitive.Writers.PopSetupIface
-import Proof.Wire_3_5.Primitive.Writers.WritersJoin
+import Proof.Wire_3_5.Primitive.Writers.BudgetIface2
+import Proof.Wire_3_5.Primitive.Writers.WritersJoinBase
 
 /-! # The SYM writer's leaf from its producers (type)
 
@@ -17,7 +17,7 @@ The SYM writer's deliverable is `WritersJoin.SymLeafJ2 l`. Its machine is the SY
   counting capacity `(8L+2)^{3·lbP+1}` (`PopSetupSpecB.need_le`'s measure), times the walk's `2^{O(e)}`
   (`popRow_run`: `2^t·128·(|record|+1)³`, `t = 2⌊e/4⌋+1`).
 
-**`SymLeafOf l`**: from these, the SYM writer's leaf. The construction proves it (the class link at `m_S = mOfT K_F P + T`,
+**`SymLeafOf l`**: from these, the SYM writer's leaf. PA2 proves it (the class link at `m_S = mOfT K_F P + T`,
 `T = O(D₂·Z·L²·√B_S)` against `Ψ_S ≥ C_D²(k+L)²√B_S`, as `HashFam`/`HashClass` for the HASH writer).
 
 Paper quantities of the main types: the POP row's cost (list:flatten P3:1491-1498, row:sym P3:2477-2496) and the SYM

@@ -11,11 +11,8 @@ check: build
 
 # ---- optional ---------------------------------------------------------------------------------------------
 kernel-replay: build   ## re-check every module's declarations with leanchecker (slow)
-	find StatementChecks Proof Bindings -name '*.lean' | sed 's|/|.|g; s|\.lean$$||' | \
-	  xargs -P $$(getconf _NPROCESSORS_ONLN) -I{} lake env leanchecker {}
-	lake env leanchecker Statement
-	lake env leanchecker Statement_Wire_3_5
-	lake env leanchecker MainTheorem_Wire_3_5
+	find . -path ./.lake -prune -o -name '*.lean' -print | sed 's|^\./||; s|/|.|g; s|\.lean$$||' | \
+	  grep -vxE 'Check|Challenge|Solution' | xargs -P $$(getconf _NPROCESSORS_ONLN) -I{} lake env leanchecker {}
 
 COMPARATOR ?= comparator
 comparator:            ## comparator check (README); run it in a fresh clone, so the proof is built only in its sandbox

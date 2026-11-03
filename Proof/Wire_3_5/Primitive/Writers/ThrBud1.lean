@@ -1,5 +1,6 @@
-import Proof.Wire_3_5.Primitive.SeedFix.C4BudF
-import Proof.Wire_3_5.Primitive.Writers.ThrB7
+import Proof.Wire_3_5.Primitive.Writers.ThrB7Base
+import Proof.Wire_3_5.Primitive.Writers.ThrBigS
+import Proof.Wire_3_5.Primitive.SeedFix.C4BudEBase
 
 /-! # c4 THR block, piece 8 part 1: the THR stage's steps within the seed-fixing budget (the arithmetic)
 

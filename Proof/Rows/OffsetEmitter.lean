@@ -1,5 +1,6 @@
-import Proof.Rows.NativeCircuitCount
+import Proof.Rows.FinalNativeSignedResidue
 import Proof.Rows.ResidueScaleCell
+import Proof.Rows.NativeCircuitCount
 
 /-! Reusable binary final-offset emitter: copy five bounded masters, negate,
 append one framed residue without scanning the output, and clear all workers. -/

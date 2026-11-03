@@ -1,4 +1,8 @@
 import Proof.CaseAnalysis.RowsRawRecord
+import Proof.MachineModel.OrdinaryMaskedReset
+import Proof.PCP.PCPSerializerTapeSupport
+import Proof.Amplification.RecoveryScratchErase
+import Proof.Amplification.RecoveryRowLookupTapes
 
 /-! Projection contracts suffice for the paid reset/erase boundary. The
 actual worker run, initial scratch support and physical drivers remain

@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoveryWorkspacePolynomial
+import Proof.PCP.PCPPRequestSourceRuntime
 
 /-! Uniform support for the original builder's retained native graph.
 The builder's own well-formedness bounds every reference; no graph prepass

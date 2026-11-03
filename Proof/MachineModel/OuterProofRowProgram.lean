@@ -1,4 +1,5 @@
 import Proof.MachineModel.CanonicalBalancedNatSumProgram
+import Proof.Foundations.CanonicalEncodedListLengthProgram
 import Proof.MachineModel.CanonicalProjectedRandomBitProgram
 import Proof.MachineModel.CanonicalThreeCNFLiteralProgram
 import Proof.MachineModel.OuterProofRecoveryFormulaSeedProgram

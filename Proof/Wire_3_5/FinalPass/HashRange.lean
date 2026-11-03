@@ -1,7 +1,23 @@
-import Proof.Wire_3_5.FinalPass.FreeGenH2
-import Proof.Wire_3_5.FinalPass.HashFree
-import Proof.Wire_3_5.FinalPass.HashPops
+import Lean
 import Proof.Wire_3_5.FinalPass.HashSz2
+import Proof.Wire_3_5.FinalPass.HashPops
+import Proof.Wire_3_5.FinalPass.HashFreeBase
+import Proof.Wire_3_5.FinalPass.FreeGenH2
+import Proof.Wire_3_5.FinalPass.SymFr3Base
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.HashSz1
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.HashRangeBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The HASH call's recovery range (`HashEAt`'s range clause)
 
@@ -25,9 +41,6 @@ open NearCubicWires.WireExponent3_5.Shared NearCubicWires.WireExponent3_5.Cost N
 open NearCubicWires.SupplierPipeline NearCubicWires.WireExponent3_5.Stars NearCubicWires.WireExponent3_5.Split
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.FinalPass.SymFr
 open NearCubicWires.WireExponent3_5.FinalPass.FreeGen
-
-/-- **The HASH constants** on the SYM record: `m = 2·a + 1` (the arity slot holds `t`), no floor. -/
-def hashK2 (c : SymC) : FreeK2 := ⟨⟨c.dT, c.dC, c.dQ, c.dH, 0, 0, 0, 2, 1, 0, c.dP, c.dA, c.dR⟩, c.eH, c.eP, 0⟩
 
 /-- The range's exponent constant. -/
 noncomputable def eR (l : Literals) : ℕ :=
@@ -197,3 +210,5 @@ theorem hrange_hash (c : SymC) (hdQ : 8 * eR l + 1 ≤ c.dQ) (kclk coef A a : �
 end Gate
 
 end NearCubicWires.WireExponent3_5.FinalPass.HashFr
+
+end

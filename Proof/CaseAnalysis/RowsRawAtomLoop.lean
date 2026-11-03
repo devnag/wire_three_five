@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RowsRawAtomRound
+import Proof.Amplification.RecoveryCursorCalls
 
 /-! The actual source-produced child count controls the absolute-index
 stream directly. It is not copied into an additional enumeration driver. -/

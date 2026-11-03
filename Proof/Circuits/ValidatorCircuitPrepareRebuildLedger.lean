@@ -1,5 +1,8 @@
 import Batteries.Tactic.OpenPrivate
 import Proof.Circuits.ValidatorCircuitRebuildLedger
+import Proof.Circuits.ValidatorCircuitWidthLedger
+import Proof.Circuits.ValidatorDescriptionLeafClosure
+import Proof.Circuits.ValidatorOracleResultWidth
 import Proof.MachineModel.CanonicalBooleanNodePrepareRebuildProgram
 
 /-!

@@ -1,6 +1,21 @@
-import Proof.Wire_3_5.Primitive.SeedFix.ThrTB3
+import Lean
+import Proof.Wire_3_5.Primitive.SeedFix.ThrTB3Base
+import Proof.Wire_3_5.Primitive.SeedFix.C4GateThrBBase
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4Base
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDecQ5
+import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPoly
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.SeedFix.ThrTB4Base
 
-/-! # THRTAIL T-B, part 4: the data side of the THR shell at a call
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # T3 THRTAIL T-B, part 4: the data side of the THR shell at a call
 
 The v4 shell's data width `V = C₂(n+1)^{D₂}` (the v4 data stage `S`, the fill of its input word): at
 `D₂ = D₀ + d_T + D_{vS} + 26`, `C₂ = C₀ + C_{vS} + 19(K_t(F) + 5)` it meets `ThrDataOK2` (`C4GateSym.thr_data_hyps` at
@@ -25,8 +40,6 @@ noncomputable def dT2 (l : Literals) (D0 : ℕ) : ℕ := D0 + ThrDecF.dT l + C4G
 /-- The data width's coefficient (from `(F, C₀)`). -/
 noncomputable def cT2 (l : Literals) (F : GateFree l) (C0 : ℕ) : ℕ :=
   C0 + C4GateSym.CvS + 19 * (ThrDecF.kT l F + 5)
-
-theorem pow_mono_exp {x a b : ℕ} (h : a ≤ b) : (x + 1) ^ a ≤ (x + 1) ^ b := Nat.pow_le_pow_right (by omega) h
 
 section Data
 variable (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ} (ha' : a' ≤ 4)
@@ -116,3 +129,5 @@ theorem data_need (l : Literals) (F : GateFree l) (D0 C0 n : ℕ) (hD : S.Dn ≤
 end Stage
 
 end NearCubicWires.WireExponent3_5.PrimT.ThrTB
+
+end

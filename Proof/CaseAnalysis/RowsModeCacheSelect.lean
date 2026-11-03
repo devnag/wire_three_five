@@ -1,5 +1,5 @@
 import Proof.CaseAnalysis.RowsModeCacheHash
-import Proof.CaseAnalysis.RowsTupleSeekPairs
+import Proof.CaseAnalysis.RowsTupleSeekDock
 
 /-! The actual computed flags and live original mask cursor enter the
 literal pair writer; the child count remains independent of the mask. -/

@@ -1,8 +1,12 @@
 import Proof.Amplification.CanonicalRecoveryLanguage
-import Proof.Amplification.RecoveryWitnessPolicy
-import Proof.Circuits.UnaryPolynomialSelector
+import Proof.Foundations.CaseOnePadding
 import Proof.Foundations.CaseOneScheduleLedger
 import Proof.MachineModel.ExecutableProgramRecoveryCompatibility
+import Proof.Foundations.PhysicalRecovery
+import Proof.Foundations.RecoveryScheduleEnvelope
+import Proof.Foundations.WireScaleTransfer
+import Proof.Amplification.RecoveryWitnessPolicy
+import Proof.Circuits.UnaryPolynomialSelector
 
 /-!
 # Direct Case-1 recovery assembly

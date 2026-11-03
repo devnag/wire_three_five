@@ -1,3 +1,4 @@
+import Proof.CaseAnalysis.CaseOneTargetLanguageClosure
 import Proof.MachineModel.CaseTwoSeedBlockListProgram
 import Proof.MachineModel.OuterProofRowStageProgram
 

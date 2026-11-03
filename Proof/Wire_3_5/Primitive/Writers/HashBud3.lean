@@ -1,6 +1,22 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.HashBud2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.HashS
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.HashFit1
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymNB
+import Proof.Wire_3_5.Primitive.SeedFix.TS4N
+import Proof.Wire_3_5.Primitive.SeedFix.TS4O
+import Proof.Wire_3_5.Assembly.Split
 
-/-! # c4 HASH budget (C), part 3: the cell and the writer at every THR call, at rate `7`
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2 c4 HASH budget (C), part 3: the cell and the writer at every THR call, at rate `7`
 
 P3:3105-3115: the kept words writer's numbers `kwT ≤ 9q` at the call's unit `q = 2^{E·(B+1)²}` (**`kwT_le`**: the
 majorant's `ℓ₀, pMod, B_*, t, J` are the call's THR numbers (`mp_eq`), `|𝒢|`, `nE`, `A` too, `N = 2^{k_h}`), and
@@ -218,3 +234,5 @@ theorem hX_ex (l : Literals) (F : GateFree l) (Wk : PrimT.C4KW.KWW) (D Cd Cc : �
   omega
 
 end NearCubicWires.WireExponent3_5.PrimAsm.HashBud
+
+end

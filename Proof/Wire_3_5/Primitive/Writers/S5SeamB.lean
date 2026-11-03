@@ -1,6 +1,21 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.S5Seam
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.FinalPass.SeamsProg
+import Proof.Wire_3_5.FinalPass.SeamsPt
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.S5SeamBase
 
-/-! # The S5 halves with their cost bounds ((2))
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2: the S5 halves with their cost bounds (freeze gate (2))
 
 The sub-seam (`S5Seam`) leaves the halves' costs free; the final pass's cost residual
 (`SeamsPt.FitsRes`, `X.front.cost r ≤ fB r`) needs them explicit. This file adds, as wrappers, the bound in the
@@ -52,3 +67,5 @@ theorem one_le_s5Bound (C D : ℕ) (hC : 1 ≤ C) (r : FReq l F kclk coef A a ha
 end Family
 
 end NearCubicWires.WireExponent3_5.PrimAsm.S5Seam
+
+end

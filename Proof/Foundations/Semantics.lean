@@ -1,5 +1,6 @@
 import Mathlib
 import Proof.Foundations.BalancedCNFCodec
+import Statement
 
 /-!
 # Concrete semantic vocabulary for the headline statements

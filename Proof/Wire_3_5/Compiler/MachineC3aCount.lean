@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Compiler.MachineC3aKit
+import Proof.Wire_3_5.MachineModel.BlockJoin
 
 /-! # C3a machine, the unary counts of the request: flip patterns and column sides (P3:1636-1664)
 

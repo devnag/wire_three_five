@@ -66,6 +66,14 @@ theorem Cv_eq (a : DecompositionAlgorithm) (r : FourfoldRequest NormalizedThresh
   show (T a r 0).length * ((T a r 1).length * ((T a r 2).length * ((T a r 3).length * 1))) = _
   ring
 
+theorem cut_eq (a : DecompositionAlgorithm) (r : FourfoldRequest NormalizedThresholdThresholdCircuit)
+    (four : r.circuits.length ≤ 4) (target : ℕ) :
+    cutOf (Fv (dsOf a r)) (Cv (dsOf a r)) target = CloseoutFinalC10ThresholdRows.primeCutoff a r target := by
+  rw [Fv_eq a r four, Cv_eq a r four]
+  unfold cutOf CloseoutFinalC10ThresholdRows.primeCutoff CloseoutFinalC10ThresholdRows.primeDenominator
+    reciprocalUnionDenominator familyMagnitudeExponent
+  rfl
+
 end Spec
 
 end

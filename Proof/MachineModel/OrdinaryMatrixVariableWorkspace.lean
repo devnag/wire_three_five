@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryMatrixVariableReset
+import Proof.Amplification.RecoveryTapeSupport
 
 /-! Finite workspace for the actual indexed source call and paid reset.
 The enclosing scheduler must physically supply this capacity; after a call,

@@ -1,6 +1,7 @@
 import Proof.Assembly.ClosureHardwireBounds
 import Proof.Assembly.ClosureTemplateRestore
 import Proof.MachineModel.ClosureLocalSupport
+import Proof.Circuits.DecompositionCountPosition
 
 /-! The hardwired-child call restores every scratch template from the same
 retained masters, leaving only its output append. The source and masks are

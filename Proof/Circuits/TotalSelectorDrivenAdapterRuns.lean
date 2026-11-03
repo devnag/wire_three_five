@@ -1,5 +1,6 @@
-import Proof.Circuits.TotalSelectorBodyAdapter
+import Proof.PCP.SelectorDrivenProjectionTableStage
 import Proof.Circuits.TotalSelectorDrivenAdapterContracts
+import Proof.Circuits.TotalSelectorBodyAdapter
 
 /-!
 # All-request selector adapter contracts

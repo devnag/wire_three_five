@@ -16,5 +16,6 @@ def readSlots : Fin 3→Fin 12 := ![10,6,11]
 noncomputable def read := RecoveryFocus.machine readSlots FieldMachine.machine
 noncomputable def lookup := TapeEmbedding.machine 2 RowMaskLookupReusable.machine
 noncomputable def machine := Composition.machine read lookup
+def budget (N w M : ℕ) := 2*RowMaskLookupReusable.capacity N w M+4*w+5
 
 end NearCubicWires.RepairOrdinary.RowTupleMaskBody

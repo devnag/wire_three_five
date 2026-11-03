@@ -1,6 +1,8 @@
-import Proof.Wire_3_5.UnionMachine.FrontClog
 import Proof.Wire_3_5.UnionMachine.FrontFill
+import Proof.Wire_3_5.UnionMachine.FrontClog
 import Proof.Wire_3_5.UnionMachine.FrontWidthTail
+import Proof.Wire_3_5.Ledger.LedgerWidth
+import Proof.Hierarchy.HierarchyFromInput
 
 /-! # C6 front, U2: the native width `q(N)` in unary (P3:3637-3640)
 

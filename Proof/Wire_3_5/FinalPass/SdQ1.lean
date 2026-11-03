@@ -1,6 +1,6 @@
 import Proof.Wire_3_5.FinalPass.SdLoop
 import Proof.Wire_3_5.FinalPass.TabFlat
-import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.FinalPass.SeamsProg3Base
 
 /-! # S4 (the seeds phase), part 35: S4's words at a star call, read (P3:3170-3178)
 

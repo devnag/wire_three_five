@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.ScheduleStep
+import Proof.PCP.VerifierDecodingRepeat
 
 /-! Use the existing literal repeat controller only at the input's actual
 bounded indices. No artificial post-exhaustion body invariant is required. -/

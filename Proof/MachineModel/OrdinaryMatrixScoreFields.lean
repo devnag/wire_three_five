@@ -1,4 +1,7 @@
 import Proof.MachineModel.OrdinaryMatrixScoreGateStream
+import Proof.MachineModel.OrdinaryMatrixTemplateEntries
+import Proof.MachineModel.ClockScalarFields
+import Proof.Amplification.RecoveryScratchErase
 
 /-! Cold caller fields for the whole score enumeration. Raw d, M and C
 produce the d sentinel, two native zero assignments, native zero id and

@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.FinalPass.S5TWin2
+import Proof.Wire_3_5.FinalPass.LiftR
 
 /-! # S5-THR, part 15: stage 4's table builder on renamed streams (P3:2150-2157, 1419-1488)
 

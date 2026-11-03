@@ -10,6 +10,8 @@ set_option maxHeartbeats 250000
 set_option maxRecDepth 120000
 set_option warningAsError true
 
+noncomputable def last := RecoveryFocus.machine slots (MatrixSignedMaskPass.machine false)
+noncomputable def machine := Composition.machine MatrixSignedEntry.machine last
 noncomputable def budget (r : Request) := MatrixSignedEntry.budget r+1+MatrixSignedMaskPass.budget r
 
 end NearCubicWires.RepairOrdinary.MatrixFirstSignedPlane

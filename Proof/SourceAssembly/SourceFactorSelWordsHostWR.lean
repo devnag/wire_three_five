@@ -1,5 +1,11 @@
 import Proof.SourceAssembly.SourceFactorSelWordsHostRun
-import Proof.SourceAssembly.SourceRestBackRun
+import Proof.Packets.SourceResidentCopies
+import Proof.Packets.SourceResidentOccCount
+import Proof.SourceAssembly.SLoadCore
+import Proof.SourceAssembly.SourceFactorSelItem4Bank
+import Proof.SourceAssembly.SourceFactorSelItem4Stages
+import Proof.SourceAssembly.SourceFactorSelItem4Top
+import Proof.SourceAssembly.SourceFactorSelRunBound
 
 set_option autoImplicit false
 set_option maxRecDepth 120000
@@ -17,6 +23,9 @@ open NearCubicWires.SourceRequest NearCubicWires.SourceRequest.FactorLoop
 open SourceInterfaces RepairSource.VerifierDecoding NearCubicWires.RepairSource NearCubicWires.RepairSource.CloseoutFinal
 noncomputable section
 attribute [local irreducible] NearCubicWires.P1TopDownPaidPayload.tapes
+
+/-- The six loop field ports the words stage reads: `fslot 17, 15, 23, 19, 21, 29`. -/
+def srcIdx : Fin 6 → Fin 31 := ![17, 15, 23, 19, 21, 29]
 
 section wr
 

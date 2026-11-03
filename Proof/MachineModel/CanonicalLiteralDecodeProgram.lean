@@ -1,5 +1,6 @@
 import Proof.MachineModel.CanonicalNativeModProgram
 import Proof.MachineModel.PreserveRightProgram
+import Proof.Foundations.VerifiedLinker
 
 /-!
 # Fixed external-literal decoder

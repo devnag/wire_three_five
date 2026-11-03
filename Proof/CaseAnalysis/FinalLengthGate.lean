@@ -1,5 +1,8 @@
-import Proof.CaseAnalysis.FinalOneSidedness
 import Proof.CaseAnalysis.FinalSupplierTotality
+import Proof.CaseAnalysis.FinalOneSidedness
+import Proof.Amplification.RecoveryTimedExecution
+import Proof.MachineModel.OrdinaryMemoryEffect
+import Proof.MachineModel.Runs
 
 namespace NearCubicWires.RepairSource.CloseoutFinal.C10LengthGate
 

@@ -22,6 +22,19 @@ section slots
 end slots
 
 section main
+variable (mask : MaskProducer) (selector : CyclicChoice.Laws)
+    (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector)
+    (rows : PCJc4297ab269d8423a_Source.RowLibrary selector) (compiler : Packets.CompilerLaws)
+    (sources : EightSources) {gamma : Real} (p : Parameters sources gamma)
+    (den : Nat) (hden : 0 < den) (k r scratch n : Nat) (x : BitInput n) (bits : List Bool)
+    (hp : P1Independent.CappedLegalAdmission.passed sources p
+      (ControllerCappedSelected.reference den hden k (PolynomialClock.ordinaryClock k))
+      (WorkspaceSelectedAdmission.coldCutoff sources) n x bits = true)
+    (site : Bool → Phase → Σ states, Machine (ControllerSelectedContinuation.bodyTapes sources p k r scratch) states)
+    (code : (ph : Phase) → RCFive.Source.SourceCode mask selector packets rows sources p k r scratch ph)
+    (ph : Phase) (ci : Fin (NC sources k (PolynomialClock.ordinaryClock k) x (C10TotalDecode.oracleOf sources k (PolynomialClock.ordinaryClock k) p.degree n bits)))
+    (H0 : Fin (ControllerSelectedContinuation.bodyTapes sources p k r scratch) → Nat) (A0 : Fin (ControllerSelectedContinuation.bodyTapes sources p k r scratch) → List Bool)
+    (values : RCFive.Source.CallValues (C10TotalDecode.Atom (pcppAt sources k (PolynomialClock.ordinaryClock k) x (C10TotalDecode.oracleOf sources k (PolynomialClock.ordinaryClock k) p.degree n bits))) (code ph).sourceTapes)
 
 set_option hygiene false in
 local notation "𝒞" => PCJda54a286946142d3_BranchPhases.cache sources p k r scratch (PCJ374c44bb8b7f47d9_.S.mode sources p den hden k r scratch n x bits hp)

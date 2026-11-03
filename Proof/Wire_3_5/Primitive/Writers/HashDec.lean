@@ -1,3 +1,4 @@
+import Proof.Wire_3_5.Primitive.Writers.SymDecFB
 import Proof.Wire_3_5.Primitive.Writers.SymDecRun
 import Proof.Wire_3_5.Primitive.Writers.ThrDataIface3
 
@@ -118,6 +119,7 @@ theorem hA_run (cr : ℕ) (P : Shared.StarParams) (hrP : P.r = Ledger.rowBr cr P
   exact WExec.seq e1 (WExec.seq e2 (WExec.seq e3 (WExec.seq e4 e5)))
 
 end HashA
+
 
 section HashC
 variable (cap : ℕ) (x : ℕ)

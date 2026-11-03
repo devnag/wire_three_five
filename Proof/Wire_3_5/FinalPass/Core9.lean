@@ -1,4 +1,18 @@
-import Proof.Wire_3_5.FinalPass.Core8
+import Lean
+import Proof.Wire_3_5.FinalPass.Core7
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.S5TJoin2
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.Core9Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S5Core, part 9: the request's head and the SYM slots at a THR request (P3:3083-3086, 3170-3181)
 
@@ -16,18 +30,6 @@ open NearCubicWires NearCubicWires.WireExponent3_5 NearCubicWires.WireExponent3_
 open NearCubicWires.WireExponent3_5.FinalPass.PlanFP NearCubicWires.WireExponent3_5.FinalPass.Seams
 open NearCubicWires.WireExponent3_5.FinalPass.Finish
 
-/-- The request word's head: `natWord n = 1^L 0 bits`, then the mode bit. -/
-theorem reqW_shape (n : ℕ) (mb : Bool) (codes cc : List ℕ) (tl : List Bool) :
-    PrimAsm.Data.reqW n mb codes cc tl = List.replicate (natBitLength n) true ++ false ::
-      (WilliamsPublishedForm.fixedWidthNatBits (natBitLength n) n ++ mb :: (RepairRepresentation.natWord codes.length ++
-        codes.flatMap RepairRepresentation.natWord ++ RepairRepresentation.natListWord cc ++ tl)) := by
-  simp [PrimAsm.Data.reqW, RepairRepresentation.natWord, WilliamsPublishedForm.framedNatBits]
-
-/-- The THR flag of a mode. -/
-def thrFlag : Mode → Bool
-  | .thr => true
-  | .sym => false
-
 section Family
 variable (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1)
 
@@ -44,9 +46,6 @@ theorem fpIn_shape (r : FReq l F kclk coef A a ha) : ∃ rest : List Bool,
   | sym =>
     rw [S5T.fpIn_sym l F kclk coef A a ha n a' ha' carriers translation Cs hc, reqW_shape]
     exact ⟨_, rfl⟩
-
-theorem fixed_len (L v : ℕ) : (WilliamsPublishedForm.fixedWidthNatBits L v).length = L := by
-  simp [WilliamsPublishedForm.fixedWidthNatBits]
 
 /-- The input is at least the request's head long. -/
 theorem fpIn_len (r : FReq l F kclk coef A a ha) :
@@ -70,3 +69,5 @@ theorem sym_blank_thr (r : FReq l F kclk coef A a ha) (hm : r.1.mode = .thr) (k 
 end Family
 
 end NearCubicWires.WireExponent3_5.FinalPass.Core
+
+end

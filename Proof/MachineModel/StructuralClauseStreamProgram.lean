@@ -1,4 +1,6 @@
 import Proof.Circuits.CircuitInputCNF
+import Proof.Foundations.CanonicalBinaryProgram
+import Proof.Foundations.DynamicCNFBuilder
 
 /-!
 # Fixed structural-clause stream encoder

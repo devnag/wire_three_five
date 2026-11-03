@@ -1,4 +1,4 @@
-import Proof.Rows.RowsInitMasterFan
+import Proof.Rows.RowsInitLoopFan
 
 set_option autoImplicit false
 set_option maxRecDepth 120000

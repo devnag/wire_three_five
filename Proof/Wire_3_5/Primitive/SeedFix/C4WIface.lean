@@ -1,6 +1,6 @@
 import Proof.Wire_3_5.Primitive.SeedFix.C4Loop
 import Proof.Wire_3_5.Primitive.SeedFix.C4SI
-import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTypes
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTypesBase
 
 /-! # C4 Stage3 wrapper, the contract: a setup's exit bank, the decision loop, the finisher
 

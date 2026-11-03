@@ -1,4 +1,5 @@
 import Proof.Hierarchy.HierarchyBinarySuccessor
+import Proof.Amplification.RecoveryUnpairCode
 
 /-! Finite physical layout for the hierarchy clock B_H=C*(n^D+1).
 The coefficient and degree are fixed program parameters. -/

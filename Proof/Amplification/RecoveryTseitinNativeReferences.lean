@@ -1,5 +1,5 @@
-import Proof.Amplification.RecoveryTseitinNodeCapacity
 import Proof.Amplification.RecoveryTseitinReferenceBound
+import Proof.Amplification.RecoveryTseitinNodeCapacity
 import Proof.PCP.PCPPRequestNodeSchema
 
 /-! Select the physically generated references demanded by each original

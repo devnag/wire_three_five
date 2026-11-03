@@ -1,4 +1,5 @@
 import Proof.PCP.ProjectionNormalizationCounter
+import Proof.Amplification.RecoveryUnpairCode
 
 /-! Actual clause-count parsing followed by the complete cold keep-last
 producer. The serializer count is produced from the source bytes. -/

@@ -1,4 +1,5 @@
 import Proof.PCP.PCPSerializerReuseErase
+import Proof.MachineModel.OrdinaryWilliamsSourceCropLayout
 
 /-! The repeated caller physically appends the framed serializer result and
 then erases the shared bank. Its source/count cursors and global unary

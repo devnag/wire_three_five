@@ -1,7 +1,9 @@
-import Proof.Wire_3_5.UnionMachine.CWWritersJ
 import Proof.Wire_3_5.UnionMachine.FrontCh3P
 import Proof.Wire_3_5.UnionMachine.FrontFmtCA
+import Proof.Wire_3_5.UnionMachine.FrontFmtW
 import Proof.Wire_3_5.UnionMachine.FrontFoldStage
+import Proof.Wire_3_5.UnionMachine.CWWritersJ
+import Proof.MachineModel.ClockUnarySum
 
 /-! # C6 front, the chain, phase 5: the table writer's sources (P3:3672-3674, 3092-3094, 3409-3410)
 

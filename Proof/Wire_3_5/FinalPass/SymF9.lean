@@ -1,6 +1,7 @@
-import Proof.Wire_3_5.FinalPass.SdPrep2
 import Proof.Wire_3_5.FinalPass.SymF8
+import Proof.Wire_3_5.FinalPass.SdPrep2
 import Proof.Wire_3_5.Primitive.Writers.SymDecTools
+import Proof.Wire_3_5.Primitive.Writers.WriterIfaceJBase
 
 /-! # SWf (the SYM words writer's flat tables), part 9: the four writers docked (the part's tail)
 

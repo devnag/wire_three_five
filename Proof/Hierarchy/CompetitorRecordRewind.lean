@@ -1,4 +1,7 @@
+import Proof.Amplification.RecoveryFocusDock
+import Proof.Hierarchy.CompetitorMonomialEntry
 import Proof.Hierarchy.CompetitorSelectedDimensions
+import Proof.PCP.ProjectionNormalizationDriverAtoms
 
 /-! A single paid saturating rewind of the appended record stream. The raw
 capacity comes from scalar metadata; the scan logs and restores its driver.

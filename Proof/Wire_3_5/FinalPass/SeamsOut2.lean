@@ -1,4 +1,20 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.AssemblyDock2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.FinalPass.SeamsProg
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.FinalPass.SeamsPt
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.S5SeamB
+import Proof.Wire_3_5.Assembly.Split
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The final pass's seams, v4: the out machine from a blank output tape
 
@@ -140,3 +156,4 @@ end Family
 
 end NearCubicWires.WireExponent3_5.FinalPass.Seams
 
+end

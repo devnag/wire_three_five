@@ -1,3 +1,4 @@
+import Proof.Foundations.CanonicalBinary
 import Proof.Foundations.RecoveryScheduleEnvelope
 
 /-!
@@ -28,22 +29,6 @@ open NearCubicWires.RecoveryPipeline
 open NearCubicWires.RecoveryScheduleEnvelope
 open NearCubicWires.ScheduleArithmetic
 open NearCubicWires.SourceInterfaces
-
-/-- The sole padded outer PCP used by both branches. -/
-def paddedOuterPCP
-    {clockDepth : ℕ}
-    {source : ExecutableRefuterSource (pairClock clockDepth)}
-    (outer : HierarchyOuterPCP source) :
-    ProjectionPCP source.hierarchyMachine (pairClock clockDepth) :=
-  padProjectionPCP outer.pcp.toSemantic
-    (widthEnvelope outer) (nativeWidth_le_widthEnvelope outer)
-
-@[simp] theorem paddedOuterPCP_nativeWidth
-    {clockDepth : ℕ}
-    {source : ExecutableRefuterSource (pairClock clockDepth)}
-    (outer : HierarchyOuterPCP source) (n : ℕ) :
-    (paddedOuterPCP outer).nativeWidth n = widthEnvelope outer n :=
-  rfl
 
 /-! ## Selector provenance -/
 

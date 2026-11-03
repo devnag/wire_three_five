@@ -1,4 +1,5 @@
 import Proof.Circuits.CanonicalBalancedTraversal
+import Proof.Foundations.VerifiedLinker
 
 /-!
 # Canonical total Booleanization

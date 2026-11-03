@@ -1,3 +1,8 @@
+import Proof.Circuits.BoundedOracleStructuralCircuit
+import Proof.MachineModel.CanonicalBalancedLookupProgram
+import Proof.MachineModel.CanonicalBalancedNatSumProgram
+import Proof.MachineModel.CanonicalBitSerialMulProgram
+import Proof.MachineModel.CanonicalRowCountExponentProgram
 import Proof.MachineModel.CanonicalSymmetricRowTableRequestProgram
 import Proof.MachineModel.CaseTwoOccurrenceProgram
 

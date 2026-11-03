@@ -18,7 +18,10 @@ noncomputable section
 abbrev Circuit (q : Nat) :=List (NormalizedThresholdGate q)×List Bool
 def word {q : Nat} (c : Circuit q) :=frame (payload c.1 c.2)
 def stream {q : Nat} (cs : List (Circuit q)):=cs.flatMap word
+def output {q : Nat} (cs : List (Circuit q)) (live : Finset (Fin q)) (x : BitInput q) (j : Nat) :=
+ (cs.take j).flatMap (fun c=>flags c.1 live x)
 
+def budget (N B q : Nat) :=N*(PCJ45bee56da9f34d5a_CircuitFlagCost.uniform B q+3)+3
 
 
 end

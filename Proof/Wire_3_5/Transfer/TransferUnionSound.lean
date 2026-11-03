@@ -1,4 +1,11 @@
+import Lean
 import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.UnionCheck
+import Proof.Wire_3_5.Transfer.TransferUnionSoundBase
+
+
+noncomputable section
+
 
 /-! # `tr:soundness` for the union machine: no accepting guess on a no-instance, and `OneSided` from `SoundFor`
 
@@ -7,7 +14,7 @@ Realizes Lemma `tr:soundness` (P3:3504-3554) at the union machine's acceptance c
 This holds for every syntactically legal real-valued sparse guess [...] and for proof-dependent, seed-dependent
 masks." A branch is a guess `g` with `UnionAccepts S P z g`. Its grid sums, constant and encoding
 parities are the atom forms (`UnionGuess.forms`), so the machine's estimates `V̂, Q̂, μ̂` formed from the fused
-primitive's printed values are within `(1+Λ̄)⁴q^{−D} ≤ ε₀` of the tests (`seed_propagated_*`, which consume
+primitive's printed values are within `(1+Λ̄)⁴q^{−D} ≤ ε₀` of the tests (the `seed_propagated_*`, which consume
 `FusedPrimitive.error` on the admissible calls), and the masked tests at the seed's filters cannot pass on a
 no-instance: the rounding (`tr:rounding`, corrected), the one-sided mask (`tr:one-sided`), pointwise PCPP soundness
 (`PointwisePCPPAlgorithm.sound`) and the outer soundness `N^{−10}` (the chain, here with real estimates:
@@ -25,34 +32,6 @@ open NearCubicWires NearCubicWires.SourceInterfaces NearCubicWires.WireExponent3
 open NearCubicWires.RepairSource NearCubicWires.RepairRepresentation
 open NearCubicWires.WireExponent3_5.Shared (uMean bitR)
 open NearCubicWires.ComponentwiseBranchExtraction (systematicConstraint)
-
-/-- `tr:soundness` with real estimates (the machine's estimates are exact rationals; their real values are what the
-accuracy bounds speak about): estimates within `ε₀` of the tests of any guess and any masks cannot pass
-`tr:thresholds` on a PCPP that is pointwise sound and whose circuit the outer verifier accepts on at most `η` of the
-random inputs. -/
-theorem masked_soundness_real {q : ℕ} {H : BooleanCircuit q} (pcpp : PointwisePCPP H) {cp sp : ℝ}
-    (params : MaskedSoundnessParameters cp sp) {Seed : Type} [Fintype Seed] [Nonempty Seed]
-    (hsound : ∀ x, ¬ H.eval x → ∀ aux, pcpp.satisfiedFraction x aux ≤ sp)
-    (houter : uMean (fun x : BitInput q => bitR (H.eval x)) ≤ params.outerError)
-    (S : PcppVar pcpp → BitInput q → ℝ) (G : PcppVar pcpp → Seed → BitInput q → Bool) (Vh Qh μh : ℝ)
-    (hV : |Vh - testV pcpp S G| ≤ params.eps0) (hQ : |Qh - testQ pcpp S G| ≤ params.eps0)
-    (hμ : |μh - testMu pcpp S G| ≤ params.eps0) (hVp : Vh ≤ 2 * (params.v0 : ℝ)) (hQp : Qh ≤ 1 + (params.v0 : ℝ))
-    (hμp : (params.threshold : ℝ) ≤ μh) : False := by
-  have hv0 : (0 : ℝ) < params.v0 := by exact_mod_cast params.v0_pos
-  have hv24 : (params.v0 : ℝ) ≤ 1 / 24 :=
-    calc (params.v0 : ℝ) ≤ ((1 / 24 : ℚ) : ℝ) := Rat.cast_le.mpr params.v0_le
-      _ = 1 / 24 := by norm_num
-  have hεv : (params.eps0 : ℝ) ≤ params.v0 := by exact_mod_cast params.eps0_le_v0
-  have hV' : testV pcpp S G ≤ 3 * (params.v0 : ℝ) := by linarith [(abs_le.mp hV).1]
-  have hQ' : testQ pcpp S G ≤ 1 + 2 * (params.v0 : ℝ) := by linarith [(abs_le.mp hQ).1]
-  have h1 := testMu_le_rounded pcpp S G params.v0 hv0 hv24 hV' hQ'
-  have h2 := maskedRoundedScore_le pcpp S G
-  have h3 := roundedScore_le_soundness pcpp params.sp_nonneg hsound S
-  have h4 := (abs_le.mp hμ).2
-  have hmid := params.thresholdAboveMidpoint
-  have hres := params.roundingReserve
-  have hout := params.outerReserve
-  linarith
 
 section Union
 variable {kclk : ℕ} {E : Envelope} {B : TimeBudget kclk E} {I : PrimitiveInputs B}
@@ -151,7 +130,7 @@ theorem linMass_wE (X : PcppVar g.pcpp) : linMass (g.wE X) ≤ 1 := by
     · simp
   rw [h1, h2, h3]; norm_num
 
-/-- The guess's atom forms: its grid sums, the constant and the encoding parities, at mass `Λ̄(q)`. -/
+/-- The guess's atom forms (M4): its grid sums, the constant and the encoding parities, at mass `Λ̄(q)`. -/
 noncomputable def forms (hsign : ∀ X a, g.sign X a ∈ ({-1, 0, 1} : Finset ℤ)) :
     AtomForms g.pcpp g.atoms (S.gridMass g.q) where
   wS := g.wS
@@ -168,11 +147,19 @@ noncomputable def forms (hsign : ∀ X a, g.sign X a ∈ ({-1, 0, 1} : Finset �
 
 end UnionGuess
 
-/-- The PCPP arity is at least the native width. -/
-theorem nativeWidth_le_q (S : UnionSetup I) {N : ℕ} {z : BitInput N} (g : UnionGuess S z) :
-    S.pcp.nativeWidth N ≤ g.q :=
-  le_max_left _ _
+/-- On a guess passing the length gate (`N = 2^a` past the onset), the PCPP arity is the width `q(N)`. -/
+theorem q_eq_width (S : UnionSetup I) {N : ℕ} {z : BitInput N} (g : UnionGuess S z)
+    (hN : N = 2 ^ Nat.log 2 N) (hon : S.onset ≤ Nat.log 2 N) : g.q = S.width N := by
+  have hq : S.pcppAlg.minimumArity ≤ NearCubicGates.Close.Outer.width S.mw S.SV N := by
+    have h := S.onset_arity (Nat.log 2 N) hon
+    rwa [← hN] at h
+  show (S.request z g.pair).arity = _
+  unfold UnionSetup.request
+  rw [W3.NearCubicWires.RepairSource.Outer3.requestAt_of S.mw S.SV S.pcppAlg (Nat.log 2 N) g.pair hq]
+  rfl
 
 end Union
 
 end NearCubicWires.WireExponent3_5.Transfer
+
+end

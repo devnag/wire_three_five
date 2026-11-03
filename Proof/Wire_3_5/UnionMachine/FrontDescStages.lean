@@ -36,6 +36,9 @@ end Own
 /-! ## The verdict: append the flag bit, count the atom off -/
 
 section Tail
+local notation "sF" => (0 : Fin 2)
+local notation "sDF" => (1 : Fin 2)
+local notation "rJ" => (0 : Fin 1)
 
 end Tail
 

@@ -1,4 +1,6 @@
 import Proof.Hierarchy.HierarchyBinaryBounds
+import Proof.Amplification.RecoveryReadyCalls
+import Proof.MachineModel.OrdinaryBoundaryAdvance
 
 /-! Reusable binary add and streaming focus boundary for the hierarchy-bound
 multiplier. Every focus call executes the imported ordinary machine, retaining

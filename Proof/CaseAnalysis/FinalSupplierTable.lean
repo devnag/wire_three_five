@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.FinalSupplierRowInput
+import Proof.Hierarchy.CompetitorCountTable
 
 set_option autoImplicit false
 set_option maxHeartbeats 250000

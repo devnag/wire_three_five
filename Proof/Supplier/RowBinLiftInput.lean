@@ -73,4 +73,22 @@ theorem fields_fit (cs : List Cut) (c : Cut) (hc : c ∈ cs) : Fits (fieldWidth 
   · exact field_fit cs c hc c.threshold (by simp [fields])
   · exact field_fit cs c hc c.coefficient (by simp [fields])
 
+def input (s Q : ℕ)
+    (rows : List (List (List (Equation ((s+1)/2) (s/2)))))
+    (hs : 67 ≤ s) (hg : (batch Q rows).length^100 ≤ 2^s) : EquationRow.Input where
+  d := (s+1)/2
+  p := fieldWidth (batch Q rows)
+  odd := decide (s%2=1)
+  cuts := batch Q rows
+  lengths := by
+    intro c hc
+    obtain ⟨ms,_,hm⟩ := List.mem_flatMap.mp hc
+    have hl := cuts_lengths Q ms c hm
+    refine ⟨hl.1,?_⟩
+    rw [hl.2]
+    by_cases hp : s%2=1 <;> simp [hp] <;> omega
+  fits := fields_fit (batch Q rows)
+  oddPositive := by intro _; omega
+  gateSquare := doubled_gateSquare hs hg
+
 end NearCubicWires.RepairOrdinary.RowBinLift

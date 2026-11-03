@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Lists.ListMachineRows
+import Proof.Wire_3_5.Foundations.GapFilter
 
 /-! # C2g computable refs: the regular filter as one explicit `𝔽₂` polynomial (P3:2063-2104, 2385-2412)
 

@@ -1,4 +1,6 @@
 import Proof.Wire_3_5.Filters.GF2Primitive
+import Proof.MachineModel.Layout
+import Proof.MachineModel.OrdinaryRewindWorkspace
 
 /-! # PA library (b): the field modulus of a call, from its unary degree (modWord prep)
 

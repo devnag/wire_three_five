@@ -1,5 +1,6 @@
 import Proof.MachineModel.ClockFields
 import Proof.MachineModel.ClockJoin
+import Proof.MachineModel.ClockUnaryProduct
 import Proof.PCP.VerifierDecodingLength
 
 /-! Complete short-data clock-field preparation from the actual counted

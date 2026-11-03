@@ -1,4 +1,4 @@
-import Proof.Hierarchy.CompetitorMonomialGlobalTerm
+import Proof.Hierarchy.CompetitorReusableMonomial
 
 /-! Reuse a stable runtime unary width by a paid physical scan. The target
 and both local zero work tapes are the outputs of the preceding clear. -/

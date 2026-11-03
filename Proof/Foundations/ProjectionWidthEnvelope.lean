@@ -18,27 +18,6 @@ open NearCubicWires.OuterPCPRecovery
 open NearCubicWires.PolynomialClock
 open NearCubicWires.SourceInterfaces
 
-def widthBudget
-    {bound : ℕ → ℕ} {source : ExecutableRefuterSource bound}
-    (outer : HierarchyOuterPCP source) (sourceLength : ℕ) : ℕ :=
-  outer.pcp.shape.coefficient * bound sourceLength *
-    logScale (bound sourceLength) ^ outer.proofExponent
-
-/-- The least binary logarithmic envelope justified by the source's explicit
-proof-count budget. -/
-def widthEnvelope
-    {bound : ℕ → ℕ} {source : ExecutableRefuterSource bound}
-    (outer : HierarchyOuterPCP source) (sourceLength : ℕ) : ℕ :=
-  Nat.log 2 (widthBudget outer sourceLength)
-
-theorem nativeWidth_le_widthEnvelope
-    {bound : ℕ → ℕ} {source : ExecutableRefuterSource bound}
-    (outer : HierarchyOuterPCP source) (sourceLength : ℕ) :
-    outer.pcp.nativeWidth sourceLength ≤
-      widthEnvelope outer sourceLength := by
-  apply Nat.le_log_of_pow_le (by omega)
-  exact outer.proofSizeBound sourceLength
-
 theorem logScale_le_add_two (value : ℕ) :
     logScale value ≤ value + 2 := by
   unfold logScale

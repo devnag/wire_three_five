@@ -1,5 +1,6 @@
-import Proof.Amplification.RecoveryTseitinNativeBodyOutput
 import Proof.Amplification.RecoveryTseitinNativeForward
+import Proof.Amplification.RecoveryTseitinNativeBodyOutput
+import Proof.Hierarchy.HierarchyFixedWord
 
 /-! The original output assertion is an actual const-true node call at the
 retained output gate index. Its fixed native descriptor is printed on tape. -/

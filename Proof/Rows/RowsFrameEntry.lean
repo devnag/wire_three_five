@@ -13,6 +13,7 @@ open NearCubicWires.RepairRepresentation NearCubicWires.P1Closure
 open NearCubicWires.RepairSource.VerifierDecoding NearCubicWires.SupplierPipeline
 open PCJ9eff70d512234a4c_Fixed PCJd4d1d9d7d1fa4313_Production
 open RowsConstruction RowsConstruction.BaseLayout RowsConstruction.PartsStep RowsConstruction.PartsFill
+open RowsInit.Global (wS hS fS cS hFin)
 attribute [local irreducible] P1TopDownPaidPayload.tapes
 noncomputable section
 

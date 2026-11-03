@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.FinalAssembly
+import Proof.CaseAnalysis.Parameters
 
 /-! **Supersedes `exists_closureParameters`.**
 

@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPQueryNatural
+import Proof.Amplification.RecoveryTapeSupport
 
 /-! The child count is bounded by the actual fresh output of the SAME
 ordinary decomposition constructor. No quantitative source field is added. -/

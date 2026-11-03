@@ -1,4 +1,5 @@
 import Proof.Foundations.HierarchySourceContract
+import Statement
 
 /-!
 # Binding: CLW20 Theorem 1.13 (refuter with an NP oracle) → `RepairSource.HierarchyRefuterSource`

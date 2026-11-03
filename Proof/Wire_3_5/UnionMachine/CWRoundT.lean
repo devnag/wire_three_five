@@ -1,5 +1,6 @@
 import Proof.Wire_3_5.UnionMachine.CWRoundA
 import Proof.Wire_3_5.UnionMachine.CWSel
+import Proof.CaseAnalysis.RowsGateHeader
 
 /-! # C6 front, U5, the code writers: loop A's round for `THR∘THR` circuits — the retained bottoms
 

@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Compiler.MachineTopEmit
+import Proof.Supplier.EquationHeaderAppend
 
 /-! # C3 v2 top level, T5: the printer request's word (P3:1728-1737)
 

@@ -1,4 +1,5 @@
-import Proof.Wire_3_5.UnionMachine.C1Ref
+import Proof.Wire_3_5.UnionMachine.C1RefBase
+import Proof.CaseAnalysis.FinalWordFunctionDock
 
 /-! # C6 front, the C1 dock: the stage (P3:1324-1362, 3673)
 

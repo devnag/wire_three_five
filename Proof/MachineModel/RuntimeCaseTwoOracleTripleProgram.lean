@@ -1,5 +1,8 @@
-import Proof.Circuits.ValidatorCircuitPrepareRebuildLedger
+import Proof.MachineModel.CanonicalBooleanCircuitValidationProgram
+import Proof.MachineModel.CanonicalRowCountExponentProgram
 import Proof.MachineModel.CaseTwoOccurrenceProgram
+import Proof.CaseAnalysis.CaseTwoOccurrenceRunnerCalls
+import Proof.Circuits.ValidatorCircuitPrepareRebuildLedger
 
 /-!
 # The oracle triple from the substituted circuit's encoding alone

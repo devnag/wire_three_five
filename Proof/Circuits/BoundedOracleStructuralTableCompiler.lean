@@ -1,3 +1,4 @@
+import Proof.Circuits.BoundedOracleStructuralCircuit
 import Proof.PCP.BoundedOracleStructuralProjectionTable
 
 /-!

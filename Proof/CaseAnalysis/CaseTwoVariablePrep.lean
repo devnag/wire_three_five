@@ -1,5 +1,6 @@
 import Proof.CaseAnalysis.CaseTwoLiteralIndices
 import Proof.CaseAnalysis.ScheduleCompare
+import Proof.MachineModel.OrdinaryMatrixTemplateEntries
 
 /-! Prepare the actual selected variable for the original assignment split.
 The same variable index supplies a query template and the physical comparison

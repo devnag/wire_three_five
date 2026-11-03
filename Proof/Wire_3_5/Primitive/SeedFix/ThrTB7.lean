@@ -1,6 +1,27 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.ThrTB6
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.ThrDimIface
+import Proof.Wire_3_5.Primitive.Writers.ThrTail1
+import Proof.Wire_3_5.Primitive.SeedFix.GeoPack
+import Proof.Wire_3_5.Primitive.SeedFix.ThrTB3
+import Proof.Wire_3_5.Primitive.SeedFix.ThrTB4
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.ThrDecIface
+import Proof.Wire_3_5.UnionMachine.ThrDimC
+import Proof.Wire_3_5.UnionMachine.ThrDimG
+import Proof.Wire_3_5.UnionMachine.ThrDimN
+import Proof.Wire_3_5.UnionMachine.ThrUnitIface5
+import Proof.Wire_3_5.Primitive.SeedFix.ThrTB6Base
 
-/-! # THRTAIL T-B, part 7: the THR writer's run at a call
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # T3 THRTAIL T-B, part 7: the THR writer's run at a call
 
 **`thr_run`**: at every THR call of the gate, the THR writer `thrM` runs from `frame thrCallW` to the THR tape within
 `128·K²·Y^E·Y^E`, `Y = 2^{m_T(P)} + 1` (`shell_runH4` with every hypothesis discharged: the data side (part 4), the
@@ -152,3 +173,5 @@ theorem thr_run (hfe : F.filterErrDeg = fe) (hSD : S.Dc3 ≤ D0) (hSn : S.Dn ≤
 end Writer
 
 end NearCubicWires.WireExponent3_5.PrimT.ThrTB
+
+end

@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryWilliamsSourceCropLayout
+import Proof.Foundations.OrdinaryTapeEmbedding
 
 /-! Focus a checked run at its actual ambient cursors. This packages only
 the transport already proved by run_config; no machine or cost is changed. -/

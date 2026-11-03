@@ -1,5 +1,6 @@
 import Proof.MachineModel.OrdinaryWilliamsCrop
 import Proof.MachineModel.OrdinaryWilliamsReplay
+import Proof.Amplification.RecoveryFocusedMachine
 
 /-! Static source-to-crop tape wiring. The source's actual output is the
 crop's input; its workspace and the transition-log tape remain allocated. -/

@@ -1,4 +1,15 @@
+import Lean
 import Proof.Wire_3_5.Foundations.OutMachineJoin
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.CoreIfaceMJ
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Foundations.OutMachineJoinWBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # Writer combinators, part 2: `join`, `reindex`, `congrWs`, `sub`
 
@@ -113,32 +124,6 @@ noncomputable def jMach (F : GateFree l) : (s : ℕ) × Machine (jns W W' + 2 + 
   ⟨_, Composition.machine (RecoveryFocus.machine (tmap (e1 W W') (g1 W W')) (W.M F))
     (Composition.machine (WM.setc (ns := jns W W') (nr := jnr W W') false).toProg.compile
       (RecoveryFocus.machine (tmap (f2 W W') (g2 W W')) (W'.M F)))⟩
-
-theorem pow_mono_add (N x y : ℕ) : (N + 1) ^ x ≤ (N + 1) ^ (x + y) :=
-  Nat.pow_le_pow_right (Nat.succ_pos N) (Nat.le_add_right _ _)
-
-theorem pow_mono_add' (N x y : ℕ) : (N + 1) ^ y ≤ (N + 1) ^ (x + y) :=
-  Nat.pow_le_pow_right (Nat.succ_pos N) (Nat.le_add_left _ _)
-
-theorem bnd_le (C C' P Q x : ℕ) (hP : P ≤ Q) (hx : x ≤ C * P) : x ≤ (C + C' + 4) * Q := by
-  have h1 := Nat.mul_le_mul_left C hP
-  have e : (C + C' + 4) * Q = C * Q + (C' * Q + 4 * Q) := by ring
-  rw [e]
-  omega
-
-theorem bnd_le' (C C' P' Q x : ℕ) (hP' : P' ≤ Q) (hx : x ≤ C' * P') : x ≤ (C + C' + 4) * Q := by
-  have h1 := Nat.mul_le_mul_left C' hP'
-  have e : (C + C' + 4) * Q = C * Q + (C' * Q + 4 * Q) := by ring
-  rw [e]
-  omega
-
-theorem bnd_sum (C C' P P' Q n1 n2 : ℕ) (hP : P ≤ Q) (hP' : P' ≤ Q) (hQ : 1 ≤ Q) (h1 : n1 ≤ C * P)
-    (h2 : n2 ≤ C' * P') : n1 + 1 + (1 + 1 + n2) ≤ (C + C' + 4) * Q := by
-  have a1 := Nat.mul_le_mul_left C hP
-  have a2 := Nat.mul_le_mul_left C' hP'
-  have e : (C + C' + 4) * Q = C * Q + (C' * Q + 4 * Q) := by ring
-  rw [e]
-  omega
 
 /-- **The joint run.** -/
 theorem join_run (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) (r : FReq l F kclk coef A a ha)
@@ -339,3 +324,5 @@ noncomputable def CoreWordsMJ.sub (W : CoreWordsMJ l m ws) (f : Fin m' ↪ Fin m
     · exact hr i h1 (fun k hk' => hio ⟨k, hk'⟩)
 
 end NearCubicWires.WireExponent3_5.FinalPass.Finish
+
+end

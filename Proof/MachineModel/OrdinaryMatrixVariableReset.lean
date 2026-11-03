@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryMatrixVariableProduct
+import Proof.MachineModel.OrdinaryMaskedReset
 
 /-! The indexed Williams call pays a return of every local work head while
 retaining the external bit-offset cursor. The log is an actual extra tape. -/

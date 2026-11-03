@@ -1,5 +1,6 @@
-import Proof.Amplification.RecoveryRefuterReplayWhole
 import Proof.Hierarchy.HierarchyNormalizedRealization
+import Proof.Amplification.RecoveryRefuterReplayWhole
+import Proof.Foundations.SourceRegistry
 
 /-! Early integration at the actual fixed-U source, normalized outer PCP and
 selected ordinary refuter. The legal weak machine remains an explicit local

@@ -1,4 +1,26 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SdR10
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdI1
+import Proof.Wire_3_5.FinalPass.SdI3
+import Proof.Wire_3_5.FinalPass.SdR5
+import Proof.Wire_3_5.FinalPass.SdR8
+import Proof.Wire_3_5.FinalPass.SdR9
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.FinalPass.SeamsProg
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.FinalPass.SeamsPt
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.S5SeamB
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SdR10Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S4 v2, part R11: **`seedsWS2Of`** at the v2 constants
 
@@ -59,3 +81,4 @@ end Family
 
 end NearCubicWires.WireExponent3_5.FinalPass.Sd.R
 
+end

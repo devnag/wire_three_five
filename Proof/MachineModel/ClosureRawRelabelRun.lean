@@ -1,5 +1,8 @@
-import Proof.CaseAnalysis.FinalSupplierRowInput
 import Proof.MachineModel.ClosureRawRelabelOffset
+import Proof.CaseAnalysis.FinalSupplierRowInput
+import Proof.MachineModel.NativeFamily
+import Proof.MachineModel.Layout
+import Proof.Amplification.RecoveryScratchErase
 
 /-! Reusable physical C10 raw-row construction from the actual lowered stream.
 Runtime N and yi are retained unary counters. Offset scratch starts and ends

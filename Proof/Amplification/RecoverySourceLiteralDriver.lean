@@ -49,6 +49,9 @@ theorem driver_run (index : Nat) (negative : Bool) : ∃ out,
     rw [install_slot _ count_injective]
     exact hCounter
 
+def index {q : Nat} : Literal q→Nat
+  | .positive j=>j.val
+  | .negative j=>j.val
 def negative {q : Nat} : Literal q→Bool
   | .positive _=>false
   | .negative _=>true

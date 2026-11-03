@@ -1,5 +1,6 @@
-import Proof.Circuits.SelectorDrivenAtomContextRuns
 import Proof.MachineModel.BankProjectionTableStage
+import Proof.MachineModel.CanonicalNativeCallProgram
+import Proof.Circuits.SelectorDrivenAtomContextRuns
 
 /-!
 # Projection table execution at the selector-driven frame

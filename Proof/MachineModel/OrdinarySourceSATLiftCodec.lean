@@ -1,3 +1,4 @@
+import Proof.Foundations.RecoverySourceSAT
 import Proof.PCP.PCPPairReusable
 
 /-! Exact constant-depth legacy marker for the budgeted source-oracle lift.

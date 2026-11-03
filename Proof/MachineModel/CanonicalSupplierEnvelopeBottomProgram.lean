@@ -1,5 +1,6 @@
 import Proof.MachineModel.CanonicalSupplierCircuitBatchProgram
 import Proof.MachineModel.CanonicalSupplierCircuitBottomBatchProgram
+import Proof.MachineModel.PreserveRightProgram
 
 /-!
 # Canonical supplier envelope-to-bottom decomposition

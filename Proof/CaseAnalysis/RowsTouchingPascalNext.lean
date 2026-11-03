@@ -1,5 +1,7 @@
-import Proof.CaseAnalysis.RowsTouchingFrameStream
+import Proof.CaseAnalysis.RowsFamilyLoop
 import Proof.CaseAnalysis.RowsTouchingPascalCell
+import Proof.CaseAnalysis.RowsTouchingFrameStream
+import Proof.MachineModel.Runs
 
 /-! One complete Pascal transition copies its existing leading one and
 runs the q exact additions. The input rows remain untouched, and the new

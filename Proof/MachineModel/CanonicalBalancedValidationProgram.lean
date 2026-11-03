@@ -1,6 +1,9 @@
+import Proof.MachineModel.BalancedClauseStreamFlattenProgram
 import Proof.Circuits.CanonicalBalancedBuilder
 import Proof.MachineModel.CanonicalNatDecodeProgram
 import Proof.MachineModel.CanonicalNativeEqualityProgram
+import Proof.MachineModel.PreserveRightProgram
+import Proof.Foundations.VerifiedLinker
 
 /-!
 # Executable canonical-balanced validation

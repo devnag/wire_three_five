@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RowsGateSupportLoop
+import Proof.Foundations.RepresentationSourceContracts
 
 /-! The copied weights are the same supported gate, in its existing Fin
 order. Retained top weights use precisely retainedTopIndex, the sorted

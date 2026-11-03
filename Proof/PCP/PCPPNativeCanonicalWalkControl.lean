@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeCanonicalWalkPop
+import Proof.Amplification.RecoveryCursorCalls
 
 /-! One fixed ordinary DFS controller. Every branch test reads the actual
 decoded tag or stack return control, and every call transition is charged. -/

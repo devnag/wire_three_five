@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.FinalObligations
+import Proof.CaseAnalysis.SampledWitness
 
 /-! Paper C.10 honest completeness, at the consumer, dyadic only.
 

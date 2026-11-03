@@ -1,4 +1,7 @@
 import Proof.Wire_3_5.Primitive.SeedFix.W6ZB
+import Proof.CaseAnalysis.RawRowsThresholdSize
+import Proof.CaseAnalysis.FinalPrimeWindow
+import Proof.Foundations.PolynomialClock
 
 /-! # W6, part 29: the THR call's basic sizes
 

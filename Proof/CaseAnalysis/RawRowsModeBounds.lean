@@ -45,5 +45,27 @@ theorem wire_le_cube {q p w : ℕ} {a : ℝ} (ha : a ≤ 1)
   have hright : a*(q : ℝ)^3 ≤ (q : ℝ)^3 := by nlinarith [show 0 ≤ (q : ℝ)^3 by positivity]
   exact_mod_cast hleft.trans (hb.trans hright)
 
+theorem symmetric_population (r : FourfoldRequest NormalizedSymmetricThresholdCircuit)
+    (p : ℕ) (a : ℝ) (ha : a ≤ 1) (hfour : r.circuits.length ≤ 4)
+    (hw : ∀ c∈r.circuits,(c.wireCount : ℝ) ≤ wireScale a p r.q) :
+    (symmetricFourfoldOccurrences r).length ≤ 4*r.q^3 := by
+  have hsum := batchDescription_le_card_mul NormalizedSymmetricThresholdCircuit.wireCount
+    r.circuits (r.q^3) (fun c hc=>wire_le_cube ha (hw c hc))
+  have he := symmetricFourfoldOccurrences_wireCount r
+  exact (show (symmetricFourfoldOccurrences r).length ≤
+    batchDescription NormalizedSymmetricThresholdCircuit.wireCount r.circuits by omega).trans
+      (hsum.trans (Nat.mul_le_mul_right _ hfour))
+
+theorem threshold_population (r : FourfoldRequest NormalizedThresholdThresholdCircuit)
+    (p : ℕ) (a : ℝ) (ha : a ≤ 1) (hfour : r.circuits.length ≤ 4)
+    (hw : ∀ c∈r.circuits,(c.wireCount : ℝ) ≤ wireScale a p r.q) :
+    (thresholdFourfoldOccurrences r).length ≤ 4*r.q^3 := by
+  have hsum := batchDescription_le_card_mul NormalizedThresholdThresholdCircuit.wireCount
+    r.circuits (r.q^3) (fun c hc=>wire_le_cube ha (hw c hc))
+  have he := thresholdFourfoldOccurrences_wireCount r
+  exact (show (thresholdFourfoldOccurrences r).length ≤
+    batchDescription NormalizedThresholdThresholdCircuit.wireCount r.circuits by omega).trans
+      (hsum.trans (Nat.mul_le_mul_right _ hfour))
+
 end
 end NearCubicWires.RepairSource.CloseoutRawRows

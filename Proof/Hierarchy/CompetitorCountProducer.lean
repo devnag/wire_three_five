@@ -1,4 +1,5 @@
 import Proof.Hierarchy.CompetitorCountEntry
+import Proof.MachineModel.ClockScalarFields
 
 /-! Actual whole count producer from raw cells, physical native/scalar widths
 and the physical cell-count word. All work tapes initially are blank. A paid

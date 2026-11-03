@@ -1,5 +1,9 @@
-import Proof.Rows.RowsRowLevelConstants
+import Proof.CaseAnalysis.RowsEstimatorScanRun
+import Proof.Hierarchy.CompetitorRecordRewind
+import Proof.PCP.ProjectionRawFrame
+import Proof.Rows.Plan
 import Proof.Rows.RowsRowLevelHeaderClear
+import Proof.Rows.RowsRowLevelConstants
 
 set_option autoImplicit false
 set_option maxRecDepth 120000

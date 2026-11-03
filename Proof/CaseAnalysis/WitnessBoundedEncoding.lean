@@ -1,4 +1,5 @@
-import Proof.CaseAnalysis.WitnessBoundedFamilyBudget
+import Proof.CaseAnalysis.WitnessBoundedFamilyPreHierarchy
+import Proof.PCP.VerifierDecodingFields
 
 /-! The honest canonical family becomes an exact N/16-bit ordinary guess.
 The existing bounded header sees the same mode, oracle and family payload. -/

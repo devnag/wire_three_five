@@ -1,6 +1,8 @@
-import Proof.Wire_3_5.Primitive.Writers.ModFull
 import Proof.Wire_3_5.Primitive.Writers.SBFieldA
 import Proof.Wire_3_5.Primitive.Writers.SBTau
+import Proof.Wire_3_5.Primitive.Writers.ModFull
+import Proof.Wire_3_5.Primitive.Writers.DockW
+import Proof.Wire_3_5.Filters.GFExists
 
 /-! # SB, part 8: the field phase (S4's words `4` and `5`)
 
@@ -9,7 +11,8 @@ of `GF2.tau p ℓ` and `p = GF.firstPrimitive ℓ`, `ℓ = FP.fieldBits`; P3:205
 `Fs` and `16` registers `Rb` (`Rb 0 = ℓ`, the rest `0`) of any word layout, the phase
 
 1. writes `1^ℓ` (`copyOnesW`), 2. docks the modulus machine (`Modulus.modM`, `modulus_full`; its answer tape `12` on
-`Fs 1`, its other tapes on `Fs 2 … 17`), 3. writes six zero words (`zerosW`: `Fs 0`, `Fs 18 … 22`), 4. runs the trace mask program (`tauW`, `SBTau.tauW_spec2`: mask on `Fs 0`, modulus `Fs 1`, work words `Fs 18 … 22`), 5. erases
+`Fs 1`, its other tapes on `Fs 2 … 17`), 3. writes six zero words (`zerosW`: `Fs 0`, `Fs 18 … 22`), 4. runs T's
+trace mask program (`tauW`, `SBTau.tauW_spec2`: mask on `Fs 0`, modulus `Fs 1`, work words `Fs 18 … 22`), 5. erases
 `Fs 2 … 22` to `0^{4ℓ+6}` (`boundW`, `eraseList`), 6. clears its registers:
 
 * `mIdx`, `mMap`, `smOf`, `rgOf`, `zeroL`, `eraseL`; `w1`, `m2`, `w3`, **`fieldM`**, `fieldCost`;

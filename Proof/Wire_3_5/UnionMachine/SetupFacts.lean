@@ -1,19 +1,36 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.Plan
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Recovery.RecoveryLanguage
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Recovery.RecoverySetupTwo
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Assembly.Free
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.UnionSetup
+import Proof.Wire_3_5.UnionMachine.SetupFactsBase
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-! # C6: the setup facts and the accepting-call fact at the pinned setup (plan residuals `SetupFactsF`, `AcceptsCallF`)
 
 Realizes the two facts of the pinned setup that the union leaf reads besides its machine:
 * the propagated error of the slack variant falls below `ε₀`: "All three propagated numerical errors will be at most
   `ε₀`" (P3:3490-3491), here `(1+Λ̄)⁴(q^{−D} + 2^{−p}) + (1+Λ̄)⁴2^{−p} ≤ ε₀` with `p = ⌈log₂(q+2)⌉` and `D = 1`
-, from `eventually_hD` at `ε₀/3`; the outer PCP's error is positive and its padded width
+ , from `eventually_hD` at `ε₀/3`; the outer PCP's error is positive and its padded width
   grows ("pad the outer verifier to the exact width `q(N)`", P3:3637-3641); the setup decides `L`;
 * a guess passing the tests makes an admissible call: the clause test "`μ̂ ≥ τ`" (P3:3487-3488) with `τ ≥ (c+s)/2 > 0`
   needs a nonzero clause term, and every nonzero term's call is admissible (`UnionAccepts`).
 
 Paper quantities of the main types: **`Plan.SetupFactsF l`** and **`Plan.AcceptsCallF l`** (`setupFactsF`,
-`acceptsCallF`). Both branches of the pinned `S₂` (the refuter's own PCP at `recL`, `S₁` elsewhere) are
-`setupOfResult` setups with the constants `gateParams1 l`, the grid `gridMassOf (gateCδ1 l) sp` and a padded width at
-least the ledger's `q(N)` (`setupFacts_of_result`). -/
+`acceptsCallF`). Both branches of the pinned `S₂` (the outer data at the refuter's hierarchy at `recL`, `S₁` elsewhere)
+are `setupOf` setups with the constants `gateParams1 l`, the grid `gridMassOf (gateCδ1 l) sp` and the width
+`q(N) = Outer.width mw SV N`, which is the ledger's width formula (`setupFacts_of`). -/
 
 set_option autoImplicit false
 set_option linter.unusedSimpArgs false
@@ -31,15 +48,6 @@ open NearCubicWires.WireExponent3_5.Shared (uMean)
 
 /-! ## An accepting guess calls -/
 
-/-- The masked verifier's threshold is positive: `τ ≥ (c+s)/2` and `c − s > 0` (the rounding reserve). -/
-theorem threshold_pos {cp sp : ℝ} (params : MaskedSoundnessParameters cp sp) : 0 < (params.threshold : ℝ) := by
-  have h1 := params.thresholdAboveMidpoint
-  have h2 := params.sp_nonneg
-  have h3 := params.roundingReserve
-  have h4 : 0 ≤ 5 * Real.sqrt (24 * (params.v0 : ℝ)) := by positivity
-  have h5 : (0 : ℝ) ≤ params.eps0 := by exact_mod_cast params.eps0_nonneg
-  linarith
-
 section Calls
 variable {kclk : ℕ} {E : Envelope} {B : TimeBudget kclk E} {I : PrimitiveInputs B}
 
@@ -49,7 +57,7 @@ theorem acceptsCall_of (S : UnionSetup I) (P : FusedPrimitive I) : AcceptsCall S
   intro N z g hg
   by_contra hno
   push Not at hno
-  obtain ⟨-, -, -, -, -, hM, -, -, hμ⟩ := hg
+  obtain ⟨-, -, -, -, -, -, -, -, -, -, -, hM, -, -, hμ⟩ := hg
   have hzero : ∀ i j t, (g.polyMuAt i).coeff j t = 0 := fun i j t => by
     by_contra h
     exact hno _ (hM i j t h)
@@ -66,18 +74,20 @@ end Calls
 section Result
 variable {kclk : ℕ} {E : Envelope} {B : TimeBudget kclk E} (I : PrimitiveInputs B)
 
-/-- **The facts of a `setupOfResult` setup**: its language is `L`, and the width, outer error and propagated error
-facts transfer from its data. -/
-theorem setupFacts_of_result (L : Language) {T : ℕ → ℕ} (H : OrdinaryHierarchy T)
-    (hL : ∀ n (x : BitInput n), L n x = true ↔ H.verifier.language H.time n x) {degrees : PCPDegrees}
-    (P : OrdinaryPCPResult H degrees) (w : ℕ → ℕ) (hw : ∀ n, P.pcp.nativeWidth n ≤ w n) (a : PointwisePCPPAlgorithm)
-    (G : ℕ) (params : MaskedSoundnessParameters a.completeness a.soundness) (gridMass : ℕ → ℚ)
-    (hmass : ∀ q, 0 ≤ gridMass q) (gridSize : ℕ → ℕ) (hwt : Tendsto w atTop atTop)
-    (hη : 0 < (params.outerError : ℝ))
+/-- **The facts of a `setupOf` setup**: its language is `L`, its width `q(N)` grows, and the propagated error fact
+transfers from its data. -/
+theorem setupFacts_of (L : Language) (H : OrdinaryHierarchy (fun n => n ^ (kclk + 2)))
+    (hL : ∀ n (x : BitInput n), L n x = true ↔ H.verifier.language H.time n x)
+    (mw : _root_.NearCubicGates.Close.Outer.MWSource) (lenG : ℕ)
+    (SV : _root_.NearCubicGates.Close.Outer.SuccinctVerifier H lenG) (a : PointwisePCPPAlgorithm) (live : Bool)
+    (G : ℕ) (params : MaskedSoundnessParameters a.completeness a.soundness) (hη : 0 < (params.outerError : ℝ))
+    (gridMass : ℕ → ℚ) (hmass : ∀ q, 0 ≤ gridMass q) (gridSize : ℕ → ℕ)
     (hD : ∀ᶠ q : ℕ in atTop, (1 + (gridMass q : ℝ)) ^ 4 * ((q : ℝ) ^ (-(I.D : ℝ)) + 1 / 2 ^ unionBits q) +
       (slackOf (gridMass q) (unionBits q) : ℝ) ≤ (params.eps0 : ℝ)) :
-    SetupFacts (setupOfResult I L H hL P w hw a G params gridMass hmass gridSize) L :=
-  ⟨rfl, hη, hwt, hD⟩
+    SetupFacts (setupOf I L H hL mw lenG SV a live G params hη gridMass hmass gridSize) L :=
+  ⟨rfl, by
+    show Tendsto (fun N => Ledger.nativeWidth kclk (_root_.NearCubicGates.Close.Outer.apad mw SV) N) atTop atTop
+    exact Ledger.tendsto_nativeWidth _ _, hD⟩
 
 end Result
 
@@ -89,13 +99,8 @@ theorem eps0_pos : 0 < ((gateParams1 l).eps0 : ℝ) := by
   show (0 : ℝ) < ((gateEps l ^ 2 / 20000 : ℚ) : ℝ)
   positivity
 
-theorem outer_pos : 0 < ((gateParams1 l).outerError : ℝ) := by
-  have := gateEps_pos l
-  show (0 : ℝ) < ((gateEps l / 6 : ℚ) : ℝ)
-  positivity
-
 /-- **The propagated error with the rounding and the slack falls below `ε₀`** at the gate's grid (`D = 1`): three
-times `(1+Λ̄)⁴q^{−1} ≤ ε₀/3`, since `2^{−⌈log₂(q+2)⌉} ≤ 1/q`. -/
+times the `(1+Λ̄)⁴q^{−1} ≤ ε₀/3`, since `2^{−⌈log₂(q+2)⌉} ≤ 1/q`. -/
 theorem hD_gate (F : GateFree l) :
     ∀ᶠ q : ℕ in atTop, (1 + (gridMassOf (gateCδ1 l) (gate0 l F).row.sp q : ℝ)) ^ 4 *
         ((q : ℝ) ^ (-((1 : ℕ) : ℝ)) + 1 / 2 ^ unionBits q) +
@@ -126,5 +131,6 @@ theorem hD_gate (F : GateFree l) :
 
 end Gate
 
-
 end NearCubicWires.WireExponent3_5.UnionMachine.SetupFacts
+
+end

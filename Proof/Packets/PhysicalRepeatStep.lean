@@ -1,3 +1,4 @@
+import Proof.PCP.VerifierDecodingRepeatBody
 import Proof.MachineModel.Runs
 
 /-! A bounded actual repeat adapter. Body executions are required only at

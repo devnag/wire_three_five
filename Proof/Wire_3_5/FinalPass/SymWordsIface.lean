@@ -1,9 +1,11 @@
-import Proof.Wire_3_5.FinalPass.Asm2
+import Proof.Wire_3_5.FinalPass.Asm1Base
+import Proof.Wire_3_5.FinalPass.SdR10Base
 
 /-! # The SYM words writer's interface (P3:1508-1520, 3046-3048, 3170-3178)
 
-The core half (S5Core) writes the front's SYM slots `16 … 32` of `frontWordsW2`: `symWords` (16 words: the
-circuits' gate tables, top tables, the list seeds' flat tables, the stage-5 templates) and the unary list of `symNums` (S3Words). Their writer is a word machine on its own layout, docked into S5Core by focus:
+The core half (S5Core) writes the front's SYM slots `16 … 32` of `frontWordsW2`: the `symWords` (16 words: the
+circuits' gate tables, top tables, the list seeds' flat tables, the stage-5 templates) and the unary list of T's
+`symNums` (S3Words). Their writer is a word machine on its own layout, docked into S5Core by focus:
 
 * **`SymWordsW l`**: the layout (`ns`, `nr`, the input stream `sIn`, the 17 output streams `sOut`), the program `P`,
   the coefficient `C F` (after the gate) and the degree `D` (before it), and the run at every SYM request of every

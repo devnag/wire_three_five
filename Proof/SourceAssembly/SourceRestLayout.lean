@@ -1,5 +1,5 @@
-import Proof.SourceAssembly.SourceLoop
 import Proof.SourceAssembly.SourceWiring
+import Proof.SourceAssembly.SourceLoop
 
 section
 set_option autoImplicit false

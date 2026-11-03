@@ -39,4 +39,24 @@ theorem result_output :
   rw [ZeroPadding.pad_zero,RecoveryBoundedGrammarFold.output_counter] at h
   exact h
 
+theorem graph_head :
+    (result node C D F L B n count Q clauses out source pre packet refs P).heads 20=
+      ((result node C D F L B n count Q clauses out source pre packet refs P).tapes 20).length := by
+  have h:=head_slot node C D F L B n count Q clauses out source pre packet refs P 20
+  have t:=result_slot node C D F L B n count Q clauses out source pre packet refs P 20
+  change (result node C D F L B n count Q clauses out source pre packet refs P).heads 20=_ at h
+  change (result node C D F L B n count Q clauses out source pre packet refs P).tapes 20=
+    ZeroPadding.pad 0 ((RecoveryBoundedGrammarFold.finalConfiguration true node C out pre refs).tapes 20) at t
+  rw [h,t,ZeroPadding.pad_zero]
+  rfl
+
+theorem stack_head :
+    (result node C D F L B n count Q clauses out source pre packet refs P).heads 74=pre.length := by
+  have h:=head_slot node C D F L B n count Q clauses out source pre packet refs P 31
+  change (result node C D F L B n count Q clauses out source pre packet refs P).heads 74=_ at h
+  rw [h]
+  change (RecoveryBoundedNativeFoldLoop.stack pre []).length=pre.length
+  simp only [RecoveryBoundedNativeFoldLoop.stack,List.reverse_nil,RecoveryBoundedNativeUnaryLoop.stackWords,
+    List.flatMap_nil,List.append_nil]
+
 end NearCubicWires.RepairOrdinary.RecoveryBoundedRowsFold

@@ -12,5 +12,7 @@ set_option warningAsError true
 
 def selected (i : Fin 40) : Bool := decide (i=17)
 noncomputable def machine := MaskedReset.machine RowTupleDerivedEnumeration.machine selected
+def input (w k M : ℕ) : Fin 41→List Bool :=
+  Fin.addCases (m:=40) (n:=1) (motive:=fun _=>List Bool) (RowTupleDerivedEnumeration.input w k M) (fun _=>[])
 
 end NearCubicWires.RepairOrdinary.RowTupleEnumerationReady

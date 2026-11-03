@@ -1,4 +1,5 @@
 import Proof.Foundations.LocalBitMultitapeCore
+import Statement
 
 /-!
 The shared ordinary-machine boundary for the source-correspondence repair.

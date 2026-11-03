@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.Foundations.Skeleton
+import Proof.Wire_3_5.Foundations.SkeletonBase
 import Proof.Wire_3_5.Stars.StarCarrier
 
 /-! # Consumer check: carrier containment and the regular filters at a primitive call

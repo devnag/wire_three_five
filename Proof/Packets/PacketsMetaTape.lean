@@ -1,4 +1,6 @@
 import Proof.MachineModel.Runs
+import Proof.Amplification.RecoveryCallController
+import Proof.Amplification.RecoveryCursorCalls
 
 set_option autoImplicit false
 set_option maxHeartbeats 250000

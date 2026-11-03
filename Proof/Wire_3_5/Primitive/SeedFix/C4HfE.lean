@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.C4HfD
+import Proof.Wire_3_5.Primitive.SeedFix.C4Enum
 
 /-! # The HASH child family, part 5: the Hb bank at a child prefix
 

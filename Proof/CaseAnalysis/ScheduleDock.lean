@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CloseoutScheduleCapacity
+import Proof.Amplification.RecoveryPrefixLoopDock
 
 /-! The existing two literal driver moves turn the finite schedule into a
 zero-head ordinary call. Both moves and both composition handoffs are paid. -/

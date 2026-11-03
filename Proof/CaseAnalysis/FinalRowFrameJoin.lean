@@ -1,5 +1,7 @@
-import Proof.CaseAnalysis.FinalRoundBudget
+import Proof.CaseAnalysis.CloseoutRowsEstimatorWarmRetained
+import Proof.CaseAnalysis.FinalExternalRowLoop
 import Proof.CaseAnalysis.FinalRowOrdering
+import Proof.CaseAnalysis.FinalRoundBudget
 
 set_option autoImplicit false
 set_option maxHeartbeats 250000
@@ -19,7 +21,11 @@ open NearCubicWires.SupplierEstimator
 open NearCubicWires.RepairSource.CloseoutFinal.C10ExternalRowLoop
   (familyWriter familyFuel familyStream wordList pairList pairWord pairValue familyDenominator
     family_run)
+open NearCubicWires.RepairSource.CloseoutFinal.C10CostAtTable (hotFuel)
 open NearCubicWires.RepairSource.CloseoutFinal.C10PartsSchedule (widthPower)
+open NearCubicWires.RepairSource.CloseoutFinal.C10RowOrdering
+  (Round orderedPairList orderedWordList orderedFamilyStream orderedRow orderedPairList_growth
+    ordered_family_run)
 
 /-! ## 1. The reusable estimator bank's tape cover
 
@@ -37,6 +43,21 @@ theorem tapes_ge (p : Program) : 70 ≤ WholePrefix.tapes p := by
 
 `WarmActual.run` is stated at `WarmActual.entry`; `Step` is stated at
 `⟨machine.start, hin, tin⟩`.  The two are the same configuration, which is the first lemma. -/
+
+theorem hrow_of_step {t st : ℕ} (body : Machine t st)
+    (source : ℕ → List Bool → Configuration t st) (emit : ℕ → List Bool) (cost len : ℕ)
+    (hstart : ∀ k, k < len → ∀ pre, (source k pre).control = body.start)
+    (hstep : ∀ k, k < len → ∀ pre, Step body cost (source k pre).heads (source k pre).tapes
+      (source (k + 1) (pre ++ emit k)).heads (source (k + 1) (pre ++ emit k)).tapes)
+    (k : ℕ) (hk : k < len) (pre : List Bool) :
+    ∃ rc : ExecutionReceipt t st, runFrom body cost (source k pre) = some rc ∧
+      rc.final.heads = (source (k + 1) (pre ++ emit k)).heads ∧
+      rc.final.tapes = (source (k + 1) (pre ++ emit k)).tapes ∧ rc.steps ≤ cost := by
+  obtain ⟨r, hr, hh, ht, hs⟩ := hstep k hk pre
+  refine ⟨r, ?_, hh, ht, hs⟩
+  have he : (⟨body.start, (source k pre).heads, (source k pre).tapes⟩ : Configuration t st)
+      = source k pre := configuration_ext (hstart k hk pre).symm rfl rfl
+  rwa [he] at hr
 
 /-! ## 5. The round body, and the family loop it drives
 

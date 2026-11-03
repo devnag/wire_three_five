@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryPrefixBody
+import Proof.Amplification.RecoveryPrefixSentinel
 
 /-! The executed whole body reproduces its literal tape invariant for the
 next zero-first prefix query, preserving the one physical workspace driver. -/

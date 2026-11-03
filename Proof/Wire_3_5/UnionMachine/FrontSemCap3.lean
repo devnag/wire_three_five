@@ -1,8 +1,9 @@
-import Proof.Wire_3_5.UnionMachine.FrontSemCap2
+import Proof.Wire_3_5.UnionMachine.FrontSemCap2Base
 
 /-! # C6 front, the semantic core (14): the numbers' caps and the sparse bound (P3:3400, 3690-3691, 3742-3744)
 
-* **`sparse_pq`**: the sparse count's value bound `sparseBound ζ C_δ L(q) (t(q) − 1)` is polynomial in `q` (`sparse_le_P` / `rowBt_le` / `sparse_le_gate`, re-derived at a general `ζ` with a block length `J`: `t = O(L)`, each
+* **`sparse_pq`**: the sparse count's value bound `sparseBound ζ C_δ L(q) (t(q) − 1)` is polynomial in `q` (PA2's
+  `sparse_le_P` / `rowBt_le` / `sparse_le_gate`, re-derived at a general `ζ` with a block length `J`: `t = O(L)`, each
   value `≤ 20(L³+1)·X^{32t}`, `2^L ≤ 4(q+1)`).
 * **`numsCaps_of`**: the numbers' capacities (`FrontCh3P.NumsCaps`) at `2W + 2` from a numeric envelope `K` (the width,
   the PCPP output's counts, `2^{cb}`, the grid, the mass), the width above `PW K`, the data bound above `BK K`.

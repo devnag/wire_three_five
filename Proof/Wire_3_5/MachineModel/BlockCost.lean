@@ -11,10 +11,10 @@ fixed before a fixed `r` or a positive endpoint coefficient is chosen" (P3:3112-
 (P3:3053-3054 for the final pass).
 
 The paper quantity of this module is the class bound `classBound E cls q k Ψ` of the seed's running-time
-ledger (`Proof.Wire_3_5.Foundations.Runtime`, A7): every block's cost is certified `≤ coef · classBound` in a named
+ledger (`WireExponent3_5.Runtime`, A7): every block's cost is certified `≤ coef · classBound` in a named
 class (`Within`), and the certificate composes through sequencing, bounded loops (`Cells`), the
 enumeration of all `w`-bit strings, and focusing. The consumer is A9's machine contract
-(`Proof.Wire_3_5.Foundations.Contracts`): `ClassBlocks C` is a block family over one machine whose cost is within
+(`WireExponent3_5.Contracts`): `ClassBlocks C` is a block family over one machine whose cost is within
 `C`'s class at `C`'s coefficient, and `ClassBlocks.implements` IS `Implements C`, the contract's
 `RewoundWordFunction` at exactly the contract's budget.
 
@@ -31,31 +31,6 @@ open NearCubicWires.BlockPlatform
 
 /-! ## The class bound as `2^{exp} · q^{deg}` -/
 
-/-- The exponent of `2` in each class bound. -/
-def classExp (E : Envelope) : BudgetClass → ℕ → ℕ → ℕ → ℕ
-  | .sourcePoly, _, _, _ => 0
-  | .selection, q, k, _ => q / 2 + E.csel * k
-  | .preprocessing, _, _, psi => E.cpsi * psi
-  | .table, q, k, _ => q - k
-  | .mainPass, q, k, _ => q - k / 4
-
-/-- The polynomial degree of each class bound, fixed by the envelope before `r`. -/
-def classDeg (E : Envelope) : BudgetClass → ℕ
-  | .sourcePoly => E.Amain
-  | .selection => E.Asel
-  | .preprocessing => E.Apre
-  | .table => E.Atable
-  | .mainPass => E.Amain
-
-theorem classBound_eq (E : Envelope) (cls : BudgetClass) (q k psi : ℕ) :
-    classBound E cls q k psi = 2 ^ classExp E cls q k psi * q ^ classDeg E cls := by
-  cases cls <;> simp [classBound, classExp, classDeg]
-
-theorem classBound_pos (E : Envelope) (cls : BudgetClass) {q : ℕ} (k psi : ℕ) (hq : 1 ≤ q) :
-    1 ≤ classBound E cls q k psi := by
-  rw [classBound_eq]
-  exact Nat.one_le_iff_ne_zero.mpr (Nat.mul_ne_zero (by positivity) (by positivity))
-
 /-! ## `Within`: a cost in a named class -/
 
 /-- The cost `n` is within class `cls` at `(q, k, Ψ)` with coefficient `c`: the shape of A9's budget
@@ -64,55 +39,12 @@ def Within (E : Envelope) (cls : BudgetClass) (c q k psi n : ℕ) : Prop :=
   n ≤ c * classBound E cls q k psi
 
 namespace Within
-variable {E : Envelope} {cls : BudgetClass} {q k psi : ℕ}
-
-theorem mono {c n m : ℕ} (h : Within E cls c q k psi n) (hm : m ≤ n) : Within E cls c q k psi m :=
-  hm.trans h
-
-theorem add {c₁ c₂ n₁ n₂ : ℕ} (h₁ : Within E cls c₁ q k psi n₁) (h₂ : Within E cls c₂ q k psi n₂) :
-    Within E cls (c₁ + c₂) q k psi (n₁ + n₂) := by
-  unfold Within at *
-  rw [Nat.add_mul]
-  exact Nat.add_le_add h₁ h₂
-
-theorem const (hq : 1 ≤ q) (c : ℕ) : Within E cls c q k psi c := by
-  have := classBound_pos E cls k psi hq (q := q)
-  unfold Within
-  nlinarith
-
-/-- Sequencing: `b.cost + 1 + c.cost` (the paid bridge step of `BlockPlatform.seq`). -/
-theorem seq (hq : 1 ≤ q) {c₁ c₂ n₁ n₂ : ℕ} (h₁ : Within E cls c₁ q k psi n₁)
-    (h₂ : Within E cls c₂ q k psi n₂) : Within E cls (c₁ + c₂ + 1) q k psi (n₁ + 1 + n₂) := by
-  have h := (h₁.add h₂).add (const (E := E) (cls := cls) (k := k) (psi := psi) hq 1)
-  exact h.mono (by omega)
 
 end Within
 
 /-! ## Costed blocks -/
 
-/-- A block with its cost certified in a named class at `(q, k, Ψ)`. -/
-structure Costed (E : Envelope) (cls : BudgetClass) (q k psi t : ℕ) where
-  block : Block t
-  coef : ℕ
-  within : Within E cls coef q k psi block.cost
-
 namespace Costed
-variable {E : Envelope} {cls : BudgetClass} {q k psi t u : ℕ}
-
-/-- Sequencing, with the seam stated once. -/
-noncomputable def seq (hq : 1 ≤ q) (b c : Costed E cls q k psi t) (hH : b.block.exitH = c.block.entryH)
-    (hA : b.block.exitA = c.block.entryA) : Costed E cls q k psi t :=
-  ⟨BlockPlatform.seq b.block c.block hH hA, b.coef + c.coef + 1, Within.seq hq b.within c.within⟩
-
-@[simp] theorem seq_coef (hq : 1 ≤ q) (b c : Costed E cls q k psi t) (hH : b.block.exitH = c.block.entryH)
-    (hA : b.block.exitA = c.block.entryA) : (seq hq b c hH hA).coef = b.coef + c.coef + 1 := rfl
-
-/-- The class budget as the block's cost (`BlockPlatform.upto`). -/
-noncomputable def toBudget (b : Costed E cls q k psi t) : Block t :=
-  upto b.block (b.coef * classBound E cls q k psi) b.within
-
-@[simp] theorem toBudget_cost (b : Costed E cls q k psi t) :
-    (toBudget b).cost = b.coef * classBound E cls q k psi := rfl
 
 end Costed
 

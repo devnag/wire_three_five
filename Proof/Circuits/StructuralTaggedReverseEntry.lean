@@ -1,5 +1,5 @@
-import Batteries.Tactic.OpenPrivate
 import Proof.MachineModel.BoundedOracleStructuralSelectiveProgram
+import Batteries.Tactic.OpenPrivate
 
 /-!
 # The tagged reverse pass at an arbitrary entry state

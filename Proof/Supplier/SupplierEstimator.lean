@@ -1,10 +1,12 @@
-import Proof.Circuits.ThresholdAlignedEnvelope
 import Proof.Supplier.BoundedNormalizedSupplier
 import Proof.Supplier.SupplierAsymptotics
 import Proof.Supplier.SupplierCapacity
+import Proof.Foundations.SupplierPrime
+import Proof.Foundations.SupplierPrinter
 import Proof.Supplier.SupplierRadix
 import Proof.Supplier.SupplierTouching
 import Proof.Supplier.SupplierWalkBridge
+import Proof.Circuits.ThresholdAlignedEnvelope
 
 /-!
 # Shared fourfold supplier estimator
@@ -45,6 +47,19 @@ open NearCubicWires.ThresholdCompiler
 
 /-! ## Canonical nonnegative rational output -/
 
+/-- Canonical code for `numerator / (denominatorTail + 1)`.  Storing the
+denominator predecessor makes zero denominators unrepresentable.  Components
+stay as canonical bit-list codes so downstream fixed programs can inspect or
+compare them without materializing large native naturals. -/
+def encodeNaturalRatio (numerator denominatorTail : ℕ) : ℕ :=
+  Nat.pair (encodeNat numerator) (encodeNat denominatorTail)
+
+@[simp] theorem decodeSupplierRational_encodeNaturalRatio
+    (numerator denominatorTail : ℕ) :
+    decodeSupplierRational (encodeNaturalRatio numerator denominatorTail) =
+      (numerator : ℚ) / (denominatorTail + 1 : ℕ) := by
+  simp [decodeSupplierRational, encodeNaturalRatio]
+
 /-! ## Shared normalized occurrence preprocessing -/
 
 /-- Retained bottom occurrences of one symmetric circuit, in canonical gate
@@ -78,6 +93,170 @@ def occurrenceSupport {q : ℕ}
     (occurrences : List (SupportedNormalizedGate q))
   (index : Fin occurrences.length) : Finset (Fin q) :=
   (occurrences.get index).support
+
+def occurrenceWireCount {q : ℕ}
+    (occurrences : List (SupportedNormalizedGate q)) : ℕ :=
+  (occurrences.map SupportedNormalizedGate.wireCount).sum
+
+theorem supportIncidenceMass_occurrenceSupport {q : ℕ}
+    (occurrences : List (SupportedNormalizedGate q)) :
+    supportIncidenceMass (occurrenceSupport occurrences) =
+      occurrenceWireCount occurrences := by
+  have hlist :
+      occurrences.map SupportedNormalizedGate.wireCount =
+        List.ofFn (fun index : Fin occurrences.length =>
+          (occurrences.get index).wireCount) := by
+    simp [List.ofFn_getElem_eq_map]
+  unfold supportIncidenceMass occurrenceSupport occurrenceWireCount
+  rw [hlist, List.sum_ofFn]
+  rfl
+
+theorem symmetricCircuitOccurrences_wireCount {q : ℕ}
+    (circuit : NormalizedSymmetricThresholdCircuit q) :
+    occurrenceWireCount (symmetricCircuitOccurrences circuit) +
+        (symmetricCircuitOccurrences circuit).length =
+      circuit.wireCount := by
+  unfold occurrenceWireCount symmetricCircuitOccurrences
+    NormalizedSymmetricThresholdCircuit.wireCount
+  rw [List.map_ofFn, List.sum_ofFn]
+  rw [Finset.sum_add_distrib]
+  simp
+
+theorem thresholdCircuitOccurrences_wireCount {q : ℕ}
+    (circuit : NormalizedThresholdThresholdCircuit q) :
+    occurrenceWireCount (thresholdCircuitOccurrences circuit) +
+        (thresholdCircuitOccurrences circuit).length =
+      circuit.wireCount := by
+  unfold occurrenceWireCount thresholdCircuitOccurrences
+    NormalizedThresholdThresholdCircuit.wireCount
+  rw [List.map_ofFn, List.sum_ofFn]
+  have henumerate :
+      (∑ index : Fin circuit.top.support.card,
+          (circuit.bottom (retainedTopIndex circuit index)).wireCount) =
+        ∑ index ∈ circuit.top.support, (circuit.bottom index).wireCount := by
+    let embedding : Fin circuit.top.support.card ↪ Fin circuit.bottomCount :=
+      (retainedTopIndex circuit).toEmbedding
+    have hmap :
+        Finset.map embedding Finset.univ = circuit.top.support := by
+      simp [embedding, retainedTopIndex]
+    change
+      (∑ index : Fin circuit.top.support.card,
+          (circuit.bottom (embedding index)).wireCount) =
+        ∑ index ∈ circuit.top.support, (circuit.bottom index).wireCount
+    conv_rhs => rw [← hmap]
+    exact (Finset.sum_map Finset.univ embedding
+      (fun index => (circuit.bottom index).wireCount)).symm
+  rw [Finset.sum_add_distrib]
+  simp only [Finset.sum_const, nsmul_eq_mul, mul_one, List.length_ofFn]
+  exact congrArg (fun wires => wires + circuit.top.support.card) henumerate
+
+@[simp] theorem occurrenceWireCount_append {q : ℕ}
+    (left right : List (SupportedNormalizedGate q)) :
+    occurrenceWireCount (left ++ right) =
+      occurrenceWireCount left + occurrenceWireCount right := by
+  simp [occurrenceWireCount]
+
+theorem symmetricFourfoldOccurrences_wireCount_le
+    (request : FourfoldRequest NormalizedSymmetricThresholdCircuit) :
+    occurrenceWireCount (symmetricFourfoldOccurrences request) ≤
+      batchDescription NormalizedSymmetricThresholdCircuit.wireCount
+        request.circuits := by
+  change occurrenceWireCount
+      (request.circuits.flatMap symmetricCircuitOccurrences) ≤
+    (request.circuits.map
+      NormalizedSymmetricThresholdCircuit.wireCount).sum
+  induction request.circuits with
+  | nil => simp [occurrenceWireCount]
+  | cons circuit circuits inductionHypothesis =>
+      simp only [List.flatMap_cons, occurrenceWireCount_append,
+        List.map_cons, List.sum_cons]
+      exact Nat.add_le_add
+        (by
+          have := symmetricCircuitOccurrences_wireCount circuit
+          omega)
+        inductionHypothesis
+
+theorem symmetricFourfoldOccurrences_wireCount
+    (request : FourfoldRequest NormalizedSymmetricThresholdCircuit) :
+    occurrenceWireCount (symmetricFourfoldOccurrences request) +
+        (symmetricFourfoldOccurrences request).length =
+      batchDescription NormalizedSymmetricThresholdCircuit.wireCount
+        request.circuits := by
+  change occurrenceWireCount
+        (request.circuits.flatMap symmetricCircuitOccurrences) +
+      (request.circuits.flatMap symmetricCircuitOccurrences).length =
+    (request.circuits.map
+      NormalizedSymmetricThresholdCircuit.wireCount).sum
+  induction request.circuits with
+  | nil => simp [occurrenceWireCount]
+  | cons circuit circuits inductionHypothesis =>
+      simp only [List.flatMap_cons, occurrenceWireCount_append,
+        List.length_append, List.map_cons, List.sum_cons]
+      rw [← symmetricCircuitOccurrences_wireCount circuit,
+        ← inductionHypothesis]
+      omega
+
+theorem thresholdFourfoldOccurrences_wireCount_le
+    (request : FourfoldRequest NormalizedThresholdThresholdCircuit) :
+    occurrenceWireCount (thresholdFourfoldOccurrences request) ≤
+      batchDescription NormalizedThresholdThresholdCircuit.wireCount
+        request.circuits := by
+  change occurrenceWireCount
+      (request.circuits.flatMap thresholdCircuitOccurrences) ≤
+    (request.circuits.map
+      NormalizedThresholdThresholdCircuit.wireCount).sum
+  induction request.circuits with
+  | nil => simp [occurrenceWireCount]
+  | cons circuit circuits inductionHypothesis =>
+      simp only [List.flatMap_cons, occurrenceWireCount_append,
+        List.map_cons, List.sum_cons]
+      exact Nat.add_le_add
+        (by
+          have := thresholdCircuitOccurrences_wireCount circuit
+          omega)
+        inductionHypothesis
+
+theorem thresholdFourfoldOccurrences_wireCount
+    (request : FourfoldRequest NormalizedThresholdThresholdCircuit) :
+    occurrenceWireCount (thresholdFourfoldOccurrences request) +
+        (thresholdFourfoldOccurrences request).length =
+      batchDescription NormalizedThresholdThresholdCircuit.wireCount
+        request.circuits := by
+  change occurrenceWireCount
+        (request.circuits.flatMap thresholdCircuitOccurrences) +
+      (request.circuits.flatMap thresholdCircuitOccurrences).length =
+    (request.circuits.map
+      NormalizedThresholdThresholdCircuit.wireCount).sum
+  induction request.circuits with
+  | nil => simp [occurrenceWireCount]
+  | cons circuit circuits inductionHypothesis =>
+      simp only [List.flatMap_cons, occurrenceWireCount_append,
+        List.length_append, List.map_cons, List.sum_cons]
+      rw [← thresholdCircuitOccurrences_wireCount circuit,
+        ← inductionHypothesis]
+      omega
+
+theorem batchDescription_le_card_mul
+    {Circuit : Type} (description : Circuit → ℕ)
+    (circuits : List Circuit) (cap : ℕ)
+    (hcap : ∀ circuit ∈ circuits, description circuit ≤ cap) :
+    batchDescription description circuits ≤ circuits.length * cap := by
+  unfold batchDescription
+  induction circuits with
+  | nil => simp
+  | cons circuit circuits inductionHypothesis =>
+      simp only [List.map_cons, List.sum_cons, List.length_cons]
+      have hhead : description circuit ≤ cap := hcap circuit (by simp)
+      have htail :
+          ∀ candidate ∈ circuits, description candidate ≤ cap := by
+        intro candidate hcandidate
+        exact hcap candidate (by simp [hcandidate])
+      calc
+        description circuit +
+            (List.map description circuits).sum ≤
+            cap + circuits.length * cap :=
+          Nat.add_le_add hhead (inductionHypothesis htail)
+        _ = (circuits.length + 1) * cap := by ring
 
 def normalizedLiveCount (q liveScale : ℕ) : ℕ :=
   min q (liveScale * logScale q)
@@ -2302,10 +2481,174 @@ def FiniteRowAggregation.acceptanceCount
     (aggregation : FiniteRowAggregation Input Row) : ℕ :=
   ∑ row, ∑ input, (aggregation.row row input).toNat
 
+def FiniteRowAggregation.sampleCount
+    (Input Row : Type) [Fintype Input] [Fintype Row] : ℕ :=
+  Fintype.card Row * Fintype.card Input
+
+noncomputable def FiniteRowAggregation.mean
+    {Input Row : Type} [Fintype Input] [Fintype Row]
+    (aggregation : FiniteRowAggregation Input Row) : ℝ :=
+  (aggregation.acceptanceCount : ℝ) /
+    FiniteRowAggregation.sampleCount Input Row
+
+def FiniteRowAggregation.outputCode
+    {Input Row : Type} [Fintype Input] [Fintype Row]
+    (aggregation : FiniteRowAggregation Input Row) : ℕ :=
+  encodeNaturalRatio aggregation.acceptanceCount
+    (FiniteRowAggregation.sampleCount Input Row - 1)
+
+theorem FiniteRowAggregation.sampleCount_pos
+    (Input Row : Type) [Fintype Input] [Fintype Row]
+    [Nonempty Input] [Nonempty Row] :
+    0 < FiniteRowAggregation.sampleCount Input Row := by
+  exact Nat.mul_pos Fintype.card_pos Fintype.card_pos
+
+theorem FiniteRowAggregation.decode_outputCode
+    {Input Row : Type} [Fintype Input] [Fintype Row]
+    [Nonempty Input] [Nonempty Row]
+    (aggregation : FiniteRowAggregation Input Row) :
+    decodeSupplierRational aggregation.outputCode =
+      (aggregation.acceptanceCount : ℚ) /
+        FiniteRowAggregation.sampleCount Input Row := by
+  rw [FiniteRowAggregation.outputCode,
+    decodeSupplierRational_encodeNaturalRatio]
+  congr 1
+  exact_mod_cast Nat.sub_add_cancel
+    (Nat.succ_le_iff.mpr
+      (FiniteRowAggregation.sampleCount_pos Input Row))
+
+theorem bitAsReal_sub_abs_eq_mismatch (left right : Bool) :
+    |bitAsReal left - bitAsReal right| = bitAsReal (left != right) := by
+  cases left <;> cases right <;> norm_num [bitAsReal]
+
+theorem FiniteRowAggregation.acceptanceCount_cast
+    {Input Row : Type} [Fintype Input] [Fintype Row]
+    (aggregation : FiniteRowAggregation Input Row) :
+    (aggregation.acceptanceCount : ℝ) =
+      ∑ row, ∑ input, bitAsReal (aggregation.row row input) := by
+  unfold FiniteRowAggregation.acceptanceCount
+  rw [Nat.cast_sum]
+  apply Finset.sum_congr rfl
+  intro row _
+  rw [Nat.cast_sum]
+  apply Finset.sum_congr rfl
+  intro input _
+  cases aggregation.row row input <;> simp [bitAsReal]
+
+theorem FiniteRowAggregation.mean_eq_product_mean
+    {Input Row : Type} [Fintype Input] [Fintype Row]
+    (aggregation : FiniteRowAggregation Input Row) :
+    aggregation.mean =
+      booleanMean (fun sample : Row × Input =>
+        aggregation.row sample.1 sample.2) := by
+  unfold FiniteRowAggregation.mean booleanMean
+  rw [FiniteRowAggregation.acceptanceCount_cast]
+  rw [Fintype.card_prod]
+  unfold FiniteRowAggregation.sampleCount
+  congr 1
+  rw [Fintype.sum_prod_type]
+
+theorem FiniteRowAggregation.decode_outputCode_cast
+    {Input Row : Type} [Fintype Input] [Fintype Row]
+    [Nonempty Input] [Nonempty Row]
+    (aggregation : FiniteRowAggregation Input Row) :
+    (decodeSupplierRational aggregation.outputCode : ℝ) =
+      aggregation.mean := by
+  rw [FiniteRowAggregation.decode_outputCode, Rat.cast_div,
+    Rat.cast_natCast]
+  rfl
+
 theorem card_bitInput (q : ℕ) :
     Fintype.card (BitInput q) = 2 ^ q := by
   rw [Fintype.card_fun]
   simp
+
+/-- Finite Fubini/union step used by both (A.13.9) and (A.13.10).  Correctness
+is pointwise in the input; it never assumes one row works for every input. -/
+theorem FiniteRowAggregation.error_le_of_pointwise
+    {Input Row : Type} [Fintype Input] [Fintype Row]
+    [Nonempty Input] [Nonempty Row]
+    (aggregation : FiniteRowAggregation Input Row)
+    (target : Input → Bool) (failure : ℝ)
+    (hpointwise : ∀ input,
+      booleanMean (fun row => aggregation.row row input != target input) ≤
+        failure) :
+    |aggregation.mean - booleanMean target| ≤ failure := by
+  have hrowCard : (0 : ℝ) < Fintype.card Row := by
+    exact_mod_cast Fintype.card_pos
+  have hinputCard : (0 : ℝ) < Fintype.card Input := by
+    exact_mod_cast Fintype.card_pos
+  have hproductCard :
+      (0 : ℝ) < (Fintype.card Row * Fintype.card Input : ℕ) := by
+    exact_mod_cast Nat.mul_pos Fintype.card_pos Fintype.card_pos
+  have hrow : ∀ input,
+      (∑ row, |bitAsReal (aggregation.row row input) -
+          bitAsReal (target input)|) ≤
+        Fintype.card Row * failure := by
+    intro input
+    calc
+      (∑ row, |bitAsReal (aggregation.row row input) -
+          bitAsReal (target input)|) =
+          ∑ row, bitAsReal
+            (aggregation.row row input != target input) := by
+              apply Finset.sum_congr rfl
+              intro row _
+              exact bitAsReal_sub_abs_eq_mismatch _ _
+      _ ≤ Fintype.card Row * failure := by
+        have hscaled := (div_le_iff₀ hrowCard).mp
+          (hpointwise input)
+        simpa [booleanMean, mul_comm] using hscaled
+  have hnormalize :
+      booleanMean target =
+        (Fintype.card Row * ∑ input, bitAsReal (target input)) /
+          (Fintype.card Row * Fintype.card Input : ℕ) := by
+    unfold booleanMean
+    push_cast
+    field_simp
+  rw [FiniteRowAggregation.mean_eq_product_mean, hnormalize]
+  unfold booleanMean
+  rw [Fintype.card_prod]
+  have hnumerator :
+      |(∑ sample : Row × Input,
+          bitAsReal (aggregation.row sample.1 sample.2)) -
+          Fintype.card Row * ∑ input, bitAsReal (target input)| ≤
+            Fintype.card Input * (Fintype.card Row * failure) := by
+    rw [Fintype.sum_prod_type_right]
+    have hreplicate :
+        Fintype.card Row * ∑ input, bitAsReal (target input) =
+          ∑ input, ∑ _row : Row, bitAsReal (target input) := by
+      simp [mul_sum]
+    rw [hreplicate, ← Finset.sum_sub_distrib]
+    calc
+      |∑ input, (∑ row, bitAsReal (aggregation.row row input) -
+          ∑ _row : Row, bitAsReal (target input))| ≤
+          ∑ input, |(∑ row, bitAsReal (aggregation.row row input)) -
+            ∑ _row : Row, bitAsReal (target input)| :=
+        Finset.abs_sum_le_sum_abs _ _
+      _ ≤ ∑ input, ∑ row,
+          |bitAsReal (aggregation.row row input) -
+            bitAsReal (target input)| := by
+        apply Finset.sum_le_sum
+        intro input _
+        rw [← Finset.sum_sub_distrib]
+        exact Finset.abs_sum_le_sum_abs _ _
+      _ ≤ ∑ _input : Input, Fintype.card Row * failure :=
+        Finset.sum_le_sum fun input _ => hrow input
+      _ = Fintype.card Input * (Fintype.card Row * failure) := by simp
+  rw [← sub_div]
+  rw [abs_div, abs_of_pos hproductCard]
+  apply (div_le_iff₀ hproductCard).2
+  calc
+    |(∑ sample : Row × Input,
+        bitAsReal (aggregation.row sample.1 sample.2)) -
+      Fintype.card Row * ∑ input, bitAsReal (target input)| ≤
+        Fintype.card Input * (Fintype.card Row * failure) :=
+      hnumerator
+    _ = (Fintype.card Row * Fintype.card Input : ℕ) * failure := by
+      push_cast
+      ring
+    _ = failure *
+        (Fintype.card Row * Fintype.card Input : ℕ) := by ring
 
 /-! ## Request preprocessing and the sole production estimate -/
 
@@ -2333,6 +2676,49 @@ def FourfoldRowPreprocessor.aggregation
     FiniteRowAggregation (BitInput request.q)
       (Fin (preprocessor.rowCount request)) where
   row := preprocessor.row request
+
+instance FourfoldRowPreprocessor.rowNonempty
+    {Circuit : CircuitFamily}
+    {evaluate : {q : ℕ} → Circuit q → BitInput q → Bool}
+    (preprocessor : FourfoldRowPreprocessor Circuit evaluate)
+    (request : FourfoldRequest Circuit) :
+    Nonempty (Fin (preprocessor.rowCount request)) :=
+  ⟨⟨0, preprocessor.rowCountPositive request⟩⟩
+
+def FourfoldRowPreprocessor.outputCode
+    {Circuit : CircuitFamily}
+    {evaluate : {q : ℕ} → Circuit q → BitInput q → Bool}
+    (preprocessor : FourfoldRowPreprocessor Circuit evaluate)
+    (request : FourfoldRequest Circuit) : ℕ :=
+  (preprocessor.aggregation request).outputCode
+
+noncomputable def FourfoldRowPreprocessor.estimate
+    {Circuit : CircuitFamily}
+    {evaluate : {q : ℕ} → Circuit q → BitInput q → Bool}
+    (preprocessor : FourfoldRowPreprocessor Circuit evaluate)
+    (request : FourfoldRequest Circuit) : ℝ :=
+  (preprocessor.aggregation request).mean
+
+theorem FourfoldRowPreprocessor.decode_outputCode
+    {Circuit : CircuitFamily}
+    {evaluate : {q : ℕ} → Circuit q → BitInput q → Bool}
+    (preprocessor : FourfoldRowPreprocessor Circuit evaluate)
+    (request : FourfoldRequest Circuit) :
+    (decodeSupplierRational (preprocessor.outputCode request) : ℝ) =
+      preprocessor.estimate request := by
+  exact (preprocessor.aggregation request).decode_outputCode_cast
+
+theorem FourfoldRowPreprocessor.accurate
+    {Circuit : CircuitFamily}
+    {evaluate : {q : ℕ} → Circuit q → BitInput q → Bool}
+    (preprocessor : FourfoldRowPreprocessor Circuit evaluate)
+    (request : FourfoldRequest Circuit) :
+    |preprocessor.estimate request -
+        conjunctionProbability evaluate request.circuits| ≤
+      preprocessor.failure request := by
+  exact (preprocessor.aggregation request).error_le_of_pointwise
+    (fun input => conjunctionBit evaluate request.circuits input)
+    (preprocessor.failure request) (preprocessor.pointwise request)
 
 /-! ## Closed componentwise error ledger -/
 

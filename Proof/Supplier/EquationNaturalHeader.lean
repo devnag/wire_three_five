@@ -1,4 +1,5 @@
 import Proof.Supplier.EquationNaturalHeaderPositive
+import Proof.Hierarchy.HierarchyFixedWord
 
 /-! The whole canonical natural header producer, including the actual zero
 branch. The only varying input is one raw unary value; all scratch is blank. -/

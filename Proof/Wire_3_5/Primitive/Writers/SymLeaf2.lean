@@ -1,8 +1,27 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.SymLeaf
 import Proof.Wire_3_5.Primitive.Writers.SymFamRun2
 import Proof.Wire_3_5.Primitive.Writers.SymLeafIface2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.SymFamCost
+import Proof.Wire_3_5.Primitive.Writers.SymNeed
+import Proof.Wire_3_5.Primitive.Writers.WriterIfaceJ
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.PopSetupSpecB2
+import Proof.Wire_3_5.Primitive.Writers.SymFamRun2Base
+import Proof.Wire_3_5.Primitive.Writers.SymLeafIface
 
-/-! # POP setup: the SYM writer's leaf over `PopSetupSpecB2`
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2 (POP setup): the SYM writer's leaf over `PopSetupSpecB2`
 
 **`symLeaf2 : SymLeafOf2 l`**: `SymLeaf.symLeaf` with the POP setup `Q : PopSetupSpecB2 W` (the need's measure reads
 the row offset `r4`): the same floors (`sbE2 … .EW`, `1`), coefficient (`sbF2 … .cWr`), the machine
@@ -64,3 +83,5 @@ noncomputable def symLeaf2 : SymLeafOf2 l := fun W FS Q hfp hpp _fe =>
             hCD _ (sbF2_cpsi l FS Q hfp hpp F) ha' Cs carriers translation hcall hs }⟩⟩
 
 end NearCubicWires.WireExponent3_5.PrimAsm.SymLeaf
+
+end

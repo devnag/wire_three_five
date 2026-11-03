@@ -1,7 +1,9 @@
 import Batteries.Tactic.OpenPrivate
-import Proof.Circuits.AmbientLinkEntry
-import Proof.MachineModel.RuntimeCaseTwoDescriptionFrameAdapter
+import Proof.Circuits.CallableRelocation
+import Proof.MachineModel.BoundedOracleStructuralSelectiveProgram
+import Proof.PCP.PaddedProjectionPresentation
 import Proof.Supplier.SelectiveTowerClosure
+import Proof.MachineModel.RuntimeCaseTwoDescriptionFrameAdapter
 
 /-!
 # The description pool's atom stream, from the closed compiler tower

@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.FinalPass.SdRunT
+import Proof.Wire_3_5.FinalPass.SeamsProg3Base
 
 /-! # S4 (the seeds phase), part 41: the seeds phase's layout (P3:3170-3178)
 

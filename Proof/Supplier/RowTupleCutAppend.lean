@@ -1,5 +1,4 @@
-import Proof.Supplier.RowTupleEnumerationReady
-import Proof.Supplier.RowTupleList
+import Proof.Supplier.RowTupleEnumeratedEquations
 
 /-! Append the cached binLift signed coefficient after the complete equation.
 The common row log resets only the coefficient source; append cursor stays live. -/

@@ -1,4 +1,5 @@
 import Proof.PCP.VerifierDecodingHeaderSemantics
+import Proof.PCP.VerifierDecodingTableRun
 
 /-! Fixed-width reconstruction and the exact chunk predicates tested by
 sequential tag scans. These supply the canonical re-encoding theorem. -/

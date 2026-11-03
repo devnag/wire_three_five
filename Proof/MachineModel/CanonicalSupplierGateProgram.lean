@@ -1,5 +1,8 @@
-import Proof.Foundations.SupplierPipeline
+import Proof.Foundations.CanonicalBinaryProgram
 import Proof.MachineModel.CanonicalIntPredecessorProgram
+import Proof.MachineModel.PreserveRightProgram
+import Proof.Foundations.SupplierPipeline
+import Proof.Foundations.VerifiedLinker
 
 /-!
 # Canonical supplier gate-field lowering

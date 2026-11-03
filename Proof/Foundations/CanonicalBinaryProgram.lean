@@ -1,3 +1,5 @@
+import Proof.Foundations.CanonicalBinary
+import Proof.Foundations.ExecutableInterfaces
 import Proof.Foundations.PolynomialClock
 import Proof.Foundations.VerifiedLinker
 

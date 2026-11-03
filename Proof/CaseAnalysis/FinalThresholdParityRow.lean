@@ -1,6 +1,8 @@
+import Proof.CaseAnalysis.FinalThresholdRowIdentity
 import Proof.CaseAnalysis.FinalPrinterBridge
-import Proof.CaseAnalysis.FinalThresholdRows
-import Proof.CaseAnalysis.RowsUniversalLowering
+import Proof.CaseAnalysis.RowsFamilyBudget
+import Proof.Circuits.ValidatorPolynomialDomination
+import Proof.MachineModel.CanonicalFourfoldRowProgram
 
 set_option autoImplicit false
 set_option maxHeartbeats 250000

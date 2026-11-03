@@ -1,15 +1,28 @@
-import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4
-import Proof.Wire_3_5.Primitive.Writers.BudgetIface
+import Lean
+import Proof.Wire_3_5.FinalPass.SeamsProg2Base
 import Proof.Wire_3_5.Primitive.Writers.BudgetIface2
+import Proof.Wire_3_5.Primitive.Writers.PlanBase
+import Proof.Wire_3_5.Primitive.Writers.ThrDataIface3
+import Proof.Wire_3_5.Primitive.Writers.WritersJoinBase
+import Proof.Wire_3_5.UnionMachine.FiltSetupIface5
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Primitive.Writers.BudgetIface
 import Proof.Wire_3_5.Primitive.Writers.WritersJoin
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4Base
 
-/-! # The HASH writer's leaf over the v4 data stage — the deliverable type
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2: the HASH writer's leaf over the v4 data stage — the deliverable type
 
 `HashLeafOf` with the v4 data stage (`ThrData.ThrStage4U l`: v3 plus `x3` extra
 scratch tapes for W6's numbers machine) in place of v3:
 
 * **`HashLeafOf4 l`**: from `ThrStage4U l`, the walk bank, the FILTER setup, `FiltPipeLe2` and `ThrNumsPoly l`, the
-  HASH writer's leaf `WritersJoin.HashLeafJ2 l`. The construction proves it (`ShellH2`'s shell on `STx + x3` tapes; the family
+  HASH writer's leaf `WritersJoin.HashLeafJ2 l`. PA2 proves it (`ShellH2`'s shell on `STx + x3` tapes; the family
   budgets and the class link of HashFam/HashClass, which read the data stage's `cost3`, `need` only).
 
 Paper quantity of the main type: the HASH tape `hashTape` within the preprocessing class `2^{O(Ψ)}q^{O(1)}`
@@ -26,3 +39,5 @@ abbrev HashLeafOf4 (l : Literals) : Type :=
     BudgetIface.FiltPipeLe2 → BudgetIface.ThrNumsPoly l → WritersJoin.HashLeafJ2 l
 
 end NearCubicWires.WireExponent3_5.PrimAsm.HashLeaf
+
+end

@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryTseitinNativeColdFormula
+import Proof.Assembly.AppendOutputFrame
 
 /-! Frame exactly the bytes emitted by the cold original circuit-formula
 producer, measuring and returning the actual append cursor physically. -/

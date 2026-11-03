@@ -1,4 +1,5 @@
 import Proof.Circuits.ComponentwisePolynomial
+import Proof.Foundations.SupplierPipeline
 
 /-!
 # Supplier guarantees on normalization-produced circuits

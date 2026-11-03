@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryTseitinNativeReferences
+import Proof.PCP.PCPPNativeNodeRead
 import Proof.PCP.PCPPNativeTemplateRaw
 
 /-! Read the actual original node descriptor alongside the physical arity

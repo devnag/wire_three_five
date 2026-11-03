@@ -1,0 +1,32 @@
+import Proof.CaseAnalysis.RowsOriginalSwitch
+import Proof.CaseAnalysis.ScheduleClog
+import Proof.MachineModel.OrdinaryRewindWorkspace
+import Proof.MachineModel.Runs
+import Proof.MachineModel.UWalkUnary
+import Proof.PCP.ProjectionDimensionTemplate
+import Proof.Packets.CycleCommonReserve
+import Proof.Packets.CyclePaletteReserve
+import Proof.Packets.PacketsXVectorLiteralPaletteBoot
+import Proof.Packets.PacketsXWalkLiteralLoopData
+import Proof.Packets.PacketsXWalkLiteralProgram
+import Proof.Packets.UnaryAffine
+import Proof.Rows.PhysicalDriverMoves
+import Proof.Rows.SourceDockCore
+
+/-! Ordinary executions create the two source templates and both reserve words. -/
+set_option autoImplicit false
+set_option maxHeartbeats 1000000
+set_option maxRecDepth 120000
+set_option warningAsError true
+set_option linter.unusedSimpArgs false
+namespace Theorem25Completion.WalkLiteralProducedReserve
+open NearCubicWires NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdinary
+open NearCubicWires.ExtDecompositionBatch NearCubicWires.RepairOrdinary.RecoveryRootRound
+open NearCubicWires.RepairSource.ProjectionNormalization
+open PCJ9eff70d512234a4c_Fixed PCJ9eff70d512234a4c_Fixed.Materializer Completion
+noncomputable section
+attribute [local irreducible] CycleCommonReserve.joined8 CyclePaletteReserve.joined8
+
+
+end
+end Theorem25Completion.WalkLiteralProducedReserve

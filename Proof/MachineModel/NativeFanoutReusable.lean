@@ -1,4 +1,6 @@
 import Proof.MachineModel.NativeFanout
+import Proof.MachineModel.Runs
+import Proof.MachineModel.OrdinaryMatrixBucketRootPower
 
 /-! The same initialization pass can reload the erased bank on every row.
 Padding transport changes neither the physical heads nor the linear fuel. -/

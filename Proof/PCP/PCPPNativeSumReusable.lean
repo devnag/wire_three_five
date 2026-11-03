@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeSumReset
+import Proof.Amplification.RecoveryScratchErase
 
 /-! The raw-natural sum append operation with physically reusable workspace.
 The bounded scratch is swept after its heads are reset; the two actual summands

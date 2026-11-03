@@ -1,4 +1,5 @@
 import Proof.MachineModel.CanonicalBalancedValidationMapProgram
+import Proof.Foundations.CanonicalBinaryProgram
 
 namespace NearCubicWires.CanonicalBoolListValidationProgram
 

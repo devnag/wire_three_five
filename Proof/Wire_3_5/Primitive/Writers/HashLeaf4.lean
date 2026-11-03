@@ -1,8 +1,31 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.HashLeaf
 import Proof.Wire_3_5.Primitive.Writers.HashLeafIface4
 import Proof.Wire_3_5.Primitive.Writers.HashFam4
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.BudgetIface
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.WriterIfaceJ
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SeamsProg2Base
+import Proof.Wire_3_5.Primitive.Writers.BudgetIface2
+import Proof.Wire_3_5.Primitive.Writers.HashFam4Base
+import Proof.Wire_3_5.Primitive.Writers.HashLeafBase
+import Proof.Wire_3_5.Primitive.Writers.PlanBase
+import Proof.Wire_3_5.Primitive.Writers.ThrDataIface3
+import Proof.Wire_3_5.Primitive.Writers.WritersJoinBase
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4Base
+import Proof.Wire_3_5.UnionMachine.FiltSetupIface5
 
-/-! # The HASH writer's leaf over the v4 data stage
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2: the HASH writer's leaf over the v4 data stage
 
 **`hashLeaf4 : HashLeafOf4 l`** ('s type): `HashLeaf.hashLeaf` with the v4 data stage family
 (`ThrData.ThrStage4U l`): the same floors (`envMax E₀ E_H`, `max CD₀ 1`) and coefficient (`HB.cW`), the
@@ -56,3 +79,5 @@ noncomputable def hashLeaf4 (l : Literals) : HashLeafOf4 l := fun SU W FS hfp hT
             exact le_max_right _ _ }⟩⟩
 
 end NearCubicWires.WireExponent3_5.PrimAsm.HashLeaf
+
+end

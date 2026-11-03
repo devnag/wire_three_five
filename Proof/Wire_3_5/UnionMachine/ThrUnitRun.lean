@@ -1,6 +1,33 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.ThrPipes
+import Proof.Wire_3_5.FinalPass.DigsIface
+import Proof.Wire_3_5.FinalPass.SeamsProg2Base
+import Proof.Wire_3_5.Primitive.Writers.BudgetIface2
+import Proof.Wire_3_5.Primitive.Writers.PlanBase
+import Proof.Wire_3_5.Primitive.Writers.ThrDataIface3
+import Proof.Wire_3_5.Primitive.Writers.WritersJoinBase
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4Base
+import Proof.Wire_3_5.Primitive.ThresholdWriter.RadSetup2
+import Proof.Wire_3_5.Primitive.ThresholdWriter.ShellIface
+import Proof.Wire_3_5.UnionMachine.FiltSetupIface5
+import Proof.Wire_3_5.UnionMachine.RadSetupB3
+import Proof.Wire_3_5.UnionMachine.RadSpecBase
+import Proof.Wire_3_5.UnionMachine.ThrDecIfaceBase
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.ThresholdWriter.RadSetup
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.RadSetupB5
+import Proof.Wire_3_5.UnionMachine.ThrDecIface
+import Proof.Wire_3_5.UnionMachine.ThrUnitRunBase
 
-/-! # The THR unit machine at a gate and its run at every unit of a THR call (THRU3's `ok`)
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # The THR unit machine at a gate and its run at every unit of a THR call (#186; THRU3's `ok`)
 
 `thrUnitM` = the decode front `D.M` ; branch on register `398` into the RADIX pipe `ThrPipes.radP R`
 (`RadSetupSpecB5`), else on `399` into the lifted FILTER pipe `FiltLift.filtP W hx F5`, else nothing ; the counter
@@ -29,11 +56,6 @@ open NearCubicWires.WireExponent3_5.PrimAsm.SymLayout NearCubicWires.SupplierPip
 open NearCubicWires.WireExponent3_5.Cost NearCubicWires.WireExponent3_5.Split NearCubicWires.WireExponent3_5.Primitive
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.PrimThrW.Joins
 open NearCubicWires.WireExponent3_5.PrimThrW.RadSetup NearCubicWires.WireExponent3_5.PrimT.WalkBank
-
-theorem pipeOK_mono {cap x s : ℕ} {P : Machine (PrimAsm.CellLoop.TT x) s} {σ : WState (LNS x) LNR} {out e : List Bool}
-    {B B' : ℕ} (h : UnitG.PipeOK cap P σ out e B) (hB : B ≤ B') : UnitG.PipeOK cap P σ out e B' := by
-  obtain ⟨σF, s1, h1⟩ := h
-  exact ⟨σF, s1.enlarge hB, h1⟩
 
 section Gate
 variable {l : Literals} {F : GateFree l} {x : ℕ} {W : WalkBankProducer} (hx : W.x ≤ x) (D : ThrDec.ThrDecFront x l F)
@@ -259,3 +281,5 @@ end Call
 end Gate
 
 end NearCubicWires.WireExponent3_5.UnionMachine.ThrUnitRun
+
+end

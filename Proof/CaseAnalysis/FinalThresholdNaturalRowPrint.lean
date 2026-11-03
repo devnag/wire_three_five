@@ -1,5 +1,6 @@
-import Proof.CaseAnalysis.FinalRowFrameJoin
 import Proof.CaseAnalysis.FinalThresholdNaturalSum
+import Proof.CaseAnalysis.FinalExternalRowLoop
+import Proof.CaseAnalysis.FinalRowFrameJoin
 
 /-!
 A.13.7/A.13.10: separate fixed-scalar (g,p,e,f) rows, selected at residual z.

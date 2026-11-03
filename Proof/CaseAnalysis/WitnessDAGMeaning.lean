@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.WitnessNodeBody
+import Proof.PCP.PCPPNativeRequestSchema
 
 /-! The same accepted node fields determine both the canonical typed DAG
 and the literal native descriptor consumed by the PCPP source. This is a

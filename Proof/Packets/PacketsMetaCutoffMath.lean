@@ -1,3 +1,8 @@
+import Proof.Supplier.RowThresholdSelections
+import Proof.Circuits.ThresholdAlignedEnvelope
+import Proof.Supplier.RowCachedEquationMeaning
+import Proof.Supplier.RowCachedCoordinateBounds
+import Proof.Circuits.DecompositionSourceBounds
 import Proof.Assembly.Production
 
 set_option autoImplicit false

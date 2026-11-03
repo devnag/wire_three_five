@@ -1,5 +1,9 @@
+import Proof.Foundations.RecoveryScheduleEnvelope
+import Proof.PCP.PCPPSubstitutionRequest
+import Proof.Wire_3_5.Stars.StarSelectionChoice
+import Proof.Wire_3_5.Transfer.TransferSeedCalls
+import Proof.Wire_3_5.Stars.StarCarrier
 import Proof.CaseAnalysis.RowsEstimatorParityThreshold
-import Proof.Wire_3_5.Transfer.TransferUnion
 
 /-! # The union setup's constant and systematic-parity atoms in both class modes (P3:3092-3094, 3409-3410)
 

@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.WitnessNodeBankPrepare
+import Proof.PCP.ProjectionDimensionPowerBounds
+import Proof.PCP.ProjectionDimensionTemplate
 
 /-! A cold framed input produces a literal polynomial capacity driver.
 The fixed degree, coefficient and offset are program parameters, shared by

@@ -1,10 +1,12 @@
 import Proof.Wire_3_5.UnionMachine.IncInt
+import Proof.Wire_3_5.Foundations.Contracts
 
 /-! # C6 front, the C1 dock: a carrier's gates in C1's request format
 
 C1's request word lists every gate as its weights' `intWord`s and its threshold's `intWord` (`Plan.selWord`, at
 `toInt g = ⟨g.weight, g.threshold⟩`); base's decoders leave a carrier's gates as the framed native region
-`tabSeg X = X.flatMap (frame ∘ gateW)`, `gateW g = natWord n ++ weights' intWords ++ intWord (θ − 1)` (`TabRef.tabGW_eq`, base `Production.bottomWord`). The converter (layout `WState 1 16`, IncInt's registers `0 … 7`,
+`tabSeg X = X.flatMap (frame ∘ gateW)`, `gateW g = natWord n ++ weights' intWords ++ intWord (θ − 1)` (T's
+`TabRef.tabGW_eq`, base `Production.bottomWord`). The converter (layout `WState 1 16`, IncInt's registers `0 … 7`,
 `8` the arity `q` (kept), `9` the gate count, `10` the weight counter, `11` a temp) reads the region's gates while
 their frames last and appends, framed, **`selGate g = weights' intWords ++ intWord θ`** per gate:
 * **`gBody_spec`** (one gate: skip `natWord q`, copy `q` weights (PA's `copyBit`, `copyNatM`), increment the threshold

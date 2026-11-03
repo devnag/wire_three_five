@@ -1,4 +1,22 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.ThrUnitMeas2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.RadAbsorb
+import Proof.Wire_3_5.UnionMachine.RadSetupB5
+import Proof.Wire_3_5.UnionMachine.ThrDecIface
+import Proof.Wire_3_5.UnionMachine.ThrUnitIface
+import Proof.Wire_3_5.UnionMachine.ThrUnitIface5
+import Proof.Wire_3_5.UnionMachine.ThrUnitMeas
+import Proof.Wire_3_5.UnionMachine.ThrUnitRun
+import Proof.Wire_3_5.UnionMachine.ThrUnitMeas3Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The THR unit's measure absorbed by `Ψ_T`, part 3: the call's measure `measC ≤ c·2^{K_q·Ψ_T}`
 
@@ -22,45 +40,9 @@ open NearCubicWires.WireExponent3_5.PrimAsm NearCubicWires.WireExponent3_5.PrimA
 open NearCubicWires.WireExponent3_5.Stars
 open NearCubicWires.WireExponent3_5.FinalPass.SymFr (pow_N_le one_le_L n2_le_L pow_mono_mul)
 
-/-- `L⁴ ≤ Ψ_T` at `C_D ≥ 1`. -/
-theorem psi_L4 (CD k L BT : ℕ) (hCD : 1 ≤ CD) : L * L * (L * L) ≤ loadThr CD k L BT := by
-  refine le_trans ?_ (ThrUnit.loadThr_le' CD k L BT)
-  have h1 : L * L ≤ (k + L) * (k + L) := Nat.mul_le_mul (by omega) (by omega)
-  have h2 : L * L ≤ Nat.sqrt (BT * L) + L * L := by omega
-  have h3 : L * L * (L * L) ≤ (k + L) * (k + L) * (Nat.sqrt (BT * L) + L * L) := Nat.mul_le_mul h1 h2
-  have h4 : 1 ≤ CD * CD := Nat.one_le_iff_ne_zero.mpr (by positivity)
-  exact h3.trans (Nat.le_mul_of_pos_left _ h4)
-
-/-- The RADIX exponent in `Ψ_T`. -/
-theorem expo_rad (lb L Ψ cAb KRc : ℕ) (hL : 1 ≤ L) (h4 : L * L * (L * L) ≤ Ψ) (hlb : lb * L ≤ cAb * Ψ) :
-    (3 * lb + 1) * (26 * L + 7) + KRc * (L * L) + 8 ≤ (99 * cAb + KRc + 41) * Ψ := by
-  have hLL : 1 ≤ L * L := Nat.one_le_iff_ne_zero.mpr (by positivity)
-  have hY : L * L ≤ Ψ := le_trans (Nat.le_mul_of_pos_right _ hLL) h4
-  have hLY : L ≤ L * L := Nat.le_mul_of_pos_left L hL
-  have hlb1 : lb ≤ lb * L := Nat.le_mul_of_pos_right _ hL
-  have hK : KRc * (L * L) ≤ KRc * Ψ := Nat.mul_le_mul_left _ hY
-  have e1 : (3 * lb + 1) * (26 * L + 7) = 78 * (lb * L) + 21 * lb + 26 * L + 7 := by ring
-  have e2 : (99 * cAb + KRc + 41) * Ψ = 99 * (cAb * Ψ) + KRc * Ψ + 41 * Ψ := by ring
-  omega
-
-/-- The FILTER pipeline's exponent in `Ψ_T`. -/
-theorem expo_filt (fe L Ψ KFc Df : ℕ) (hL : 1 ≤ L) (h4 : L * L * (L * L) ≤ Ψ) :
-    Df * (fe * L + 2) * (KFc * (L * L) + 2) ≤ Df * (fe + 2) * (KFc + 2) * Ψ := by
-  have hLL : 1 ≤ L * L := Nat.one_le_iff_ne_zero.mpr (by positivity)
-  have hLY : L ≤ L * L := Nat.le_mul_of_pos_left L hL
-  have a1 : fe * L + 2 ≤ (fe + 2) * L := by nlinarith
-  have a2 : KFc * (L * L) + 2 ≤ (KFc + 2) * (L * L) := by nlinarith
-  have a3 : L * (L * L) ≤ L * L * (L * L) := by nlinarith
-  calc Df * (fe * L + 2) * (KFc * (L * L) + 2) ≤ Df * ((fe + 2) * L) * ((KFc + 2) * (L * L)) :=
-        Nat.mul_le_mul (Nat.mul_le_mul_left _ a1) a2
-    _ = Df * (fe + 2) * (KFc + 2) * (L * (L * L)) := by ring
-    _ ≤ Df * (fe + 2) * (KFc + 2) * Ψ := Nat.mul_le_mul_left _ (a3.trans h4)
-
 /-- **The measure's exponent** (from `l`, `f_e`, the decode front's `D₀`, `D_f`, `D_t`). -/
 noncomputable def Kq (l : Literals) (fe D0 Df Dt : ℕ) : ℕ :=
   4 * D0 + (99 * RadAbsorb.cAb l + KR l + 41) + KF l fe + Df * (fe + 2) * (KF l fe + 2) + (Dt + 26) + 1
-
-theorem two_pow_le_of {a b : ℕ} (h : a ≤ b) : 2 ^ a ≤ 2 ^ b := Nat.pow_le_pow_right (by norm_num) h
 
 section Call
 variable (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) (n : ℕ) (a' : ℕ) (ha' : a' ≤ 4)
@@ -167,3 +149,5 @@ theorem measC_le {x : ℕ} (D : ThrDec.ThrDecFront x l F) (D0 : ℕ) (hD0 : ThrU
 end Call
 
 end NearCubicWires.WireExponent3_5.UnionMachine.ThrMeas
+
+end

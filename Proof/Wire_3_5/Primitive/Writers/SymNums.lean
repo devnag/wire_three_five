@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.Primitive.Writers.SymNeed
+import Proof.Wire_3_5.Primitive.Writers.SymNeedBase
 
 /-! # SYM leaf, part 7: the SYM dimension stage's cost, polynomially
 

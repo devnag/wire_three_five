@@ -1,5 +1,5 @@
+import Proof.Rows.NativeFlags
 import Proof.Rows.ExpandedThresholdStream
-import Proof.Rows.NativeFlagsLoop
 
 /-! The actual original-native traversal emits exactly the flags consumed by
 the expanded canonical equation, including child targets and final offset. -/
@@ -17,6 +17,12 @@ noncomputable section
 
 def circuits (r : FourfoldRequest NormalizedThresholdThresholdCircuit) :=
  r.circuits.map (fun c=>(thrGates c,thrTop c))
+
+theorem native_stream (r : FourfoldRequest NormalizedThresholdThresholdCircuit) :
+ PCJ45bee56da9f34d5a_NativeFlagsLoop.stream (circuits r)=
+ r.circuits.flatMap (fun c=>frame (PCJd4d1d9d7d1fa4313_Production.thrWord c)) :=by
+ simp only [PCJ45bee56da9f34d5a_NativeFlagsLoop.stream,circuits,List.flatMap_map,
+  PCJ45bee56da9f34d5a_NativeFlagsLoop.word,thrWord_eq]
 
 end
 end PCJ45bee56da9f34d5a_NativeFlagsMeaning

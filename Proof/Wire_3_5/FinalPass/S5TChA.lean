@@ -1,4 +1,17 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.S5TLay2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.S5TP0
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Primitive.SeedFix.TS4N
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.FinalPass.S5TChABase
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-! # S5-THR, part 23: the THR numbers on W6's block (P3:2543-2558, 2596-2599, 2150-2157)
 
@@ -30,23 +43,6 @@ open NearCubicWires.WireExponent3_5.PrimThrW.Nums3 (nums3InPorts nums3OutPorts)
 open NearCubicWires.SupplierPipeline
 
 section Upd
-variable {ns nr t : ℕ}
-
-theorem updS_st_in (tmap : Fin t → Fin (ns + 1)) (hinj : Function.Injective tmap) (σ : WState ns nr)
-    (hout : Fin t → ℕ) (tout : Fin t → List Bool) (j : Fin t) : (updS tmap σ hout tout).st (tmap j) = tout j :=
-  install_slot _ hinj _ _ j
-
-theorem updS_st_out (tmap : Fin t → Fin (ns + 1)) (σ : WState ns nr) (hout : Fin t → ℕ) (tout : Fin t → List Bool)
-    (i : Fin (ns + 1)) (hi : ∀ j, tmap j ≠ i) : (updS tmap σ hout tout).st i = σ.st i :=
-  install_other _ _ _ _ hi
-
-theorem updS_sh0 (tmap : Fin t → Fin (ns + 1)) (hinj : Function.Injective tmap) (σ : WState ns nr)
-    (tout : Fin t → List Bool) (hsh : ∀ i, σ.sh i = 0) : ∀ i, (updS tmap σ (fun _ => 0) tout).sh i = 0 := by
-  intro i
-  show dockH tmap σ.sh (fun _ => 0) i = 0
-  by_cases hi : ∃ j, tmap j = i
-  · obtain ⟨j, rfl⟩ := hi; rw [dockH_slot _ hinj]
-  · rw [dockH_other _ _ _ _ (fun j h => hi ⟨j, h⟩), hsh]
 
 end Upd
 
@@ -177,3 +173,5 @@ theorem chainA_spec (l : Literals) (cr : ℕ) (σ : WState (nsL D (PrimT.W6.nums
 end ChainA
 
 end NearCubicWires.WireExponent3_5.FinalPass.S5T
+
+end

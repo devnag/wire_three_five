@@ -1,8 +1,9 @@
+import Proof.CaseAnalysis.RecoverySharedInput
+import Proof.CaseAnalysis.CommonPrefixSelected
 import Proof.CaseAnalysis.CaseOneHeaderLive
 import Proof.CaseAnalysis.CaseTwoDirectInput
-import Proof.CaseAnalysis.CommonPrefixSelected
 import Proof.CaseAnalysis.CommonQueryBudget
-import Proof.CaseAnalysis.RecoverySharedInput
+import Proof.Hierarchy.HierarchyFixedWord
 
 /-! Static layout of the one common oracle program. Its five worker banks
 are fresh except for the listed retained inputs and the ONE query/output.

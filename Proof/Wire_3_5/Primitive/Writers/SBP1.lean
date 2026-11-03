@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.Primitive.Writers.SBTypes
+import Proof.Wire_3_5.Primitive.Writers.SBTypesBase
 import Proof.Wire_3_5.Primitive.Writers.SBHi
 
 /-! # SB, part (1): the register program P1

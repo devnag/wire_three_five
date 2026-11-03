@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.Writers.CellLoop
+import Proof.Circuits.DecompositionSourceBounds
 
 /-! # PA (d), the writer shell, part 1: the shell's layout and its bookkeeping
 
@@ -23,9 +24,47 @@ open NearCubicWires.RepairOrdinary.RecoveryRootRound NearCubicWires.BlockPlatfor
 open NearCubicWires.WireExponent3_5.FinalPass.Tm NearCubicWires.WireExponent3_5.PrimAsm.SymLayout
 open NearCubicWires.WireExponent3_5.PrimAsm.CellLoop
 
+/-- The loop's layout: cell, workspace, log, driver, counter. -/
+abbrev LT (x D : ℕ) : ℕ := TT x + Scrub.wk D + 1 + 1 + 1
+
+/-- The shell's layout: the loop's, then the bound's polynomial run. -/
+abbrev ST (x D D1 : ℕ) : ℕ := LT x D + UnaryCalc.tapes D1
+
 section Tapes
+variable {x D D1 : ℕ}
 
+/-- A cell tape. -/
+def cT (i : Fin (TT x)) : Fin (ST x D D1) :=
+  Fin.castAdd _ (Fin.castAdd 1 (Scrub.inner (Fin.castAdd (Scrub.wk D) i)))
+/-- A workspace tape. -/
+def wT (j : Fin (Scrub.wk D)) : Fin (ST x D D1) := Fin.castAdd _ (Fin.castAdd 1 (Scrub.inner (Fin.natAdd (TT x) j)))
+/-- The scrub's log. -/
+def lgT : Fin (ST x D D1) := Fin.castAdd _ (Fin.castAdd 1 Scrub.logTape)
+/-- The scrub's driver. -/
+def drT : Fin (ST x D D1) := Fin.castAdd _ (Fin.castAdd 1 Scrub.driverTape)
+/-- The loop counter. -/
+def kT : Fin (ST x D D1) := Fin.castAdd _ (Fin.natAdd (TT x + Scrub.wk D + 1 + 1) (0 : Fin 1))
+/-- A fixed stream of the cell. -/
+def cs (k : Fin 161) : Fin (ST x D D1) := cT (sTape (sk x k))
 
+theorem cT_val (i : Fin (TT x)) : (cT (D := D) (D1 := D1) i).val = i.val := rfl
+theorem wT_val (j : Fin (Scrub.wk D)) : (wT (x := x) (D1 := D1) j).val = TT x + j.val := rfl
+theorem lgT_val : (lgT (x := x) (D := D) (D1 := D1)).val = TT x + Scrub.wk D := rfl
+theorem drT_val : (drT (x := x) (D := D) (D1 := D1)).val = TT x + Scrub.wk D + 1 := rfl
+theorem kT_val : (kT (x := x) (D := D) (D1 := D1)).val = TT x + Scrub.wk D + 2 := rfl
+theorem cs_val (k : Fin 161) : (cs (x := x) (D := D) (D1 := D1) k).val = if k.val = 0 then 0 else k.val + 1 := rfl
+
+theorem cs_lt (k : Fin 161) : (cs (x := x) (D := D) (D1 := D1) k).val < TT x := by
+  rw [cs_val]
+  have := k.isLt
+  unfold TT LNS LNR
+  split <;> omega
+
+theorem cT_inj : Function.Injective (cT (x := x) (D := D) (D1 := D1)) := by
+  intro a b h
+  exact Fin.ext (by simpa [cT_val] using congrArg Fin.val h)
+
+theorem ne_of_val {u : ℕ} {a b : Fin u} (h : a.val ≠ b.val) : a ≠ b := fun e => h (congrArg Fin.val e)
 
 end Tapes
 

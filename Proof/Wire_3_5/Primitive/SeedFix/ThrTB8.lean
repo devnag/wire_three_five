@@ -1,6 +1,43 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.ThrTB7
+import Proof.Wire_3_5.FinalPass.DigsIface
+import Proof.Wire_3_5.FinalPass.SeamsProg2Base
+import Proof.Wire_3_5.Primitive.Writers.BudgetIface2
+import Proof.Wire_3_5.Primitive.Writers.PlanBase
+import Proof.Wire_3_5.Primitive.Writers.ThrDataIface3
+import Proof.Wire_3_5.Primitive.Writers.WritersJoinBase
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4Base
+import Proof.Wire_3_5.Primitive.ThresholdWriter.RadSetup2
+import Proof.Wire_3_5.Primitive.ThresholdWriter.ShellIface
+import Proof.Wire_3_5.UnionMachine.FiltSetupIface5
+import Proof.Wire_3_5.UnionMachine.RadSetupB3
+import Proof.Wire_3_5.UnionMachine.RadSpecBase
+import Proof.Wire_3_5.UnionMachine.ThrDecIfaceBase
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SeamsUni
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.PreLink
+import Proof.Wire_3_5.Primitive.Writers.ThrDimIface
+import Proof.Wire_3_5.Primitive.Writers.WriterIfaceJ
+import Proof.Wire_3_5.Primitive.Writers.WritersJoin
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4
+import Proof.Wire_3_5.Primitive.SeedFix.ThrTB3
+import Proof.Wire_3_5.Primitive.SeedFix.ThrTB4
+import Proof.Wire_3_5.Primitive.SeedFix.ThrTB6
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.ThrDimC
+import Proof.Wire_3_5.UnionMachine.ThrDimG
+import Proof.Wire_3_5.UnionMachine.ThrDimN
+import Proof.Wire_3_5.UnionMachine.ThrUnitIface5
+import Proof.Wire_3_5.Primitive.SeedFix.ThrTB6Base
 
-/-! # THRTAIL T-B, part 8: the THR writer at the class link's order of choice, and THRTAIL's `tail`
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # T3 THRTAIL T-B, part 8: the THR writer at the class link's order of choice, and THRTAIL's `tail`
 
 **`thrW`**: the THR writer `thrM` as `ThrWriterAtJ l F (EWT l f_e D₀) (cWT l F f_e D₀ C₀)`: the run `thr_run`
 lifted by the class link `class_linkT` (the dimension's `m_le`, `C_D ≥ 1`) into `c_W·classBound E_W .preprocessing
@@ -104,3 +141,5 @@ noncomputable def thrLeafU4 (l : Literals) : ThrUnit.ThrLeafOfU4 l := fun SU UU 
 noncomputable def tail : ∀ l : Literals, PreLink.PreLinkT l → ThrUnit.ThrLeafOfU4 l := fun l _ => thrLeafU4 l
 
 end NearCubicWires.WireExponent3_5.PrimT.ThrTB
+
+end

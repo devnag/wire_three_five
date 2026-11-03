@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryPrefixUpdate
+import Proof.MachineModel.OrdinaryWilliamsSourceCropLayout
 
 /-! One fixed ordinary-oracle prefix iteration: the reusable query followed
 by the three physically executed field updates. -/

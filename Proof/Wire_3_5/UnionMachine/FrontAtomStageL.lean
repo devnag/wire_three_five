@@ -1,6 +1,9 @@
 import Proof.Wire_3_5.UnionMachine.FrontAtomLoop
 import Proof.Wire_3_5.UnionMachine.FrontSize
 import Proof.Wire_3_5.UnionMachine.FrontTemplate
+import Proof.Wire_3_5.UnionMachine.FrontFill
+import Proof.MachineModel.ClockUnarySum
+import Proof.CaseAnalysis.RowsEstimatorDriverPower
 
 /-! # C6 front, U1b: the atom stage at the description envelope (P3:3670, 3083-3094)
 
@@ -87,6 +90,7 @@ noncomputable def setupM :=
   (Composition.machine (FrontFill.fillP (xs 3) (xs 8) tgtS).compile
   (Composition.machine (FrontKit.cellP (lp (sm 1))).compile
   (Composition.machine (FrontKit.cellP (lp (sm 5))).compile (FrontKit.cellP (xs 11)).compile))))))))
+
 
 /-! ## The named tapes' positions -/
 
@@ -688,7 +692,7 @@ theorem tm_off_jm : ∀ j : Fin 4, ∀ k : Fin 5, tmap k ≠ jmap j := by
 
 /-- **The atom stage**: from the rest `frame r` on the loop's rest tape and `1^{|w|}`, `1^q`, `1^E`, `1^{nf}`, the
 stage's verdict register (the loop's `BAD`, tape `lp (sm 7)`) holds `verdictOf …`: `0` exactly when every one of the
-`E` entries' atoms passes the Theorem 2.5 repository's decoder at arity `q`. -/
+`E` entries' atoms passes v8's decoder at arity `q`. -/
 theorem atoms_stage (m : Mode) (hE : 1 ≤ E) (pos : ℕ → ℕ) (pay : ℕ → List Bool) (hpos0 : pos 0 = 0)
     (hent : ∀ j, j < E → ∃ b x rest, r.drop (pos j) =
       FrontEntriesRef.gridWord b x ++ (List.replicate (pay j).length true ++ false :: pay j) ++ rest)
@@ -862,7 +866,8 @@ theorem atoms_stage (m : Mode) (hE : 1 ≤ E) (pos : ℕ → ℕ) (pay : ℕ →
   · rw [install_slot _ lp_inj, hv7]
   · rw [dockH_slot _ lp_inj, hh7]
 
-/-- The capacity covers every atom of a shorter code: `20·(nbl + 4)`, the Theorem 2.5 repository's capacity, and the frame. -/
+
+/-- The capacity covers every atom of a shorter code: `20·(nbl + 4)`, v8's capacity, and the frame. -/
 theorem capP_covers (nw : ℕ) (p : List Bool) (hp : p.length + 1 ≤ nw) :
     20 * (natBitLength (RepairOrdinary.RadixSemantics.value p) + 4) ≤ capP nw ∧
     CloseoutRowsCircuitCapacity.capacity p.length ≤ capP nw ∧ 2 * p.length + 1 ≤ capP nw := by

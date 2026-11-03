@@ -1,4 +1,6 @@
-import Proof.Hierarchy.CompetitorResidueTableContext
+import Proof.MachineModel.OrdinaryMatrixRawBlock
+import Proof.Hierarchy.CompetitorMatrixPlaneTable
+import Proof.Hierarchy.CompetitorResidueTableDock
 
 /-! One actual raw odd-residual row: keep the first half-row and skip the
 second using the same physically supplied byte-count driver. The driver

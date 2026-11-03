@@ -1,5 +1,9 @@
+import Proof.MachineModel.BitInputPrefixProgram
 import Proof.MachineModel.CanonicalFourfoldRangeRequestProgram
+import Proof.MachineModel.CanonicalFourfoldRowProgram
 import Proof.MachineModel.CanonicalSupplierEnvelopeBottomProgram
+import Proof.MachineModel.PreserveRightProgram
+import Proof.Foundations.VerifiedLinker
 
 /-!
 # Canonical fourfold row evaluation

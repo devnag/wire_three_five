@@ -1,11 +1,12 @@
 import Proof.CaseAnalysis.RowsDegreeSign
-import Proof.Hierarchy.CompetitorCountProducer
+import Proof.Hierarchy.CompetitorDenominator
 
 /-! The actual binLift coefficient is computed once from unary j and the
 common unary width p. Existing power, normalization and signed-field writers
 produce its complete cached frame in linear short-width time. -/
 namespace NearCubicWires.RepairOrdinary.CloseoutRowsDegreeCoefficient
 open LocalBitMultitape RecoveryExecution RecoveryRootRound SignedSortKey
+open CloseoutRowsDegreeSign (positive)
 set_option autoImplicit false
 set_option maxHeartbeats 250000
 set_option maxRecDepth 120000
@@ -22,5 +23,7 @@ noncomputable def emit := RecoveryFocus.machine emitSlots RowCoefficientEmit.mac
 noncomputable def machine := Composition.machine sign
   (Composition.machine power (Composition.machine normalize emit))
 
+def input (j p : ℕ) : Fin 14 → List Bool :=
+  ![List.replicate j true,List.replicate p true,[],[],[],[],[],[],[],[],[],[],[],[]]
 
 end NearCubicWires.RepairOrdinary.CloseoutRowsDegreeCoefficient

@@ -1,4 +1,4 @@
-import Proof.CaseAnalysis.RowsRawAtomSeek
+import Proof.CaseAnalysis.RowsRawAtomRead
 
 /-! The cache reader's polynomial list is exactly the output of the actual
 source-count producer. Its indices are absolute positions in the SAME GS;

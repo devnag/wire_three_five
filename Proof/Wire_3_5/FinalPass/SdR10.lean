@@ -1,4 +1,30 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SdR9
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.FpInLen
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdI1
+import Proof.Wire_3_5.FinalPass.SdI3
+import Proof.Wire_3_5.FinalPass.SdI5
+import Proof.Wire_3_5.FinalPass.SdI8
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.FinalPass.SdR3
+import Proof.Wire_3_5.FinalPass.SdR5
+import Proof.Wire_3_5.FinalPass.SdR8
+import Proof.Wire_3_5.FinalPass.Seams
+import Proof.Wire_3_5.FinalPass.SeamsProg
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.FinalPass.SeamsPt
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.S5SeamB
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SdR10Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S4 v2, part R10: the runs at SYM and THR calls at the v2 constants
 
@@ -25,14 +51,6 @@ open NearCubicWires.WireExponent3_5.PrimT.C4Geo (dRow dR)
 open NearCubicWires.WireExponent3_5.PrimT.WalkBank (WalkBankProducer)
 open NearCubicWires.WireExponent3_5.PrimAsm.FiltSetup (FiltSetupSpec5)
 open NearCubicWires.WireExponent3_5.FinalPass.Seams (SymPtEval2 SdEntry2 symCallOf thrCallOf thrWords thrNums)
-
-theorem capNeed_ge (X Fn : ℕ) : X + 100 ≤ capNeed X Fn ∧ 10000 * (X * X * X) + 100 ≤ capNeed X Fn := by
-  unfold capNeed
-  rcases Nat.eq_zero_or_pos X with h | h
-  · subst h; omega
-  · have h1 : X ≤ X * X := Nat.le_mul_of_pos_left X h
-    have h2 : X * X ≤ X * X * X := Nat.le_mul_of_pos_right _ h
-    omega
 
 section Family
 variable (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1)
@@ -254,3 +272,4 @@ end Family
 
 end NearCubicWires.WireExponent3_5.FinalPass.Sd.R
 
+end

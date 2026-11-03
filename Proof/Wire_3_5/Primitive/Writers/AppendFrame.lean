@@ -1,5 +1,6 @@
-import Proof.MachineModel.FrameCopy
 import Proof.Wire_3_5.Primitive.Writers.Ruler
+import Proof.MachineModel.FrameCopy
+import Proof.MachineModel.OrdinaryRewindWorkspace
 
 /-! # The two framing stages of PA.compose's glue (leaf-P kit)
 

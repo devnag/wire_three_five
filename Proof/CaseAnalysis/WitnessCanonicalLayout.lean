@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.WitnessReencodeReady
+import Proof.Amplification.RecoveryWitnessCopy
+import Proof.Hierarchy.CompetitorRationalProducts
 
 /-! Cold canonical-list checking retains the original word before traversal.
 Every auxiliary input is blank; copied words and flags are produced physically. -/

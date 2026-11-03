@@ -1,4 +1,6 @@
+import Proof.MachineModel.CanonicalNativeCallProgram
 import Proof.MachineModel.CanonicalTouchingSweepProgram
+import Proof.MachineModel.CanonicalTwoPowProgram
 
 /-!
 # The greedy touching sweep, one round at a time

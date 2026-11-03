@@ -1,5 +1,5 @@
-import Proof.Wire_3_5.FinalPass.S5TScr
-import Proof.Wire_3_5.FinalPass.SeamsBank2
+import Proof.Wire_3_5.FinalPass.S5TScrBase
+import Proof.Wire_3_5.FinalPass.SeamsBank2Base
 
 /-! # S5-THR, part 32: the THR half focused onto the front's bank (P3:3170-3181)
 

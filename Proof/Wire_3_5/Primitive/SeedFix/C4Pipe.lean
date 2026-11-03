@@ -1,5 +1,6 @@
-import Proof.Wire_3_5.Compiler.MachineTopWord
 import Proof.Wire_3_5.Primitive.SeedFix.C4Frame
+import Proof.MachineModel.PlanDirectCount
+import Proof.Wire_3_5.Compiler.MachineTopWord
 
 /-! # SEEDFIX C4.L, the printer dock part 2: one child's recovered sum (P3:1728-1737, 1886-1906, 1965-1982, 3035-3037)
 

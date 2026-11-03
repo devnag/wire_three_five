@@ -1,4 +1,8 @@
+import Proof.MachineModel.Basic
+import Proof.Circuits.DecompositionSourceEntry
 import Proof.CaseAnalysis.RowsCircuitBottomMeaning
+import Proof.CaseAnalysis.RawRowsChildren
+import Proof.Supplier.RowCommonReusable
 
 /-! P25: the frozen semantic input of the ordered decomposition-source batch.
 Everything is stated with the existing definitions: the same selected

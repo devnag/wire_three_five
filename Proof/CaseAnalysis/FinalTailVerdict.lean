@@ -284,7 +284,103 @@ theorem and3_step_frame {u : ℕ} (f1 f2 f3 res : Fin u)
 
 /-! ### The T1 → T2 interface -/
 
+def FeedInterface : Prop :=
+  ∀ (ph : CloseoutRowsOriginalSchedule.Phase) (lower : Bool) (q : ℚ) (W : ℕ)
+    (est : CompetitorValidity.Estimate) (_hv : est.Valid W)
+    (_hq : 0 ≤ q) (_hqnum : numerator q < 2^(w W)) (_hqden : q.den < 2^(w W))
+    (H : Fin bank → ℕ) (A : Fin bank → List Bool) (_hp : Parked ph W est H A),
+    ∃ (states : ℕ) (m : Machine bank states) (budget : ℕ) (H' : Fin bank → ℕ)
+      (A' : Fin bank → List Bool),
+      Step m budget H A H' A' ∧
+      (readTapeBit (A' (cmpSlots 65)) 0 = true ↔
+        passes lower est.positive est.negative est.denominator q) ∧
+      (∀ i, (∀ j, cmpSlots j ≠ i) → (∀ j, normSlots j ≠ i) → (∀ j, normSlotsB j ≠ i) →
+        (∀ j, wordSlots j ≠ i) → i ≠ scratch ph → A' i = A i) ∧
+      (∀ i, (∀ j, cmpSlots j ≠ i) → (∀ j, normSlots j ≠ i) → (∀ j, normSlotsB j ≠ i) →
+        (∀ j, wordSlots j ≠ i) → i ≠ scratch ph → H' i = H i) ∧
+      H' (cmpSlots 65) = 0 ∧
+      A' (scratch ph) = A (scratch ph)
+
 /-! ### One feed, docked into the verdict bank -/
+
+/-- **One phase's test, run on copy `k` of the verdict bank.** -/
+theorem feed_dock (hfeed : FeedInterface) (k : Fin 3)
+    (ph : CloseoutRowsOriginalSchedule.Phase) (lower : Bool) (q : ℚ) (W : ℕ)
+    (est : CompetitorValidity.Estimate) (hv : est.Valid W)
+    (hq : 0 ≤ q) (hqnum : numerator q < 2^(w W)) (hqden : q.den < 2^(w W))
+    (H : Fin tailBank → ℕ) (A : Fin tailBank → List Bool)
+    (hrecA : A (scratchT ph) =
+      CloseoutRowsEstimatorCoefficients.Stream.recordWord (w W) est 1 1)
+    (hrecH : H (scratchT ph) = 0)
+    (hcA : ∀ j, A (feedSlots k (cmpSlots j)) = [])
+    (hcH : ∀ j, H (feedSlots k (cmpSlots j)) = 0)
+    (hnA : ∀ j, A (feedSlots k (normSlots j)) = [])
+    (hnH : ∀ j, H (feedSlots k (normSlots j)) = 0)
+    (hbA : ∀ j, A (feedSlots k (normSlotsB j)) = [])
+    (hbH : ∀ j, H (feedSlots k (normSlotsB j)) = 0)
+    (hwA : ∀ j, A (feedSlots k (wordSlots j)) = [])
+    (hwH : ∀ j, H (feedSlots k (wordSlots j)) = 0) :
+    ∃ (states : ℕ) (m : Machine tailBank states) (budget : ℕ) (H' : Fin tailBank → ℕ)
+      (A' : Fin tailBank → List Bool),
+      Step m budget H A H' A' ∧
+      (readTapeBit (A' (feedSlots k (cmpSlots 65))) 0 = true ↔
+        passes lower est.positive est.negative est.denominator q) ∧
+      H' (feedSlots k (cmpSlots 65)) = 0 ∧
+      (∀ i, i.val < 221 → A' i = A i) ∧
+      (∀ i, i.val < 221 → i ≠ scratchT ph → H' i = H i) ∧
+      (∀ i, (∀ j, feedSlots k j ≠ i) → A' i = A i) ∧
+      (∀ i, (∀ j, feedSlots k j ≠ i) → H' i = H i) := by
+  have hp : Parked ph W est (fun j => H (feedSlots k j)) (fun j => A (feedSlots k j)) := by
+    refine ⟨?_, ?_, hcH, hcA, hnH, hnA, hbH, hbA, hwH, hwA⟩
+    · show A (feedSlots k (scratch ph)) = _
+      rw [feedSlots_scratch]
+      exact hrecA
+    · show H (feedSlots k (scratch ph)) = 0
+      rw [feedSlots_scratch]
+      exact hrecH
+  obtain ⟨states, m, budget, Hf, Af, hstep, hiff, htapes, hheads, hcmp65, hscr⟩ :=
+    hfeed ph lower q W est hv hq hqnum hqden _ _ hp
+  have hinj := feedSlots_injective k
+  have hdock := hstep.dock (feedSlots k) hinj H A (fun _ => rfl) (fun _ => rfl)
+  have hchaseA : ∀ j : Fin bank, j.val < 221 → Af j = A (feedSlots k j) := by
+    intro j hj
+    by_cases hs : j = scratch ph
+    · rw [hs]
+      exact hscr
+    · exact htapes j (cmp_ne_pre j hj) (normA_ne_pre j hj) (normB_ne_pre j hj)
+        (word_ne_pre j hj) hs
+  have hchaseH : ∀ j : Fin bank, j.val < 221 → j ≠ scratch ph → Hf j = H (feedSlots k j) := by
+    intro j hj hs
+    exact hheads j (cmp_ne_pre j hj) (normA_ne_pre j hj) (normB_ne_pre j hj)
+      (word_ne_pre j hj) hs
+  refine ⟨states, RecoveryFocus.machine (feedSlots k) m, budget,
+    dockH (feedSlots k) H Hf, install (feedSlots k) A Af, hdock, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · rw [install_slot (feedSlots k) hinj A Af (cmpSlots 65)]
+    exact hiff
+  · rw [dockH_slot (feedSlots k) hinj H Hf (cmpSlots 65)]
+    exact hcmp65
+  · intro i hi
+    have he : feedSlots k (preIdx i hi) = i := feedSlots_pre k i hi
+    calc install (feedSlots k) A Af i
+        = install (feedSlots k) A Af (feedSlots k (preIdx i hi)) := by rw [he]
+      _ = Af (preIdx i hi) := install_slot (feedSlots k) hinj A Af (preIdx i hi)
+      _ = A (feedSlots k (preIdx i hi)) := hchaseA (preIdx i hi) hi
+      _ = A i := by rw [he]
+  · intro i hi hnei
+    have he : feedSlots k (preIdx i hi) = i := feedSlots_pre k i hi
+    have hne : preIdx i hi ≠ scratch ph := by
+      intro hc
+      apply hnei
+      rw [← he, hc, feedSlots_scratch]
+    calc dockH (feedSlots k) H Hf i
+        = dockH (feedSlots k) H Hf (feedSlots k (preIdx i hi)) := by rw [he]
+      _ = Hf (preIdx i hi) := dockH_slot (feedSlots k) hinj H Hf (preIdx i hi)
+      _ = H (feedSlots k (preIdx i hi)) := hchaseH (preIdx i hi) hi hne
+      _ = H i := by rw [he]
+  · intro i hi
+    exact install_other (feedSlots k) A Af i hi
+  · intro i hi
+    exact dockH_other (feedSlots k) H Hf i hi
 
 /-! ### The parked verdict bank -/
 

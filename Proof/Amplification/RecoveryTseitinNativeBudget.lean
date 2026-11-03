@@ -1,5 +1,6 @@
 import Proof.Amplification.RecoveryTseitinNativeMasked
 import Proof.PCP.PCPPNativeNodeReadBounds
+import Proof.Amplification.RecoveryTseitinReferenceBound
 
 /-! One paid cubic capacity works for every original well-formed node in
 the retained verifier graph; no per-node canonical reference is an input. -/

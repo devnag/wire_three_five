@@ -1,4 +1,6 @@
 import Proof.Packets.PacketsXWalkTimeLoop
+import Proof.Packets.PacketsXWalkSampleWord
+import Proof.Supplier.SupplierWalkBridge
 
 /-! # The walk-bank producer: its interface (shared piece "Walk-bank producer")
 

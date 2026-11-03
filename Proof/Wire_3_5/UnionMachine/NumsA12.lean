@@ -1,4 +1,24 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.NumsA11
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.FpInLen
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdR12
+import Proof.Wire_3_5.FinalPass.SdR2
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.NumsA4
+import Proof.Wire_3_5.UnionMachine.NumsA6
+import Proof.Wire_3_5.UnionMachine.NumsA9
+import Proof.Wire_3_5.UnionMachine.NumsPh2
+import Proof.Wire_3_5.UnionMachine.NumsPh3
+import Proof.Wire_3_5.UnionMachine.NumsA12Base
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-! # NW phase (a), part 12: the run at a SYM request and `phA3 x hx l : NumsPh3.PhA x l`
 
@@ -19,22 +39,6 @@ open NearCubicWires.WireExponent3_5.PrimAsm.SymLayout NearCubicWires.WireExponen
 open NearCubicWires.WireExponent3_5.FinalPass.PlanFP NearCubicWires.WireExponent3_5.Split
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan
 open NearCubicWires.WireExponent3_5.UnionMachine.NumsC (g g_ne npow_le)
-
-theorem sumle (U K0 K1 KTZ D0 n W e T : ℕ) (hU : 1 ≤ U) (hn : n ≤ U) (hW : W ≤ 27 * U) (he : e ≤ U)
-    (hT : T ≤ KTZ * U) : 3 * W + n + e + T + 2 ≤ (2 * K0 + K1 + KTZ + 3 * D0 + 1000) * U := by
-  have e1 : (2 * K0 + K1 + KTZ + 3 * D0 + 1000) * U = 2 * (K0 * U) + K1 * U + KTZ * U + 3 * (D0 * U) + 1000 * U := by
-    ring
-  rw [e1]; omega
-
-theorem mfle (U K0 K1 KTZ D0 D3 cap₀ V Bh n e T F : ℕ) (hU : 1 ≤ U) (h0 : cap₀ ≤ K0 * U) (hV : V ≤ K0 * U)
-    (hB : Bh ≤ K1 * U) (hT : T ≤ KTZ * U) (hn : n ≤ U) (he : e ≤ U) (hF : F ≤ U) (hD3 : D3 ≤ 3 * D0) :
-    cap₀ + V + Bh + n + e + T + F + K1 + D3 + 2 ≤ 3 * ((2 * K0 + K1 + KTZ + 3 * D0 + 1000) * U) := by
-  have e1 : (2 * K0 + K1 + KTZ + 3 * D0 + 1000) * U = 2 * (K0 * U) + K1 * U + KTZ * U + 3 * (D0 * U) + 1000 * U := by
-    ring
-  rw [e1]
-  have a1 : K1 ≤ K1 * U := Nat.le_mul_of_pos_right _ hU
-  have a2 : D0 ≤ D0 * U := Nat.le_mul_of_pos_right _ hU
-  omega
 
 section Gate
 variable (x : ℕ) (hx : DataDock.DT + 3 ≤ x) (l : Literals)
@@ -269,3 +273,5 @@ noncomputable def phA3 : NumsPh3.PhA x l :=
 end Gate
 
 end NearCubicWires.WireExponent3_5.UnionMachine.NumsA
+
+end

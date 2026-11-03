@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.UnionMachine.FrontCostLedger
+import Proof.Wire_3_5.UnionMachine.FrontSemTopSBase
 
 /-! # C6 front, the time (0): the fixed-degree bookkeeping (`c6np`)
 

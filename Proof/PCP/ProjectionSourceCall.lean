@@ -1,4 +1,5 @@
 import Proof.PCP.ProjectionSourceFrame
+import Proof.Amplification.RecoveryTapeSupport
 
 /-! The one selected source algorithm is called on the two physically
 produced fields. Its reset and output support are paid by its actual receipt. -/

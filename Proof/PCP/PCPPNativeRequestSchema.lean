@@ -1,4 +1,4 @@
-import Proof.PCP.PCPPRequestSourceLayout
+import Proof.PCP.PCPPRequestSource
 
 /-! Literal native bytes for the source's actual domain lift and isolated
 size padding. The completed source caller consumes exactly this descriptor. -/

@@ -1,5 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.ThrDecD
-import Proof.Wire_3_5.UnionMachine.ThrDecIface
+import Proof.Wire_3_5.UnionMachine.ThrDecIfaceBase
 
 /-! # THR decode front, part E: the unit's branch and the FILTER finisher
 

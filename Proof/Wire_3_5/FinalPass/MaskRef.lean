@@ -1,5 +1,6 @@
 import Proof.Wire_3_5.FinalPass.CornerRef
 import Proof.Wire_3_5.FinalPass.Mask
+import Proof.Wire_3_5.Stars.StarPartition
 
 /-! # Final pass: the mask's input from the corners (P3:1224-1235, 2019, 3074-3080, 3419)
 

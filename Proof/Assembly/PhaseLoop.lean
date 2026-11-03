@@ -1,6 +1,10 @@
-import Proof.Assembly.SelectedPhases
 import Proof.Assembly.SiteLoop
-import Proof.CaseAnalysis.FinalSumFamilyTransport
+import Proof.Assembly.CappedCoordinate
+import Proof.Assembly.SelectedPhases
+import Proof.CaseAnalysis.FinalGuardedStageConsumer
+import Proof.CaseAnalysis.FinalRetainedPhaseFold
+import Proof.CaseAnalysis.RowsOriginalClauseLoop
+
 set_option autoImplicit false
 set_option maxHeartbeats 500000
 set_option maxRecDepth 120000

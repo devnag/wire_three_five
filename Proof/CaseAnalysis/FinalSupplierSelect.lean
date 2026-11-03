@@ -1,5 +1,8 @@
 import Proof.CaseAnalysis.FinalPrinterBridge
+import Proof.Hierarchy.CompetitorCountTableRecordRow
+import Proof.Supplier.RowOffsetFamilies
 import Proof.CaseAnalysis.RowsDegreeLoop
+import Proof.MachineModel.Runs
 import Proof.CaseAnalysis.RowsEstimatorRecord
 
 set_option autoImplicit false

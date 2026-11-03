@@ -1,5 +1,5 @@
 import Proof.Wire_3_5.Primitive.Writers.SymCosts
-import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.CallIndexRBase
 
 /-! # SYM leaf, part 5: the length-only quantities of a SYM call, as `2^{aL+b}`
 

@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.Primitive.SeedFix.C4GateSymB
+import Proof.Wire_3_5.Primitive.SeedFix.C4GateSymBBase
 import Proof.Wire_3_5.Primitive.Writers.ThrDataIface2
 
 /-! # G3, the THR gate-frame writer, part 1: the stages and the run (P3:1655-1664, 3119-3120)

@@ -1,4 +1,6 @@
+import Proof.CaseAnalysis.RecoveryQueryRewind
 import Proof.CaseAnalysis.RecoveryGrammarScalarAdd
+import Proof.Amplification.RecoveryTseitinRawIncrement
 
 /-! Paid preparation of the four original cold-serializer inputs. The
 original native graph is returned using the retained coarse driver; the

@@ -1,4 +1,18 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.C3WClass
+import W3.Proof.Foundations.SourceRegistry
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Transfer.LiteralSources
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.GeoIface2
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.C3WBudgetABase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # C3 request writer, part 22: the budget at a call
 
@@ -25,33 +39,10 @@ open NearCubicWires.RepairRepresentation (natWord)
 section Consts
 open NearCubicWires.WireExponent3_5.Cost
 
-/-- The geometry writers' envelope. -/
-noncomputable def EGs : Envelope := EGp PrimT.GeoPack.geoD
-/-- The geometry writers' coefficient. -/
-noncomputable def cGs (cr : ℕ) : ℕ := PrimT.GeoPack.geoC cr * 2 ^ PrimT.GeoPack.geoD
-/-- The gate-field writers' coefficients. -/
-noncomputable def cGg : ℕ := PrimT.C4GateSym.gsC * 2 ^ PrimT.C4GateSym.gsD
-noncomputable def cGt : ℕ :=
-  PrimT.C4GateSym.gtC PrimAsm.ThrData.thrDataStage2 * 2 ^ PrimT.C4GateSym.gtD PrimAsm.ThrData.thrDataStage2
-/-- The fill polynomial's coefficient. -/
-noncomputable def CvF (cr : ℕ) : ℕ := 31 * cGs cr + 9 * (cGg + cGt) + 80
-/-- The size's coefficient. -/
-noncomputable def KF (cN cr : ℕ) : ℕ :=
-  PrimT.GeoPack.cW + 1 + cN + (cGg + cGt) + cGs cr + PrimT.FlipsPack.flipsC cr + 2 * CvF cr + 1
 /-- **The writer's coefficient.** -/
 noncomputable def cWF (l : Literals) (cN cr : ℕ) : ℕ :=
   cGm (Classical.choice l.eightSources.decomposition) DvC *
     (KF cN cr + 1) ^ dGm (Classical.choice l.eightSources.decomposition) DvC
-
-theorem geoD_le : PrimT.GeoPack.geoD ≤ DvC := le_max_left _ _
-theorem gsD_le : PrimT.C4GateSym.gsD ≤ DvC := le_trans (le_max_left _ _) (le_max_right _ _)
-theorem gtD_le : PrimT.C4GateSym.gtD PrimAsm.ThrData.thrDataStage2 ≤ DvC :=
-  le_trans (le_max_right _ _) (le_max_right _ _)
-theorem DvC_lt : DvC < D0 := by unfold D0; have := le_max_left DvC PrimT.FlipsPack.flipsD; omega
-theorem dW_lt : PrimT.GeoPack.dW < D0 := by unfold D0; have := le_max_left PrimT.GeoPack.dW (max DvC PrimT.FlipsPack.flipsD); omega
-theorem flipsD_lt : PrimT.FlipsPack.flipsD < D0 := by
-  unfold D0; have := le_max_right DvC PrimT.FlipsPack.flipsD
-  have := le_max_right PrimT.GeoPack.dW (max DvC PrimT.FlipsPack.flipsD); omega
 
 end Consts
 
@@ -122,3 +113,5 @@ theorem call_hpoly (req : PrimRequest) (hs : (callInputs l F kclk coef A a ha).S
 end Call
 
 end NearCubicWires.WireExponent3_5.PrimAsm.C3Cost
+
+end

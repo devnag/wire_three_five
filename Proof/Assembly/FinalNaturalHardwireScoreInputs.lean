@@ -1,5 +1,6 @@
 import Proof.Assembly.FinalNaturalHardwireTarget
 import Proof.Assembly.FinalPoolJoin
+import Proof.Hierarchy.HierarchyAllocation
 
 /-! Physical positive and negative frozen-score producers on one native
 signed weight source and one raw assignment mask. The positive pass pays a

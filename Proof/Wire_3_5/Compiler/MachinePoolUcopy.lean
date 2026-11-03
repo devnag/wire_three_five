@@ -16,5 +16,18 @@ open NearCubicWires NearCubicWires.WireExponent3_5.CompilerMachine NearCubicWire
 open NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdinary NearCubicWires.ExtDecompositionBatch
 open NearCubicWires.RepairOrdinary.StablePartition.Workspace (overlay overlay_write overlay_length)
 
+/-- Copy ones: while the source reads `1`, write `1` on the output and move both right; halt on `0`. -/
+def ucopyM : Machine 2 2 where
+  descriptionBits := 0
+  start := 0
+  halted := fun q => q.val == 1
+  rule := fun q sc =>
+    if q.val = 0 then
+      some (if sc 0 then ⟨0, ![none, some true], ![.right, .right]⟩ else ⟨1, fun _ => none, fun _ => .stay⟩)
+    else none
+
+/-- A unary copy with the source head returned to `0` (log on tape 2). -/
+noncomputable def ucopyR := MaskedReset.machine ucopyM ![true, false]
+
 
 end NearCubicWires.WireExponent3_5.CompilerMachine.Pool

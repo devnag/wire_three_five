@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.C4SC
+import Proof.Wire_3_5.Compiler.MachinePoolConv
 
 /-! # C4 per-call setup (item 3), part 4: emitting the stage's words, generically
 

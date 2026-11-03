@@ -1,4 +1,5 @@
 import Proof.Hierarchy.CompetitorSameBucketScalars
+import Proof.MachineModel.OrdinaryMatrixWilliamsProduct
 
 /-! The actual cold raw-p field produces the sign/magnitude zero template.
 All previous streams, dimensions and cursors are preserved. -/

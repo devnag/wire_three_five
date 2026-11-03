@@ -1,4 +1,6 @@
 import Proof.Wire_3_5.Primitive.SeedFix.C4BudC
+import Proof.Wire_3_5.Primitive.Writers.SymCosts
+import Proof.PCP.PCPPNativeResourceCost
 
 /-! # C4.K item (h), part 4: the rest of the SYM stage's steps at rate `3/8` (generic)
 

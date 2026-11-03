@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoverySearchExecution
+import Proof.CaseAnalysis.RecoveryCaseQuery
 
 /-! The executed flag and descriptor have the original recovery meaning.
 Canonical description order is supplied by the existing prefix theorem. -/

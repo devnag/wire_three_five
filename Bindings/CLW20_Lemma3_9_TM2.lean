@@ -1,5 +1,6 @@
-import Bindings.CLW20_Lemma3_9
 import Bindings.TuringBridge.Budget
+import Bindings.CLW20_Lemma3_9
+import Statement
 
 /-!
 # Tier 2 binding: CLW20 Lemma 3.9, the truth-table construction in Mathlib's standard model

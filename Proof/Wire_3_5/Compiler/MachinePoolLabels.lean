@@ -24,11 +24,21 @@ open NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdinary NearCubicWir
 open NearCubicWires.RepairOrdinary.RecoveryRootRound NearCubicWires.BlockPlatform
 open NearCubicWires.RepairOrdinary.StablePartition.Workspace (overlay overlay_write overlay_length)
 
+def lbA : Fin 1 → Fin 3 := ![1]
+def lbCp : Fin 3 → Fin 4 := ![1, 2, 3]
+def lbMv : Fin 1 → Fin 4 := ![0]
+def lbPut : Fin 1 → Fin 4 := ![2]
 
 /-! ## Phase 1: `4·rowIdx` ones (tapes: 0 rowIdx, 1 the result, 2 a log) -/
 
+noncomputable def p1 := Composition.machine ucopyR (Composition.machine ucopyR (Composition.machine ucopyR
+  (Composition.machine ucopyR (RecoveryFocus.machine lbA (putM false)))))
+
 /-! ## Phase 2: the base `4·rowIdx·G` ones (tapes: 0 phase 1's ones, 1 `G`, 2 the base, 3 a log) -/
 
+noncomputable def p2body := Composition.machine (RecoveryFocus.machine lbCp ucopyR) (RecoveryFocus.machine lbMv moveM)
+noncomputable def p2loop := StreamController.machine p2body 0
+noncomputable def p2 := Composition.machine p2loop (RecoveryFocus.machine lbPut (putM false))
 
 /-! ## Phase 3: one occurrence's four labels (tapes: 0 the occurrences, 1 the occurrence register, 2 the output,
 3 the base, 4 `G`, 5 a log, 6 the register's log) -/

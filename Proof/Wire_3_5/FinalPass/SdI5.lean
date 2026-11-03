@@ -1,5 +1,20 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SdI4
-import Proof.Wire_3_5.FinalPass.FpInLen
+import Proof.Wire_3_5.FinalPass.FpInLenBase
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SdI2
+import Proof.Wire_3_5.FinalPass.SdI3
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SdI5Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S4 (the seeds phase), part 54: the tables writer at a star call of the family (P3:2036-2101, 3170-3178)
 
@@ -23,23 +38,6 @@ open NearCubicWires.WireExponent3_5.Split NearCubicWires.BlockPlatform
 open NearCubicWires.WireExponent3_5.PrimT.WalkBank (WalkBankProducer)
 open NearCubicWires.WireExponent3_5.PrimAsm.FiltSetup (FiltSetupSpec5)
 open NearCubicWires.WireExponent3_5.FinalPass.Seams (SymPtEval2)
-
-/-- The writer's dimension is past `n + 2`. -/
-theorem n2_le_m (P : StarParams) : P.n + 2 ≤ 2 ^ PrimAsm.NumsX.mOf P + 1 := by
-  have h1 : P.n + 2 ≤ 2 ^ Nat.clog 2 (P.n + 2) := Nat.le_pow_clog (by norm_num) _
-  have h2 : 2 ^ Nat.clog 2 (P.n + 2) ≤ 2 ^ PrimAsm.NumsX.mOf P :=
-    Nat.pow_le_pow_right (by norm_num) (by unfold PrimAsm.NumsX.mOf; omega)
-  omega
-
-/-- The writer's dimension against the sample count (`2^{kh} ≤ Q`). -/
-theorem two_m_le (P : StarParams) (Q : ℕ) (hQ : 2 ^ SeedFix.callKh P ≤ Q) :
-    2 ^ PrimAsm.NumsX.mOf P ≤ Q * Q * ((P.n + 2) * (P.n + 2)) := by
-  have h2 : 2 ^ Nat.clog 2 (P.n + 2) ≤ (P.n + 2) ^ 2 := PrimAsm.CallIndex.two_pow_clog_le (by omega)
-  have e : 2 ^ PrimAsm.NumsX.mOf P = 2 ^ SeedFix.callKh P * 2 ^ SeedFix.callKh P * 2 ^ Nat.clog 2 (P.n + 2) := by
-    unfold PrimAsm.NumsX.mOf SeedFix.callKh
-    rw [← pow_add, ← pow_add]; ring_nf
-  rw [e, ← sq (P.n + 2)]
-  exact Nat.mul_le_mul (Nat.mul_le_mul hQ hQ) h2
 
 section Family
 variable (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1)
@@ -93,8 +91,20 @@ theorem kh_le_thr (n a' : ℕ) (Cs : Fin a' → NormalizedThresholdThresholdCirc
       ((SeedFix.greedySampler (callInputs l F kclk coef A a ha) (gate0 l F).alg).thrS Cs carriers translation hs).Q :=
   Sampler.N_le_sampleCount _ _ _ _ (by have := PrimAsm.CallIndex.n_ge_two l F hs; omega) (by omega)
 
+variable {W5 : WalkBankProducer} (F5 : FiltSetupSpec5 W5) (E : SymPtEval2) (Csz Dsz Ctz Dtz : ℕ)
+
+/-- The writer's shell constants. -/
+noncomputable def wD : ℕ := TabW.E2 F5 (ZX l F E Dsz Dtz)
+noncomputable def wC : ℕ := TabW.CW F5 (KX l F E Csz Ctz)
+noncomputable def wDL : ℕ := ZX l F E Dsz Dtz
+noncomputable def wCL : ℕ := 2 * KX l F E Csz Ctz
+
+/-- **The tables writer** of the family. -/
+noncomputable def Mw := TabW.tabM W5 F5 F.cr (wD l F F5 E Dsz Dtz) (wC l F F5 E Csz Ctz) (wDL l F E Dsz Dtz)
+  (wCL l F E Csz Ctz)
 
 end Family
 
 end NearCubicWires.WireExponent3_5.FinalPass.Sd
 
+end

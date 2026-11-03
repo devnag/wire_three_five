@@ -1,3 +1,4 @@
+import Proof.MachineModel.BankEmittedAtomLoop
 import Proof.Circuits.FixedScheduleAtomLoop
 
 /-!

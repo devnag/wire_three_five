@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryProjectionFieldLoop
+import Proof.PCP.ProjectionNormalizationConstants
 
 /-! A complete projected address row. The executed field loop emits every
 address bit; the existing literal printer appends its actual false frame

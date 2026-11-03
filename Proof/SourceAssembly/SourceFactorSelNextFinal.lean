@@ -1,4 +1,5 @@
 import Proof.SourceAssembly.SourceStepsNextHole
+import Proof.SourceAssembly.SourceFirstSeam3B
 
 section
 set_option autoImplicit false

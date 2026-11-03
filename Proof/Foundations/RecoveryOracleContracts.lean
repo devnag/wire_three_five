@@ -1,4 +1,5 @@
 import Proof.Foundations.RecoveryOracleSemantics
+import Statement
 
 /-! Actual ordinary-oracle execution and the LOCAL recovery realization targets.
 Finite query-control rules extend the existing local finite-tape machine. A

@@ -1,16 +1,19 @@
-# Theorem 1.1, row B
+# Theorem 1.1, row B, and the cone above it
 
-The main theorem concludes `NearCubicWires.WireExponent3_5.rowB`, the Lean statement in the first row of the table
-below: row B of the paper's Theorem 1.1, with the definitions of `Statement_Wire_3_5.lean` shown in full. The other rows
-show the definitions it uses, beside the paper's own definitions. The last section links the statement checks that Lean
-proves.
+The first main theorem concludes `NearCubicWires.WireExponent3_5.rowB`, the Lean statement in the first row of the
+table below: row B of the paper's Theorem 1.1, with the definitions of `Statement_Wire_3_5.lean` shown in full. The other
+rows show the definitions it uses, beside the paper's own definitions. The section after the table links the statement
+checks that Lean proves. The second main theorem concludes `NearCubicWires.WireExponent3_5.rowBCone`, Theorem 1.1 for
+every 0 < c ≤ 1/8, K_T ≥ 11/2 and K_S ≥ 9/2; the last section puts it beside the paper's theorem.
 
-Paper: the paper's source is [`paper/paper.tex`](../paper/paper.tex); line numbers refer to that file, and the Lean
-comments cite them as `P3:n`. The quotations are its LaTeX source, verbatim.
+Paper: the source of version 1 is [`paper/paper.tex`](../paper/paper.tex); line numbers refer to that file, and the
+Lean comments cite them as `P3:n`. The quotations are its LaTeX source, verbatim. Each of them appears unchanged in
+version 2 ([`paper/paper_v2.tex`](../paper/paper_v2.tex)), the version this proof was checked against.
 
-The nine published statements the main theorem assumes are not shown here. They are the hypotheses of the Theorem 2.5
-repository, defined in `Statement.lean` (the same file, byte for byte), and each is put beside its published sentence
-on that repository's pages: [SourceMapping/](https://github.com/devnag/near-cubic-wires/tree/main/SourceMapping).
+The nine published statements the main theorems assume are not shown here. Each is put beside its published sentence
+on a page of its own (the table in the README): hypotheses 1–5 on the pages of the Theorem 2.5 repository
+([SourceMapping/](https://github.com/devnag/near-cubic-wires/tree/main/SourceMapping)), whose `Statement.lean` this
+repository uses byte for byte, and hypotheses 6–9 on pages 6–8 of this repository.
 
 <table>
 <tr><th>Paper (verbatim)</th><th>Lean (verbatim)</th></tr>
@@ -53,14 +56,14 @@ Almost everywhere means at every sufficiently large integer length.
 </pre>
 </td><td>
 
-[Statement_Wire_3_5.lean, lines 54–55](../Statement_Wire_3_5.lean#L54-L55)
+[Statement_Wire_3_5.lean, lines 56–57](../Statement_Wire_3_5.lean#L56-L57)
 
-<pre title="Statement_Wire_3_5.lean, lines 54–55">
+<pre title="Statement_Wire_3_5.lean, lines 56–57">
 /-- Row B (P3:261-262): `c = 1/8`, `K_T = 11/2`, `K_S = 9/2`. -/
 noncomputable def rowB : Prop := WireExponent3_5 (1 / 8) (11 / 2) (9 / 2)
 </pre>
 
-<pre title="Statement_Wire_3_5.lean, lines 47–52">
+<pre title="Statement_Wire_3_5.lean, lines 49–54">
 /-- `thm:tradeoff` (P3:225-238): one `E^NP` language, chosen before the multipliers `A_T, A_S`. -/
 noncomputable def _root_.NearCubicWires.WireExponent3_5 (c KT KS : ℝ) : Prop :=
   ∃ language : Language,
@@ -69,7 +72,7 @@ noncomputable def _root_.NearCubicWires.WireExponent3_5 (c KT KS : ℝ) : Prop :
     WireExponent3_5Hard c KT KS language
 </pre>
 
-<pre title="Statement_Wire_3_5.lean, lines 26–45">
+<pre title="Statement_Wire_3_5.lean, lines 28–47">
 /-- The hardness half of `thm:tradeoff` for one language (P3:233-237): for every pair of fixed multipliers there
 is an onset past which every capped circuit of either class has agreement below `1/2 + L(n)^{-c}`. -/
 noncomputable def WireExponent3_5Hard (c KT KS : ℝ) (language : Language) : Prop :=
@@ -108,25 +111,25 @@ inputs feed threshold gates, which feed one threshold or symmetric gate.
 </pre>
 </td><td>
 
-[Statement.lean, lines 649–654](../Statement.lean#L649-L654)
+[Statement.lean, line 640](../Statement.lean#L640)
 
-<pre title="Statement.lean, line 641">
+<pre title="Statement.lean, line 640">
 abbrev BitInput (n : ℕ) := Fin n → Bool
 </pre>
 
-<pre title="Statement.lean, line 643">
+<pre title="Statement.lean, line 642">
 abbrev BoolFunction (n : ℕ) := BitInput n → Bool
 </pre>
 
-<pre title="Statement.lean, line 645">
+<pre title="Statement.lean, line 644">
 abbrev Language := (n : ℕ) → BoolFunction n
 </pre>
 
-<pre title="Statement.lean, line 647">
+<pre title="Statement.lean, line 646">
 def bitAsReal (bit : Bool) : ℝ := if bit then 1 else 0
 </pre>
 
-<pre title="Statement.lean, lines 649–654">
+<pre title="Statement.lean, lines 648–653">
 /-- A semantic threshold gate together with its exact retained support. -/
 structure RealThresholdGate (n : ℕ) where
   weight : Fin n → ℝ
@@ -135,30 +138,30 @@ structure RealThresholdGate (n : ℕ) where
   mem_support_iff : ∀ i, i ∈ support ↔ weight i ≠ 0
 </pre>
 
-<pre title="Statement.lean, lines 656–658">
+<pre title="Statement.lean, lines 655–657">
 noncomputable def RealThresholdGate.eval {n : ℕ} (gate : RealThresholdGate n)
     (input : BitInput n) : Bool :=
   decide (gate.threshold ≤ ∑ i, gate.weight i * bitAsReal (input i))
 </pre>
 
-[Statement.lean, lines 711–714](../Statement.lean#L711-L714)
+[Statement.lean, lines 710–713](../Statement.lean#L710-L713)
 
-<pre title="Statement.lean, lines 711–714">
+<pre title="Statement.lean, lines 710–713">
 structure SymmetricThresholdCircuit (n : ℕ) where
   bottomCount : ℕ
   bottom : Fin bottomCount → RealThresholdGate n
   top : ℕ → Bool
 </pre>
 
-<pre title="Statement.lean, lines 716–718">
+<pre title="Statement.lean, lines 715–717">
 noncomputable def SymmetricThresholdCircuit.eval {n : ℕ}
     (circuit : SymmetricThresholdCircuit n) (input : BitInput n) : Bool :=
   circuit.top ((Finset.univ.filter fun i =&gt; (circuit.bottom i).eval input).card)
 </pre>
 
-[Statement.lean, lines 720–724](../Statement.lean#L720-L724)
+[Statement.lean, lines 719–723](../Statement.lean#L719-L723)
 
-<pre title="Statement.lean, lines 720–724">
+<pre title="Statement.lean, lines 719–723">
 structure ThresholdThresholdCircuit (n : ℕ) where
   bottomCount : ℕ
   bottom : Fin bottomCount → RealThresholdGate n
@@ -166,7 +169,7 @@ structure ThresholdThresholdCircuit (n : ℕ) where
   topThreshold : ℝ
 </pre>
 
-<pre title="Statement.lean, lines 726–729">
+<pre title="Statement.lean, lines 725–728">
 noncomputable def ThresholdThresholdCircuit.eval {n : ℕ}
     (circuit : ThresholdThresholdCircuit n) (input : BitInput n) : Bool :=
   decide (circuit.topThreshold ≤
@@ -245,9 +248,9 @@ efficiently.
 </pre>
 </td><td>
 
-[Statement.lean, lines 1572–1584](../Statement.lean#L1572-L1584)
+[Statement.lean, lines 1571–1583](../Statement.lean#L1571-L1583)
 
-<pre title="Statement.lean, lines 1572–1584">
+<pre title="Statement.lean, lines 1571–1583">
 /-- LOCAL NP witness for the actual numeric query predicate. Both ordinary
 verifier time and witness length are polynomial in the ENCODED query length.
 The input is binary code.bits; no unary numeric-code or prefix-count input. -/
@@ -263,7 +266,7 @@ structure EncodedNPVerifier (oracle : ℕ → Bool) where
         code.bits witness
 </pre>
 
-<pre title="Statement.lean, lines 1586–1592">
+<pre title="Statement.lean, lines 1585–1591">
 structure OrdinaryENPCertificate (oracle : ℕ → Bool) (language : Language) where
   program : OrdinaryOracleProgram
   exponent : ℕ
@@ -273,9 +276,9 @@ structure OrdinaryENPCertificate (oracle : ℕ → Bool) (language : Language) w
       (2 ^ (exponent * max 1 n))
 </pre>
 
-[Statement.lean, lines 1561–1570](../Statement.lean#L1561-L1570)
+[Statement.lean, lines 1560–1569](../Statement.lean#L1560-L1569)
 
-<pre title="Statement.lean, lines 1561–1570">
+<pre title="Statement.lean, lines 1560–1569">
 /-- Inputs and outputs are framed, with a distinct initially blank output tape.
 All data preparation, querying and final head movements inside the program
 must be present in the counted trace. -/
@@ -288,9 +291,9 @@ def OrdinaryOracleRuns (oracle : ℕ → Bool) (program : OrdinaryOracleProgram)
     final.tapes program.base.outputTape = frame output
 </pre>
 
-[Statement.lean, line 56](../Statement.lean#L56)
+[Statement.lean, line 55](../Statement.lean#L55)
 
-<pre title="Statement.lean, line 56">
+<pre title="Statement.lean, line 55">
 def natBitLength (value : ℕ) : ℕ := Nat.log 2 value + 1
 </pre>
 
@@ -298,8 +301,7 @@ def natBitLength (value : ℕ) : ℕ := Nat.log 2 value + 1
 </table>
 
 The machine model under `EncodedNPVerifier` and `OrdinaryENPCertificate` (the verifier, the oracle program and their
-steps) is the Theorem 2.5 repository's, shown on its
-[page 7](https://github.com/devnag/near-cubic-wires/blob/main/SourceMapping/7-refuter.md).
+steps) is the Theorem 2.5 repository's, shown on [page 7](7-refuter.md).
 
 **What to check** (a few minutes):
 
@@ -353,3 +355,63 @@ Lean proves three statement checks; you need not read them.
   [StatementChecks/Wire_3_5.lean, lines 46–76](../StatementChecks/Wire_3_5.lean#L46-L76)
 
 **Class:** literal.
+
+## The cone above row B
+
+The second main theorem proves, from the same nine hypotheses, Theorem 1.1 at every point (c, K_T, K_S) with
+0 < c ≤ 1/8, K_T ≥ 11/2 and K_S ≥ 9/2. Each such point satisfies the theorem's conditions c > 0, K_T > 5 + 2c and
+K_S > 4 + 2c, since 5 + 2c ≤ 21/4 < 11/2 and 4 + 2c ≤ 17/4 < 9/2. Compared with row B, it allows a larger advantage
+L(n)^{-c} ≥ L(n)^{-1/8} and has smaller caps A n^{7/2}/L(n)^{K} (L(n) ≥ 1 at every n), so it asks less than row B;
+Lean derives it from row B with the same language and the same onsets.
+
+<table>
+<tr><th>Paper (verbatim)</th><th>Lean (verbatim)</th></tr>
+<tr><td>
+<b>paper/paper.tex, line 227</b>
+<pre>
+Fix $c&gt;0$ and real constants $K_T&gt;5+2c$ and $K_S&gt;4+2c$.
+</pre>
+<b>paper/paper.tex, lines 261–262</b>
+<pre>
+B &amp; $A_T n^{7/2}/L^{11/2}$, $A_S n^{7/2}/L^{9/2}$
+  &amp; Every fixed $A_T,A_S&gt;0$ &amp; $L^{-1/8}$\\[3pt]
+</pre>
+</td><td>
+
+[Statement_Wire_3_5.lean, lines 59–63](../Statement_Wire_3_5.lean#L59-L63)
+
+<pre title="Statement_Wire_3_5.lean, lines 59–63">
+/-- `thm:tradeoff` (P3:225-238) for every advantage exponent `0 &lt; c ≤ 1/8` and cap exponents `K_T ≥ 11/2`,
+`K_S ≥ 9/2`. Each such triple satisfies the theorem's hypotheses `K_T &gt; 5 + 2c`, `K_S &gt; 4 + 2c`; compared with row B
+it allows a larger advantage `L(n)^{-c}` and has smaller caps `A n^{7/2}/L(n)^K`. -/
+noncomputable def rowBCone : Prop :=
+  ∀ c KT KS : ℝ, 0 &lt; c → c ≤ 1 / 8 → 11 / 2 ≤ KT → 9 / 2 ≤ KS → WireExponent3_5 c KT KS
+</pre>
+
+[Proof/Wire_3_5/Assembly/ConeMono.lean, lines 36–39](../Proof/Wire_3_5/Assembly/ConeMono.lean#L36-L39)
+
+<pre title="Proof/Wire_3_5/Assembly/ConeMono.lean, lines 36–39">
+/-- **Monotonicity of Theorem 1.1**: `WireExponent3_5 c' K'_T K'_S → WireExponent3_5 c K_T K_S` for `c ≤ c'`,
+`K'_T ≤ K_T`, `K'_S ≤ K_S` (a larger allowed advantage and smaller caps), with the same language. -/
+theorem wireExponent3_5_mono {c KT KS c' KT' KS' : ℝ} (hc : c ≤ c') (hT : KT' ≤ KT) (hS : KS' ≤ KS)
+    (h : _root_.NearCubicWires.WireExponent3_5 c' KT' KS') : _root_.NearCubicWires.WireExponent3_5 c KT KS := by
+</pre>
+
+<pre title="Proof/Wire_3_5/Assembly/ConeMono.lean, lines 52–53">
+/-- **Row B implies Theorem 1.1 on the cone above row B.** -/
+theorem rowBCone_of_rowB (h : _root_.NearCubicWires.WireExponent3_5.rowB) : rowBCone :=
+</pre>
+
+</td></tr>
+</table>
+
+**What to check** (a few minutes):
+
+1. `rowBCone` quantifies over every real c, K_T, K_S with 0 < c, c ≤ 1/8, 11/2 ≤ K_T and 9/2 ≤ K_S, and asserts
+   `WireExponent3_5 c K_T K_S`: the same statement as row B (first row above) at those parameters, with its own
+   language for each point, as the paper allows (“The language may depend on $c,K_T,K_S$”).
+2. Every such point satisfies the paper's conditions on (c, K_T, K_S) quoted above.
+3. The monotonicity `wireExponent3_5_mono` (you need not read its proof): for c ≤ c', K'_T ≤ K_T and K'_S ≤ K_S, Theorem
+   1.1 at (c', K'_T, K'_S) implies it at (c, K_T, K_S). `rowBCone_of_rowB` applies it with (c', K'_T, K'_S) = row B.
+
+**Class:** corollary of row B, proved in Lean.

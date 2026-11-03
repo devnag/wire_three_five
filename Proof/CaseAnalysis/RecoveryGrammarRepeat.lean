@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoveryGrammarRowBody
+import Proof.PCP.VerifierDecodingRepeat
 
 /-! Apply the existing finite driver to a bounded sequence of actual row
 receipts. Only the demanded finite interval needs a body supplier. -/

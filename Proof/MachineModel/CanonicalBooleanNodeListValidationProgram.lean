@@ -1,5 +1,11 @@
+import Proof.MachineModel.CanonicalBalancedValidationProgram
 import Proof.MachineModel.CanonicalBooleanCircuitPreparationProgram
 import Proof.MachineModel.CanonicalBooleanNodeTopologyProgram
+import Proof.Circuits.CanonicalForkCall
+import Proof.MachineModel.CanonicalNativeEqualityProgram
+import Proof.Circuits.CanonicalPairedCall
+import Proof.MachineModel.PreserveRightProgram
+import Proof.Foundations.VerifiedLinker
 
 /-!
 # Canonical Boolean-node-list validation

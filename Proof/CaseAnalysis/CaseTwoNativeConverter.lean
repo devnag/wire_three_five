@@ -1,5 +1,6 @@
 import Proof.CaseAnalysis.CaseTwoCanonicalWalk
 import Proof.CaseAnalysis.CaseTwoNativeHeaderJoin
+import Proof.Assembly.AppendOutputFrame
 
 /-! The same canonical description is converted to the original native
 descriptor. Its header uses the in-walk count, and both stream copies and

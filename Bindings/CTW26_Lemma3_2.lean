@@ -1,4 +1,5 @@
 import Proof.Foundations.SourceInterfaces
+import Statement
 
 /-!
 # Binding: CTW26 Lemma 3.2 (attributed there to [MTT61]) → `ThresholdNormalizationContract`

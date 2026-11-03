@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.C4CapA
+import Proof.Wire_3_5.Primitive.SeedFix.C4SJ
 import Proof.Wire_3_5.Primitive.SeedFix.C4SN
 
 /-! # C4 cap re-type, part 3: the SYM setup with the numbers machine at capacity `2^m`

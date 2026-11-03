@@ -69,6 +69,7 @@ def Data.reader (d : Data) : RecoveryRowFields.Data :=
 def rowSlots : Fin 7→Fin 51 := ![48,42,46,47,0,49,50]
 theorem rowSlots_injective : Function.Injective rowSlots := by decide
 noncomputable def readMachine := RecoveryFocus.machine rowSlots RecoveryRowFields.machine
+noncomputable def leafMachine := TapeEmbedding.machine 5 RecoveryRowLeaf.machine
 
 def Data.Valid (d : Data) (word : List Bool) : Prop :=
   d.state.Valid ∧ d.extra.Valid d.state word ∧

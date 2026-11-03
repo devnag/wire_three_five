@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeClauseOracleRun
+import Proof.PCP.PCPPNativeForwardQuery
 
 /-! The entire original clause loop only appends to its output. This is
 the exact rule-table premise for the existing paid native-output framer. -/

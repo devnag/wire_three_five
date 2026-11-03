@@ -1,3 +1,4 @@
+import Proof.MachineModel.OrdinaryZeroUnpadding
 import Proof.PCP.VerifierDecodingPreparationLayout
 
 /-! Turn a paid unary dimension into a framed word for the shared physical

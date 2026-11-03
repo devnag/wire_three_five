@@ -1,6 +1,19 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.SymNums
+import Proof.Wire_3_5.Primitive.Writers.SymLeafIface
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Assembly.Split
 
-/-! # SYM leaf, part 8: the SYM writer's run at one call, with the budgets as hypotheses
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2 (SYM leaf), part 8: the SYM writer's run at one call, with the budgets as hypotheses
 
 The SYM writer is the SYM shell v2 (`ShellS.shell_runSym`, the dimension `m_S` at `D₂' = 26`, `K₀ = 6`) with PA's SYM
 unit decode `SymDec.decW` (the FILTER bank and the POP bank `pbW Q`). **`sym_ready`**: at a SYM call of the gate's
@@ -127,3 +140,5 @@ theorem sym_ready (FS : FiltSetupSpec5 W) (Q : PopSetupSpec W) (l : Literals) (F
 end Ready
 
 end NearCubicWires.WireExponent3_5.PrimAsm.SymDec
+
+end

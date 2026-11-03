@@ -1,4 +1,15 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.PreLink
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.PreProofBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # PA (e), proved: the writers' class link `∀ l, PreLinkT l`
 
@@ -20,44 +31,6 @@ open NearCubicWires.WireExponent3_5.Cost NearCubicWires.WireExponent3_5.Split
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.PrimAsm.WriterIfaceJ
 open NearCubicWires.WireExponent3_5.PrimAsm.PreLink
 
-/-- **The writers' floor envelope**: preprocessing `2^{D·Ψ}`, every other exponent `0`. -/
-def envW (D : ℕ) : Envelope := ⟨0, 0, 0, 0, 0, 0, 0, D⟩
-
-/-- **The load dominates the star cells' exponent**: `k + L ≤ Ψ` once `C_D ≥ 1` (through `Ψ_aux`). -/
-theorem kL_le_loadPsi (CD k L BT BS : ℕ) (hCD : 1 ≤ CD) : k + L ≤ loadPsi CD k L BT BS := by
-  have h1 : loadAux CD k L ≤ loadPsi CD k L BT BS := by
-    unfold loadPsi
-    exact le_trans (le_max_right _ _) (le_max_right _ _)
-  have h2 : L ≤ L ^ 2 := Nat.le_self_pow (by norm_num) L
-  have h3 : k + L ≤ k + L ^ 2 + (k + L ^ 3) * L ^ 2 * (k + L) := by omega
-  have h4 : k + L ^ 2 + (k + L ^ 3) * L ^ 2 * (k + L) ≤ loadAux CD k L := by
-    unfold loadAux
-    have h := Nat.mul_le_mul hCD (le_refl (k + L ^ 2 + (k + L ^ 3) * L ^ 2 * (k + L)))
-    simpa using h
-  omega
-
-/-- **The link at one call**: `C·(2^{k+L} + n + 1)^D ≤ C·2^D · classBound (envW D) .preprocessing n k Ψ`. -/
-theorem link_le (D C CD k n BT BS : ℕ) (hCD : 1 ≤ CD) :
-    C * (2 ^ (k + Nat.clog 2 (n + 2)) + n + 1) ^ D ≤
-      C * 2 ^ D * classBound (envW D) .preprocessing n k (loadPsi CD k (Nat.clog 2 (n + 2)) BT BS) := by
-  obtain ⟨L, hLdef⟩ : ∃ L, L = Nat.clog 2 (n + 2) := ⟨_, rfl⟩
-  rw [← hLdef]
-  obtain ⟨Ψ, hΨdef⟩ : ∃ Ψ, Ψ = loadPsi CD k L BT BS := ⟨_, rfl⟩
-  rw [← hΨdef]
-  have hΨ : k + L ≤ Ψ := by rw [hΨdef]; exact kL_le_loadPsi CD k L BT BS hCD
-  have hL : n + 2 ≤ 2 ^ L := by rw [hLdef]; exact Nat.le_pow_clog (by norm_num) _
-  have h1 : 2 ^ (k + L) ≤ 2 ^ Ψ := Nat.pow_le_pow_right (by norm_num) hΨ
-  have h2 : 2 ^ L ≤ 2 ^ Ψ := Nat.pow_le_pow_right (by norm_num) (by omega)
-  have h3 : 2 ^ (k + L) + n + 1 ≤ 2 ^ (Ψ + 1) := by rw [pow_succ]; omega
-  have h4 : (2 ^ (k + L) + n + 1) ^ D ≤ (2 ^ (Ψ + 1)) ^ D := Nat.pow_le_pow_left h3 D
-  have h5 : (2 ^ (Ψ + 1)) ^ D = 2 ^ D * 2 ^ (D * Ψ) := by
-    rw [← pow_mul, ← pow_add]
-    congr 1
-    ring
-  have e : classBound (envW D) .preprocessing n k Ψ = 2 ^ (D * Ψ) := by simp [classBound, envW]
-  rw [e, mul_assoc, ← h5]
-  exact Nat.mul_le_mul le_rfl h4
-
 /-- **PA's (e), proved** (the `pre` child of the writer node): at every endpoint exponent `fe` and writers'
 polynomial `(D, C)`: the floor envelope `envW D`, the load-constant floor `1`, and `c_W = C·2^D`. -/
 def preLink (l : Literals) : PreLinkT l := fun _fe D C =>
@@ -70,3 +43,5 @@ def preLink (l : Literals) : PreLinkT l := fun _fe D C =>
     exact link_le D C F.CD _ n _ _ hCD⟩⟩
 
 end NearCubicWires.WireExponent3_5.UnionMachine.PreProof
+
+end

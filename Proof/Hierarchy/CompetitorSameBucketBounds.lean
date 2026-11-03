@@ -1,5 +1,6 @@
-import Proof.Hierarchy.CompetitorFinalTableNative
 import Proof.MachineModel.OrdinaryMatrixBatchBucketSizes
+import Proof.MachineModel.OrdinaryMatrixBatchAllRanksBounds
+import Proof.Hierarchy.CompetitorFinalTableNative
 
 /-! Tight ALL-gate aggregate for the actual capacity-dependent buckets.
 This pays even a padded B-by-B scan of every bucket; replacing Gates by

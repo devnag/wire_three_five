@@ -1,3 +1,4 @@
+import Proof.Hierarchy.HierarchyAllocation
 import Proof.CaseAnalysis.CaseTwoLayout
 
 /-! Add a fixed paid offset to a raw unary capacity, then allocate its

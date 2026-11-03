@@ -70,6 +70,8 @@ variable (cap W V ℓ : ℕ) (k : Fin 28) (hk : 18 ≤ k.val) (hk' : k.val ≤ 2
 variable (S : Fin 12 → Fin (ns + 1)) (hS6 : S 6 = G 10) (hS7 : S 7 = G 11)
 include hG hR hk hk' hS6 hS7
 
+theorem gne (a b : Fin 28) (h : a ≠ b) : G a ≠ G b := hG.ne h
+theorem rne (a b : Fin 48) (h : a ≠ b) : R a ≠ R b := hR.ne h
 
 theorem emYR_hyp (hW : 1 ≤ W) :
     EmitHyp cap W V S (G k) (R 27) (R 28) (R 29) (emYR G R k) (EmEnv G R W V ℓ) (fYR W) (2 * (60 * W + 30) + 1) := by

@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryFormulaPrefix
+import Proof.PCP.ProjectionNormalizationFieldList
 
 /-! Count the actual fields inside one external frame. Payload false bits
 are skipped in their value position; only inner-frame delimiters advance

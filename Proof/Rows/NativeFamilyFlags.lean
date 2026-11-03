@@ -18,6 +18,9 @@ noncomputable section
 
 def source {q : Nat} (tag L target : Nat) (cs : List (Circuit q)) :=
  PCJ45bee56da9f34d5a_CircuitCountCopy.source tag q L target cs.length (stream cs)
+def budget (tag q L target N B : Nat):=
+ PCJ45bee56da9f34d5a_CircuitCountAdvance.budget tag q L target N (U B q (B+1))+
+ PCJ45bee56da9f34d5a_NativeFlagsLoop.budget N B q+3
 
 end
 end PCJ45bee56da9f34d5a_NativeFamilyFlags

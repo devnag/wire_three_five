@@ -1,4 +1,19 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.C3WSizes
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.C3WCall
+import Proof.Wire_3_5.Primitive.Writers.CallSize
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.GeoIface2
+import Proof.Wire_3_5.Primitive.SeedFix.GeoPack
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.C3WCostCallBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # C3 request writer, part 20: the call's steps in one size `S`
 
@@ -24,32 +39,6 @@ open NearCubicWires.WireExponent3_5.PrimAsm.C3Asm NearCubicWires.WireExponent3_5
 open NearCubicWires.WireExponent3_5.PrimAsm.C3Field
 open NearCubicWires.RepairOrdinary (frame frame_length)
 open NearCubicWires.RepairRepresentation (natWord)
-
-/-- C3a′'s steps as a polynomial in the size `S`. -/
-def PnA (a : RepairRepresentation.DecompositionAlgorithm) (S : ℕ) : ℕ :=
-  10246 * ((20 * S + 12) * (20 * S + 12) * ((SourceEnvelope.coefficient a + 1) * (S + 2) ^ (2 * degD a + 2) + 1)) ^ 4 +
-    Kd a * (S + 2) ^ (2 * degD a + 3)
-
-/-- **The call's steps as a polynomial in the size `S`.** -/
-noncomputable def Gm (a : RepairRepresentation.DecompositionAlgorithm) (Dv S : ℕ) : ℕ :=
-  2 * (cR Dv * (S + PnA a S + 1) ^ dR Dv) + 2
-
-theorem pb_Gm (a : RepairRepresentation.DecompositionAlgorithm) (Dv : ℕ) : PolynomiallyBounded (fun S => Gm a Dv S) := by
-  simp only [Gm, PnA]
-  iterate 60 (all_goals (try (first
-    | with_reducible exact polynomiallyBounded_id
-    | with_reducible exact polynomiallyBounded_constant _
-    | with_reducible apply polynomiallyBounded_add
-    | with_reducible apply polynomiallyBounded_mul
-    | with_reducible apply polynomiallyBounded_pow)))
-
-noncomputable def cGm (a : RepairRepresentation.DecompositionAlgorithm) (Dv : ℕ) : ℕ :=
-  Classical.choose (pb_Gm a Dv)
-noncomputable def dGm (a : RepairRepresentation.DecompositionAlgorithm) (Dv : ℕ) : ℕ :=
-  Classical.choose (Classical.choose_spec (pb_Gm a Dv))
-
-theorem Gm_le (a : RepairRepresentation.DecompositionAlgorithm) (Dv S : ℕ) : Gm a Dv S ≤ cGm a Dv * (S + 1) ^ dGm a Dv :=
-  (Classical.choose_spec (Classical.choose_spec (pb_Gm a Dv))).2 S
 
 section Call
 open NearCubicWires.WireExponent3_5.Cost NearCubicWires.WireExponent3_5.Split NearCubicWires.WireExponent3_5.Primitive
@@ -205,3 +194,5 @@ theorem call_cost_le (Gs : WriterIface.WriterStage) (sA : PrimT.GeoIface2.SideWr
 end Call
 
 end NearCubicWires.WireExponent3_5.PrimAsm.C3Cost
+
+end

@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.UnionMachine.FrontFill
+import Proof.Wire_3_5.FinalPass.Words
 
 /-! # C6 front kit: register programs and fills as ready runs
 

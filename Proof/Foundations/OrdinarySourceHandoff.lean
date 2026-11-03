@@ -1,5 +1,5 @@
-import Proof.Foundations.OrdinaryComposition
 import Proof.Foundations.OrdinaryTapeRenaming
+import Proof.Foundations.OrdinaryComposition
 import Proof.Foundations.OrdinaryWilliamsLoader
 
 /-! Actual loader-to-source handoff with a fresh source workspace. The source

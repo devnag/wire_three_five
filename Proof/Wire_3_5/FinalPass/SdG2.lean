@@ -1,4 +1,6 @@
 import Proof.Wire_3_5.FinalPass.SdG1
+import Proof.Wire_3_5.Primitive.Writers.DockW
+import Proof.Wire_3_5.Primitive.Writers.WriterIfaceJBase
 
 /-! # S4 (the seeds phase), part 42: the seeds phase's machine and its run (P3:3170-3178)
 

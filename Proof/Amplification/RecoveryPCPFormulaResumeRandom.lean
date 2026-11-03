@@ -1,4 +1,6 @@
 import Proof.Amplification.RecoveryPCPFormulaResumeCountCold
+import Proof.Amplification.RecoveryPaddedCopyWhole
+import Proof.MachineModel.OrdinaryZeroUnpadding
 
 /-! The physical first randomness field comes from the retained R driver
 and blank input. The existing width-controlled copier writes every frame

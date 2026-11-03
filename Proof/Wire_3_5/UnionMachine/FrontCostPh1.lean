@@ -3,7 +3,7 @@ import Proof.Wire_3_5.UnionMachine.FrontCostKit
 /-! # C6 front, the time (2): phase 1's cost is `O((N+2)^{25})` (P3:3632-3640)
 
 **`ph1C_le`**: phase 1 (the input's framing, the width `q(N)` in unary (base's hierarchy width stages, the `⌈log₂⌉`
-program, the tail), the oracle field (the walker, the arity, the Theorem 2.5 repository's cold oracle call: base's
+program, the tail), the oracle field (the walker, the arity, v8's cold oracle call: base's
 `CloseoutWitness.Oracle.budget_polynomial`, `(N+2)^{25}`), the size stage) costs at most `c·(N+2)^{25}`, `c` fixed
 by `k`, `A_pad` and the oracle degree.
 
@@ -93,31 +93,6 @@ theorem ph1C_le (k Ap G N : ℕ) (xs w : List Bool) (hx : xs.length = N) (hw : w
 section Ph2
 open NearCubicWires.RepairSource NearCubicWires.SourceInterfaces NearCubicWires.RepairSource.ProjectionNormalization
 open NearCubicWires.WireExponent3_5.Transfer.CaseTwoPadG NearCubicWires.RepairRepresentation
-
-/-- **Phase 2's cost** is at most `10^9·(N+2)^{E+4}` given the PCPP-output budget `C₀(N+1)^E(q+1)^c + C₀(cap+1)³`
-and `N` covering the constants. -/
-theorem ph2C_le (source : ProjectionSourceAlgorithm UWhole.verifier UWhole.time) (a : PointwisePCPPAlgorithm)
-    (k : ℕ) (Hh : OrdinaryHierarchy (fun n => n ^ (k + 2))) (Cpad : ℕ) (hpad : k + 3 ≤ Cpad) {N : ℕ}
-    (x : BitInput N) (q : ℕ)
-    (hq : PCPPNativeHierarchyNodes.width source k Hh.coefficient Cpad (VerifierEncoding.code Hh.verifier) x ≤ q)
-    (O : BooleanCircuit q) (E c C0 : ℕ)
-    (hob : obudgetG source a Hh Cpad hpad ⟨N, x⟩ hq O (FrontCapStage.capOf (List.ofFn x) q) ≤
-      C0 * (N + 1) ^ E * (q + 1) ^ c + C0 * (FrontCapStage.capOf (List.ofFn x) q + 1) ^ 3)
-    (hC0 : C0 ≤ N + 2) (hqc : (q + 1) ^ c ≤ N + 2) (hqN : q ≤ N + 2)
-    (hcoef : CloseoutHierarchyRequest.coefficient k Hh.coefficient ≤ N + 2)
-    (hT : (Hh.time N).bits.length ≤ N + 2) :
-    FrontTop.ph2C source a k Hh Cpad hpad x q hq O ≤ 10 ^ 9 * (N + 2) ^ (E + 4) := by
-  have hn : 1 ≤ N + 2 := by omega
-  have hxl : (List.ofFn x).length ≤ N + 2 := by rw [List.length_ofFn]; omega
-  have aN : N ≤ N + 2 := by omega
-  have aN1 : N + 1 ≤ N + 2 := by omega
-  have hreq := CloseoutHierarchyRequest.budget_bound k Hh.coefficient (List.ofFn x)
-  have hdim := DimensionPower.cost_bound 1 64 (q + (List.ofFn x).length) 1 le_rfl
-  unfold FrontTop.ph2C FrontHierarchy.hierCost CloseoutCaseTwo.HierarchyFrame.budget
-    CloseoutCaseTwo.HierarchyFrame.rawBudget FrontCapStage.capCost RepairSource.CloseoutSchedule.Scale.budget
-  unfold FrontCapStage.capOf at hob ⊢
-  simp only [List.length_append, frame_length]
-  exact np_fin hn (by c6np) (by norm_num) (by omega)
 
 end Ph2
 

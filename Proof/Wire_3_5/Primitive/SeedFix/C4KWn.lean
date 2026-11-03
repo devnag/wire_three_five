@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.C4KWd
+import Proof.Wire_3_5.UnionMachine.RegRatOps
 import Proof.Wire_3_5.UnionMachine.BinW
 
 /-! # C4KW, part 13: stage B2's kit (products by repeated addition, `Nat.bits` emission, erasure)

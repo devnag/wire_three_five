@@ -1,5 +1,6 @@
-import Proof.Wire_3_5.Foundations.OutMachineReqSkip
 import Proof.Wire_3_5.Foundations.OutMachineSlot1M
+import Proof.Wire_3_5.Foundations.OutMachineReqSkip
+import Proof.Wire_3_5.Foundations.OutMachineCarKit
 
 /-! # SA's slot 1, part 3: the program
 

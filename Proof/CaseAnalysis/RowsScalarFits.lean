@@ -1,4 +1,8 @@
+import Proof.Amplification.RecoveryFocusDock
 import Proof.Hierarchy.CompetitorCountTableRecordRow
+import Proof.Hierarchy.CompetitorMonomialEntry
+import Proof.Hierarchy.CompetitorSelectedDimensions
+import Proof.PCP.ProjectionNormalizationDriverAtoms
 import Proof.Supplier.RowOffsetFamilies
 
 /-! The same scalar field covers the quartic validity test, second moment,

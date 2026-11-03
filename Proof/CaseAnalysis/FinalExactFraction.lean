@@ -33,7 +33,30 @@ set_option warningAsError true
 
 /-! ## §1 An arbitrary per-record stream -/
 
+/-- **The phase's record stream, at an arbitrary per-record denominator.**  Same
+shape as `phaseRecords` (`Proof/CaseAnalysis/FinalWorkerDockSeam.lean`) -- the
+concatenation over PCPP clause addresses of one record per monomial -- except
+that the record is an arbitrary function of the address AND the monomial, so each
+record carries its own `denominator` field. -/
+noncomputable def phaseRecords' {Atom : Type} {arity : ℕ}
+    {circuit : BooleanCircuit arity}
+    (phase : CloseoutRowsOriginalSchedule.Phase) (pcpp : PointwisePCPP circuit)
+    (coordinate : Fin (pcpp.systematicBits + pcpp.auxiliaryBits) →
+      CircuitPolynomial Atom 1)
+    (systematicAtom : Fin pcpp.systematicBits → Atom)
+    (record : Fin (2 ^ pcpp.clauseBits) → CircuitMonomial Atom 4 → Entry) : List Entry :=
+  (univ : Finset (Fin (2 ^ pcpp.clauseBits))).toList.flatMap
+    (fun address =>
+      (siteCalls phase pcpp coordinate systematicAtom address).monomials.map (record address))
+
 /-! ## §2 The exact-fraction record, and that its denominators may genuinely differ -/
+
+/-- **A.13.9's record shape.**  Numerator and denominator are arbitrary functions
+of the address and the monomial; the only constraint is the one `Calls` names. -/
+def exactFractionRecord {Atom : Type} (clauseAddresses : ℕ)
+    (num den : Fin clauseAddresses → CircuitMonomial Atom 4 → ℕ)
+    (address : Fin clauseAddresses) (monomial : CircuitMonomial Atom 4) : Entry :=
+  ⟨coefficientEstimate monomial.coefficient, num address monomial, den address monomial⟩
 
 /-! ## §3 The three consumer applications, at the actual list type and width formula -/
 

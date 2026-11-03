@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Compiler.MachineEmitWords
+import Proof.Wire_3_5.Compiler.MachinePoolLoop
 import Proof.Wire_3_5.MachineModel.BlockArith
 
 /-! # C3.6/C3.7: the machine kit of the emit stage (P3:1793-1794, 1728-1731)

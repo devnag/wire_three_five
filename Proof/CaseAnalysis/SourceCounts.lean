@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPSubstitutionRequest
+import Proof.Foundations.RecoveryCaseOne
 
 /-! Paper C.10's short witness-family and clause counts. These bounds use
 the actual compact substituted circuit and the same pointwise source;

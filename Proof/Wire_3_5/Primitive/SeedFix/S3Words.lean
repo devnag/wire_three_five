@@ -1,6 +1,9 @@
-import Proof.Wire_3_5.FinalPass.SeamsPt
-import Proof.Wire_3_5.Primitive.SeedFix.TabRef
+import Proof.Wire_3_5.FinalPass.SeamsPtBase
 import Proof.Wire_3_5.Primitive.Writers.Enum
+import Proof.Wire_3_5.FinalPass.FlatTable
+import Proof.Wire_3_5.FinalPass.CornerRef
+import Proof.Wire_3_5.Primitive.SeedFix.TabRef
+import Proof.Wire_3_5.FinalPass.ListEvalRef
 
 /-! # S3, part 0: the SYM per-point evaluator's call words and numbers (P3:3170-3178)
 

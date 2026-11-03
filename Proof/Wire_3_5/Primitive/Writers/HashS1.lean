@@ -1,16 +1,36 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.HashB1
-import Proof.Wire_3_5.Primitive.Writers.ThrLf1
+import Proof.Wire_3_5.Primitive.Writers.ThrB7Base
+import Proof.Wire_3_5.Primitive.Writers.ThrBud2Base
+import Proof.Wire_3_5.Primitive.Writers.ThrDataH
+import Proof.Wire_3_5.Primitive.Writers.ThrK7Base
+import Proof.Wire_3_5.Primitive.Writers.ThrStrip7
+import Proof.Wire_3_5.Primitive.SeedFix.C3ReqIface
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymLfCBase
+import Proof.Wire_3_5.Primitive.SeedFix.TS4WBase
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.C3ReqIface3
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.C4GateThrB
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.HashB1Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # HASH setup (A), part 5: the HASH setup's run to the SymBank part (`hash_setup_run`)
 
-The HASH stage's setup (`hash_call_run` form) reuses the THR setup's chain `ThrSet.setupT3` (M48/M53:
+The HASH stage's setup (the `hash_call_run` form, #176 (A)) reuses the THR setup's chain `ThrSet.setupT3` (M48/M53:
 the front at capacity v2, the v4 data stage, the hash bits' program, the numbers machine, the modulus words and the
-C3 sub-stage, the big unary words) with the HASH numbers machine `bigWTH` (`Fp` on `hashX`), the THR request
+C3 sub-stage, the big unary words) with the HASH numbers machine `bigWTH` (the `Fp` on `hashX`), the THR request
 word without hash suffix (the HASH stage's input, so the hash bits' program sees an empty suffix), and the C3
 sub-stage the writer's THR stage itself (`L.S3 = C.thr`, no strip). **`hash_setup_run`**: at a THR call, from the
 fits, the data stage's premises and the C3 writer's hypotheses, the setup's run leaves on the bank the request, the
 HASH tape, `1^{2^{2 dRow}}`, `1^{2^ρ}`, `PRE`/`POST` of the call's request `thrR0 … (fr 3) (fr 2) 0 (fr 4) dg (fr 5) 0`
-at the HASH free numbers, the log, the masked tapes and the blank cells (`HBank2`'s SymBank part).
+at the HASH free numbers, the log, the masked tapes and the blank cells (the `HBank2`'s SymBank part).
 
 Paper quantity of the main type: the HASH stage's setup (the compiler request's fixed fields, the pad, the table). -/
 
@@ -28,7 +48,7 @@ open NearCubicWires.SupplierPipeline NearCubicWires.WireExponent3_5.Stars NearCu
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.PrimAsm.WriterIface
 open NearCubicWires.RepairOrdinary.Streaming (marks)
 
-/-- **The HASH setup's run at a THR call** to the SymBank part of `HBank2`. -/
+/-- **The HASH setup's run at a THR call** to the SymBank part of the `HBank2`. -/
 theorem hash_setup_run (l : Literals) (F : GateFree l) (EW : Envelope) (cW K3 D3 kclk coef A a0 : ℕ) (ha0 : a0 ≤ kclk + 1)
     (C3 : C3ReqIface3.C3ReqAt3 l F EW cW K3 D3 kclk coef A a0 ha0) (L : Lay) (hL : L.S3 = C3.thr) (hDL : 16 ≤ L.D)
     (CL Cd Cc : ℕ) (Fp : FreeProg) (S4 : ThrData.ThrDataStage4 (gate0 l F).alg (callInputs l F kclk coef A a0 ha0).D (fun n => ((callInputs l F kclk coef A a0 ha0).filterParams .thr n).cap)) {n a : ℕ} (ha : a ≤ 4)
@@ -114,3 +134,5 @@ theorem hash_setup_run (l : Literals) (F : GateFree l) (EW : Envelope) (cW K3 D3
   exact ⟨c, B', hc, hB, fP0, fP1, fP2, fW, fUU, fRR, fPRE, fPOST, fLG, fmask, fbl, fbl2⟩
 
 end NearCubicWires.WireExponent3_5.PrimAsm.HashSet
+
+end

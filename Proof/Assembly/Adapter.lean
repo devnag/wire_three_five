@@ -1,6 +1,6 @@
-import Proof.Assembly.ClosureBinaryCachePoolCount
-import Proof.Assembly.ClosureHardwireBudget
 import Proof.Assembly.Ready
+import Proof.Assembly.ClosureBinaryCacheRun
+import Proof.Hierarchy.CompetitorRecordRewind
 
 section
 /- Source body: PCJ38fbfed565f64139_Cached.lean; unchanged below. -/
@@ -21,6 +21,43 @@ open PCJ9eff70d512234a4c_Fixed
 attribute [local irreducible] P1TopDownPaidPayload.tapes
 noncomputable section
 
+structure Program {printer : WilliamsAlgorithm} {work : Nat}
+    (row : PCJ38fbfed565f64139_Ready.Program printer work) (U : Nat) where
+  familySlots : Fin (PCJ38fbfed565f64139_Ready.tapes printer work+1)→Fin U
+  familyInjective : Function.Injective familySlots
+  poolSlots : Fin 373→Fin U
+  poolInjective : Function.Injective poolSlots
+  rewindSlots : Fin 3→Fin U
+  rewindInjective : Function.Injective rewindSlots
+  directSource : rewindSlots 0=familySlots ((PCJ38fbfed565f64139_Ready.descriptor printer work).castAdd 1)
+  seedStates : Nat
+  seed : Machine U seedStates
+  setupStates : Nat
+  setup : Machine U setupStates
+  finishStates : Nat
+  finish : Machine U finishStates
+
+def before {printer : WilliamsAlgorithm} {work U : Nat}
+    {row : PCJ38fbfed565f64139_Ready.Program printer work} (p : Program row U) :=
+  Composition.machine p.seed
+    (Composition.machine (RecoveryFocus.machine p.poolSlots BinaryCacheColdRun.machine) p.setup)
+def after {printer : WilliamsAlgorithm} {work U : Nat}
+    {row : PCJ38fbfed565f64139_Ready.Program printer work} (p : Program row U) :=
+  Composition.machine (RecoveryFocus.machine p.rewindSlots CompetitorRecordRewind.machine) p.finish
+
+def code {printer : WilliamsAlgorithm} {work U : Nat}
+    {row : PCJ38fbfed565f64139_Ready.Program printer work} (p : Program row U) :
+    PCJ38fbfed565f64139_Cycle.Code (PCJ38fbfed565f64139_Ready.code row) U where
+  slots := p.familySlots
+  injective := p.familyInjective
+  beforeStates := _
+  before := before p
+  afterStates := _
+  after := after p
+
+def cacheArgs {q L : Nat} (a : DecompositionAlgorithm) (F : Packets.Family q L) :
+    BinaryCacheColdJoin.Args q :=
+  ⟨Packets.live F,C10SupplierRowInput.childList a (Packets.live F) F.occurrences⟩
 
 def descriptorWord (printer : WilliamsAlgorithm) (ds : List P1TopDownPaidReusable.Datum) :=
   ds.flatMap (P1TopDownPaidReusable.Datum.word printer)

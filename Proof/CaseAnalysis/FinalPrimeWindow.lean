@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.FinalWireEnvelope
+import Proof.CaseAnalysis.RawRowsThresholdAccuracy
 
 namespace NearCubicWires.RepairOrdinary.CloseoutFinalC10PrimeWindow
 
@@ -13,6 +14,7 @@ open NearCubicWires.RepairOrdinary.CloseoutRowsOriginalSchedule (Phase)
 open NearCubicWires.RepairRepresentation
 open NearCubicWires.RepairSource (EightSources)
 open NearCubicWires.RepairSource.CloseoutFinal (Parameters constantsOf decompositionOf)
+open NearCubicWires.RepairSource.CloseoutFinal.C10SumFamilyTransport (stageCoordinate)
 open NearCubicWires.RepairSource.CloseoutFinal.C10TailComposeUniform (pcppOf Atoms)
 open NearCubicWires.RepairSource.CloseoutFinal.C10TotalDecode (Atom)
 open NearCubicWires.RepairSource.CloseoutFinal.C10UnionSupplier
@@ -143,6 +145,52 @@ is `modulusDigitCount (primeCutoff …) * (primeDenominator … + 1)`, so it fal
 out of the SAME two bounds -- which is why `hprime` and `hthrden` are one
 obligation and not two. -/
 
+theorem canonicalPrimeCutoff_mono {e e' d d' : ℕ} (he : e ≤ e') (hd : d ≤ d') :
+    canonicalPrimeCutoff e d ≤ canonicalPrimeCutoff e' d' := by
+  unfold canonicalPrimeCutoff canonicalPrimeScale
+  exact Nat.pow_le_pow_left
+    (max_le_max le_rfl
+      (Nat.mul_le_mul (Nat.mul_le_mul le_rfl (Nat.succ_le_succ he)) (Nat.succ_le_succ hd))) 2
+
+theorem reciprocalUnionDenominator_mono {f f' t : ℕ} (h : f ≤ f') :
+    reciprocalUnionDenominator f t ≤ reciprocalUnionDenominator f' t := by
+  unfold reciprocalUnionDenominator
+  exact Nat.mul_le_mul (Nat.mul_le_mul le_rfl h) le_rfl
+
+theorem modulusDigitCount_mono {m m' : ℕ} (h : m ≤ m') :
+    modulusDigitCount m ≤ modulusDigitCount m' :=
+  Nat.succ_le_succ (Nat.log_mono_right h)
+
+def tupleCutoffBound (a : DecompositionAlgorithm) (desc target : ℕ) : ℕ :=
+  canonicalPrimeCutoff (tupleExponentBound a desc) (thresholdPrimeDen a desc target)
+
+def tupleListDenominatorBound (a : DecompositionAlgorithm) (desc target : ℕ) : ℕ :=
+  modulusDigitCount (tupleCutoffBound a desc target) * (thresholdPrimeDen a desc target + 1)
+
+theorem primeDenominator_le (a : DecompositionAlgorithm)
+    (r : FourfoldRequest NormalizedThresholdThresholdCircuit) (desc target : ℕ)
+    (hfour : r.circuits.length ≤ 4)
+    (hd : ∀ c ∈ r.circuits, c.descriptionBits ≤ desc) :
+    primeDenominator a r target ≤ thresholdPrimeDen a desc target :=
+  reciprocalUnionDenominator_mono (selection_count a r desc hfour hd)
+
+theorem primeCutoff_le (a : DecompositionAlgorithm)
+    (r : FourfoldRequest NormalizedThresholdThresholdCircuit) (desc target : ℕ)
+    (hfour : r.circuits.length ≤ 4)
+    (hd : ∀ c ∈ r.circuits, c.descriptionBits ≤ desc) :
+    primeCutoff a r target ≤ tupleCutoffBound a desc target :=
+  canonicalPrimeCutoff_mono (familyMagnitudeExponent_le a r desc hfour hd)
+    (primeDenominator_le a r desc target hfour hd)
+
+/-- **`hthrden`'S CONTENT, AT ONE REQUEST.** -/
+theorem listDenominator_le (a : DecompositionAlgorithm)
+    (r : FourfoldRequest NormalizedThresholdThresholdCircuit) (desc target : ℕ)
+    (hfour : r.circuits.length ≤ 4)
+    (hd : ∀ c ∈ r.circuits, c.descriptionBits ≤ desc) :
+    listDenominator a r target ≤ tupleListDenominatorBound a desc target :=
+  Nat.mul_le_mul (modulusDigitCount_mono (primeCutoff_le a r desc target hfour hd))
+    (Nat.succ_le_succ (primeDenominator_le a r desc target hfour hd))
+
 /-! ## §4 The request at one monomial
 
 `unionRequestOf` (`Proof/CaseAnalysis/FinalWireEnvelope.lean`) is
@@ -150,6 +198,8 @@ obligation and not two. -/
 `rightRequest (unionRequestOf …)` has exactly the monomial's threshold atoms as
 its circuits.  `hfour` is then `CircuitMonomial.degree_le` and the description
 cap transports through `atomToUnion` unchanged. -/
+
+variable (sources : EightSources) (k : ℕ) {gamma : ℝ} (p : Parameters sources gamma)
 
 /-! ## §5 `hprime` and `hthrden`, at A.8's two summands
 
@@ -159,6 +209,39 @@ exactly two numbers on the threshold branch: `primeBits n` (A.8's "primes") and
 of a per-atom DESCRIPTION cap, and discharges the two binders. -/
 
 -- the three `private` arithmetic cores, by their in-file names
+
+theorem tupleExponentBound_polynomial (a : DecompositionAlgorithm) (degree : ℕ) :
+    PolynomiallyBounded (fun q => tupleExponentBound a (descriptionEnvelope degree q)) := by
+  refine polynomiallyBounded_mono (fun q => ?_)
+    (polynomiallyBounded_add
+      (polynomiallyBounded_add
+        (polynomiallyBounded_mul (polynomiallyBounded_constant 4)
+          (sourceChildBound_polynomial a (descriptionEnvelope_polynomial degree)))
+        (thresholdMagnitudeExponent_polynomial a degree))
+      (polynomiallyBounded_constant 1))
+  have hclog : Nat.clog 2 (sourceChildBound a (descriptionEnvelope degree q) + 1) ≤
+      sourceChildBound a (descriptionEnvelope degree q) :=
+    Nat.clog_le_of_le_pow (Nat.succ_le_of_lt Nat.lt_two_pow_self)
+  unfold tupleExponentBound
+  omega
+
+/-- **The prime window is polynomial**, at the cutoff `primeCutoff` actually
+uses -- which `threshold_parameters_polynomial` does not cover. -/
+theorem tupleCutoffBound_polynomial (a : DecompositionAlgorithm) (degree : ℕ)
+    (target : ℕ → ℕ) (ht : PolynomiallyBounded target) :
+    PolynomiallyBounded
+      (fun q => tupleCutoffBound a (descriptionEnvelope degree q) (target q)) :=
+  primeCutoff_polynomial (tupleExponentBound_polynomial a degree)
+    (threshold_parameters_polynomial a degree target ht).1
+
+/-- **The stacked-equation list denominator is polynomial**, at the same cutoff. -/
+theorem tupleListDenominatorBound_polynomial (a : DecompositionAlgorithm) (degree : ℕ)
+    (target : ℕ → ℕ) (ht : PolynomiallyBounded target) :
+    PolynomiallyBounded
+      (fun q => tupleListDenominatorBound a (descriptionEnvelope degree q) (target q)) :=
+  polynomiallyBounded_mul (bits_polynomial (tupleCutoffBound_polynomial a degree target ht))
+    (polynomiallyBounded_add (threshold_parameters_polynomial a degree target ht).1
+      (polynomiallyBounded_constant 1))
 
 
 end

@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.ScheduleBound
+import Proof.Amplification.RecoveryPCPFormulaResumeSearchCountFrame
 
 /-! The selected raw source length is physically framed for the existing
 ordinary refuter. Both conversions use already checked machines. -/

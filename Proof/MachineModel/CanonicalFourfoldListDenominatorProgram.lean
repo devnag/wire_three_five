@@ -1,5 +1,8 @@
+import Proof.MachineModel.CanonicalBalancedLengthProgram
 import Proof.MachineModel.CanonicalBitSerialMulProgram
 import Proof.MachineModel.CanonicalFourfoldRowTailProgram
+import Proof.MachineModel.FixedAccuracyDenominatorProgram
+import Proof.MachineModel.PreserveRightProgram
 
 /-!
 # The symmetric list denominator, executed from the typed envelope

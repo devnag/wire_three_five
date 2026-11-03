@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.FinalPass.SdI3
+import Proof.Wire_3_5.FinalPass.SdI3Base
 
 /-! # S4 (the seeds phase), part 53: the register capacity's side conditions from the sizes (P3:3170-3178)
 

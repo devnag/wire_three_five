@@ -1,6 +1,7 @@
 import Proof.MachineModel.CanonicalBalancedNatSumProgram
 import Proof.MachineModel.CanonicalNormalizedCircuitValidationProgram
 import Proof.MachineModel.CanonicalSupplierCompressedGateProgram
+import Proof.MachineModel.CanonicalSupplierSupportCompressionProgram
 
 /-!
 # Exact wire resources from validated normalized-circuit summaries

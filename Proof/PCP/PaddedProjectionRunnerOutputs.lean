@@ -1,3 +1,4 @@
+import Proof.MachineModel.BitInputPrefixProgram
 import Proof.PCP.PaddedProjectionPresentation
 
 namespace NearCubicWires.PaddedProjectionRunnerOutputs

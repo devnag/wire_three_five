@@ -1,4 +1,5 @@
 import Proof.PCP.ProjectionNormalizationSuffixRestore
+import Proof.MachineModel.OrdinaryStreamController
 
 namespace NearCubicWires.RepairSource.ProjectionNormalization.SharedDriverProbe
 open LocalBitMultitape RepairOrdinary RecoveryExecution VerifierDecoding

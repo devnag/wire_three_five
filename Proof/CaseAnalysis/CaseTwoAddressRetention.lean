@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CaseTwoAddressFields
+import Proof.Amplification.RecoveryTseitinReadOnly
 
 /-! The actual arity tape survives both occurrence-field readers. This is
 rule-table preservation of the already paid tape, with no extra producer. -/

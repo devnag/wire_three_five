@@ -1,4 +1,8 @@
 import Proof.Packets.SrcSeamNums
+import Proof.Packets.BudgetFamilyAt
+import Proof.Packets.BudgetFirst3
+import Proof.SourceAssembly.SourceStepsHw
+import Proof.SourceAssembly.SourceSkelParamsV4
 
 section
 set_option autoImplicit false
@@ -27,6 +31,30 @@ noncomputable section
 /-! ## The site's family class, its clock condition and the onset -/
 
 section site
+variable (selector : CyclicChoice.Laws) (mask : MaskProducer)
+  (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector) (rows : PCJc4297ab269d8423a_Source.RowLibrary selector)
+  (sources : EightSources) (gamma : Real) (hg : 0 < gamma) (hh : gamma < 1/2) (p : Parameters sources gamma)
+
+abbrev famW (k : ℕ) : CostCls :=
+  famClsAt (printerOf sources) sources p k (SourceSteps.rBsel sources p)
+    (SourceBudget.Params.cVcN selector sources gamma hg hh p) (SourceBudget.Params.hVN selector sources gamma hg hh p) 22
+
+theorem famSite_dP_le_kW :
+    (famW selector sources gamma hg hh p (ParamsV4.kW selector mask packets rows sources gamma hg hh p)).dP + 1 ≤
+      ParamsV4.kW selector mask packets rows sources gamma hg hh p + 2 := by
+  have h := ParamsV4.BW_dP_le_kW selector mask packets rows sources gamma hg hh p
+  have h2 : (famW selector sources gamma hg hh p (ParamsV4.kW selector mask packets rows sources gamma hg hh p)).dP ≤
+      (ParamsV4.BW selector mask packets rows).dP sources gamma hg hh p :=
+    le_trans (le_max_left _ _) (le_max_left _ _)
+  omega
+
+def hfamOn (k L : ℕ) (hk : (famW selector sources gamma hg hh p k).dP + 1 ≤ k + 2) : ℕ :=
+  max (Classical.choose (hfamH_at sources k (famW selector sources gamma hg hh p k) 2 L le_rfl hk)) (SourceSteps.selR sources p k).onset
+
+/-- **`hfamH`'s onset at the site** (index `kW`, live scale `siteL4`): the onset to FOLD into `xtra`. -/
+def hfamOnW : ℕ :=
+  hfamOn selector sources gamma hg hh p (ParamsV4.kW selector mask packets rows sources gamma hg hh p)
+    (ClassV4.siteL4 selector mask packets rows sources gamma hg hh p) (famSite_dP_le_kW selector mask packets rows sources gamma hg hh p)
 
 end site
 
@@ -46,6 +74,10 @@ noncomputable section
 attribute [local irreducible] P1TopDownPaidPayload.tapes
 
 section nums
+variable (mask : MaskProducer) {selector : CyclicChoice.Laws}
+  (packets : PCJc4297ab269d8423a_Source.PacketLibrary selector)
+  (rows : PCJc4297ab269d8423a_Source.RowLibrary selector) (sources : EightSources)
+  (res : Nat) (hres : 19 ≤ res) {gamma : Real} (p : Parameters sources gamma) (k r : Nat)
 
 set_option hygiene false in
 local notation "𝔇" => dimsOf mask packets rows sources res p k r

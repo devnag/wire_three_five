@@ -1,4 +1,6 @@
-import Proof.CaseAnalysis.RowsRawAtomSeek
+import Proof.CaseAnalysis.RowsRawPairReusable
+import Proof.Supplier.RowNativeFieldSkip
+import Proof.MachineModel.OrdinarySourceSATLiftRequestPrint
 
 /-! The actual constant-gate request uses the original native weight at
 frozen coordinates and a literal zero at live coordinates. These two
@@ -40,5 +42,37 @@ theorem skip_run (pre tail backing out mask : List Bool) (mpos : ℕ) (z : ℤ) 
   have all:=h.embed (fun _ : Fin 1=>mpos) (fun _ : Fin 1=>mask)
   apply (all.congr_in ?_ ?_).congr ?_ ?_
   all_goals funext i;fin_cases i <;> rfl
+
+theorem zero_run (source backing out mask : List Bool) (pos mpos : ℕ) :
+    Step zero 4 (heads pos mpos out) (data source backing out mask)
+      (heads pos mpos (out++intWord 0)) (data source backing (out++intWord 0) mask) := by
+  obtain ⟨raw,hr,rh,rt,_⟩:=RepairSource.OrdinarySourceSATLift.RequestPrint.run (intWord 0) out
+  obtain ⟨r,rr,_rc,_rs,h,t,keep⟩:=RecoveryFocus.dock zeroSlots (by intro i j _;exact Subsingleton.elim i j)
+    (HierarchyFixedWord.raw (intWord 0)) _ (heads pos mpos out) (data source backing out mask) _
+    (by intro i;rfl) (by intro i;rfl) raw hr
+  refine Step.of_run rr ?_ ?_
+  · funext i;fin_cases i
+    · exact (keep 0 (by intro j;fin_cases j;decide)).1
+    · exact (keep 1 (by intro j;fin_cases j;decide)).1
+    · exact (h 0).trans (congrArg (fun H=>H 0) rh)
+    · exact (keep 3 (by intro j;fin_cases j;decide)).1
+  · funext i;fin_cases i
+    · exact (keep 0 (by intro j;fin_cases j;decide)).2
+    · exact (keep 1 (by intro j;fin_cases j;decide)).2
+    · exact (t 0).trans (congrArg (fun T=>T 0) rt)
+    · exact (keep 3 (by intro j;fin_cases j;decide)).2
+
+theorem replaced_run (pre tail backing out mask : List Bool) (mpos : ℕ) (z : ℤ) :
+    Step replaced (DecompositionSource.Fields.cost z+5) (heads pre.length mpos out)
+      (data (pre++intWord z++tail) backing out mask)
+      (heads (pre.length+(intWord z).length) mpos (out++intWord 0))
+      (data (pre++intWord z++tail) (DecompositionSource.Fields.saved z backing) (out++intWord 0) mask) := by
+  have h:=(skip_run pre tail backing out mask mpos z).seq
+    (zero_run (pre++intWord z++tail) (DecompositionSource.Fields.saved z backing) out mask
+      (pre.length+(intWord z).length) mpos)
+  have ht:RowNativeFieldSkip.cost z+1+4=DecompositionSource.Fields.cost z+5:=by
+    unfold RowNativeFieldSkip.cost DecompositionSource.Fields.cost;omega
+  rw [ht] at h
+  exact h
 
 end NearCubicWires.RepairOrdinary.CloseoutRowsPoolWeight

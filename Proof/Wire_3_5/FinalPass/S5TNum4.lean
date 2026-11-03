@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.FinalPass.S5TNum3
+import Proof.Wire_3_5.FinalPass.S5TNum3Base
 
 /-! # S5-THR, part 38: the THR words' sizes and the data stage's side conditions (P3:2220-2231, 3170-3181)
 

@@ -1,10 +1,12 @@
-import Mathlib
+import Proof.SourceAssembly.SourceSkelFinalClose2
 import Proof.SourceAssembly.SourceFactorSelTraceSite
+import Proof.SourceAssembly.SourceFactorSelSeamSite
+import Proof.SourceAssembly.SourceStepsSeam6
+import Proof.SourceAssembly.SourceSkelSiteResid
+import Proof.Packets.SrcYSite
+import Proof.Packets.SrcMetaRun
 import Proof.SourceAssembly.SourceRequestSelKeptNums
 import Proof.SourceAssembly.SourceRequestSelStripLen
-import Proof.SourceAssembly.SourceSkelFinalClose2
-import Proof.SourceAssembly.SourceSkelSiteResid
-import Proof.SourceAssembly.SourceStepsSeam6
 
 section
 set_option autoImplicit false
@@ -26,6 +28,7 @@ open NearCubicWires.SourceSkeleton.FirstW NearCubicWires.SourceStart.EntryW
 noncomputable section
 
 section fields
+variable (selector : CyclicChoice.Laws)
 
 set_option hygiene false in
 local notation "CODE" => skelFamilyR mask packets rows (FillV5.resPV5 selector mask packets rows)

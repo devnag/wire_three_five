@@ -1,7 +1,10 @@
-import Proof.Amplification.RecoveryWitnessPolicy
-import Proof.Circuits.CanonicalInputLiftedBooleanCircuitEncoding
+import Proof.Circuits.DecompositionAtomBudget
 import Proof.Circuits.DecompositionInputBudget
+import Proof.Circuits.DecompositionPrepare
 import Proof.Circuits.DecompositionStreamReset
+import Proof.PCP.PCPTriple
+import Proof.Circuits.CanonicalInputLiftedBooleanCircuitEncoding
+import Proof.Amplification.RecoveryWitnessPolicy
 
 /-! Literal source request after native compact substitution. Input-axis
 lifting handles the source's minimum arity; isolated nodes handle its size

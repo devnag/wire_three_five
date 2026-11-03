@@ -235,6 +235,49 @@ theorem two_le (W : ℕ) (hW : 2 ≤ W) : 4 ≤ 2 ^ W :=
   calc 4 = 2 ^ 2 := by norm_num
     _ ≤ 2 ^ W := Nat.pow_le_pow_right (by norm_num) hW
 
+/-- SYM (tag 0): empty output. -/
+theorem prog_sym {sT : ℕ} (Tm : Machine 17 sT) (nw tw rest : List Bool) (hnw : nw = natWord 0 ++ rest) (W : ℕ)
+    (hW : W = 32 * (nw.length + tw.length)) (h2 : 2 ≤ W) :
+    LRuns W (prog Tm) (hdrCost nw tw W + 1 + ((2 * W + 3) + 0 + 0 + 2)) (σ0 nw tw) (outOnly 0) := by
+  have h4 := two_le W h2
+  have hH := hdr_run nw tw rest 0 hnw W hW (by simp [natBitLength]; omega)
+  have hO : LRuns W (Ite dispC (Ite dispC2 (nop 60) (thrM Tm) 4) (nop 60) 4) ((2 * W + 3) + 0 + 0 + 2)
+      (Hv nw tw (1 + (natWord 0).length) 0 0 0 false) (outOnly 0) :=
+    Ite.runs (W := W) (nc := 2 * W + 3) (np := 0) (nq := 0) _ _ _ 4 (decide (0 < 0))
+      (lt_at (W := W) (Hv nw tw (1 + (natWord 0).length) 0 0 0 false) 3 5 51 4 (by decide) 0 0 false rfl rfl rfl rfl
+        (by omega) (by omega)) rfl
+      (fun h => absurd h (by decide))
+      (fun _ => weaken_out (nop_lruns _) 0 rfl)
+  exact hH.seq hO
+
+/-- Terminal (tag 2): empty output. -/
+theorem prog_term {sT : ℕ} (Tm : Machine 17 sT) (nw tw : List Bool) (hnw : nw = natWord 2 ++ []) (W : ℕ)
+    (hW : W = 32 * (nw.length + tw.length)) (h2 : 2 ≤ W) :
+    LRuns W (prog Tm) (hdrCost nw tw W + 1 + ((2 * W + 3) + (((2 * W + 3) + 1 + (2 * W + 3)) + 0 + 0 + 2) + 0 + 2))
+      (σ0 nw tw) (outOnly 0) := by
+  have h4 := two_le W h2
+  have hb2 : natBitLength 2 ≤ W := by
+    have e := ReadNat.natWord_length 2
+    have hl : (natWord 2).length ≤ nw.length := by rw [hnw, List.append_nil]
+    omega
+  have hH := hdr_run nw tw [] 2 hnw W hW hb2
+  have hO : LRuns W (Ite dispC (Ite dispC2 (nop 60) (thrM Tm) 4) (nop 60) 4)
+      ((2 * W + 3) + (((2 * W + 3) + 1 + (2 * W + 3)) + 0 + 0 + 2) + 0 + 2)
+      (Hv nw tw (1 + (natWord 2).length) 0 2 0 false) (outOnly 0) :=
+    Ite.runs (W := W) (nc := 2 * W + 3) (np := ((2 * W + 3) + 1 + (2 * W + 3)) + 0 + 0 + 2) (nq := 0) _ _ _ 4
+      (decide (0 < 2))
+      (lt_at (W := W) (Hv nw tw (1 + (natWord 2).length) 0 2 0 false) 3 5 51 4 (by decide) 0 2 false rfl rfl rfl rfl
+        (by omega) (by omega)) rfl
+      (fun _ => Ite.runs (W := W) (nc := (2 * W + 3) + 1 + (2 * W + 3)) (np := 0) (nq := 0) _ _ _ 4 (decide (0 < 2 - 1))
+        ((dec_at (W := W) _ 3 51 5 4 (by decide) 2 0 (decide (0 < 2)) (by rfl) (by rfl) (by rfl) (by rfl) rfl
+          (by omega) (by omega)).seq
+          (lt_at (W := W) _ 3 5 51 4 (by decide) 0 (2 - 1) false (by rfl) (by rfl) (by rfl) (by rfl) (by omega)
+            (by omega))) rfl
+        (fun _ => weaken_out (nop_lruns _) 0 rfl)
+        (fun h => absurd h (by decide)))
+      (fun h => absurd h (by decide))
+  exact hH.seq hO
+
 /-- THR (tag 1): the tail's output. -/
 theorem prog_thr (nw rest : List Bool) (q L tgt : ℕ)
     (hnw : nw = natWord 1 ++ natWord q ++ natWord L ++ natWord tgt ++ rest) (ds : List CD) (W : ℕ)

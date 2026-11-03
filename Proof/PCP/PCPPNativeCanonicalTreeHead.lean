@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeCanonicalGuard
+import Proof.Amplification.RecoveryDecodeStep
 
 /-! The concrete reusable balanced-tree head call. It decodes one natural
 pair and classifies its retained tag while preserving the payload at tape0.

@@ -1,4 +1,6 @@
 import Proof.Wire_3_5.Primitive.ThresholdWriter.TopFront
+import Proof.Wire_3_5.Primitive.SeedFix.TabThrBlock
+import Proof.SourceAssembly.SourceTopNative
 
 /-! # THR, TopFront part 1: one circuit's native word and top payload (`payM`, `pay_step`)
 

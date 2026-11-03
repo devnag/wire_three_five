@@ -1,11 +1,24 @@
-import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Lean
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.EndpointBase
+import Proof.Wire_3_5.Primitive.Writers.CallIndexBase
 import Proof.Wire_3_5.Primitive.Writers.StarNums
+import Proof.Wire_3_5.Primitive.Writers.UnaryArith
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Free
+import Proof.Wire_3_5.Primitive.Writers.PlanBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The producer of leaf P's nested reduce (PA)
 
-The reduce replaces the open leaf `∀ l, PrimitiveLeafF l` by leaf P's enclosing application (`Plan.leafP`; checked c82bb7…) with the endpoint exponent filled (`Endpoint.endpointLeaf`) and three children:
+The reduce replaces the open leaf `∀ l, PrimitiveLeafF l` by the primitive leaf's enclosing application
+(`Plan.leafP`) with the endpoint exponent filled (`Endpoint.endpointLeaf`) and three children:
 `ComposeLeaf` (PA.compose), `SeedFixLeaf` (C4) and `FinalPassLeaf` (C5), each `∀ l`. This module exists so that the
-producer's import closure contains `Proof.Wire_3_5.Primitive.Writers.Library`, which ships PA's verified library as ancestor context
+producer's import closure contains `WireExponent3_5PrimAsmLibrary`, which ships PA's verified library as ancestor context
 of the three children.
 
 Paper quantity of the main type: `lem:primitive` at the gate (`Split.PrimitiveLeafF`, P3:3066-3116). -/
@@ -22,3 +35,5 @@ noncomputable def leafPR (g7 : ∀ l, EndpointLeaf l) (cmp : ∀ l, ComposeLeaf 
   leafP g7 cmp s4 s5
 
 end NearCubicWires.WireExponent3_5.PrimAsm.Reduce
+
+end

@@ -1,4 +1,7 @@
 import Proof.MachineModel.OrdinaryMatrixScoreBatchCodec
+import Proof.MachineModel.OrdinaryWilliamsPower
+import Proof.MachineModel.OrdinaryWilliamsPaddedRequest
+import Proof.Amplification.RecoveryScratchErase
 
 namespace NearCubicWires.RepairOrdinary.MatrixBucketDimensions
 open LocalBitMultitape SourceInterfaces SupplierPrinter

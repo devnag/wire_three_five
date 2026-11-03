@@ -11,6 +11,11 @@ set_option maxHeartbeats 250000
 set_option maxRecDepth 120000
 set_option warningAsError true
 
+def input (w k M : ℕ) : Fin 40→List Bool := fun i=>
+  if i=2 then CompareMachine.word w else
+  if i=3 then frame (binary w (M-1)) else
+  if i=12 then CompareMachine.word k else
+  if i=18 then List.replicate w true else []
 def productSlots : Fin 4→Fin 40 := ![18,12,29,30]
 def limitSlots : Fin 12→Fin 40 := ![29,14,31,32,33,34,35,36,37,38,25,39]
 def rowSlots (i : Fin 29) : Fin 40 := i.castAdd 11

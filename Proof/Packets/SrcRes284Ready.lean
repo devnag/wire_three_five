@@ -1,4 +1,5 @@
-import Proof.Packets.SrcRes284Pro
+import Proof.CaseAnalysis.FinalUnaryExpDock
+import Proof.MachineModel.TopDownWorkspaceSelectedEntry
 import Proof.Assembly.CappedReady
 
 set_option autoImplicit false
@@ -12,8 +13,10 @@ open LocalBitMultitape ExtDecompositionBatch RepairOrdinary
 open RepairSource RepairOrdinary.CloseoutWitness SourceInterfaces RepairRepresentation
 open RepairSource.CloseoutFinal RepairSource.SelectedRecoveryIntegration CanonicalWitnessCodec
 open WorkspaceSelectedAdmission (originalTapes capacity)
+open WorkspaceSelectedProgram (finalBank)
 open RecoveryRootRound
 open WorkspaceSelectedEntryReady
+open private NearCubicWires.RepairOrdinary.CloseoutFinalC10AdmittedEntry.cache_injective from Proof.CaseAnalysis.FinalAdmittedEntry
 noncomputable section
 
 end

@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryTransitionWalkTrace
+import Proof.MachineModel.OrdinaryInitializedTrace
 
 /-! Exact bridge from the appended chronological emitter word to the
 existing raw memory checker. The chronological index is the list position;

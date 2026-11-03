@@ -1,4 +1,17 @@
+import Lean
 import Proof.Wire_3_5.Foundations.OutMachineSAShell
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SeamsProg3
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Foundations.OutMachineSlot1WBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # SA's slot 1, part 1: the sample word is a copy of the seed's frames
 
@@ -23,29 +36,6 @@ open NearCubicWires.WireExponent3_5.FinalPass NearCubicWires.WireExponent3_5.Fin
 open NearCubicWires.WireExponent3_5.FinalPass.PlanFP NearCubicWires.WireExponent3_5.PrimAsm.Plan
 open NearCubicWires.WireExponent3_5.FinalPass.Finish
 open NearCubicWires.RepairOrdinary.SignedSortKey (binary)
-
-theorem flatMap_eq {α β : Type} (l : List α) (h : α → List β) : l.flatMap h = (l.map h).flatten := by
-  induction l with
-  | nil => rfl
-  | cons x l ih => simp [ih]
-
-/-- A sample word is the flattened frames of its halves. -/
-theorem sampleWord_frames (kh : ℕ) : ∀ ps : List (ℕ × ℕ),
-    FinalPass.Sample.sampleWord kh ps = ((ps.flatMap fun p => [binary kh p.1, binary kh p.2]).map frame).flatten
-  | [] => rfl
-  | p :: ps => by
-    have ih := sampleWord_frames kh ps
-    unfold FinalPass.Sample.sampleWord at ih ⊢
-    simp only [List.flatMap_cons, List.map_append, List.flatten_append, ← ih]
-    simp
-
-/-- **The bridge**: S4's sample word is the sample word with a closing `false`. -/
-theorem sampWord_eq (P : Shared.StarParams) (smp : Primitive.CallSample P) :
-    sampWord P smp = FinalPass.Sample.sampleWord (SeedFix.callKh P)
-      (List.ofFn fun j => ((smp.S j).1.val, (smp.S j).2.val)) ++ [false] := by
-  unfold sampWord FinalPass.Sample.sampleWord SeedFix.callKh
-  rw [flatMap_eq, List.map_ofFn]
-  rfl
 
 /-- **The seed's frames**: at every request, the input's seed word is the frames `fs` (and at THR the hash frame),
 and S4's word 1 is the frames `fs` with a closing `false`. -/
@@ -78,3 +68,5 @@ theorem seed_split (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a
       exact sampleWord_frames _ _
 
 end NearCubicWires.WireExponent3_5.FinalPass.Out.Slot1
+
+end

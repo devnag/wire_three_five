@@ -29,5 +29,13 @@ theorem budget_bound (d R : ℕ) : budget d R≤coefficient d*(R+2)^degree d := 
   unfold budget coefficient
   nlinarith
 
+theorem bounded_cold_run (d R : ℕ) : ∃ out,
+    ClockJoin.ReadyRun (machine d) (coefficient d*(R+2)^degree d) (input d R) out ∧
+      out (sourceSlot d)=List.replicate R true ∧
+      out (rawSlot d)=List.replicate (oracleSizeBound d R) true ∧
+      out (compareSlot d)=CompareMachine.word (oracleSizeBound d R) := by
+  obtain ⟨out,hr,hR,hB,hC⟩:=cold_run d R
+  exact ⟨out,ClockJoin.enlarge _ _ _ _ _ hr (budget_bound d R),hR,hB,hC⟩
+
 end
 end NearCubicWires.RepairOrdinary.RecoveryFullBound

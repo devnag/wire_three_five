@@ -18,6 +18,14 @@ set_option warningAsError true
 def tapes (p : Program) := 130+CompetitorCountTableRecord.tapes p
 def receive (p : Program) (i : Fin (CompetitorCountTableRecord.tapes p)) : Fin (tapes p) :=
   if i.val=0 then ⟨128,by unfold tapes; omega⟩ else i.natAdd 130
+def extra (p : Program) (row : EquationRow.Input) (Q : ℕ) (q : ℚ)
+    (denominator : ℕ) (xs : List (Bool × ℕ)) (i : Fin (CompetitorCountTableRecord.tapes p)) :=
+  if i.val=0 then [] else CompetitorCountTableRecord.input p (EquationRow.request row)
+    Q row.odd q denominator xs i
+def input (p : Program) (row : EquationRow.Input) (Q : ℕ) (q : ℚ)
+    (denominator : ℕ) (xs : List (Bool × ℕ)) :=
+  Fin.addCases (m := 130) (n := CompetitorCountTableRecord.tapes p) (motive := fun _ => List Bool)
+    (EquationRowFramed.input row) (extra p row Q q denominator xs)
 noncomputable def first (p : Program) :=
   TapeEmbedding.machine (CompetitorCountTableRecord.tapes p) EquationRowFramed.machine
 noncomputable def last {s : ℕ} (p : Program) (callee : Machine (CompetitorCountTableRecord.tapes p) s) :=
@@ -26,6 +34,8 @@ noncomputable def machine {s : ℕ} (p : Program) (callee : Machine (CompetitorC
   Composition.machine (first p) (last p callee)
 noncomputable def budget (a : WilliamsAlgorithm) (row : EquationRow.Input) (Q : ℕ) :=
   EquationRowFramed.uniformBudget row+1+CompetitorCountTableRecord.budget a (EquationRow.request row) Q
+noncomputable def envelope (a : WilliamsAlgorithm) (row : EquationRow.Input) :=
+  EquationRowFramed.uniformBudget row+1+CompetitorCountTableRecord.envelope a (EquationRow.request row)
 
 theorem receive_injective (p : Program) : Function.Injective (receive p) := by
   intro i j h
@@ -33,5 +43,78 @@ theorem receive_injective (p : Program) : Function.Injective (receive p) := by
   have hv := congrArg Fin.val h
   simp only [receive] at hv
   split_ifs at hv <;> simp only [Fin.val_natAdd] at hv <;> omega
+
+theorem input_zero (p : Program) (row : EquationRow.Input) (Q : ℕ) (q : ℚ)
+    (denominator : ℕ) (xs : List (Bool × ℕ))
+    (i : Fin (CompetitorCountTableRecord.tapes p)) (hi : i.val=0) :
+    CompetitorCountTableRecord.input p (EquationRow.request row) Q row.odd q denominator xs i=
+      physicalInput (EquationRow.request row) := by
+  let z : Fin (CompetitorCrossScheduler.tapes p) := ⟨0,by unfold CompetitorCrossScheduler.tapes; omega⟩
+  have he : i=(((z.castAdd 511).castAdd 124).castAdd 92).castAdd 27 := Fin.ext hi
+  rw [he]
+  simp [CompetitorCountTableRecord.input,
+    CompetitorSelectedTable.extend,CompetitorSelectedTable.tapes,CompetitorCountTable.input,
+    CompetitorCountTable.extend,CompetitorCountTable.tapes,CompetitorCountBanks.input,
+    CompetitorCountBanks.extend,CompetitorCountBanks.tapes,CompetitorCrossScheduler.input,
+    CompetitorCrossScheduler.tapes,Fin.addCases,z]
+
+theorem prefix_run {s : ℕ} (p : Program) (callee : Machine (CompetitorCountTableRecord.tapes p) s)
+    (row : EquationRow.Input) (Q : ℕ) (q : ℚ) (denominator : ℕ) (xs : List (Bool × ℕ))
+    (fuel : ℕ) (child : ExecutionReceipt (CompetitorCountTableRecord.tapes p) s)
+    (ch : run callee fuel (CompetitorCountTableRecord.input p (EquationRow.request row)
+      Q row.odd q denominator xs)=some child) :
+    ∃ actual,run (machine p callee) (EquationRowFramed.uniformBudget row+1+fuel)
+      (input p row Q q denominator xs)=some actual ∧
+      actual.steps≤EquationRowFramed.uniformBudget row+1+child.steps ∧
+      (∀ i,actual.final.heads (receive p i)=child.final.heads i) ∧
+      (∀ i,actual.final.tapes (receive p i)=child.final.tapes i) := by
+  let ext := extra p row Q q denominator xs
+  obtain ⟨base,hbase,bt,bh,bs⟩ := EquationRowFramed.producer_run row
+  let before : ExecutionReceipt (tapes p) _ := TapeEmbedding.receipt
+    (fun _ : Fin (CompetitorCountTableRecord.tapes p) => 0) ext base
+  have hfirst := TapeEmbedding.run_embed EquationRowFramed.machine
+    (fun _ : Fin (CompetitorCountTableRecord.tapes p) => 0) ext _ _ base hbase
+  have hheads : ∀ i,before.final.heads (receive p i)=0 := by
+    intro i
+    by_cases hz : i.val=0
+    · simp only [receive,hz,↓reduceIte]
+      change before.final.heads ((128 : Fin 130).castAdd (CompetitorCountTableRecord.tapes p))=0
+      rw [TapeEmbedding.receipt_heads_old]
+      exact bh 128
+    · simp only [receive,hz,↓reduceIte]
+      exact TapeEmbedding.receipt_heads_new _ ext base i
+  have htapes : ∀ i,before.final.tapes (receive p i)=
+      CompetitorCountTableRecord.input p (EquationRow.request row) Q row.odd q denominator xs i := by
+    intro i
+    by_cases hz : i.val=0
+    · simp only [receive,hz,↓reduceIte]
+      change before.final.tapes ((128 : Fin 130).castAdd (CompetitorCountTableRecord.tapes p))=_
+      rw [TapeEmbedding.receipt_tapes_old,bt]
+      exact (input_zero p row Q q denominator xs i hz).symm
+    · simp only [receive,hz,↓reduceIte]
+      rw [TapeEmbedding.receipt_tapes_new]
+      simp only [ext,extra,hz,↓reduceIte]
+  obtain ⟨tail,th,_,ts,hh,tt,_⟩ := RecoveryFocus.dock (receive p) (receive_injective p)
+    callee fuel before.final.heads before.final.tapes _ hheads htapes child ch
+  have htail : runFrom (last p callee) fuel
+      (Composition.restart before.final (last p callee).start)=some tail := th
+  have hj := Composition.run_join (first p) (last p callee) _ _ _ before tail hfirst htail
+  have hi : Composition.leftConfig _ (TapeEmbedding.config
+      (fun _ : Fin (CompetitorCountTableRecord.tapes p) => 0) ext
+      (initialConfiguration EquationRowFramed.machine (EquationRowFramed.input row)))=
+      initialConfiguration (machine p callee) (input p row Q q denominator xs) := by
+    apply configuration_ext
+    · rfl
+    · funext i
+      change Fin.addCases (m := 130) (n := CompetitorCountTableRecord.tapes p)
+        (motive := fun _ => ℕ) (fun _ => 0) (fun _ => 0) i=0
+      refine Fin.addCases (m := 130) (n := CompetitorCountTableRecord.tapes p) ?_ ?_ i <;>
+        intro j <;> simp only [Fin.addCases_left,Fin.addCases_right]
+    · rfl
+  rw [hi] at hj
+  refine ⟨Composition.joinedReceipt before tail,hj,?_,hh,tt⟩
+  change base.steps+1+tail.steps≤_
+  rw [ts]
+  omega
 
 end NearCubicWires.RepairOrdinary.CloseoutRowsRawRecord

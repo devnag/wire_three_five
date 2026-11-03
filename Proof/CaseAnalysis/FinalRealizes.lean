@@ -1,4 +1,7 @@
 import Proof.CaseAnalysis.FinalStability
+import Proof.Hierarchy.CompetitorRationalTolerance
+import Proof.CaseAnalysis.RowsEstimatorCoefficientsPrepare
+import Proof.MachineModel.Runs
 
 namespace NearCubicWires.RepairOrdinary.CloseoutFinalC10Realizes
 

@@ -1,9 +1,32 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.ThrUnitMeas3
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SeamsUni
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPoly
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.RadAbsorb
+import Proof.Wire_3_5.UnionMachine.RadSetupB5
+import Proof.Wire_3_5.UnionMachine.ThrDecIface
+import Proof.Wire_3_5.UnionMachine.ThrUnitIface
+import Proof.Wire_3_5.UnionMachine.ThrUnitIface3
+import Proof.Wire_3_5.UnionMachine.ThrUnitIface5
+import Proof.Wire_3_5.UnionMachine.ThrUnitMeas
+import Proof.Wire_3_5.UnionMachine.ThrUnitMeas2
+import Proof.Wire_3_5.UnionMachine.ThrUnitRun
+import Proof.Wire_3_5.UnionMachine.ThrUnitOfBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The producer statement v5, proved: `thrUnitOf5 l : ThrUnit.ThrUnitOf5 l`
 
 From the walk bank `W`, the unit cells `xF F ≥ W.x`, the FILTER setup `FiltSetupSpec5 W`, its pipe bound
-(`FiltPipeLe2`), the uniform decode fronts and RADIX setups (`RadSetupSpecB5`), the THR unit machines v4 in the
+(`FiltPipeLe2`), the uniform decode fronts (T3) and RADIX setups (`RadSetupSpecB5`), the THR unit machines v4 in the
 StageU order:
 
 * the machine `ThrUnitRun.thrUnitM` (the decode ; RADIX 398 ; FILTER 399 ; the counter), the measure
@@ -12,7 +35,8 @@ StageU order:
 * `need_le`, `nU_le` (explicit `K·(X+1)^D`, the exponents from the RADIX setup's and the FILTER setup's), `meas_le`
   (`K_m = K_q`, `D_m = 0`), **`ok`** (`ThrUnitRun.unit_ok` at `measC ≤ c·2^{K_q Ψ_T}`, `ThrMeas.measC_le`, the need and
   the budget monotone);
-* **`thrUnitOf5 l`** (the family; floors `envMax` of the two families' and `C_D ≥ 1`; `K_t` from `ThrNumsPoly`, `K_f`, `D_f` from `FiltPipeLe2`).
+* **`thrUnitOf5 l`** (the family; floors `envMax` of the two families' and `C_D ≥ 1`; `K_t` from T's
+  `ThrNumsPoly`, `K_f`, `D_f` from `FiltPipeLe2`).
 
 Paper quantity of the main type: the THR tape's unit machines within the preprocessing class `2^{O(Ψ_T)}` (P3:3089-3108,
 row:radix P3:2585-2623, row:matrix P3:1523-1526). -/
@@ -29,17 +53,6 @@ open NearCubicWires.WireExponent3_5.Cost NearCubicWires.WireExponent3_5.Split Ne
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.PrimT.WalkBank
 
 /-! ## Monotone, polynomial -/
-
-theorem unitOK_mono {cap x sU : ℕ} {U : Machine (PrimAsm.CellLoop.TT x) sU} {nU nU' : ℕ} {w u : List Bool}
-    {emit : ℕ → List Bool} {j : ℕ} {out : List Bool} (h : PrimThrW.Shell.UnitOK cap x U nU w u emit j out)
-    (hn : nU ≤ nU') : PrimThrW.Shell.UnitOK cap x U nU' w u emit j out := by
-  obtain ⟨σE, mU, s, a1, a2, a3, a4, a5⟩ := h
-  exact ⟨σE, mU, s, a1, a2, a3, a4, a5.trans hn⟩
-
-theorem pw_le (c X d D : ℕ) (hd : d ≤ D) : (c * X + 1) ^ d ≤ (c + 1) ^ d * (X + 1) ^ D := by
-  calc (c * X + 1) ^ d ≤ ((c + 1) * (X + 1)) ^ d := Nat.pow_le_pow_left (by nlinarith) d
-    _ = (c + 1) ^ d * (X + 1) ^ d := mul_pow _ _ _
-    _ ≤ (c + 1) ^ d * (X + 1) ^ D := Nat.mul_le_mul_left _ (Nat.pow_le_pow_right (by omega) hd)
 
 section Gate
 variable {l : Literals} {F : GateFree l} {x : ℕ} {W : WalkBankProducer} (R : RadSetupB5.RadSetupSpecB5 x l F)
@@ -151,15 +164,6 @@ noncomputable def thrSpec {l : Literals} {F : GateFree l} {x : ℕ} {W : WalkBan
 
 /-! ## The family -/
 
-/-- `FiltPipeLe2`'s constants. -/
-noncomputable def kfOf (hfp : BudgetIface.FiltPipeLe2) : ℕ := Classical.choose hfp
-noncomputable def dfOf (hfp : BudgetIface.FiltPipeLe2) : ℕ := Classical.choose (Classical.choose_spec hfp)
-
-theorem hKf_of (hfp : BudgetIface.FiltPipeLe2) : ∀ (P : GapParams) (e : GapSeed P) (L r4 G off : ℕ), 1 ≤ P.cap →
-    FiltPipe.filtPipeBound P e L r4 G off (FiltSetup.rulerW P) (FiltSetup.rulerW P) ≤
-      kfOf hfp * (P.len + P.cap + P.errExp + L + r4 + G + off + 2) ^ dfOf hfp * (L + 2) ^ (dfOf hfp * (P.errExp + 1)) :=
-  Classical.choose_spec (Classical.choose_spec hfp)
-
 /-- The THR numbers' exponent (at the cap's exponent `capZR l`, before the gate). -/
 noncomputable def dtOf (l : Literals) : ℕ := Classical.choose (PrimT.W6.thrNumsPoly l (CallIndexR.capZR l))
 
@@ -185,16 +189,6 @@ theorem hKt_of (l : Literals) (F : GateFree l) : ∀ (kclk coef A a : ℕ) (ha :
       _ = _ := by ring
   exact Classical.choose_spec (Classical.choose_spec (PrimT.W6.thrNumsPoly l (CallIndexR.capZR l))
     (CallIndexR.capK F.cr * 2 ^ CallIndexR.capZR l) F) kclk coef A a ha n hs Cs carriers _ h1 h2 h3 hc v hv
-
-theorem pow_mono2 {a b d e : ℕ} (hab : a ≤ b) (hde : d ≤ e) : (a + 1) ^ d ≤ (b + 1) ^ e :=
-  (Nat.pow_le_pow_left (by omega) d).trans (Nat.pow_le_pow_right (by omega) hde)
-
-/-- The family's coefficient (after the gate). -/
-def C0 (Cd0 Cr0 Dr0 Kt Kf : ℕ) {W : WalkBankProducer} (F5 : FiltSetup.FiltSetupSpec5 W) : ℕ :=
-  (Cd0 + (16 * Kt + 32) + Kf + 3) + Cr0 * (Cd0 + (16 * Kt + 32) + Kf + 3 + 1) ^ Dr0 +
-      F5.Cn * (Cd0 + (16 * Kt + 32) + Kf + 3 + 1) ^ F5.Dn +
-    (22 * (Cd0 + (16 * Kt + 32) + Kf + 3) + 23 + Cr0 * (Cd0 + (16 * Kt + 32) + Kf + 3 + 1) ^ Dr0 +
-      Cr0 * (Cd0 + (16 * Kt + 32) + Kf + 3 + 1) ^ Dr0 + F5.Cb * (Cd0 + (16 * Kt + 32) + Kf + 3 + 1) ^ F5.Db)
 
 theorem spec_cf {l : Literals} {F : GateFree l} {x : ℕ} {W : WalkBankProducer} (hx : W.x ≤ x)
     (D : ThrDec.ThrDecFront x l F) (R : RadSetupB5.RadSetupSpecB5 x l F) (F5 : FiltSetup.FiltSetupSpec5 W)
@@ -266,3 +260,5 @@ noncomputable def thrUnitOf5 (l : Literals) : ThrUnit.ThrUnitOf5 l :=
                   (le_trans (le_trans (le_max_right _ _) (le_max_left _ _)) hCD)).2 kclk coef A a ha).2.1⟩⟩⟩
 
 end NearCubicWires.WireExponent3_5.UnionMachine.ThrUnitOf
+
+end

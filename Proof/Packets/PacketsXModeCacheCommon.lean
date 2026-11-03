@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.RowsModeCacheReuseRun
+import Proof.CaseAnalysis.RowsModeCacheSource
+import Proof.Supplier.EquationZeroField
 
 /-! The original ordinary mode-cache machine reuses the physically generated
 common reserve. Its private-capacity driver is supplied by that actual reserve

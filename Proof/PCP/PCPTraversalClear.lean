@@ -1,4 +1,5 @@
 import Proof.PCP.PCPTraversalBounds
+import Proof.Amplification.RecoveryRowLookupTapes
 
 /-! The traversal's physical scratch sweeps. The measured capacity driver
 and the reset log are retained explicitly; arbitrary inactive source and

@@ -1,5 +1,6 @@
 import Proof.Circuits.CanonicalPairedCall
 import Proof.MachineModel.TaggedProgramChoice
+import Proof.Foundations.VerifiedLinker
 
 /-!
 # Canonical heterogeneous fork call

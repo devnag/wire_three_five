@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.Writers.CopyNat
+import Proof.Wire_3_5.UnionMachine.RoundParse
 
 /-! # C6 front, U5: the table writer's stream kit (register language)
 

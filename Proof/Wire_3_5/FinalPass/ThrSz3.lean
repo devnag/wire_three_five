@@ -1,6 +1,6 @@
 import Proof.Wire_3_5.FinalPass.ThrSz1
 import Proof.Wire_3_5.FinalPass.ThrPtRS33
-import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.CallIndexRBase
 
 /-! # The THR call's sizes, part 3: the call's words (P3:3176-3178)
 

@@ -1,5 +1,6 @@
-import Proof.CaseAnalysis.FinalSupplierStepBridge
 import Proof.CaseAnalysis.FinalVerdict
+import Proof.CaseAnalysis.FinalOneSidedness
+import Proof.CaseAnalysis.FinalSupplierStepBridge
 
 /-! Paper C.10 rejects malformed, noncanonical and oversized descriptions before
 running the estimators. Each input therefore supplies either an actual rejecting

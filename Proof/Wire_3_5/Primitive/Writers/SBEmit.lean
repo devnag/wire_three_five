@@ -1,3 +1,4 @@
+import Proof.Wire_3_5.Primitive.Writers.WriteNat
 import Proof.Wire_3_5.Primitive.Writers.DataTabs
 
 /-! # SB, part 1: raw unary emission from registers

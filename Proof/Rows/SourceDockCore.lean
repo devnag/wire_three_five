@@ -1,4 +1,6 @@
 import Proof.MachineModel.Runs
+import Proof.MachineModel.OrdinaryUnaryTemplate
+import Proof.PCP.VerifierDecodingCompare
 
 /-! Source-generator wiring lemmas over the original Step/focus/padding
 definitions. These names are separate from the full batch-layout module. -/

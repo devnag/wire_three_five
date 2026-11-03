@@ -104,6 +104,10 @@ theorem pow_twoPow_le_pairClock (depth n : ℕ) :
     n ^ (2 ^ depth) ≤ pairClock depth n :=
   pow_twoPow_le_pairIter depth n
 
+theorem pairClock_positive (depth n : ℕ) (hn : 0 < n) :
+    0 < pairClock depth n :=
+  lt_of_lt_of_le hn (value_le_pairIter depth n)
+
 theorem pairClock_polynomiallyBounded (depth : ℕ) :
     PolynomiallyBounded (pairClock depth) := by
   refine ⟨1, 2 ^ depth, by omega, ?_⟩

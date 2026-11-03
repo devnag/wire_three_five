@@ -1,5 +1,6 @@
 import Proof.Amplification.RecoveryFormulaCountWhole
 import Proof.PCP.PCPTraversalFocused
+import Proof.MachineModel.UInputFields
 
 /-! Actual count and source loading for the existing balanced serializer.
 The only external input is its framed field stream; every native count,

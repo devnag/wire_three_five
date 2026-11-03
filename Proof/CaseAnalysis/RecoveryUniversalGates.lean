@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoveryUniversalAddress
+import Proof.PCP.PCPPNativeClauseFullCapacity
 
 /-! The original universal node's next three native nodes use the checked
 native node printer, retaining both actual child references and workspaces. -/

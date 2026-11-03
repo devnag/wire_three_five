@@ -1,4 +1,5 @@
 import Proof.MachineModel.CanonicalTaggedNatListValidationProgram
+import Proof.Circuits.RegisterBounds
 
 /-!
 # Canonical Boolean-node validation

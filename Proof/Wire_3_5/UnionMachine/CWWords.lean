@@ -1,6 +1,7 @@
 import Proof.Wire_3_5.Primitive.SeedFix.CarWM
 import Proof.Wire_3_5.Primitive.SeedFix.TabDock
 import Proof.Wire_3_5.Primitive.Writers.ParseNat
+import Proof.Circuits.CanonicalBinaryOutput
 
 /-! # C6 front, U5, the code writers: the word passes over the circuits' codes
 
@@ -831,6 +832,7 @@ theorem lenStage (u : List Bool) : ∃ o : Fin 4 → List Bool,
   · rw [show (1 : Fin 4) = Fin.castAdd 1 (1 : Fin 3) from rfl, ho]; show [τ.cell] = [false]; rw [ec]; rfl
   · rw [show (2 : Fin 4) = Fin.castAdd 1 (2 : Fin 3) from rfl, ho]; exact e1
 
+
 /-! ## Loop A's append: the circuit's bottoms and their count -/
 
 /-- **The append** (streams `0` the traversal's atoms, `1` its count word, `2` the bottom accumulator, `3` the
@@ -902,6 +904,7 @@ theorem appendAStage (as bs : List (List Bool)) (has : ∀ a ∈ as, a ≠ []) (
   · rw [show (2 : Fin 6) = Fin.castAdd 1 (2 : Fin 5) from rfl, ho]; exact e1
   · rw [show (3 : Fin 6) = Fin.castAdd 1 (3 : Fin 5) from rfl, ho]; exact e2
   · rw [show (4 : Fin 6) = Fin.castAdd 1 (4 : Fin 5) from rfl, ho]; exact e3
+
 
 /-! ## Loop B: the crop of bottom `j` (widths at most `W`) and the append of its atom code -/
 
@@ -1099,6 +1102,7 @@ theorem appendBStage (gs : List (List Bool)) (hgs : ∀ g ∈ gs, g ≠ []) (y r
   · rw [show (1 : Fin 4) = Fin.castAdd 1 (1 : Fin 3) from rfl, ho]; show [τ.cell] = [false]; rw [ec]; rfl
   · rw [show (2 : Fin 4) = Fin.castAdd 1 (2 : Fin 3) from rfl, ho]; exact e1
 
+
 /-! ## The carrier code's field: canonical binary to `natWord` -/
 
 /-- `natWord` of a positive number: `1^|x.bits| 0 x.bits`. -/
@@ -1258,6 +1262,7 @@ theorem pass3_spec (F O T : Fin (ns + 1)) (hFO : F ≠ O) (hFT : F ≠ T) (hOT :
     · rw [c6, c5, c4, c3, c2, c1]
 
 end NatW
+
 
 /-- **The `natWord` writer** (streams `0` the framed canonical binary `frame x.bits ++ …`, `1` the output, `2` a
 ruler): `frame (natWord x)`, the special word for `x = 0` included. -/

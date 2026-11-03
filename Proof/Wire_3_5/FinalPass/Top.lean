@@ -1,7 +1,17 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.Plan
 import Proof.Wire_3_5.FinalPass.MajMain
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.PlanBase
 
-/-! # Final pass: the leaf's enclosing term
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # Final pass: the leaf's enclosing term 
 
 "At each of `2^{n−k}` columns, evaluate the reported lookup at these `Q` pairs [...] The final pass costs
 `2^{n−k/4}n^{C_D}`" (P3:3046-3048, 3170-3181). PA's residual for the final pass is `FinalPassLeaf l`: after the
@@ -11,7 +21,7 @@ source work, a `RewoundWordFunction` from `req.word ++ seedWord` to `ratWord (gr
 
 This module is the enclosing term with the machine as a typed parameter: a `WordBlocks` family (one machine for all
 requests, all heads back at `0`) at every call family gives the leaf (`finalPassLeaf_of`, by base's
-`WordBlocks.toRewound`). The machine is the final pass's word program converted once at the top.
+`WordBlocks.toRewound`). The machine is the final pass's word program converted once at the top (root).
 
 Paper quantity of the main type: the primitive's printed value `ratWord (greedyValue I alg req)` (`FinalPassAt`). -/
 
@@ -41,3 +51,5 @@ noncomputable def finalPassLeaf_of (E₅ : ℕ → Envelope) (CD₅ : ℕ → �
     (W fe F hF hE hCD kclk coef A a ha).1.toRewound (W fe F hF hE hCD kclk coef A a ha).2⟩⟩
 
 end NearCubicWires.WireExponent3_5.FinalPass.Top
+
+end

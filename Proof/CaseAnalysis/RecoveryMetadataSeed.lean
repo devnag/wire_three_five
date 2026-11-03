@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoveryGrammarBudget
+import Proof.Amplification.RecoveryEraseConstant
 
 /-! The cold scalar bank begins with actual retained raw inputs. This
 fixed literal printer pays for the single one used by the remaining additions. -/

@@ -1,5 +1,37 @@
-import Proof.Wire_3_5.UnionMachine.RadAbsorb
+import Lean
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SeamsUni
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.WritersJoin
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.RadSetupB4
+import Proof.Wire_3_5.UnionMachine.RadSetupB5
+import Proof.Wire_3_5.UnionMachine.ThrDecIface
+import Proof.Wire_3_5.UnionMachine.ThrUnitIface
 import Proof.Wire_3_5.UnionMachine.ThrUnitIface3
+import Proof.Wire_3_5.FinalPass.DigsIface
+import Proof.Wire_3_5.FinalPass.SeamsProg2Base
+import Proof.Wire_3_5.Primitive.Writers.BudgetIface2
+import Proof.Wire_3_5.Primitive.Writers.PlanBase
+import Proof.Wire_3_5.Primitive.Writers.ThrDataIface3
+import Proof.Wire_3_5.Primitive.Writers.WritersJoinBase
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4Base
+import Proof.Wire_3_5.Primitive.ThresholdWriter.RadSetup2
+import Proof.Wire_3_5.Primitive.ThresholdWriter.ShellIface
+import Proof.Wire_3_5.UnionMachine.FiltSetupIface5
+import Proof.Wire_3_5.UnionMachine.RadSetupB3
+import Proof.Wire_3_5.UnionMachine.RadSpecBase
+import Proof.Wire_3_5.UnionMachine.ThrDecIfaceBase
+import Proof.Wire_3_5.UnionMachine.RadAbsorb
+import Proof.Wire_3_5.Primitive.Writers.ThrSide2
+import Proof.Wire_3_5.UnionMachine.ThrUnitIface5Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The THR unit machine's contract, v4: the measure absorbed by the THR load `Ψ_T` alone
 
@@ -29,17 +61,6 @@ open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.
 open NearCubicWires.WireExponent3_5.Stars
 
 /-! ## The RADIX list bound against the THR load -/
-
-theorem loadThr_le' (CD k L BT : ℕ) :
-    CD * CD * ((k + L) * (k + L) * (Nat.sqrt (BT * L) + L * L)) ≤ loadThr CD k L BT := by
-  unfold loadThr sqrtUp
-  have e : CD * CD * ((k + L) * (k + L) * (Nat.sqrt (BT * L) + L * L)) =
-      CD * ((k + L) ^ 2 * (CD * (Nat.sqrt (BT * L) + L ^ 2))) := by ring
-  rw [e]
-  apply Nat.mul_le_mul_left
-  have : (k + L) ^ 2 * (CD * (Nat.sqrt (BT * L) + L ^ 2)) ≤ (k + L) ^ 2 * (CD * (Nat.sqrt (BT * L) + 1 + L ^ 2)) :=
-    Nat.mul_le_mul_left _ (Nat.mul_le_mul_left _ (by omega))
-  omega
 
 /-- **The RADIX row's list bound times `L` below `cAb l · Ψ_T`** (`RadAbsorb.lb_absorb`'s chain, stopped at `Ψ_T`). -/
 theorem lb_absorbT (l : Literals) (F : GateFree l) (hCD : 1 ≤ F.CD) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ}
@@ -169,7 +190,8 @@ def ThrUnitSpec4.cf4 {l : Literals} {F : GateFree l} (U : ThrUnitSpec4 l F) : �
 abbrev ThrUnitU4 (l : Literals) : Type :=
   FinalPass.Seams.StageU l (fun F _ _ _ _ _ => ThrUnitSpec4 l F) (fun U => U.deg4) (fun U => U.cf4)
 
-/-- **The THR writer's leaf from the unit machines, v4** (THRTAIL: the flattening, the emission, the shell over the v4 data stage dimensioned by the THR load, the class link through `meas_le`, `ThrWriterAtJ`). -/
+/-- **The THR writer's leaf from the unit machines, v4** (THRTAIL: the flattening, the emission, the shell over T's
+v4 data stage dimensioned by the THR load, the class link through `meas_le`, `ThrWriterAtJ`). -/
 abbrev ThrLeafOfU4 (l : Literals) : Type :=
   ThrData.ThrStage4U l → ThrUnitU4 l → WritersJoin.ThrLeafJ2 l
 
@@ -185,3 +207,5 @@ abbrev ThrUnitOf5 (l : Literals) : Type :=
     ThrUnitU4 l
 
 end NearCubicWires.WireExponent3_5.UnionMachine.ThrUnit
+
+end

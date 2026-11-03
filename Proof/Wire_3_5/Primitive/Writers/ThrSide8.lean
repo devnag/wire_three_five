@@ -1,12 +1,29 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.ThrSide7
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.ThrSide1
+import Proof.Wire_3_5.Primitive.Writers.ThrSide3
+import Proof.Wire_3_5.Primitive.Writers.ThrSide6
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.ThrSide8Base
 
-/-! # c4 THR block, piece 6 part 8: `hpre` and `CoefFit` at a THR call
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2 c4 THR block, piece 6 part 8: `hpre` and `CoefFit` at a THR call
 
 The THR twin of the SymHp1–3 and SymOcc4: the request's `h·Q'·d ≤ pr` (**`hqd_thr`**, at the THR degree
 `d_D(⌊√(B_T L)⌋ + L²)`), `N^{16}·2^{8ℓ}·2^{Q'} ≤ 2^{pr}` (**`coef_thr`**), the printer's budget within the rectangle
 (**`occ_thr`**, under the THR printer floor `occCDT ≤ C_D`: the linear part through `C_D(k+L) ≤ Ψ` and
 `C_D·L² ≤ Ψ`, the quadratic part through the THR load `C_D²(k+L)²(⌊√(B_T L)⌋ + L²) ≤ Ψ`), and hence alg:compiler's
-precondition at every THR child prefix (**`hpre_thr`**, `pre_of`), with the pool's `CoefFit` (**`thrHcf`**).
+precondition at every THR child prefix (**`hpre_thr`**, the `pre_of`), with the pool's `CoefFit` (**`thrHcf`**).
 
 * `ThrHpreC`, `hqd_thr`, `coef_thr`, `occCDT`, `occ_thr`, **`hpre_thr`**, **`thrHcf`**.
 
@@ -167,10 +184,6 @@ theorem coef_thr (c : SymC) (hdP : 2 * (24 + 8 * eQT l F.filterErrDeg + c.dQ) �
       (2 * (24 + 8 * eQT l F.filterErrDeg + c.dQ)) * (n + 1) := by ring
   omega
 
-/-- **The THR printer's load floor** (fixed before `F`: the algorithm is the literals'). -/
-def occCDT (a : RepairRepresentation.DecompositionAlgorithm) (c : SymC) (A1 cd : ℕ) : ℕ :=
-  160 * (A1 + 1392 * cd + 16 + 16 * cd + c.dQ + 1) + 160 * (c.dQ * c.dD * cDa a) + 2
-
 /-- **The printer's budget at the THR child request of every prefix** under the THR printer floor. -/
 theorem occ_thr (c : SymC)
     (hCD : occCDT (gate0 l F).alg c (A1T l F.filterErrDeg) (10 * CallIndex.algX l + 32) ≤ F.CD)
@@ -298,7 +311,7 @@ theorem occ_thr (c : SymC)
   rw [hSd, hKd, hLd, hm4d, hdRd, hcd] at key
   exact key
 
-/-- **The THR pool fits at `h = d_H(n+1)^{e_H}`** at a THR call (`poolFits_of` at the THR pool). -/
+/-- **The THR pool fits at `h = d_H(n+1)^{e_H}`** at a THR call (the `poolFits_of` at the THR pool). -/
 theorem fits_thr (c : SymC) (hdH : (gate0 l F).alg.coefficient * 4 ^ (gate0 l F).alg.degree + 2 ≤ c.dH)
     (heH : 26 * (gate0 l F).alg.degree + 1 ≤ c.eH) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ} (ha' : a' ≤ 4)
     (Cs : Fin a' → NormalizedThresholdThresholdCircuit n) (carriers : List (Carrier n)) (translation : List ℕ)
@@ -382,3 +395,5 @@ theorem thrH1 (c : SymC) (hc : ThrHpreC l F.filterErrDeg (gate0 l F).alg c) (kcl
 end Gate
 
 end NearCubicWires.WireExponent3_5.PrimAsm.ThrSide
+
+end

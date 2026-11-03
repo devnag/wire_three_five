@@ -1,5 +1,6 @@
-import Proof.MachineModel.GeneratedAmplifierArity
 import Proof.MachineModel.OrdinaryAmplifierReplayFrame
+import Proof.MachineModel.GeneratedAmplifierArity
+import Proof.MachineModel.OrdinaryMatrixTemplateCopy
 import Proof.MachineModel.OrdinaryMatrixScorePower
 
 /-! The actual raw arity header supplies the exact table-length driver.

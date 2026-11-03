@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.RowsCircuitNativePrefix
+import Proof.MachineModel.OrdinaryMatrixBucketDivide
+import Proof.MachineModel.UWalkArithmetic
 
 /-! Divide an actually produced small description counter by two. The
 fixed divisor is printed and the existing native quotient restores every

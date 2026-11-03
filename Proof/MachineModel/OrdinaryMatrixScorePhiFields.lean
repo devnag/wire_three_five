@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryMatrixScoreLeftLoop
+import Proof.MachineModel.OrdinaryMatrixScorePhi
 
 /-! PIECE C / PIECE D interface: the per-gate native fields with the row transform `φ`.
 

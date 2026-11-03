@@ -1,4 +1,5 @@
 import Proof.Foundations.SourceInterfaces
+import Statement
 
 /-!
 # Binding: RS62 Theorem 4, eq. (3.14) → `PrimeThetaBoundContract`

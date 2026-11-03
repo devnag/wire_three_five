@@ -1,4 +1,6 @@
 import Proof.Supplier.RowTupleSubsets
+import Proof.Amplification.RecoveryPrefixCompare
+import Proof.MachineModel.OrdinaryMatrixFrameCopy
 
 /-! One tuple digit is read at the live source cursor. Reusable comparisons
 and an overwriting copy retain the short binary fields between digits. -/
@@ -9,6 +11,16 @@ set_option autoImplicit false
 set_option maxHeartbeats 250000
 set_option maxRecDepth 120000
 set_option warningAsError true
+
+structure Data where
+  source : List Bool
+  current : ℕ
+  bound : ℕ
+  previous : ℕ
+  boundFlag : Bool
+  previousFlag : Bool
+  seen : Bool
+  good : Bool
 
 def readMachine := TapeEmbedding.machine 9 FieldMachine.machine
 

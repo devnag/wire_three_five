@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RowsStrictArithmetic
+import Proof.MachineModel.ClockSmallInput
 
 /-! A constant-time physical selector for strict threshold subtraction.
 It retains the sign, distinguishes zero/one/larger canonical magnitudes,

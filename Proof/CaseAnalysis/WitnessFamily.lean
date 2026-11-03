@@ -1,7 +1,5 @@
-import Proof.Amplification.RecoveryRowLeafTapes
+import Proof.Hierarchy.CompetitorWitnessHeaderReady
 import Proof.Amplification.RecoveryWitnessPolicy
-import Proof.Hierarchy.CompetitorWitnessHeader
-import Proof.Hierarchy.HierarchyBinaryMultiplyEntry
 
 /-! Paper C.10's one-sum-per-variable payload. The outer three-field grammar
 is retained; its last field is a balanced list in the actual source's variable
@@ -65,6 +63,27 @@ theorem decode_encode (codec : CanonicalCircuitCodec Circuit)
   cases family with
   | mk ss h =>
     simp [decode, code, decodeBalancedList_encode, decodeSums_encode, h]
+
+theorem code_of_decode (codec : CanonicalCircuitCodec Circuit) {raw : ℕ}
+    {family : SumFamily Circuit wires description limits variableCount}
+    (h : decode codec wires description limits variableCount raw = some family) :
+    family.code codec = raw := by
+  unfold decode at h
+  cases hc : decodeBalancedList raw with
+  | none => simp [hc] at h
+  | some cs =>
+    simp only [hc, bind, Option.bind] at h
+    cases hs : decodeSums codec wires description limits cs with
+    | none => simp [hs] at h
+    | some ss =>
+      simp only [hs] at h
+      split at h
+      · split at h
+        · rename_i hcode
+          cases Option.some.inj h
+          exact hcode
+        · simp at h
+      · simp at h
 
 theorem code_bits (codec : CanonicalCircuitCodec Circuit)
     (family : SumFamily Circuit wires description limits variableCount) (bits : ℕ)

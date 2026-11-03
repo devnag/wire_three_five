@@ -1,3 +1,6 @@
+import Proof.Circuits.BoundedOracleStructuralCircuit
+import Proof.Circuits.CircuitInputClauseBalancedCall
+import Proof.Amplification.CanonicalRecoveryLanguage
 import Proof.MachineModel.CircuitInputFormulaPrefixSATProgram
 import Proof.MachineModel.TaggedToBalancedPreservingProgram
 

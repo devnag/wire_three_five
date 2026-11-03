@@ -46,13 +46,145 @@ end BalancedTraversalTree
 
 /-! ## Total structural view of arbitrary raw codes -/
 
+/-- Proof syntax for the controller's behavior on every natural.  Raw tags
+are retained so the final equality guard can detect every normalization. -/
+inductive RawBalancedTraversalTree where
+  | empty
+  | leaf (tag atom : ℕ)
+  | branch (tag : ℕ)
+      (left right : RawBalancedTraversalTree)
+  deriving DecidableEq, Repr
+
 namespace RawBalancedTraversalTree
+
+def rawCode : RawBalancedTraversalTree → ℕ
+  | .empty => 0
+  | .leaf tag atom => Nat.pair tag atom
+  | .branch tag left right =>
+      Nat.pair tag (Nat.pair left.rawCode right.rawCode)
+
+def normalized : RawBalancedTraversalTree → BalancedTraversalTree
+  | .empty => .empty
+  | .leaf _tag atom => .leaf atom
+  | .branch _tag left right =>
+      .branch left.normalized right.normalized
+
+def atoms (tree : RawBalancedTraversalTree) : List ℕ :=
+  tree.normalized.atoms
+
+/-- Exactly the raw shapes selected by the fixed controller. -/
+def Valid : RawBalancedTraversalTree → Prop
+  | .empty => True
+  | .leaf tag atom =>
+      Nat.pair tag atom ≠ 0 ∧ (Nat.unpair tag).1 = 0
+  | .branch tag left right =>
+      (Nat.unpair tag).1 ≠ 0 ∧ left.Valid ∧ right.Valid
 
 end RawBalancedTraversalTree
 
+/-- Total parser for the controller's actual raw-tag classification.  This is
+a proof view only; executable code remains the fixed register controller. -/
+def rawBalancedTraversalTree (code : ℕ) : RawBalancedTraversalTree :=
+  if _hzero : code = 0 then
+    .empty
+  else
+    let outer := Nat.unpair code
+    if _hleaf : (Nat.unpair outer.1).1 = 0 then
+      .leaf outer.1 outer.2
+    else
+      let branches := Nat.unpair outer.2
+      .branch outer.1
+        (rawBalancedTraversalTree branches.1)
+        (rawBalancedTraversalTree branches.2)
+termination_by code
+decreasing_by
+  all_goals
+    have htagPositive : 0 < outer.1 := by
+      by_contra hnotPositive
+      have htagZero : outer.1 = 0 := Nat.eq_zero_of_not_pos hnotPositive
+      exact _hleaf (by simp [htagZero])
+    have hpayloadLt : outer.2 < code := by
+      have hsum : outer.1 + outer.2 ≤ code := by
+        simpa only [outer] using Nat.unpair_add_le code
+      omega
+  · exact (Nat.unpair_left_le outer.2).trans_lt hpayloadLt
+  · exact (Nat.unpair_right_le outer.2).trans_lt hpayloadLt
+
 namespace RawBalancedTraversalTree
 
+/-- Canonical structural trees embed with exact public tags. -/
+def ofBalanced : BalancedTraversalTree → RawBalancedTraversalTree
+  | .empty => .empty
+  | .leaf atom => .leaf 1 atom
+  | .branch left right =>
+      .branch 2 (ofBalanced left) (ofBalanced right)
+
+@[simp] theorem rawCode_ofBalanced (tree : BalancedTraversalTree) :
+    (ofBalanced tree).rawCode = tree.code := by
+  induction tree with
+  | empty => rfl
+  | leaf atom => rfl
+  | branch left right inductionLeft inductionRight =>
+      simp [ofBalanced, rawCode, BalancedTraversalTree.code,
+        inductionLeft, inductionRight]
+
+@[simp] theorem normalized_ofBalanced (tree : BalancedTraversalTree) :
+    (ofBalanced tree).normalized = tree := by
+  induction tree with
+  | empty => rfl
+  | leaf atom => rfl
+  | branch left right inductionLeft inductionRight =>
+      simp [ofBalanced, normalized, inductionLeft, inductionRight]
+
+theorem valid_ofBalanced (tree : BalancedTraversalTree) :
+    (ofBalanced tree).Valid := by
+  induction tree with
+  | empty =>
+      trivial
+  | leaf atom =>
+      refine ⟨?_, by norm_num [Nat.unpair]⟩
+      have := Nat.left_le_pair 1 atom
+      omega
+  | branch left right inductionLeft inductionRight =>
+      exact ⟨by norm_num [Nat.unpair],
+        inductionLeft, inductionRight⟩
+
 end RawBalancedTraversalTree
+
+theorem rawBalancedTraversalTree_of_valid
+    (tree : RawBalancedTraversalTree) (hvalid : tree.Valid) :
+    rawBalancedTraversalTree tree.rawCode = tree := by
+  induction tree with
+  | empty =>
+      simp [rawBalancedTraversalTree,
+        RawBalancedTraversalTree.rawCode]
+  | leaf tag atom =>
+      rcases hvalid with ⟨hnonzero, htagClass⟩
+      simp [rawBalancedTraversalTree,
+        RawBalancedTraversalTree.rawCode, hnonzero, htagClass]
+  | branch tag left right inductionLeft inductionRight =>
+      rcases hvalid with
+        ⟨htagClass, hleftValid, hrightValid⟩
+      have hnonzero :
+          Nat.pair tag (Nat.pair left.rawCode right.rawCode) ≠ 0 := by
+        intro hzero
+        have htagZero : tag = 0 := by
+          have := Nat.left_le_pair tag
+            (Nat.pair left.rawCode right.rawCode)
+          omega
+        exact htagClass (by simp [htagZero])
+      simp [rawBalancedTraversalTree,
+        RawBalancedTraversalTree.rawCode, hnonzero, htagClass,
+        inductionLeft hleftValid, inductionRight hrightValid]
+
+theorem rawBalancedTraversalTree_normalized_code
+    (tree : BalancedTraversalTree) :
+    (rawBalancedTraversalTree tree.code).normalized = tree := by
+  rw [← RawBalancedTraversalTree.rawCode_ofBalanced tree,
+    rawBalancedTraversalTree_of_valid
+      (RawBalancedTraversalTree.ofBalanced tree)
+      (RawBalancedTraversalTree.valid_ofBalanced tree)]
+  exact RawBalancedTraversalTree.normalized_ofBalanced tree
 
 /-- Canonical midpoint tree used only to reason about the public code. -/
 def balancedTraversalTree : List ℕ → BalancedTraversalTree

@@ -1,4 +1,16 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SymOcc2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SymOcc3Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The printer's gate budget at a SYM call, part 3: `occ_sym`
 
@@ -20,20 +32,6 @@ open NearCubicWires.WireExponent3_5.Shared NearCubicWires.WireExponent3_5.Cost N
 open NearCubicWires.SupplierPipeline NearCubicWires.WireExponent3_5.Stars NearCubicWires.WireExponent3_5.Split
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.PrimAsm.WriterIface
 open NearCubicWires.WireExponent3_5.FinalPass.FreeGen NearCubicWires.WireExponent3_5.CompilerMachine
-
-/-- **The load-constant floor of the printer's budget** (chosen before `F`: the algorithm is the literals'). -/
-def occCD (a : RepairRepresentation.DecompositionAlgorithm) (c : SymC) (A1 : ℕ) : ℕ :=
-  160 * (A1 + 400 + c.dQ + 1) + 160 * (c.dQ * c.dD * cDa a) + 2
-
-theorem symBud_le' (a : RepairRepresentation.DecompositionAlgorithm) (n : ℕ) :
-    symBud a n ≤ a.coefficient * 4 ^ a.degree * (n + 1) ^ (26 * a.degree) := by
-  unfold symBud
-  have h1 : n + ((n + 1) ^ 26 + 2) + 1 ≤ 4 * (n + 1) ^ 26 := by
-    have : n + 1 ≤ (n + 1) ^ 26 := Nat.le_self_pow (by norm_num) _
-    omega
-  calc a.coefficient * (n + ((n + 1) ^ 26 + 2) + 1) ^ a.degree
-      ≤ a.coefficient * (4 * (n + 1) ^ 26) ^ a.degree := Nat.mul_le_mul_left _ (Nat.pow_le_pow_left h1 _)
-    _ = _ := by rw [mul_pow, ← pow_mul, Nat.mul_assoc]
 
 section Gate
 variable (l : Literals) (F : GateFree l)
@@ -128,3 +126,4 @@ end Gate
 
 end NearCubicWires.WireExponent3_5.FinalPass.SymFr
 
+end

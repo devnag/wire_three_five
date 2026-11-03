@@ -1,5 +1,6 @@
 import Proof.Wire_3_5.Primitive.SeedFix.CarBounds
 import Proof.Wire_3_5.Primitive.SeedFix.TabSymStages
+import Proof.CaseAnalysis.WitnessCanonicalFields
 
 /-! # The carrier table: the machine's layout (P3:3071-3086, 1645-1650)
 

@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.SeedFix.W6M
+import Proof.Wire_3_5.Filters.GF2Primitive
 
 /-! # W6, part 14: the modulus search's entry words
 

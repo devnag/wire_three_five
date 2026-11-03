@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.CaseOneAmplifierBound
+import Proof.PCP.PCPSerializerCapacityBounds
+import Proof.Amplification.RecoveryPrefixColdBudget
 
 /-! The whole original Case1 formula constructor and canonical proof search
 have a sufficient C.12 envelope in their actual serialized input/output sizes.

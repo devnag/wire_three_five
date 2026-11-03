@@ -1,4 +1,6 @@
 import Proof.MachineModel.ClockBinary
+import Proof.MachineModel.OrdinaryStreamController
+import Proof.MachineModel.OrdinaryZeroUnpadding
 
 /-! Count a literal framed input with a dynamically growing binary counter.
 The input is retained and every carry, head reset and stream advance is paid. -/

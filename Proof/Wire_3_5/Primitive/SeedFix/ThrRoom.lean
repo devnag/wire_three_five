@@ -1,5 +1,5 @@
-import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPoly
-import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4
+import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPolyBase
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4Base
 
 /-! # gate 2: the numbers machine's room, a function of the literals only
 

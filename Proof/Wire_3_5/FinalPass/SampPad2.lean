@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.FinalPass.SampPad
+import Proof.Wire_3_5.Primitive.SeedFix.C4Child
 
 /-! # The degenerate call's padded batch (mode-generic), part 2: the child expression's value
 

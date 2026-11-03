@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryCaseOnePaddedBitRun
+import Proof.MachineModel.GeneratedAmplifierEvaluator
 
 /-! C.12's sufficient envelope for the whole padded Case1 evaluator. Reuse
 the original complete-table runtime bound; all crop, field-copy and reset

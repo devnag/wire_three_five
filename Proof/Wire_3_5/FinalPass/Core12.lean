@@ -1,4 +1,18 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.Core11
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.Core9
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.S5Seam2
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.Core11Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S5Core, part 12: the THR half's exit and the count and mode stages on it (P3:3083-3086, 3170-3181)
 
@@ -28,3 +42,5 @@ section Run
 end Run
 
 end NearCubicWires.WireExponent3_5.FinalPass.Core
+
+end

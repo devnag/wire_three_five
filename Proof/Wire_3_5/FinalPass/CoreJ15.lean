@@ -1,4 +1,12 @@
-import Proof.Wire_3_5.FinalPass.CoreJ14
+import Lean
+import Proof.Wire_3_5.FinalPass.CoreJ10
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.CoreJ11
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # S5Core over the writers with arbitrary residues, part J15: the core half's exit (P3:3044-3048, 3170-3181)
 
@@ -49,3 +57,5 @@ theorem stageFJ (c : ℕ) (A6 : Fin L.t → List Bool) (hT : A6 (TcJ W L hR) = s
 end Final
 
 end NearCubicWires.WireExponent3_5.FinalPass.Core
+
+end

@@ -1,21 +1,39 @@
-import Proof.Wire_3_5.UnionMachine.FrontSemRun
+import Lean
+import Proof.Wire_3_5.UnionMachine.FrontSemRunBase
 import Proof.Wire_3_5.UnionMachine.FrontCaps
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Recovery.RecoveryLanguage
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Recovery.RecoverySetupTwo
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.PlanW2
+import Proof.Wire_3_5.UnionMachine.UnionSetup
+import Proof.Wire_3_5.UnionMachine.UnionCallCount
+import Proof.Wire_3_5.UnionMachine.FrontCapsBase
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-! # C6 front, the semantic core (7): the pinned setup's facts the front's run reads (P3:3633, 3669-3691)
 
-At the pinned setup `SUE` (both branches: the refuter's hierarchy at `recL`, the language's elsewhere): the parity and
-constant atoms are the union's, the grid is row B's (`sue_gridSize`, `sue_gridMass`), the thresholds and the oracle
-degree are the gate's; the hierarchy the front simulates (**`hhOf`**), the substituted source's width
-(**`sue_hq`**) and its PCPP output word (**`sue_hPO`**, `recSetup2_pcppOutput` / `unionSetupS1_pcppOutput`).
+At the pinned setup `SUE` (both branches: the refuter's hierarchy at `recL`, live; the language's elsewhere, dead):
+the parity and constant atoms are the union's, the grid is row B's (`sue_gridSize`, `sue_gridMass`), the thresholds,
+the oracle degree, the short PCP and the pointwise PCPP are the gate's; at `recL` the setup is live with the
+succinct verifier `gateSV l` and the width `q(N)` of the ledger (**`sue_live`**, **`sue_width`**).
 
-Paper quantity of the main types: the pinned setup's PCPP output of the substituted circuit. -/
+Paper quantity of the main types: the pinned setup's outer data (`𝒱_G`, `q(N)`, liveness). -/
 
 set_option autoImplicit false
 set_option linter.unusedSimpArgs false
 
 namespace NearCubicWires.WireExponent3_5.UnionMachine.FrontSemSUE
 open NearCubicWires NearCubicWires.WireExponent3_5 NearCubicWires.WireExponent3_5.Transfer
-open NearCubicWires.WireExponent3_5.Transfer.CaseTwoPadG NearCubicWires.WireExponent3_5.Split
+open NearCubicWires.WireExponent3_5.Split
 open NearCubicWires.WireExponent3_5.UnionMachine.PlanW2 NearCubicWires.WireExponent3_5.Ledger
 open NearCubicWires.RepairSource NearCubicWires.SourceInterfaces NearCubicWires.RepairOrdinary
 open NearCubicWires.RepairOrdinary.CloseoutCaseTwo
@@ -26,23 +44,26 @@ open NearCubicWires.WireExponent3_5.UnionMachine.FrontCaps (BU)
 section SUE
 variable (l : Literals) (F : GateFree l) (e coef A : ℕ) (L : Language) (hL : InNTIME (fun n => n ^ (kE l e + 2)) L)
 
-/-- **The hierarchy the front simulates**: the refuter's at `recL`, the language's elsewhere. -/
-noncomputable def hhOf : OrdinaryHierarchy (fun n => n ^ (kE l e + 2)) := by
-  classical exact if L = recL l (kE l e) then refH l (kE l e) else hierarchyOf hL
-
 theorem sue_eq_rec (h : L = recL l (kE l e)) :
-    SUE l F e coef A L hL = recSetup2 l (gate0 l F) (kE l e) coef A (aE l e) (haE l e) :=
-  setupF_eq_rec l F (kE l e) coef A (aE l e) (haE l e) L hL h
+    SUE l F e coef A L hL = recSetup2 l (gate0 l F) (kE l e) coef A (aE l e) (haE l e) := by
+  subst h; exact unionSetupS2_recL l (gate0 l F) (kE l e) coef A (aE l e) (haE l e) hL
 
 theorem sue_eq_other (h : L ≠ recL l (kE l e)) :
     SUE l F e coef A L hL = unionSetupS1 l (gate0 l F) (kE l e) coef A (aE l e) (haE l e) L hL :=
-  setupF_eq_other l F (kE l e) coef A (aE l e) (haE l e) L hL h
+  UnionCallCount.unionSetupS2_ne l (gate0 l F) coef A (aE l e) (kE l e) (haE l e) L hL h
 
-theorem hh_rec (h : L = recL l (kE l e)) : hhOf l e L hL = refH l (kE l e) := by
-  unfold hhOf; rw [if_pos h]
+/-- The recovered setup is live. -/
+theorem sue_live (h : L = recL l (kE l e)) : (SUE l F e coef A L hL).live = true := by
+  rw [sue_eq_rec l F e coef A L hL h]; rfl
 
-theorem hh_other (h : L ≠ recL l (kE l e)) : hhOf l e L hL = hierarchyOf hL := by
-  unfold hhOf; rw [if_neg h]
+/-- Off the recovered language the setup is dead. -/
+theorem sue_dead (h : L ≠ recL l (kE l e)) : (SUE l F e coef A L hL).live = false := by
+  rw [sue_eq_other l F e coef A L hL h]; rfl
+
+/-- **The recovered setup's width is the ledger's `q(N)`** at `A_pad = gateApad l`. -/
+theorem sue_width (h : L = recL l (kE l e)) (N : ℕ) :
+    (SUE l F e coef A L hL).width N = Ledger.nativeWidth kclk (gateApad l) N := by
+  rw [sue_eq_rec l F e coef A L hL h]; rfl
 
 theorem sue_parity : (SUE l F e coef A L hL).parityAtom = unionParityAtom := by
   by_cases h : L = recL l (kE l e)
@@ -83,38 +104,8 @@ theorem sue_gridMass (q : ℕ) :
   rw [FrontCaps.S2_gridMass l (gate0 l F) (kE l e) coef A (aE l e) (haE l e) L hL]
   exact gridMassOf_rowB (gateZeta_pos l) (gateZeta_lt l) (gateCδ1 l) (gateCδ1_pos l) q
 
-/-- **The substituted source's width** is within the setup's width. -/
-theorem sue_hq {N : ℕ} (x : BitInput N) :
-    PCPPNativeHierarchyNodes.width (gateSource l) (kE l e) (hhOf l e L hL).coefficient (cpadOf (hhOf l e L hL))
-      (VerifierEncoding.code (hhOf l e L hL).verifier) x ≤ (SUE l F e coef A L hL).pcp.nativeWidth N := by
-  by_cases h : L = recL l (kE l e)
-  · rw [hh_rec l e L hL h, sue_eq_rec l F e coef A L hL h]
-    show _ ≤ max _ _
-    exact nativeWidth_le l (refH l (kE l e)) (paddedWidth l (gate0 l F) (refH l (kE l e))) (fun _ => le_max_left _ _) x
-  · rw [hh_other l e L hL h, sue_eq_other l F e coef A L hL h]
-    show _ ≤ max _ _
-    exact nativeWidth_le l (hierarchyOf hL) (paddedWidth l (gate0 l F) (hierarchyOf hL)) (fun _ => le_max_left _ _) x
-
-/-- **The setup's PCPP output word is the substituted circuit's.** -/
-theorem sue_hPO {N : ℕ} (x : BitInput N) :
-    ∀ (O : BooleanCircuit ((SUE l F e coef A L hL).pcp.nativeWidth N))
-      (hq : PCPPNativeHierarchyNodes.width (gateSource l) (kE l e) (hhOf l e L hL).coefficient (cpadOf (hhOf l e L hL))
-        (VerifierEncoding.code (hhOf l e L hL).verifier) x ≤ (SUE l F e coef A L hL).pcp.nativeWidth N),
-      pcppOutput ((SUE l F e coef A L hL).request x O) ((SUE l F e coef A L hL).pcppOf x O) =
-        pcppOutput (PCPPRequestBoundary.request (gatePCPP l) (padSubstituted (gateSource l) (kE l e)
-          (hhOf l e L hL).coefficient (cpadOf (hhOf l e L hL)) (VerifierEncoding.code (hhOf l e L hL).verifier) x
-          (le_max_right _ _) hq O))
-          ((gatePCPP l).output (PCPPRequestBoundary.request (gatePCPP l) (padSubstituted (gateSource l) (kE l e)
-            (hhOf l e L hL).coefficient (cpadOf (hhOf l e L hL)) (VerifierEncoding.code (hhOf l e L hL).verifier) x
-            (le_max_right _ _) hq O))) := by
-  by_cases h : L = recL l (kE l e)
-  · rw [hh_rec l e L hL h, sue_eq_rec l F e coef A L hL h]
-    intro O hq
-    exact recSetup2_pcppOutput l F (kE l e) coef A (aE l e) (haE l e) x O hq
-  · rw [hh_other l e L hL h, sue_eq_other l F e coef A L hL h]
-    intro O hq
-    exact unionSetupS1_pcppOutput l F (kE l e) coef A (aE l e) (haE l e) L hL x O hq
-
 end SUE
 
 end NearCubicWires.WireExponent3_5.UnionMachine.FrontSemSUE
+
+end

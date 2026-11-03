@@ -1,8 +1,19 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.ThrDataH
 import Proof.Wire_3_5.Primitive.Writers.ThrStrip7
 import Proof.Wire_3_5.Primitive.Writers.C3ReqIface3
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.SeedFix.C3ReqIface
 
-/-! # c4 THR block, the THR stage's compiler run (`hc3`)
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2 c4 THR block, the THR stage's compiler run (`hc3`)
 
 "`alg:compiler`" (P3:1886-1906) with the fixed fields `PRE`/`POST` of the THR call's request: the THR stage's C3
 sub-stage is `ThrStrip.thrC3` of the THR request writer (`C3ReqIface3.C3ReqAt3.thr`), and its run on the THR input
@@ -78,3 +89,5 @@ theorem thr_hc3 (l : Literals) (F : GateFree l) (EW : Envelope) (cW cN DN kclk c
     (C.thr_run n a ha Cs carriers translation hcall hs (fr 3) (fr 2) (fr 4) (fr 5) h1 hcf hload) τ c hx hc hY h0
 
 end NearCubicWires.WireExponent3_5.PrimAsm.ThrSet
+
+end

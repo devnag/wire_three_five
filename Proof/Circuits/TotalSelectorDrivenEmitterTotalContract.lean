@@ -1,5 +1,5 @@
-import Proof.Circuits.TotalSelectorDrivenEmitterResources
 import Proof.Circuits.UniformTargetTotalRun
+import Proof.Circuits.TotalSelectorDrivenEmitterResources
 
 /-! # All-request guarded emitter contract at the selector frame -/
 

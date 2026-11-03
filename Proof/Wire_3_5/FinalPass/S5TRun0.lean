@@ -1,4 +1,17 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.S5TNum4
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.S5TChC
+import Proof.Wire_3_5.FinalPass.S5TJoin
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPoly
+import Proof.Wire_3_5.Assembly.Split
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-! # S5-THR, part 39: the THR call's named pieces at `l`'s algorithm (P3:2220-2231, 3170-3181)
 
@@ -77,3 +90,5 @@ theorem mp_eqL {n : ℕ} (hs : (callInputs l F kclk coef A a ha).StarAt n) {a' :
 end Run
 
 end NearCubicWires.WireExponent3_5.FinalPass.S5T
+
+end

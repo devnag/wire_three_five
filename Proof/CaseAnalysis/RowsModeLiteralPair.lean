@@ -1,5 +1,5 @@
 import Proof.CaseAnalysis.RowsModeLiteralPrefix
-import Proof.CaseAnalysis.RowsRawAtomSeek
+import Proof.CaseAnalysis.RowsRawPairSeek
 
 /-! One actual literal-cache pair. Both scalar flags are physically read;
 the original unary index advances even for an empty variable polynomial. -/

@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.Writers.ParseNat
+import Proof.Wire_3_5.FinalPass.WordMap
 
 /-! # PA library (b), part 1: unary arithmetic in the register language
 
@@ -62,6 +63,7 @@ theorem decAgainstW_spec (a b f : Fin nr) (hab : a ≠ b) (haf : a ≠ f) (hbf :
         (by simp [Function.update_apply, Ne.symm hbf, Ne.symm haf]; omega)
       refine WExec.cast cap (WExec.whrT (by omega) (WExec.seq h1 h2') ih) ?_ (by omega)
       wgen_eq [hb0, hn]
+
 
 /-! ## Compare, subtract, multiply-add, power of two (registers as embeddings) -/
 
@@ -210,6 +212,7 @@ theorem pow2W_spec (R : Fin 4 ↪ Fin nr) (σ : WState ns nr) (hp : σ.val (R 1)
   refine WExec.cast cap (WExec.seq h0 (WExec.seq h1 hloop)) ?_ (by simp [σ0]; nlinarith)
   simp only [S]
   wgen_eq [σ1, σ0, ht, hp]
+
 
 /-! ## Division -/
 

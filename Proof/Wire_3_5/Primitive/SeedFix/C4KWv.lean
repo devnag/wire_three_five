@@ -1,7 +1,8 @@
-import Proof.Wire_3_5.Primitive.SeedFix.C4KWh
-import Proof.Wire_3_5.Primitive.SeedFix.C4KWk
-import Proof.Wire_3_5.Primitive.SeedFix.C4KWl
 import Proof.Wire_3_5.Primitive.SeedFix.C4KWu
+import Proof.Wire_3_5.Primitive.SeedFix.C4KWl
+import Proof.Wire_3_5.Primitive.SeedFix.C4KWk
+import Proof.Wire_3_5.Primitive.SeedFix.C4KWh
+import Proof.Wire_3_5.Primitive.SeedFix.C4KWf
 
 /-! # C4KW: **the kept words writer** `kww : KWW`
 

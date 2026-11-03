@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.FinalSupplierCalls
+import Proof.MachineModel.Layout
 
 namespace NearCubicWires.RepairOrdinary.CloseoutFinalC10WorkerDock
 
@@ -27,6 +28,9 @@ set_option warningAsError true
 /-- The multiply stage's ninety tapes. -/
 def entrySlot (j : Fin 90) : Fin 218 := ⟨2 + j.val, by omega⟩
 
+/-- The fold's source tape, as an index of its own bank. -/
+def foldSource : Fin 95 := (⟨88, by omega⟩ : Fin 94).castAdd 1
+
 /-- The fold's ninety-five tapes.  Its source tape is the multiply stage's
 output port; every other tape is fresh. -/
 def foldSlot (j : Fin 95) : Fin 218 :=
@@ -46,6 +50,50 @@ def result : Fin 218 := ⟨217, by omega⟩
 
 /-- The verifier's framed input tape. -/
 def inputTape : Fin 218 := ⟨0, by omega⟩
+
+theorem entrySlot_val (j : Fin 90) : (entrySlot j).val = 2 + j.val := rfl
+
+theorem foldSlot_val (j : Fin 95) :
+    (foldSlot j).val = if j.val = 88 then 76 else 92 + j.val := by
+  unfold foldSlot
+  split <;> rfl
+
+theorem entrySlot_injective : Function.Injective entrySlot := by
+  intro a b h
+  have hv := congrArg Fin.val h
+  rw [entrySlot_val, entrySlot_val] at hv
+  exact Fin.ext (by omega)
+
+theorem foldSlot_injective : Function.Injective foldSlot := by
+  intro a b h
+  have hv := congrArg Fin.val h
+  rw [foldSlot_val, foldSlot_val] at hv
+  have ha := a.isLt
+  have hb := b.isLt
+  refine Fin.ext ?_
+  by_cases hA : a.val = 88
+  · by_cases hB : b.val = 88
+    · omega
+    · rw [if_pos hA, if_neg hB] at hv; omega
+  · by_cases hB : b.val = 88
+    · rw [if_neg hA, if_pos hB] at hv; omega
+    · rw [if_neg hA, if_neg hB] at hv; omega
+
+/-- **The handoff, as a slot identity.**  The fold's source tape IS the
+multiply stage's output port `74`.  Nothing is copied between the stages. -/
+theorem foldSlot_source : foldSlot foldSource = entrySlot 74 := by
+  apply Fin.ext
+  rw [foldSlot_val, entrySlot_val]
+  rfl
+
+/-- Every other fold tape is fresh: no multiply-stage tape lands on it. -/
+theorem entrySlot_ne_foldSlot (j : Fin 95) (hj : j.val ≠ 88) (k : Fin 90) :
+    entrySlot k ≠ foldSlot j := by
+  intro h
+  have hv := congrArg Fin.val h
+  rw [entrySlot_val, foldSlot_val, if_neg hj] at hv
+  have := k.isLt
+  omega
 
 /-! ## §2 The scalar width and the budget -/
 
@@ -92,6 +140,21 @@ structure DockReady (entryWidth : ℕ) (entries : List Entry)
     bank (foldSlot j) =
       CompetitorSumEntry.input (joinScalarWidth entryWidth entries.length)
         (contributions entries) j
+
+theorem foldInput_castAdd (scalarWidth : ℕ)
+    (terms : List CompetitorValidity.Estimate) (i : Fin 94) :
+    CompetitorSumEntry.input scalarWidth terms (i.castAdd 1) =
+      CompetitorSumFold.coldInput scalarWidth
+        (CompetitorSumFold.words scalarWidth terms) i := by
+  simp [CompetitorSumEntry.input, CompetitorSumEntry.extendTapes]
+
+/-- The fold's source tape carries the term stream. -/
+theorem foldInput_source (scalarWidth : ℕ)
+    (terms : List CompetitorValidity.Estimate) :
+    CompetitorSumEntry.input scalarWidth terms foldSource =
+      CompetitorSumFold.words scalarWidth terms := by
+  rw [foldSource, foldInput_castAdd]
+  rfl
 
 /-! ## §4 The docked chain -/
 

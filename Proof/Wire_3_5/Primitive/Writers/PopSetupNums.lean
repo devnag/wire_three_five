@@ -1,4 +1,9 @@
+import Proof.Wire_3_5.Primitive.Writers.SymQM
+import Proof.Wire_3_5.Primitive.Writers.LevelW
 import Proof.Wire_3_5.Primitive.Writers.SymDecIdx
+import Proof.Wire_3_5.Primitive.Writers.CapNum
+import Proof.Wire_3_5.Primitive.Writers.FiltNum
+import Proof.Wire_3_5.Primitive.Writers.SymLayout
 
 /-! # PA POP setup, part 3: the POP setup's numbers, in registers
 

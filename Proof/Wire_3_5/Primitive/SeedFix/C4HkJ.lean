@@ -1,5 +1,18 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.C4HkI
 import Proof.Wire_3_5.FinalPass.HashFree2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.HashFree
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixTypes
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.SeedFix.C4HkJBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The HASH stage, part 10: one stage for every THR call, and its run at a call
 
@@ -23,33 +36,6 @@ open NearCubicWires.WireExponent3_5.Primitive NearCubicWires.SupplierPipeline Ne
 open NearCubicWires.WireExponent3_5.Split NearCubicWires.WireExponent3_5.PrimAsm.Plan
 open NearCubicWires.WireExponent3_5.PrimAsm.WriterIface
 open NearCubicWires.WireExponent3_5.PrimT.C4Wrap (wrapM wrapCost)
-
-/-- **The HASH loop's family without call data**: the machine fields of every HASH child family. -/
-noncomputable def famUH (A0 : C4Iface.AsmStage) (wa : RepairRepresentation.WilliamsAlgorithm) : C4Loop.ChildFam where
-  t := C4H.CTH A0 wa + 1
-  s := _
-  M := C4Hf.chMHs A0 wa
-  cost := 0
-  PFX := C4Hf.hPfxT A0 wa
-  SUM := C4Hf.hSumP A0 wa
-  keep := C4Hf.hKeepF A0 wa
-  hPFX := C4Hf.hKeepF_pfx A0 wa
-  hSUM := C4Hf.hKeepF_sum A0 wa
-  K := fun _ => []
-  W := 0
-  bound := 0
-  val := fun _ => 0
-  run := fun _ _ h => absurd h (Nat.not_lt_zero _)
-
-/-- **The HASH stage** at the uniform family (the setup `M0`, its layout and kept tapes). -/
-noncomputable def hashStageU {x s0 : ℕ} (L : C4Set.Lay) (hLx : L.N ≤ 3 + x) (M0 : Machine (3 + x) s0)
-    (wa : RepairRepresentation.WilliamsAlgorithm) (hkT : Fin 94 → Fin (3 + x)) (hqT : Fin (3 + x)) (off : ℕ)
-    (hroom : off + 12 + ((famUH UnionMachine.TailAsm.asmStage wa).T + 1 + 1 + 1) + (2 + 2 + 0 + 1) ≤ 3 + x) :
-    SeedFixTypes.Stage3 :=
-  ⟨x, _, wrapM (setupH L hLx M0 hkT off (by omega) ((famUH UnionMachine.TailAsm.asmStage wa).T + 1 + 1 + 1))
-    (famUH UnionMachine.TailAsm.asmStage wa) (off + 12) (by omega)
-    (hashExt L hLx UnionMachine.TailAsm.asmStage wa hkT hqT off (by omega) (famUH UnionMachine.TailAsm.asmStage wa).T)
-    finM (off + 12 + ((famUH UnionMachine.TailAsm.asmStage wa).T + 1 + 1 + 1)) hroom (finExtH off (by omega))⟩
 
 section Call
 variable (l : Literals) (F : GateFree l) (wa : RepairRepresentation.WilliamsAlgorithm) (K3 D3 Kp Dp : ℕ)
@@ -77,3 +63,5 @@ theorem hash_call_run {x s0 c0 : ℕ} (L : C4Set.Lay) (hLx : L.N ≤ 3 + x) (M0 
 end Call
 
 end NearCubicWires.WireExponent3_5.PrimT.C4Hk
+
+end

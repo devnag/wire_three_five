@@ -1,5 +1,16 @@
+import Lean
 import Proof.Wire_3_5.Transfer.TransferUnionComplete
 import Proof.Wire_3_5.UnionMachine.UnionAtomsOk
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.Transfer.TransferUnionSound
+import Proof.Wire_3_5.Transfer.TransferUnionCompleteBase
+import Proof.Wire_3_5.UnionMachine.UnionCodecBase
+import Proof.Wire_3_5.UnionMachine.UnionSchedule
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The honest guess passes the atom test (the satisfiability of `CompleteForEventuallyOk`)
 
@@ -26,63 +37,63 @@ section Union
 variable {kclk : ℕ} {E : Envelope} {B : TimeBudget kclk E} {I : PrimitiveInputs B}
 
 section Build
-variable (S : UnionSetup I) {N : ℕ} (z : BitInput N) (oracle : BooleanCircuit (S.pcp.nativeWidth N)) (m : Mode)
-variable {J : PcppVar (S.pcppOf z oracle) → Type}
+variable (S : UnionSetup I) {N : ℕ} (z : BitInput N) (Γ : NearCubicGates.Close.Outer.OuterGuess (S.width N)) (m : Mode)
+variable {J : PcppVar (S.pcppOf z Γ) → Type}
 
 /-- **The honest guess is accepted and passes the atom test** (`exists_unionAccepts` with `AtomsOkG`, P3:3670). -/
 theorem exists_unionAccepts_ok (P : FusedPrimitive I) (cparams : MaskedCompletenessParameters S.params)
-    (hsize : oracle.size ≤ RecoveryScheduleEnvelope.oracleSizeBound S.G (S.pcp.nativeWidth N))
-    (htaut : ∀ x, (S.request z oracle).circuit.eval x = true)
-    [∀ X, Fintype (J X)] (C : ∀ X, J X → m.Circuit (S.request z oracle).arity) (α : ∀ X, J X → ℝ)
+    (hguards : PairGuards S z Γ)
+    (htaut : ∀ x, (S.request z Γ).circuit.eval x = true)
+    [∀ X, Fintype (J X)] (C : ∀ X, J X → m.Circuit (S.request z Γ).arity) (α : ∀ X, J X → ℝ)
     (hT : ∀ X x, 0 ≤ ∑ j, α X j * bitR (m.eval (C X j) x) ∧ ∑ j, α X j * bitR (m.eval (C X j) x) ≤ 1)
-    (happrox : uMean (fun p : Fin (2 ^ (S.pcppOf z oracle).clauseBits) × Fin 2 × BitInput (S.request z oracle).arity =>
-      |∑ j, α (posVar (S.pcppOf z oracle) p.1 p.2.1) j *
-          bitR (m.eval (C (posVar (S.pcppOf z oracle) p.1 p.2.1) j) p.2.2) -
-        honestBit (S.pcppOf z oracle) (S.pcppOf z oracle).honestAuxiliary
-          (posVar (S.pcppOf z oracle) p.1 p.2.1) p.2.2|) ≤ (cparams.ζ : ℝ))
-    (hmass : ∀ X, ∑ j, |α X j| ≤ (S.gridMass (S.request z oracle).arity : ℝ))
-    (hΛ : 1 ≤ (S.gridMass (S.request z oracle).arity : ℝ)) (hs : 1 ≤ S.gridSize (S.request z oracle).arity)
-    (hsδ : 19 * (S.gridMass (S.request z oracle).arity : ℝ) ^ 4 ≤
-      (S.gridSize (S.request z oracle).arity : ℝ) ^ 2 * (cparams.δ : ℝ) ^ 4)
-    (hStar : I.StarAt (S.request z oracle).arity) (hFit : B.FitsAt (S.request z oracle).arity)
+    (happrox : uMean (fun p : Fin (2 ^ (S.pcppOf z Γ).clauseBits) × Fin 2 × BitInput (S.request z Γ).arity =>
+      |∑ j, α (posVar (S.pcppOf z Γ) p.1 p.2.1) j *
+          bitR (m.eval (C (posVar (S.pcppOf z Γ) p.1 p.2.1) j) p.2.2) -
+        honestBit (S.pcppOf z Γ) (S.pcppOf z Γ).honestAuxiliary
+          (posVar (S.pcppOf z Γ) p.1 p.2.1) p.2.2|) ≤ (cparams.ζ : ℝ))
+    (hmass : ∀ X, ∑ j, |α X j| ≤ (S.gridMass (S.request z Γ).arity : ℝ))
+    (hΛ : 1 ≤ (S.gridMass (S.request z Γ).arity : ℝ)) (hs : 1 ≤ S.gridSize (S.request z Γ).arity)
+    (hsδ : 19 * (S.gridMass (S.request z Γ).arity : ℝ) ^ 4 ≤
+      (S.gridSize (S.request z Γ).arity : ℝ) ^ 2 * (cparams.δ : ℝ) ^ 4)
+    (hStar : I.StarAt (S.request z Γ).arity) (hFit : B.FitsAt (S.request z Γ).arity)
     (hname : 2 ≤ I.nameCount)
-    (hdescC : ∀ X j, m.descriptionBits (C X j) ≤ ((S.request z oracle).arity + 1) ^ I.descDeg)
-    (hdescK : m.descriptionBits (S.constAtom m (S.request z oracle).arity) ≤
-      ((S.request z oracle).arity + 1) ^ I.descDeg)
-    (hdescP : ∀ Sp, m.descriptionBits (S.parityAtom m (S.request z oracle).arity Sp) ≤
-      ((S.request z oracle).arity + 1) ^ I.descDeg)
+    (hdescC : ∀ X j, m.descriptionBits (C X j) ≤ ((S.request z Γ).arity + 1) ^ I.descDeg)
+    (hdescK : m.descriptionBits (S.constAtom m (S.request z Γ).arity) ≤
+      ((S.request z Γ).arity + 1) ^ I.descDeg)
+    (hdescP : ∀ Sp, m.descriptionBits (S.parityAtom m (S.request z Γ).arity Sp) ≤
+      ((S.request z Γ).arity + 1) ^ I.descDeg)
     (K : ℕ) (hKC : ∀ X j, (m.gates (C X j)).length ≤ K)
-    (hKP : ∀ Sp, (m.gates (S.parityAtom m (S.request z oracle).arity Sp)).length ≤ K)
-    (hlen : (S.gridSize (S.request z oracle).arity + 1) * K ≤ ((S.request z oracle).arity + 1) ^ I.carrierDeg)
-    (hbC : ∀ X j, ∀ gt ∈ m.gates (C X j), gt.encodingBits ≤ ((S.request z oracle).arity + 1) ^ I.carrierDeg)
-    (hbP : ∀ Sp, ∀ gt ∈ m.gates (S.parityAtom m (S.request z oracle).arity Sp),
-      gt.encodingBits ≤ ((S.request z oracle).arity + 1) ^ I.carrierDeg)
+    (hKP : ∀ Sp, (m.gates (S.parityAtom m (S.request z Γ).arity Sp)).length ≤ K)
+    (hlen : (S.gridSize (S.request z Γ).arity + 1) * K ≤ ((S.request z Γ).arity + 1) ^ I.carrierDeg)
+    (hbC : ∀ X j, ∀ gt ∈ m.gates (C X j), gt.encodingBits ≤ ((S.request z Γ).arity + 1) ^ I.carrierDeg)
+    (hbP : ∀ Sp, ∀ gt ∈ m.gates (S.parityAtom m (S.request z Γ).arity Sp),
+      gt.encodingBits ≤ ((S.request z Γ).arity + 1) ^ I.carrierDeg)
     (w Cpar : ℝ) (hw0 : 0 ≤ w) (hCpar : 0 ≤ Cpar) (hwC : ∀ X j, ((m.gates (C X j)).wires : ℝ) ≤ w)
-    (hwP : ∀ Sp, ((m.gates (S.parityAtom m (S.request z oracle).arity Sp)).wires : ℝ) ≤
-      Cpar * ((S.request z oracle).arity : ℝ) ^ 2)
-    (hcap : (I.starParams (S.request z oracle).arity hStar).popRate *
-        ((S.gridSize (S.request z oracle).arity : ℝ) * w + Cpar * ((S.request z oracle).arity : ℝ) ^ 2) ≤
-      (cparams.β : ℝ) * (B.capOf m (S.request z oracle).arity : ℝ))
+    (hwP : ∀ Sp, ((m.gates (S.parityAtom m (S.request z Γ).arity Sp)).wires : ℝ) ≤
+      Cpar * ((S.request z Γ).arity : ℝ) ^ 2)
+    (hcap : (I.starParams (S.request z Γ).arity hStar).popRate *
+        ((S.gridSize (S.request z Γ).arity : ℝ) * w + Cpar * ((S.request z Γ).arity : ℝ) ^ 2) ≤
+      (cparams.β : ℝ) * (B.capOf m (S.request z Γ).arity : ℝ))
     (spectrum : ExpanderSpectrumContract)
-    (hξ : 1 / (2 : ℝ) ^ (I.filterParams m (S.request z oracle).arity).errExp ≤ (cparams.ξ : ℝ))
-    (hD : (1 + (S.gridMass (S.request z oracle).arity : ℝ)) ^ 4 *
-        ((S.request z oracle).arity : ℝ) ^ (-(I.D : ℝ)) ≤ (S.params.eps0 : ℝ))
-    (Ko Ks Kc : ℕ) (hO : (natWord (ExecutableInterfaces.encodeBooleanCircuit oracle)).length ≤ Ko)
+    (hξ : 1 / (2 : ℝ) ^ (I.filterParams m (S.request z Γ).arity).errExp ≤ (cparams.ξ : ℝ))
+    (hD : (1 + (S.gridMass (S.request z Γ).arity : ℝ)) ^ 4 *
+        ((S.request z Γ).arity : ℝ) ^ (-(I.D : ℝ)) ≤ (S.params.eps0 : ℝ))
+    (Ko Ks Kc : ℕ) (hO : (NearCubicWires.WireExponent3_5.UnionMachine.Front35.pairWord Γ).length ≤ Ko)
     (hKs : ∀ σ ∈ ({-1, 0, 1} : Finset ℤ), (intWord σ).length ≤ Ks)
     (hcodeC : ∀ X j, (natWord (m.code (C X j))).length ≤ Kc)
-    (hcodeK : (natWord (m.code (S.constAtom m (S.request z oracle).arity))).length ≤ Kc)
-    (hbudget : 1 + Ko + ((S.pcppOf z oracle).systematicBits + (S.pcppOf z oracle).auxiliaryBits) *
-      (S.gridSize (S.request z oracle).arity * (Ks + Kc)) ≤ N / 16) :
+    (hcodeK : (natWord (m.code (S.constAtom m (S.request z Γ).arity))).length ≤ Kc)
+    (hbudget : 1 + Ko + ((S.pcppOf z Γ).systematicBits + (S.pcppOf z Γ).auxiliaryBits) *
+      (S.gridSize (S.request z Γ).arity * (Ks + Kc)) ≤ N / 16) :
     ∃ g : UnionGuess S z, UnionAccepts S P z g ∧ AtomsOkG g := by
   have hδ0 : (0 : ℝ) ≤ cparams.δ := by exact_mod_cast cparams.δ_nonneg
   -- the sparse witness of every named variable, at one `s` and grid
   obtain ⟨σ, atom, hσ, -, hL4⟩ := sparseGuess_exists (fun X j x => m.eval (C X j) x) α
-    (S.gridMass (S.request z oracle).arity : ℝ) (S.gridSize (S.request z oracle).arity) hs hΛ hmass
+    (S.gridMass (S.request z Γ).arity : ℝ) (S.gridSize (S.request z Γ).arity) hs hΛ hmass
     (cparams.δ : ℝ) hsδ
-  set g := guessOfWitness S z oracle m C σ atom with hg
+  set g := guessOfWitness S z Γ m C σ atom with hg
   have hsign : ∀ X a, g.sign X a ∈ ({-1, 0, 1} : Finset ℤ) := by
     intro X a
-    show witnessSign S z oracle σ atom X a ∈ _
+    show witnessSign S z Γ σ atom X a ∈ _
     unfold witnessSign
     split
     · exact hσ X a
@@ -97,7 +108,7 @@ theorem exists_unionAccepts_ok (P : FusedPrimitive I) (cparams : MaskedCompleten
     rw [g.forms_guess hsign X x]
     congr 1
     refine Finset.sum_congr rfl fun a _ => ?_
-    show (witnessSign S z oracle σ atom X a : ℝ) * bitR (m.eval (witnessAtom S z oracle m C atom X a) x) = _
+    show (witnessSign S z Γ σ atom X a : ℝ) * bitR (m.eval (witnessAtom S z Γ m C atom X a) x) = _
     unfold witnessSign witnessAtom
     cases atom X a
     · simp
@@ -106,7 +117,7 @@ theorem exists_unionAccepts_ok (P : FusedPrimitive I) (cparams : MaskedCompleten
   have hdesc : ∀ a : g.AtomIx, g.mode.descriptionBits (g.circ a) ≤ (g.q + 1) ^ I.descDeg := by
     rintro (u | ⟨X, b⟩ | X)
     · exact hdescK
-    · show m.descriptionBits (witnessAtom S z oracle m C atom X b) ≤ _
+    · show m.descriptionBits (witnessAtom S z Γ m C atom X b) ≤ _
       unfold witnessAtom
       split
       · exact hdescC X _
@@ -114,14 +125,14 @@ theorem exists_unionAccepts_ok (P : FusedPrimitive I) (cparams : MaskedCompleten
     · exact hdescP _
   have hKA : ∀ X a, (g.mode.gates (g.atom X a)).length ≤ K := by
     intro X a
-    show (m.gates (witnessAtom S z oracle m C atom X a)).length ≤ K
+    show (m.gates (witnessAtom S z Γ m C atom X a)).length ≤ K
     unfold witnessAtom
     split
     · exact hKC X _
     · rw [S.constAtom_gates]; exact Nat.zero_le _
   have hbA : ∀ X a, ∀ gt ∈ g.mode.gates (g.atom X a), gt.encodingBits ≤ (g.q + 1) ^ I.carrierDeg := by
     intro X a gt hgt
-    change gt ∈ m.gates (witnessAtom S z oracle m C atom X a) at hgt
+    change gt ∈ m.gates (witnessAtom S z Γ m C atom X a) at hgt
     unfold witnessAtom at hgt
     split at hgt
     · exact hbC X _ gt hgt
@@ -130,7 +141,7 @@ theorem exists_unionAccepts_ok (P : FusedPrimitive I) (cparams : MaskedCompleten
     g.carrier_envelope K hKA (fun X => hKP _) hlen hbA (fun X => hbP _)
   have hwA : ∀ X a, ((g.mode.gates (g.atom X a)).wires : ℝ) ≤ w := by
     intro X a
-    show ((m.gates (witnessAtom S z oracle m C atom X a)).wires : ℝ) ≤ w
+    show ((m.gates (witnessAtom S z Γ m C atom X a)).wires : ℝ) ≤ w
     unfold witnessAtom
     split
     · exact hwC X _
@@ -142,12 +153,12 @@ theorem exists_unionAccepts_ok (P : FusedPrimitive I) (cparams : MaskedCompleten
     hξ henv (g.carrier_wires_le w Cpar hwA (fun X => hwP _) hCpar) hcap
   have hword : g.word.length ≤ N / 16 := by
     refine (g.word_length_le Ko Ks Kc hO (fun X a => hKs _ (hsign X a)) fun X a => ?_).trans hbudget
-    show (natWord (m.code (witnessAtom S z oracle m C atom X a))).length ≤ Kc
+    show (natWord (m.code (witnessAtom S z Γ m C atom X a))).length ≤ Kc
     unfold witnessAtom
     split
     · exact hcodeC X _
     · exact hcodeK
-  exact ⟨g, g.unionAccepts_of_parts P cparams hsize hsign hword hVcall hQcall hμcall htaut _ wit hmissing hD,
+  exact ⟨g, g.unionAccepts_of_parts P cparams hguards hsign hword hVcall hQcall hμcall htaut _ wit hmissing hD,
     fun X a => hdesc (Sum.inr (Sum.inl (X, a)))⟩
 
 end Build
@@ -155,3 +166,5 @@ end Build
 end Union
 
 end NearCubicWires.WireExponent3_5.Transfer
+
+end

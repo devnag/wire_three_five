@@ -1,4 +1,4 @@
-import Proof.Rows.CircuitPowerInput
+import Proof.Rows.CircuitPowerRun
 
 /-! Four child digits and fixed circuit cursors share the actual reusable
 coefficient cell. The only changing prefix tapes are factor28 and output64. -/
@@ -11,6 +11,7 @@ open NearCubicWires NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdina
 open NearCubicWires.ExtDecompositionBatch NearCubicWires.RepairOrdinary.RecoveryRootRound
 open NearCubicWires.RepairRepresentation NearCubicWires.RepairSource.VerifierDecoding
 open NearCubicWires.RepairSource.CloseoutFinal SignedSortKey
+open PCJ45bee56da9f34d5a_SelectedPowerBody (equation)
 noncomputable section
 
 def extras (source :List Bool) (digits :Fin 4→Nat) (N v U :Nat):Fin 11→List Bool:=

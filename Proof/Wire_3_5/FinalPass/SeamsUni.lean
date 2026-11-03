@@ -1,6 +1,20 @@
+import Lean
+import Proof.Wire_3_5.FinalPass.SeamsProg2Base
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
 import Proof.Wire_3_5.FinalPass.SeamsProg2
+import Proof.Wire_3_5.FinalPass.SeamsPt
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.Writers.S5SeamB
+import Proof.Wire_3_5.Assembly.Split
 
-/-! # Uniform stage constants in `FinalPassLeaf`'s order of choice (class)
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # Uniform stage constants in `FinalPassLeaf`'s order of choice
 
 `fpPlan` (`FinalPassLeaf`) chooses, after the endpoint exponent `fe`, the floors `E₅`, `CD₅`; then for every
 admissible `F` the coefficient `c₅`; then the machine at every clock and source work (P3:3114-3115: the load constant
@@ -12,7 +26,7 @@ coefficient `C` with `c₅` (on `(l, fe, F)` only). **`StageU`** states that, ge
 {x // deg x ≤ D₀ ∧ cf x ≤ C₀}`.
 
 `StageU.pair` puts two families side by side (exponents `max`, coefficients `+`, floors `envMax`/`max`), so S2, S3,
-S4, S5-THR, S5-core and the output machine target one wrapper (build once). Dock (gate 1): `seedsDeg`/`seedsCf` for `SeedsProg2`,
+S4, S5-THR, S5-core and X6 target one wrapper (build once). Dock (gate 1): `seedsDeg`/`seedsCf` for `SeedsProg2`,
 **`SeedsProg2.cost_le_uni`** (the seeds phase's cost at the uniform constants), and `StageU.at` (the instance and
 its bounds at `fpPlan`'s binders). Paper quantities: the phases' constants in `prim:runtime` (P3:3105-3115). -/
 
@@ -67,3 +81,5 @@ section Family
 end Family
 
 end NearCubicWires.WireExponent3_5.FinalPass.Seams
+
+end

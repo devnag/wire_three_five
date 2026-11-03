@@ -1,4 +1,7 @@
+import Proof.CaseAnalysis.CaseTwoNativeConverter
 import Proof.CaseAnalysis.CaseTwoFits
+import Proof.Amplification.RecoveryScratchErase
+import Proof.CaseAnalysis.RowsMetadataCopy
 
 /-! The five approved input ports remain the only cold inputs. Every
 converter cell belongs to an explicit allocation or charged input copy. -/

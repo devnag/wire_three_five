@@ -1,5 +1,4 @@
-import Proof.CaseAnalysis.RowsDegreeLoop
-import Proof.CaseAnalysis.RowsDegreeRange
+import Proof.CaseAnalysis.RowsPolynomial
 
 /-! One shared digit width may serve an entire live-family bank. Changing
 the binary enumeration width only permutes positional subsets; no repeated

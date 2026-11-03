@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.UnionMachine.CodeWritersEnv
+import Proof.Wire_3_5.UnionMachine.CodeWriters
 
 /-! # C6 front, U5: the code writers' interface, version 2
 
@@ -8,7 +8,7 @@ canonical codes of the two atoms the setup supplies, the encoding parity of each
 parities are constructed from the PCPP output", P3:3672) and the constant; the envelope bit of each named carrier
 decides `lem:primitive`'s precondition "at the same fixed description envelope" (P3:3092-3094).
 
-Version 1 (`Proof.Wire_3_5.UnionMachine.CodeWriters`, `…CodeWritersEnv`) asked every tape other than the two ports to be
+Version 1 (`WireExponent3_5UnionMachineCodeWriters`, `…CodeWritersEnv`) asked every tape other than the two ports to be
 EMPTY at the halt. A written tape never becomes empty again (`writeTapeBit` returns a cons in every branch), so a
 version-1 writer could never write a scratch tape, and no donor machine could be docked into one. Version 2 keeps the
 ports exact and lets the writer leave a RESIDUE `J` on its other tapes, of length at most the step bound. That is

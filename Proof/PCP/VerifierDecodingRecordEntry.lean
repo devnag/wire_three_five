@@ -1,5 +1,6 @@
-import Proof.PCP.VerifierDecodingRejectingRepeat
 import Proof.PCP.VerifierDecodingScans
+import Proof.PCP.VerifierDecodingRangeReject
+import Proof.PCP.VerifierDecodingRejectingRepeat
 
 /-! The literal single-record validator and its retained eight-tape entry.
 This controller uses the existing bounded readers; failed calls halt at once.

@@ -1,5 +1,6 @@
-import Proof.Wire_3_5.MachineModel.BlockCost
 import Proof.Wire_3_5.MachineModel.BlockOfRun
+import Proof.Wire_3_5.MachineModel.BlockCost
+import Proof.MachineModel.OrdinaryCompare
 
 /-! # Block v3 (S5): one-pass bit scans over two framed words (fold and map)
 
@@ -88,6 +89,8 @@ def andOut (a b _ : Bool) : Bool := a && b
 def keep (_ _ old : Bool) : Bool := old
 /-- The masked parity `⊕ᵢ aᵢ·bᵢ` (the trace `⟨τ, a⟩` and the pullback's center-bit parities). -/
 def parityStep (a b old : Bool) : Bool := xor old (a && b)
+/-- Word equality. -/
+def eqStep (a b old : Bool) : Bool := old && (a == b)
 
 theorem map_xor (left right : List Bool) (hw : left.length = right.length) (old : Bool) :
     ZipMap.map xorOut keep left right old = List.zipWith xor left right := by

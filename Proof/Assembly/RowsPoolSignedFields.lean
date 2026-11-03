@@ -1,4 +1,6 @@
 import Proof.Assembly.RowsPoolMinimumLoop
+import Proof.Supplier.RowCoefficientNormalize
+import Proof.CaseAnalysis.RowsStrictMagnitude
 
 /-! Existing signed normalization and one reverse comparison supply the
 exact magnitude/sign and zero test needed to serialize the transformed

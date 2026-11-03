@@ -1,5 +1,4 @@
-import Proof.CaseAnalysis.RowsEstimatorPaidDriverReady
-import Proof.CaseAnalysis.RowsEstimatorPreparedRun
+import Proof.CaseAnalysis.CloseoutRowsEstimatorPaidWarmJoin
 
 /-! The actual allocated driver and reusable original estimator run in one bank. -/
 namespace NearCubicWires.RepairOrdinary.CloseoutRowsEstimator.Paid
@@ -14,6 +13,11 @@ set_option warningAsError true
 noncomputable def warm (a : WilliamsAlgorithm):=
   TapeEmbedding.machine (ScannedClean.tapes a) (WarmPrepared.machine a)
 noncomputable def warmMachine (a : WilliamsAlgorithm):=Composition.machine (driver a) (warm a)
+noncomputable def warmEntry (a : WilliamsAlgorithm) (row : EquationRow.Input) (C Q : ℕ)
+    (q : CompetitorValidity.Estimate) (denominator : ℕ)
+    (select : Fin (EquationRow.request row).U → Fin (EquationRow.request row).U → Bool) (out : List Bool):=
+  WarmPrepared.startWith (driver a) (warm a) (heads a (producer a) out)
+    (input a (producer a) row C (WarmFields.words row Q q denominator select) out)
 noncomputable def warmBudget (a : WilliamsAlgorithm) (row : EquationRow.Input) (C Q : ℕ):=
   ScannedClean.budget a row C+1+WarmPrepared.budget a row C Q
 

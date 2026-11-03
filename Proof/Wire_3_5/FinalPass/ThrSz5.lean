@@ -1,5 +1,20 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.ThrSz4
-import Proof.Wire_3_5.Primitive.Writers.BudgetIface
+import Proof.Wire_3_5.Primitive.Writers.PlanBase
+import Proof.Wire_3_5.Primitive.Writers.ThrDataIface3
+import Proof.Wire_3_5.UnionMachine.FiltSetupIface5
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Endpoint
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The THR word-size lemma, part 1: the call, its cap, its numbers, its table and payloads
 
@@ -84,3 +99,5 @@ theorem pay_le' (hd : ∀ i, (Cs i).descriptionBits ≤ (n + 1) ^ 26) (j : Fin 4
 end Pieces
 
 end NearCubicWires.WireExponent3_5.FinalPass.ThrSz
+
+end

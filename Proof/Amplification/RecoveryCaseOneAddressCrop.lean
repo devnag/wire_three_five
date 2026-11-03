@@ -1,4 +1,8 @@
 import Proof.Amplification.RecoveryCaseOneEntryPair
+import Proof.Amplification.RecoveryCaseOneEvaluationReady
+import Proof.Amplification.RecoveryCaseOneSourceMeaning
+import Proof.MachineModel.UInputFields
+import Proof.Amplification.RecoveryFieldCopy
 
 /-! The target address is physically cropped by the generated core's
 actual unary arity. The trailing sentinel is part of the supplied scalar. -/

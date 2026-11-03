@@ -1,5 +1,6 @@
-import Proof.CaseAnalysis.FixedSelectorCaseOnePointRunsOfRow
+import Proof.CaseAnalysis.FixedRegisterCaseOneChain
 import Proof.MachineModel.BankScheduledRowStageClosure
+import Proof.CaseAnalysis.FixedSelectorCaseOnePointRunsOfRow
 import Proof.MachineModel.TotalOuterProofRowGuardedProgram
 
 /-!

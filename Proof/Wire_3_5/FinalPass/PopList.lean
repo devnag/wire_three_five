@@ -1,6 +1,7 @@
-import Proof.Wire_3_5.FinalPass.Lift
-import Proof.Wire_3_5.FinalPass.ListEvalMain
 import Proof.Wire_3_5.FinalPass.Pop
+import Proof.Wire_3_5.FinalPass.Lift
+import Proof.Wire_3_5.MachineModel.BlockCost
+import Proof.Wire_3_5.FinalPass.ListEvalMain
 
 /-! # Final pass: stage 3 then stage 5, C2's point evaluator over the corners
 

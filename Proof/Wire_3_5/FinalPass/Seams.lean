@@ -1,5 +1,16 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.NumDen
 import Proof.Wire_3_5.FinalPass.PlanFP
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SeamsBase
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The final pass's seams: seeds → out, and the per-point value (P3:3170-3181)
 
@@ -58,38 +69,9 @@ end Family
 /-! ## The per-point value -/
 
 section Point
-variable (P : StarParams) (σ : P.Translation) {a : ℕ} {N Q : ℕ} (eqv : P.Errors ≃ Fin N)
-  (S : Fin Q → Fin N × Fin N)
-
-/-- **The THR per-point value** at center `c`, filter seed `e`, sample `ℓ`: `Σ_{g,p} M·R̂_{g,p}`. -/
-def ptThr (Cs : Fin a → NormalizedThresholdThresholdCircuit P.n) (carriers : List (Carrier P.n)) (FP : GapParams)
-    (algorithm : RepairRepresentation.DecompositionAlgorithm) (den : ℕ) (report : List Bool → ℕ)
-    (c : {c // P.IsCenter σ c}) (e : GapSeed FP) (l : Fin Q) : ℕ :=
-  ∑ gp : ThrEq P Cs algorithm × PrimeIndex (thrCutoff P Cs algorithm den),
-    (maskBits P σ carriers FP e (P.point c.1 (eqv.symm (S l).1) (eqv.symm (S l).2))).toNat *
-      (thrRhat P Cs algorithm den report gp.1 gp.2 c.1 (eqv.symm (S l).1) (eqv.symm (S l).2)).toNat
-
-theorem thrNum_pt (Cs : Fin a → NormalizedThresholdThresholdCircuit P.n) (carriers : List (Carrier P.n))
-    (FP : GapParams) (algorithm : RepairRepresentation.DecompositionAlgorithm) (den : ℕ) (report : List Bool → ℕ) :
-    thrNum P σ eqv S Cs carriers FP algorithm den report =
-      ∑ c, ∑ e, ∑ l, ptThr P σ eqv S Cs carriers FP algorithm den report c e l := rfl
-
-/-- **The SYM per-point value** at center `c`, filter seed `e`, sample `ℓ`: `Σ_{e'} M·R̂_{e'}` over the list seeds. -/
-def ptSym (Cs : Fin a → NormalizedSymmetricThresholdCircuit P.n) (carriers : List (Carrier P.n)) (FP : GapParams)
-    (Pl : FlatListParams) (c : {c // P.IsCenter σ c}) (e : GapSeed FP) (l : Fin Q) : ℕ :=
-  ∑ el : Pl.FlatSeed,
-    (maskBits P σ carriers FP e (P.point c.1 (eqv.symm (S l).1) (eqv.symm (S l).2))).toNat *
-      (symRhatFast P Cs Pl el c.1 (eqv.symm (S l).1) (eqv.symm (S l).2)).toNat
-
-theorem symNum_pt (Cs : Fin a → NormalizedSymmetricThresholdCircuit P.n) (carriers : List (Carrier P.n))
-    (FP : GapParams) (Pl : FlatListParams) :
-    symNum P σ eqv S Cs carriers FP Pl = ∑ c, ∑ e, ∑ l, ptSym P σ eqv S Cs carriers FP Pl c e l := by
-  unfold symNum ptSym
-  refine Finset.sum_congr rfl (fun c _ => ?_)
-  rw [Fintype.sum_prod_type]
-  refine Finset.sum_congr rfl (fun e _ => ?_)
-  rw [Finset.sum_comm]
 
 end Point
 
 end NearCubicWires.WireExponent3_5.FinalPass.Seams
+
+end

@@ -1,4 +1,5 @@
 import Proof.PCP.PaddedProjectionRunnerAssembly
+import Proof.MachineModel.RuntimeScheduleNumeralBank
 
 /-!
 # The padded shape runner

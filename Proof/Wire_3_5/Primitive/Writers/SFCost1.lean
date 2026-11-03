@@ -1,8 +1,13 @@
 import Proof.Wire_3_5.Primitive.SeedFix.SeedFixSplitT
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixElim
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixCons
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixEmit
+import Proof.Wire_3_5.Primitive.SeedFix.SeedFixCoef
 
 /-! # polynomial bounds on the SeedFix stages' step counts, part 1 (the numeric ones)
 
-Each lemma has the shape `f args ≤ C·(q+1)^D` whenever every numeric argument is `≤ q`, with `C`, `D` literals (the contract for the EAt side conditions' `hK`): the table's inner and multiplication loops, the row passes, the
+Each lemma has the shape `f args ≤ C·(q+1)^D` whenever every numeric argument is `≤ q`, with `C`, `D` literals (C1b's
+contract for the EAt side conditions' `hK`): the table's inner and multiplication loops, the row passes, the
 elimination's record loop (every argument `≤ q`, the prefix not assumed `≤ 2h·ℓ`), Gauss's per-row and full costs,
 the deficit, the constraint loop, the split's fields, rotation and target, the cells, the validity loop, the emit and
 target copies, and the coefficient writer (`|bs| ≤ q`).

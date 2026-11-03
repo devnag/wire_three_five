@@ -16,6 +16,8 @@ open PCJ45bee56da9f34d5a_FourfoldBaseData (Data)
 open PCJ45bee56da9f34d5a_StreamPair
 noncomputable section
 
+def coefficientWord (d :Data) (B p w o :Nat):=
+ PCJ45bee56da9f34d5a_FourfoldPowerData.stream d B p w 4++frame (binary w ((p-o)%p))
 
 
 end

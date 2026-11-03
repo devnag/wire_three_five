@@ -1,4 +1,5 @@
-import Proof.Wire_3_5.Primitive.SeedFix.GeoIface2
+import Proof.Wire_3_5.Primitive.Writers.WriterIfaceJBase
+import Proof.Wire_3_5.Primitive.SeedFix.C4Geo
 import Proof.Wire_3_5.Compiler.MachinePoolContract2
 
 /-! # The C3 request writer's interface: the compiler's fixed fields of a call, from the request

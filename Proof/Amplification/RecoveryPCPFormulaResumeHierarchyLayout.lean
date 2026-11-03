@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryPCPFormulaResumeState
+import Proof.Hierarchy.HierarchyStreamReady
 
 /-! Literal source fields retained by the checked hierarchy stream are
 connected to the fixed cold original-formula constructor. -/

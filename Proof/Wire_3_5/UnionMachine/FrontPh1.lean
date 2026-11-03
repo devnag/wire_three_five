@@ -1,7 +1,8 @@
-import Proof.Wire_3_5.UnionMachine.FrontOracle
-import Proof.Wire_3_5.UnionMachine.FrontSizeStage
 import Proof.Wire_3_5.UnionMachine.FrontSlots
 import Proof.Wire_3_5.UnionMachine.FrontWidthCost
+import Proof.Wire_3_5.UnionMachine.FrontOracle
+import Proof.Wire_3_5.UnionMachine.FrontSizeStage
+import Proof.Amplification.RecoveryWitnessCopy
 
 /-! # C6 front, the chain, phase 1: the width, the oracle field, the oracle's size (P3:3637-3640, 3669-3671)
 

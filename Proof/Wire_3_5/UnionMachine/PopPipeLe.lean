@@ -1,4 +1,7 @@
 import Proof.Wire_3_5.Primitive.Writers.SymLeafIface
+import Proof.Wire_3_5.Primitive.Writers.PopParams
+import Proof.Wire_3_5.Primitive.Writers.PopCap
+import Proof.Wire_3_5.Lists.ListMachineRowCost
 
 /-! # The POP pipeline's cost is polynomial times `2^{O(e)}`
 
@@ -6,7 +9,8 @@ The POP row of the flat list prints the population's expression: its capacities 
 carry the counting capacity `(8L+2)^{3·lbP}` of the row's factor prints, and the row's evaluation runs the walk's
 `2^t` truth-table rows (`t = walkLen = 2⌊e/4⌋+1`; `ListMachine.Row.popRowCost_le`). Every other piece of
 `PopPipe.popPipeBound` is polynomial in the capacity, the list's numbers and the slice.
-* the block length (`blockC_len_le`: `2·|block| + 2 ≤ blF …`, hence C2's `StateOk` at Route B's capacities by `PopCap.popStates_okB`);
+* the block length (`blockC_len_le`: `2·|block| + 2 ≤ blF …`, hence C2's `StateOk` at Route B's capacities by PA2's
+  `PopCap.popStates_okB`);
 * the row record's length (`rec_len_le`: setup fields, the constant term, at most `M + 1` states of `2t` blocks);
 * the uniform bookkeeping `PB f` (`f ≤ C·(Y·2^e)^k` for constants `C, k`), closed under `+`, `·`, powers, `-`,
   `/`, `max`; every atom of the bound (the list's numbers, `(8L+2)^{3·lbP} ≤ Y`, `2^t ≤ 2·2^e`, the slice's

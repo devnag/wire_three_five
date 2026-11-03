@@ -1,3 +1,4 @@
+import Proof.MachineModel.BankAtomContextRegisters
 import Proof.Circuits.FixedScheduleDiagonalClosure
 import Proof.MachineModel.SourceDrivenNumeralBank
 

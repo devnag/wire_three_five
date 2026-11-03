@@ -19,4 +19,13 @@ def occurrence {l r : ℕ} (ms : List (List (Equation l r))) (row column : ℕ) 
 def count {l r : ℕ} (rows : List (List (List (Equation l r)))) (row column : ℕ) : ℕ :=
   (rows.map (fun ms => occurrence ms row column%2)).sum
 
+theorem odd_even_size (input : EquationRow.Input) (ho : input.odd=true) :
+    (request input).U/2+(request input).U/2=(request input).U := by
+  have hd := input.oddPositive ho
+  have he : input.d=input.d-1+1 := by omega
+  change 2^input.d/2+2^input.d/2=2^input.d
+  rw [he,pow_succ]
+  rw [Nat.mul_div_cancel _ (by decide : 0<2)]
+  omega
+
 end NearCubicWires.RepairOrdinary.CompetitorRowCountMeaning

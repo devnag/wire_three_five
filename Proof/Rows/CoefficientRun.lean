@@ -1,3 +1,5 @@
+import Proof.CaseAnalysis.RowsOriginalClauseLoop
+import Proof.Rows.FinalNativeResidueCallback
 import Proof.Rows.OffsetEmitter
 import Proof.Rows.ThresholdData
 

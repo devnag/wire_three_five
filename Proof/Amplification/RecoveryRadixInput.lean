@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoverySubtract
+import Proof.MachineModel.OrdinaryRewindWorkspace
 
 /-! Paid little-endian to even-length most-significant-first input preparation.
 The first pass emits one leading zero per input bit and records two unary

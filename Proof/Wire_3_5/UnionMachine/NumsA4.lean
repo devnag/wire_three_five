@@ -1,6 +1,26 @@
-import Proof.Wire_3_5.Primitive.SeedFix.C4BudD
+import Lean
 import Proof.Wire_3_5.UnionMachine.NumsA3
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymLk
+import Proof.Wire_3_5.Primitive.SeedFix.C4BudD
+import Proof.Wire_3_5.Primitive.Writers.ReqBridge
+import Proof.Wire_3_5.FinalPass.FpInLen
+import Proof.Wire_3_5.FinalPass.SymSz1
 import Proof.Wire_3_5.UnionMachine.NumsPh2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Primitive.Writers.HashFam
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.C4GateSymB
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.NumsA4Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # NW phase (a), part 4: the SYM numbers at a SYM request, at a polynomial capacity
 
@@ -27,11 +47,6 @@ open NearCubicWires.WireExponent3_5.PrimAsm.SymDec NearCubicWires.WireExponent3_
 open NearCubicWires.WireExponent3_5.FinalPass.Tm NearCubicWires.WireExponent3_5.PrimAsm.SymLayout
 open NearCubicWires.WireExponent3_5.FinalPass.PlanFP
 
-/-- The SYM request's counts (the carriers' sizes, then the circuits' bottom counts); `[]` at THR. -/
-noncomputable def countsOf : PrimRequest → List ℕ
-  | ⟨_, .sym, a', _, Cs, carriers, _⟩ => Data.symCounts a' Cs carriers
-  | ⟨_, .thr, _, _, _, _, _⟩ => []
-
 section Gate
 variable (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1)
 
@@ -44,9 +59,6 @@ noncomputable def D0 (fe : ℕ) : ℕ := KFa l fe + 2
 
 /-- The numbers front's capacity coefficient. -/
 noncomputable def K0 : ℕ := 100 * 2 ^ ((nwSB l F).cA + 2 * KFa l F.filterErrDeg) + 200002
-
-theorem stV_one (m0 m1 m2 m3 : ℕ) : 1 ≤ SymDec.stV m0 m1 m2 m3 := by
-  unfold SymDec.stV; exact Nat.succ_le_of_lt (by positivity)
 
 /-- **`Q ≤ |fpIn|`** at a SYM request (the printed sample: `Q` pairs of `4k_h + 2` bits). -/
 theorem q_le_fpIn {n a' : ℕ} (ha' : a' ≤ 4) (Cs : Fin a' → NormalizedSymmetricThresholdCircuit n)
@@ -65,12 +77,6 @@ theorem q_le_fpIn {n a' : ℕ} (ha' : a' ≤ 4) (Cs : Fin a' → NormalizedSymme
   have := Nat.le_mul_of_pos_right (SeedFix.symCount (callInputs l F kclk coef A a ha) hs Cs carriers)
     (by omega : 0 < 4 * SeedFix.callKh ((callInputs l F kclk coef A a ha).starParams n hs) + 2)
   omega
-
-theorem vec21 (n capS err M nc L kh a' m0 m1 m2 m3 : ℕ) :
-    SymDec.numsVec n capS err M nc L kh a' m0 m1 m2 m3 21 = 2 ^ (SymDec.gP n capS err).seedBits := rfl
-
-theorem vec41 (n capS err M nc L kh a' m0 m1 m2 m3 : ℕ) :
-    SymDec.numsVec n capS err M nc L kh a' m0 m1 m2 m3 41 = 2 ^ FlatNums.fbv M (SymDec.bV nc capS) (L + 5) := rfl
 
 /-- `V` at a SYM request (on-star): `|E|·|FlatSeed|·Q`. -/
 theorem vOf_sym {n a' : ℕ} (ha' : a' ≤ 4) (Cs : Fin a' → NormalizedSymmetricThresholdCircuit n)
@@ -279,3 +285,5 @@ theorem numsAt (r : FReq l F kclk coef A a ha) (hm : r.1.mode = .sym) (cap₀ : 
 end Gate
 
 end NearCubicWires.WireExponent3_5.UnionMachine.NumsA
+
+end

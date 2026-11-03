@@ -1,5 +1,6 @@
-import Proof.Wire_3_5.Primitive.SeedFix.TabRef
 import Proof.Wire_3_5.UnionMachine.NumsA2
+import Proof.Wire_3_5.Primitive.SeedFix.TabRef
+import Proof.Wire_3_5.FinalPass.HashCell
 
 /-! # SWn, item 4: the gate table's width `tabH G` from the table itself
 

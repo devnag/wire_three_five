@@ -1,4 +1,5 @@
 import Proof.MachineModel.GeneratedAmplifierLookup
+import Proof.MachineModel.OrdinaryZeroUnpadding
 
 /-! The lookup's reset workspace is physically blank at entry. Zero-padding
 transport removes only its logical zero capacity; the output tape is exact. -/

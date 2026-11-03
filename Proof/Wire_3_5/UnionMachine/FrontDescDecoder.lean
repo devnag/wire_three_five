@@ -1,11 +1,12 @@
-import Proof.SourceAssembly.SourceFactorSelRunBound
-import Proof.Wire_3_5.Transfer.FoldLoop
 import Proof.Wire_3_5.UnionMachine.FrontAtomDecoder
 import Proof.Wire_3_5.UnionMachine.FrontLoopKit
+import Proof.Wire_3_5.Transfer.FoldLoop
+import Proof.CaseAnalysis.FinalCacheRewind
+import Proof.SourceAssembly.SourceFactorSelRunBound
 
 /-! # C6 front, U5: one decoder run that may reject, rewound (the description flags, P3:3670, 3083-3094)
 
-`lem:primitive`'s precondition bounds every circuit's description (`descriptionBits ≤ (n+1)^descDeg`), and the Theorem 2.5 repository's
+`lem:primitive`'s precondition bounds every circuit's description (`descriptionBits ≤ (n+1)^descDeg`), and v8's
 decoder at policy `L` decides exactly that on a decodable atom (base `CloseoutRowsCircuitMeaning.threshold_exact` /
 `symmetric_exact`: passing ↔ decoded ∧ wires ≤ `W` ∧ `descriptionBits ≤ L`). The union front runs it on EVERY grid
 atom, so the run may reject, and a rejecting run fixes only the raw tape, the driver and the flag. This module wraps

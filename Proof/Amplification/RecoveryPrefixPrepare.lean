@@ -1,5 +1,6 @@
-import Proof.Amplification.RecoveryPrefixInitialize
 import Proof.Amplification.RecoveryPrefixMeasureWhole
+import Proof.Amplification.RecoveryPrefixInitialize
+import Proof.PCP.PCPSerializerCapacityPower
 
 /-! Whole physical preparation from the two serialized search fields. The
 measured mass drives the accepted fixed polynomial producer directly into

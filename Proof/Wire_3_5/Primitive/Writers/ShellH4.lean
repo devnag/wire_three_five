@@ -1,5 +1,6 @@
-import Proof.Wire_3_5.Primitive.Writers.ShellH
-import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4
+import Proof.Wire_3_5.Primitive.Writers.ShellERun
+import Proof.Wire_3_5.Primitive.Writers.ThrDataIface3
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDataIface4Base
 
 /-! # gate 1: the THR/HASH writer shell over `ThrDataStage4` — machines and the run's statement
 

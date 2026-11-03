@@ -1,6 +1,7 @@
-import Proof.CaseAnalysis.RecoveryGraphBudgetOriginal
-import Proof.CaseAnalysis.RecoveryGraphBudgetScalarWhole
 import Proof.CaseAnalysis.RecoveryGraphRun
+import Proof.CaseAnalysis.RecoveryGraphBudgetOriginal
+import Proof.CaseAnalysis.RecoveryGraphBudgetSupport
+import Proof.CaseAnalysis.RecoveryGraphBudgetScalarWhole
 
 /-! All physical graph and serializer resources follow from the original
 source and the one paid W. No graph, node count or scratch bank is supplied. -/

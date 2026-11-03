@@ -1,4 +1,18 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.S5TFoc
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.S5TChC
+import Proof.Wire_3_5.FinalPass.S5TP0
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.TS4N
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.S5TJoinBase
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-! # S5-THR, part 33: the THR call's hash parameters, the joins (P3:2150-2157, 2220-2231, 2596-2599)
 
@@ -21,18 +35,6 @@ namespace NearCubicWires.WireExponent3_5.FinalPass.S5T
 open NearCubicWires NearCubicWires.LocalBitMultitape NearCubicWires.RepairOrdinary
 open NearCubicWires.WireExponent3_5 NearCubicWires.WireExponent3_5.Filters NearCubicWires.WireExponent3_5.Split
 open NearCubicWires.SupplierPipeline
-
-/-- The hash bits transported along an equality of majorant parameters. -/
-def castS {MP₁ MP₂ : MajorantParams} (h : MP₁ = MP₂) (s : Fin (2 * MP₁.t * MP₁.ell0) → Bool) :
-    Fin (2 * MP₂.t * MP₂.ell0) → Bool := fun i => s (Fin.cast (by rw [h]) i)
-
-theorem ofFn_castS {MP₁ MP₂ : MajorantParams} (h : MP₁ = MP₂) (s : Fin (2 * MP₁.t * MP₁.ell0) → Bool) :
-    List.ofFn (castS h s) = List.ofFn s := by subst h; rfl
-
-theorem level_castS {MP₁ MP₂ : MajorantParams} (h : MP₁ = MP₂) (s : Fin (2 * MP₁.t * MP₁.ell0) → Bool) :
-    ListEval.levelWord MP₂.M MP₂.J MP₂.W (ListEval.rowsOf (MajorantBits.dataBits MP₂ (castS h s)) MP₂.M) =
-      ListEval.levelWord MP₁.M MP₁.J MP₁.W (ListEval.rowsOf (MajorantBits.dataBits MP₁ s) MP₁.M) := by
-  subst h; rfl
 
 section Call
 variable (l : Literals) (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1)
@@ -78,3 +80,5 @@ theorem mp_eq {n : ℕ} (hs : (PrimAsm.Plan.callInputs l F kclk coef A a ha).Sta
 end Call
 
 end NearCubicWires.WireExponent3_5.FinalPass.S5T
+
+end

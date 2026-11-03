@@ -1,4 +1,6 @@
 import Proof.MachineModel.Runs
+import Proof.MachineModel.OrdinaryStreamController
+import Proof.MachineModel.OrdinaryControlPrefix
 
 /-! # Final pass: structured multitape programs and their machines (P3:3170-3178)
 

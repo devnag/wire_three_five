@@ -1,4 +1,7 @@
-import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Foundations.RecoveryScheduleEnvelope
+import Proof.PCP.PCPPSubstitutionRequest
+import Proof.Wire_3_5.Stars.StarSelectionChoice
+import Proof.Wire_3_5.Transfer.TransferSeedCalls
 
 /-! # The union machine's call schedule and its exact rational check (P3:3669-3691, 3485-3489)
 
@@ -16,7 +19,7 @@ the constant and the systematic parities, one named carrier for a `V`/`Q` term a
 rational thresholds `2v₀`, `1+v₀`, `τ`.
 
 Everything here is computable and stated on plain data (`UnionCheckData`: one parsed guess with the setup's constant,
-parity, grid mass and the translation), so it runs on tiny instances; `Proof.Wire_3_5.UnionMachine.UnionCheck` instantiates it at a
+parity, grid mass and the translation), so it runs on tiny instances; `WireExponent3_5UnionCheck` instantiates it at a
 `UnionGuess` and proves it equal to `UnionAccepts`.
 
 * `Poly4Q`: the rational form of `Poly4` (`polyVQ`, `polyQQ`, `polyMuQ` cast to `polyV`, `polyQ`, `polyMu`).

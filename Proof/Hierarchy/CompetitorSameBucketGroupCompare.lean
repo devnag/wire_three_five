@@ -1,5 +1,6 @@
-import Proof.Hierarchy.CompetitorSameBucketGroupSemantics
 import Proof.PCP.ProjectionNormalizationFieldEquality
+import Proof.Amplification.RecoveryReadyCalls
+import Proof.Hierarchy.CompetitorSameBucketGroupSemantics
 
 /-! A paid comparison of both concatenated occurrence IDs. The old and new
 fields, both heads, and the physical rewind log are retained for reuse. -/

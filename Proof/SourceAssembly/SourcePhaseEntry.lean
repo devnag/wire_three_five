@@ -25,6 +25,7 @@ end generic
 section requestEq
 open NearCubicWires.RepairOrdinary.CloseoutWitness NearCubicWires.RepairOrdinary.CloseoutWitness.SelectedSource
   NearCubicWires.RepairSource.SelectedRecoveryIntegration NearCubicWires.CanonicalWitnessCodec
+open private decode_cast size_cast from Proof.CaseAnalysis.WitnessDyadicGuards
 
 end requestEq
 
@@ -46,6 +47,13 @@ end entry
 /-! ## 4. Row C3: the moment/clause entry (focused cache erase) and their loop start -/
 
 section later
+variable (sources : EightSources) {gamma : Real} (p : Parameters sources gamma) (k r scratch : Nat)
+  (clock : OrdinaryClock (fun n => n^(k+2))) {n : Nat} (x : BitInput n)
+  (oracle : BooleanCircuit ((SelectedRecoveryIntegration.outer sources k clock).result.pcp.nativeWidth n))
+
+/-- The query-cache capacity `C` of the actual request. -/
+abbrev capC := PCPPQueryCachedBounds.capacity (CloseoutLanguage.selectedPCPP sources)
+  ((req sources k clock x oracle).circuit.size+(req sources k clock x oracle).arity)
 
 
 end later

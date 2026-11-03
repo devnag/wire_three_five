@@ -1,4 +1,5 @@
 import Proof.PCP.PCPClauseListLayout
+import Proof.PCP.PCPTripleNative
 
 /-! The complete native clause-list program at its actual ambient caller.
 No prepared capacity, triple code, or clause-list code is an input. -/

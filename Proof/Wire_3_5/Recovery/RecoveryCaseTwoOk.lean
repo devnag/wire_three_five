@@ -1,5 +1,17 @@
+import Lean
 import Proof.Wire_3_5.Recovery.RecoveryCaseTwo
 import Proof.Wire_3_5.UnionMachine.UnionCompleteOk
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.UnionAtomsOk
+import Proof.Wire_3_5.Recovery.RecoveryFamily
+import Proof.Wire_3_5.Transfer.TransferUnionCompleteBase
+import Proof.Wire_3_5.UnionMachine.UnionCodecBase
+import Proof.Wire_3_5.UnionMachine.UnionSchedule
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # Case 2 of the recovery with the union's atom test (P3:3711-3729; D1.2)
 
@@ -21,27 +33,27 @@ open NearCubicWires.WireExponent3_5.Shared (uMean bitR)
 
 section CaseTwoOk
 variable {kclk : ℕ} {E : Envelope} {B : TimeBudget kclk E} {I : PrimitiveInputs B}
-variable (S : UnionSetup I) {N : ℕ} (z : BitInput N) (oracle : BooleanCircuit (S.pcp.nativeWidth N)) (m : Mode)
+variable (S : UnionSetup I) {N : ℕ} (z : BitInput N) (Γ : NearCubicGates.Close.Outer.OuterGuess (S.width N)) (m : Mode)
 
 /-- **An accepting guess from the averaged approximate sum** (D1.1 + `exists_unionAccepts`): an occurrence-averaged
 family (`[0,1]`-valued, honest error `≤ ζ`, mass `≤ A`, wires `≤ W`, descriptions `≤ Ldesc`) at a tautological
 substituted circuit, under the ledger's conditions at `q`, gives a guess the union machine accepts, its atoms within the envelope (P3:3670). -/
 theorem exists_unionAccepts_of_family_ok (P : FusedPrimitive I) (cparams : MaskedCompletenessParameters S.params)
-    (hsize : oracle.size ≤ RecoveryScheduleEnvelope.oracleSizeBound S.G (S.pcp.nativeWidth N))
-    (htaut : ∀ x, (S.request z oracle).circuit.eval x = true) (spectrum : ExpanderSpectrumContract)
+    (hguards : PairGuards S z Γ)
+    (htaut : ∀ x, (S.request z Γ).circuit.eval x = true) (spectrum : ExpanderSpectrumContract)
     {Jc Bc Dc W Ldesc : ℕ} {A : ℚ}
     (family : SumFamily m.Circuit (fun C => modeWireCount m C) (fun C => m.descriptionBits C)
-      (Average.limits (S.request z oracle).arity Jc Bc Dc A W Ldesc)
-      ((S.pcppOf z oracle).systematicBits + (S.pcppOf z oracle).auxiliaryBits))
+      (Average.limits (S.request z Γ).arity Jc Bc Dc A W Ldesc)
+      ((S.pcppOf z Γ).systematicBits + (S.pcppOf z Γ).auxiliaryBits))
     (hu : ∀ u X, 0 ≤ family.value (fun C x => m.eval C x) u X ∧ family.value (fun C x => m.eval C x) u X ≤ 1)
-    (herr : CompetitorSourceAverage.honestError S.pcppAlg (S.request z oracle)
+    (herr : CompetitorSourceAverage.honestError S.pcppAlg (S.request z Γ)
       (family.value (fun C x => m.eval C x)) ≤ (cparams.ζ : ℝ))
-    (led : CaseTwoLedger S z oracle m P cparams A W Ldesc) :
+    (led : CaseTwoLedger S z Γ m P cparams A W Ldesc) :
     ∃ g : UnionGuess S z, UnionAccepts S P z g ∧ AtomsOkG g := by
-  have happrox := (approx_eq_honestError S.pcppAlg (S.request z oracle)
+  have happrox := (approx_eq_honestError S.pcppAlg (S.request z Γ)
     (family.value (fun C x => m.eval C x))).trans_le herr
   simp only [famValue_eq] at happrox
-  exact exists_unionAccepts_ok S z oracle m P cparams hsize htaut (J := fun X => Fin (famTerms family X).length)
+  exact exists_unionAccepts_ok S z Γ m P cparams hguards htaut (J := fun X => Fin (famTerms family X).length)
     (famAtom family) (famCoeff family) (famT_mem family hu) happrox
     (fun X => (famMass_le family X).trans led.hA) led.hΛ led.hs led.hsδ led.hStar led.hFit led.hname
     (fun X j => (famAtom_descriptionBits_le family X j).trans led.hdesc) led.hdescK led.hdescP W
@@ -66,19 +78,19 @@ padded honest table has no `SYM∘THR` approximate sum (`SampledXorSum symmetric
 theorem no_sampled_sym_ok (normalization : ThresholdNormalizationContract) (spectrum : ExpanderSpectrumContract)
     (P : FusedPrimitive I) (cparams : MaskedCompletenessParameters S.params) (M : OrdinaryWeakMachine)
     (hacc : ∀ g : UnionGuess S z, UnionAccepts S P z g → AtomsOkG g → M.accepts N z) (hrej : ¬ M.accepts N z)
-    (hsize : oracle.size ≤ RecoveryScheduleEnvelope.oracleSizeBound S.G (S.pcp.nativeWidth N))
-    (htaut : ∀ x, (S.request z oracle).circuit.eval x = true)
-    (r copies W : ℕ) (hr : (S.pcppOf z oracle).clauseBits ≤ r) (δ : ℚ) (hd : 0 < δ) (hh : δ < 1 / 2)
+    (hguards : PairGuards S z Γ)
+    (htaut : ∀ x, (S.request z Γ).circuit.eval x = true)
+    (r copies W : ℕ) (hr : (S.pcppOf z Γ).clauseBits ≤ r) (δ : ℚ) (hd : 0 < δ) (hh : δ < 1 / 2)
     (hδζ : (δ : ℝ) ≤ cparams.ζ)
-    (led : CaseTwoLedger S z oracle .sym P cparams (massCap δ copies) W
-      (restrictedSymmetricDescriptionCap (S.request z oracle).arity ((S.request z oracle).arity + r + 1)
-        (2 ^ symmetricDescriptionCap ((S.request z oracle).arity + r + 1) W) W)) :
-    SampledXorSum symmetricWireFamily δ ((S.request z oracle).arity + r + 1) copies W
-      (CloseoutLanguage.paddedUnsigned (S.pcppOf z oracle) hr) → False := by
+    (led : CaseTwoLedger S z Γ .sym P cparams (massCap δ copies) W
+      (restrictedSymmetricDescriptionCap (S.request z Γ).arity ((S.request z Γ).arity + r + 1)
+        (2 ^ symmetricDescriptionCap ((S.request z Γ).arity + r + 1) W) W)) :
+    SampledXorSum symmetricWireFamily δ ((S.request z Γ).arity + r + 1) copies W
+      (CloseoutLanguage.paddedUnsigned (S.pcppOf z Γ) hr) → False := by
   intro sample
-  obtain ⟨family, herr, hu⟩ := symmetric_family normalization S.pcppAlg (S.request z oracle) r copies W hr δ hd hh
+  obtain ⟨family, herr, hu⟩ := symmetric_family normalization S.pcppAlg (S.request z Γ) r copies W hr δ hd hh
     sample
-  obtain ⟨g, hg, hok⟩ := exists_unionAccepts_of_family_ok S z oracle .sym P cparams hsize htaut spectrum family hu
+  obtain ⟨g, hg, hok⟩ := exists_unionAccepts_of_family_ok S z Γ .sym P cparams hguards htaut spectrum family hu
     (herr.trans hδζ) led
   exact hrej (hacc g hg hok)
 
@@ -86,23 +98,25 @@ theorem no_sampled_sym_ok (normalization : ThresholdNormalizationContract) (spec
 theorem no_sampled_thr_ok (normalization : ThresholdNormalizationContract) (spectrum : ExpanderSpectrumContract)
     (P : FusedPrimitive I) (cparams : MaskedCompletenessParameters S.params) (M : OrdinaryWeakMachine)
     (hacc : ∀ g : UnionGuess S z, UnionAccepts S P z g → AtomsOkG g → M.accepts N z) (hrej : ¬ M.accepts N z)
-    (hsize : oracle.size ≤ RecoveryScheduleEnvelope.oracleSizeBound S.G (S.pcp.nativeWidth N))
-    (htaut : ∀ x, (S.request z oracle).circuit.eval x = true)
-    (r copies W : ℕ) (hr : (S.pcppOf z oracle).clauseBits ≤ r) (δ : ℚ) (hd : 0 < δ) (hh : δ < 1 / 2)
+    (hguards : PairGuards S z Γ)
+    (htaut : ∀ x, (S.request z Γ).circuit.eval x = true)
+    (r copies W : ℕ) (hr : (S.pcppOf z Γ).clauseBits ≤ r) (δ : ℚ) (hd : 0 < δ) (hh : δ < 1 / 2)
     (hδζ : (δ : ℝ) ≤ cparams.ζ)
-    (led : CaseTwoLedger S z oracle .thr P cparams (massCap δ copies) W
-      (restrictedThresholdDescriptionCap (S.request z oracle).arity ((S.request z oracle).arity + r + 1)
-        (2 ^ thresholdDescriptionCap ((S.request z oracle).arity + r + 1) W)
-        (thresholdDescriptionCap ((S.request z oracle).arity + r + 1) W))) :
-    SampledXorSum thresholdWireFamily δ ((S.request z oracle).arity + r + 1) copies W
-      (CloseoutLanguage.paddedUnsigned (S.pcppOf z oracle) hr) → False := by
+    (led : CaseTwoLedger S z Γ .thr P cparams (massCap δ copies) W
+      (restrictedThresholdDescriptionCap (S.request z Γ).arity ((S.request z Γ).arity + r + 1)
+        (2 ^ thresholdDescriptionCap ((S.request z Γ).arity + r + 1) W)
+        (thresholdDescriptionCap ((S.request z Γ).arity + r + 1) W))) :
+    SampledXorSum thresholdWireFamily δ ((S.request z Γ).arity + r + 1) copies W
+      (CloseoutLanguage.paddedUnsigned (S.pcppOf z Γ) hr) → False := by
   intro sample
-  obtain ⟨family, herr, hu⟩ := threshold_family normalization S.pcppAlg (S.request z oracle) r copies W hr δ hd hh
+  obtain ⟨family, herr, hu⟩ := threshold_family normalization S.pcppAlg (S.request z Γ) r copies W hr δ hd hh
     sample
-  obtain ⟨g, hg, hok⟩ := exists_unionAccepts_of_family_ok S z oracle .thr P cparams hsize htaut spectrum family hu
+  obtain ⟨g, hg, hok⟩ := exists_unionAccepts_of_family_ok S z Γ .thr P cparams hguards htaut spectrum family hu
     (herr.trans hδζ) led
   exact hrej (hacc g hg hok)
 
 end CaseTwoOk
 
 end NearCubicWires.WireExponent3_5.Transfer
+
+end

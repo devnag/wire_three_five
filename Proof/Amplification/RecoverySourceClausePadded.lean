@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoverySourceClauseLoadBudget
+import Proof.Circuits.DecompositionSourceBounds
 
 /-! The exact source-stream clause machine executes from bounded blank
 workspace. Actual one-tape write growth bounds every scratch tape, while

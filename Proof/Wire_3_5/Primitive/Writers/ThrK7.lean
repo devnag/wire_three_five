@@ -1,10 +1,22 @@
-import Proof.Wire_3_5.Primitive.Writers.ThrCap3
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.ThrEAt3
+import Proof.Wire_3_5.Primitive.Writers.ThrCap3Base
+import Proof.Wire_3_5.Primitive.Writers.CallSizeBase
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.Primitive.Writers.ThrK7Base
 
-/-! # c4 THR block, piece 7 part 1: the THR free numbers' contract, v7 (v6 + the strip's premises)
 
-The THR twin of `C4SymW.SymFreeOk6` (the v6 shapes, root's ruling to build ThrEAt/ThrFreeOk at them) with the
-per-call strip field approved in: the THR stage's C3 sub-stage (`ThrStrip.thrC3`) runs the strip
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2 c4 THR block, piece 7 part 1: the THR free numbers' contract, v7 (v6 + the strip's premises)
+
+The THR twin of the `C4SymW.SymFreeOk6` (the v6 shapes, root's ruling to build ThrEAt/ThrFreeOk at them) with the
+per-call strip field approved in #162: the THR stage's C3 sub-stage (`ThrStrip.thrC3`, M53) runs the strip
 (`stripW_spec`) at the capacity `2·pr + 2` of the free program's `pr`, so its premises (`thr_hc3`'s `c1`–`c7`, `cw`,
 with the code bound `Kb = kbT n`) are a field of the contract, discharged by the builder at `pr = d_P(n+1)^{e_P}`.
 * `kbT` (the codes' bit bound at the gate's description degree 26), **`ThrStripAt`** (the strip's premises at one
@@ -21,22 +33,6 @@ open NearCubicWires.RepairOrdinary NearCubicWires.WireExponent3_5.PrimAsm
 open NearCubicWires.WireExponent3_5.Shared NearCubicWires.WireExponent3_5.Cost NearCubicWires.WireExponent3_5.Primitive
 open NearCubicWires.SupplierPipeline NearCubicWires.WireExponent3_5.Stars NearCubicWires.WireExponent3_5.Split
 open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.WireExponent3_5.PrimAsm.WriterIface
-
-/-- **The codes' bit bound** at the gate's description degree `26` (circuit codes and carrier codes). -/
-noncomputable def kbT (n : ℕ) : ℕ :=
-  CallSize.circBits (CallSize.codeParam 26 26 n) + CallSize.carrierBits (CallSize.codeParam 26 26 n)
-
-/-- **The strip's premises at one THR call** (`thr_hc3`'s `c1`–`c7`, `cw` at `Kb = kbT n`), at the capacity
-`2·pr + 2`, for the THR writer's input `req.word ++ hbF`. -/
-def ThrStripAt (pr : ℕ) {n a : ℕ} (ha : a ≤ 4) (Cs : Fin a → NormalizedThresholdThresholdCircuit n)
-    (carriers : List (Carrier n)) (translation : List ℕ) (hbF : List Bool) : Prop :=
-  natBitLength n + 1 ≤ 2 * pr + 2 ∧
-    2 ^ (natBitLength (ReqBridge.thrCodes Cs).length + 1) ≤ 2 * pr + 2 ∧
-    2 ^ (natBitLength (carriers.map Carrier.code).length + 1) ≤ 2 * pr + 2 ∧
-    kbT n + 1 ≤ 2 * pr + 2 ∧ (ReqBridge.thrCodes Cs).length ≤ 2 * pr + 2 ∧
-    (carriers.map Carrier.code).length ≤ 2 * pr + 2 ∧
-    8 * translation.length + 2 * (RepairRepresentation.natListWord translation).length + 16 ≤ 2 * pr + 2 ∧
-    ((thrReq n a ha Cs carriers translation).word ++ hbF).length ≤ 2 * pr + 2
 
 /-- **The free numbers of the THR stage**, v7: v6's fields (the twin of `C4SymW.SymFreeOk6`) and the strip's
 premises at every THR call. -/
@@ -101,3 +97,5 @@ def ThrFreeOkB7 (l : Literals) (wa : RepairRepresentation.WilliamsAlgorithm) : T
     CDt ≤ F.CD → 1 ≤ F.E.cpsi → ThrFreeOk7 l F wa K3 D3 Kp Dp
 
 end NearCubicWires.WireExponent3_5.PrimAsm.ThrFam
+
+end

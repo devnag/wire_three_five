@@ -1,5 +1,6 @@
-import Proof.Wire_3_5.FinalPass.RowIface
 import Proof.Wire_3_5.FinalPass.RowJ
+import Proof.Wire_3_5.FinalPass.RowIface
+import Proof.Wire_3_5.FinalPass.DigsFinal
 
 /-! # **`RowW`**, built: stage 8's row word as a word program (P3:2585-2630)
 

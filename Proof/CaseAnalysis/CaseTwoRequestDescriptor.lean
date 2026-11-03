@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPNativeHierarchyNodesReady
+import Proof.PCP.PCPPNativeFrame
 
 /-! The original hierarchy/substitution producer emits the exact native
 descriptor of the one faithful request. Actual request arity and size are

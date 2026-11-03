@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.Recovery.RecoveryLanguage
+import Proof.Wire_3_5.Recovery.RecoveryLanguageBase
 
 /-! # Facts about the recovery's setup at the refuter's language (P3:3632-3653, 3699-3709; D1)
 
@@ -24,7 +24,7 @@ open NearCubicWires.ProjectionPCPPadding (padProjectionPCP padProjectionPCP_comp
 open Filter
 
 section Facts
-variable (l : Literals) (G : Split.Gate) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1)
+variable (l : Literals) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1)
 
 theorem clogN_le_nativeWidth (A' N : ℕ) : Nat.clog 2 N ≤ nativeWidth kclk A' N := by
   rcases Nat.eq_zero_or_pos N with rfl | hN

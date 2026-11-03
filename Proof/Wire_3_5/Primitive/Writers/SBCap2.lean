@@ -1,4 +1,16 @@
+import Lean
 import Proof.Wire_3_5.Primitive.Writers.SBCap1
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Assembly.GateUnion
+import Proof.Wire_3_5.Primitive.Writers.SBTypes
+import Proof.Wire_3_5.Recovery.RecoverySetup
+import Proof.Wire_3_5.Primitive.Writers.SBCap2Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # SB: the capacity target, part 2 — `sbNeed` polynomial in `|fpIn r| + 1`
 
@@ -20,35 +32,6 @@ open NearCubicWires NearCubicWires.WireExponent3_5 NearCubicWires.WireExponent3_
 open NearCubicWires.WireExponent3_5.FinalPass NearCubicWires.WireExponent3_5.FinalPass.PlanFP
 open NearCubicWires.WireExponent3_5.PrimAsm.SBTypes NearCubicWires.WireExponent3_5.PrimAsm.WriteNat
 open NearCubicWires.WireExponent3_5.FinalPass.Out.Car NearCubicWires.WireExponent3_5.FinalPass.Out.CarBound
-
-/-- The small-number word within `10^5·Z`. -/
-theorem ul_le (P : Shared.StarParams) (CAP fe c0 c1 nc : ℕ) :
-    (Data.unaryList (sbList P CAP (fe * Nat.clog 2 (P.n + 2)) c0 c1 nc)).length ≤
-      10 ^ 5 * ((P.n + 1) ^ 26 + CAP + fe * (2 * P.n + 4) + P.n * P.n + c0 + c1 + nc + 10) := by
-  obtain ⟨a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12⟩ := atoms P fe CAP
-  rw [SymDec.unaryList_length_le]
-  simp only [sbList, swOf, lbOf, ellOf, List.sum_cons, List.sum_nil, List.length_cons, List.length_nil]
-  generalize (P.n + 1) ^ 26 = Y at a9 a10 ⊢
-  generalize natBitLength (CAP * 32 - 1) = NB2 at a11 ⊢
-  generalize natBitLength (Y * 2 - 1) = NB1 at a10 ⊢
-  have hmx : max NB2 NB1 ≤ CAP * 32 + Y * 2 + 1 := by clear * - a10 a11; omega
-  generalize max NB2 NB1 = MX at hmx ⊢
-  generalize Nat.clog 2 (P.n + 2) = L at a8 a12 ⊢
-  generalize fe * L = FL at a8 ⊢
-  have hx : P.n - P.r * P.b ≤ P.n := Nat.sub_le _ _
-  generalize P.n - P.r * P.b = XX at hx ⊢
-  have d1 : (XX + 1) / 2 ≤ XX + 1 := Nat.div_le_self _ _
-  have d2 : XX / 2 ≤ XX := Nat.div_le_self _ _
-  have d5 : FL / 4 ≤ FL := Nat.div_le_self _ _
-  have d7 : P.r / 2 ≤ P.r := Nat.div_le_self _ _
-  generalize (XX + 1) / 2 = D1 at d1 ⊢
-  generalize XX / 2 = D2 at d2 ⊢
-  generalize FL / 4 = D5 at d5 ⊢
-  generalize P.r / 2 = D7 at d7 a6 a7 ⊢
-  clear * - a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11 a12 hmx hx d1 d2 d5 d7
-  omega
-
-theorem mbOf_le (m : Mode) : mbOf m ≤ 1 := by unfold mbOf; split <;> omega
 
 /-- **Every term of `sbNeed` against one majorant.** -/
 theorem sbNeed_Z (l : Literals) (cr fe : ℕ) (P : Shared.StarParams) (m : Mode) (wl c0 c1 nc : ℕ) :
@@ -94,3 +77,5 @@ theorem sbNeed_Z (l : Literals) (cr fe : ℕ) (P : Shared.StarParams) (m : Mode)
   omega
 
 end NearCubicWires.WireExponent3_5.PrimAsm.SBAsm
+
+end

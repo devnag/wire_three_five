@@ -1,4 +1,5 @@
 import Proof.MachineModel.OrdinaryMatrixScoreLeftCycle
+import Proof.MachineModel.OrdinaryMatrixScorePhi
 
 /-! The record-cycle layout with the row transform `φ` (paper3 `alg:pullback`, P3:1623-1671).
 

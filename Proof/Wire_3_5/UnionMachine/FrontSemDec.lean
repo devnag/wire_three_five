@@ -1,11 +1,24 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.FrontSemTW
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.UnionCheck
+import Proof.Wire_3_5.UnionMachine.UnionCodec
+import Proof.Wire_3_5.UnionMachine.FrontDecode
+import Proof.Wire_3_5.UnionMachine.FrontOutRef
+import Proof.Wire_3_5.UnionMachine.PlanW3
+import Proof.Wire_3_5.UnionMachine.FrontSemDecBase
+
+
+noncomputable section
+
 
 /-! # C6 front, the semantic core (4): the chain's checks decide the reference output (P3:3669-3691)
 
 The front's reference output (`FrontOutRef.outRef`) is the valid branch's exactly when the witness decodes to a guess
-passing the size, atom, sign and admissibility checks. The chain checks, in order: the walker's scan (`okOf`), the
-oracle's decoding and size, the entries' scan, the atoms' decoder at the description envelope, then (in the end) the
-calls' admissibility. This module shows each failing check rejects the decoded guess (**`okOf_of`**, **`oracle_of`**,
+passing the outer step's guards, the atom, sign and admissibility checks. The chain checks, in order: the walker's scan
+(`okOf`), the cold front end's verdict (the pair's decoding and the guards of the outer step, paper v2 §H.5), the
+entries' scan, the atoms' decoder at the description envelope, then (in the end) the calls' admissibility. This module
+shows each failing check rejects the decoded guess (**`okOf_of`**, **`pair_of`**,
 **`signs_of`**, **`atoms_fail`**), the passing checks decode the chain's guess `gOf` with its three checks
 (**`valid_of`**), and evaluates the reference output on each branch (**`outRef_rej`**, **`outRef_valid`**: the valid
 branch's output is the end's `endOut`).
@@ -33,13 +46,12 @@ theorem okOf_of {w : List Bool} {g : UnionGuess S z} (h : decodeGuess S z w = so
   obtain ⟨t, k, hw, hsc, -, -⟩ := decode_fwd g w h
   subst hw; exact hsc
 
-/-- A decoded witness's oracle field decodes to the guess's oracle. -/
-theorem oracle_of {w : List Bool} {g : UnionGuess S z} (h : decodeGuess S z w = some g) :
-    CanonicalWitnessCodec.decodeBooleanCircuit (S.pcp.nativeWidth N) (value (payload w.tail)) = some g.oracle := by
+/-- A decoded witness's pair field reads as the guess's pair. -/
+theorem pair_of {w : List Bool} {g : UnionGuess S z} (h : decodeGuess S z w = some g) :
+    NearCubicWires.WireExponent3_5.UnionMachine.Front35.pairOf (S.width N) (payload w.tail) = some g.pair := by
   obtain ⟨t, k, hw, -, hv, -⟩ := decode_fwd g w h
   subst hw
-  show CanonicalWitnessCodec.decodeBooleanCircuit _ (value (payload t)) = _
-  rw [hv]; exact CanonicalWitnessCodec.decodeBooleanCircuit_encode _
+  exact hv
 
 /-- A decoded witness's tag bit is the guess's mode. -/
 theorem mode_of {w : List Bool} {g : UnionGuess S z} (h : decodeGuess S z w = some g) :
@@ -55,11 +67,11 @@ theorem rest_of {w : List Bool} {g : UnionGuess S z} (h : decodeGuess S z w = so
   obtain ⟨t, k, hw, -, -, hr⟩ := decode_fwd g w h
   subst hw; exact ⟨k, hr⟩
 
-theorem entN_eq (g : UnionGuess S z) : entN S z g.oracle = (entsG g).length := (entsG_length g).symm
+theorem entN_eq (g : UnionGuess S z) : entN S z g.pair = (entsG g).length := (entsG_length g).symm
 
 /-- **The entries' scan of a decoded witness is its guess's grid-sign check.** -/
 theorem signs_of {w : List Bool} {g : UnionGuess S z} (h : decodeGuess S z w = some g) :
-    (entScan (entN S z g.oracle) (restOf w.tail)).isSome = (g.checkData g.translation).signsOk := by
+    (entScan (entN S z g.pair) (restOf w.tail)).isSome = (g.checkData g.translation).signsOk := by
   obtain ⟨k, hr⟩ := rest_of h
   rw [hr, entN_eq]
   exact entScan_fwd g _ k
@@ -93,36 +105,6 @@ open NearCubicWires.RepairOrdinary
 variable {kclk : ℕ} {E : Envelope} {B : TimeBudget kclk E} {I : PrimitiveInputs B} {S : UnionSetup I} {N : ℕ}
   {z : BitInput N}
 
-/-- A passing atom decodes. -/
-theorem passed_dec (m : Mode) (q W L : ℕ) (bits : List Bool) (h : FrontAtomDecoder.passedM m q W L bits) :
-    ∃ c, decodeAtom m q (value bits) = some c := by
-  cases m
-  · have h' : CloseoutRowsCircuitThresholdRun.passed q W L bits := h
-    rw [CloseoutRowsCircuitMeaning.threshold_exact] at h'
-    obtain ⟨c, hc, -, -⟩ := h'
-    exact ⟨c, hc⟩
-  · have h' : CloseoutRowsCircuitSymmetricRun.passed q W L bits := h
-    rw [CloseoutRowsCircuitMeaning.symmetric_exact] at h'
-    obtain ⟨c, hc, -, -⟩ := h'
-    exact ⟨c, hc⟩
-
-theorem verdict_zero {q W L : ℕ} {m : Mode} {En : ℕ} {pay : ℕ → List Bool}
-    (h : FrontAtomLoop.verdictOf q W L m En pay = 0) : ∀ j, j < En → FrontAtomDecoder.passedM m q W L (pay j) := by
-  classical
-  intro j hj
-  by_contra hf
-  have : FrontAtomLoop.verdictOf q W L m En pay = 1 := by
-    simp only [FrontAtomLoop.verdictOf]; rw [if_neg]; intro hall; exact hf (hall j hj)
-  omega
-
-theorem verdict_ne {q W L : ℕ} {m : Mode} {En : ℕ} {pay : ℕ → List Bool}
-    (h : FrontAtomLoop.verdictOf q W L m En pay ≠ 0) : ∃ j, j < En ∧ ¬ FrontAtomDecoder.passedM m q W L (pay j) := by
-  classical
-  by_contra hex
-  have hall : ∀ j, j < En → FrontAtomDecoder.passedM m q W L (pay j) := fun j hj => by
-    by_contra hf; exact hex ⟨j, hj, hf⟩
-  exact h (by simp only [FrontAtomLoop.verdictOf]; rw [if_pos hall])
-
 /-- **The atom test passes**: every atom within the description envelope. -/
 theorem atoms_ok (g : UnionGuess S z) (Z : List Bool) (hg : ∀ e ∈ entsG g, e.1 ∈ gridSet) (Wd L : ℕ)
     (hWd : ∀ j, j < (entsG g).length →
@@ -151,8 +133,9 @@ theorem atoms_bad (g : UnionGuess S z) (Z : List Bool) (hg : ∀ e ∈ entsG g, 
     (hWd j hj)).2 (hat X a))
 
 /-- **The chain's checks pass**: the witness decodes to the chain's guess `gOf`, with grid signs. -/
-theorem valid_of (b : Bool) (t : List Bool) (hsc : scanOK t = true) (O : BooleanCircuit (S.pcp.nativeWidth N))
-    (hO : CanonicalWitnessCodec.decodeBooleanCircuit (S.pcp.nativeWidth N) (value (payload t)) = some O)
+theorem valid_of (b : Bool) (t : List Bool) (hsc : scanOK t = true)
+    (O : NearCubicGates.Close.Outer.OuterGuess (S.width N))
+    (hO : NearCubicWires.WireExponent3_5.UnionMachine.Front35.pairOf (S.width N) (payload t) = some O)
     (hE : (entScan (entN S z O) (restOf t)).isSome = true) (Wd L : ℕ)
     (hv : FrontAtomLoop.verdictOf (S.request z O).arity Wd L (modeOf b) (entN S z O)
       (payOf (restOf t) (entN S z O)) = 0) :
@@ -205,10 +188,10 @@ theorem outRef_below (hF : FrontOutRef.GridFacts S) (onset : ℕ) (capF RF LgF :
   rintro ⟨h, -⟩
   omega
 
-/-- **A valid witness**: its guess passes the size, atom and sign checks; the output is the end's. -/
+/-- **A valid witness**: its guess passes the outer step's guards, the atom and sign checks; the output is the end's. -/
 theorem outRef_valid (hF : FrontOutRef.GridFacts S) (onset : ℕ) (capF RF LgF : ℕ → ℕ) (N : ℕ) (x : BitInput N)
     (w : List Bool) (g : UnionGuess S x) (hd : decodeGuess S x w = some g) (hN : onset ≤ N)
-    (hsz : g.oracle.size ≤ RecoveryScheduleEnvelope.oracleSizeBound S.G (S.pcp.nativeWidth N))
+    (hsz : UnionGuards S x g)
     (hat : PlanW3.AtomsOkG g) (hsg : (g.checkData g.translation).signsOk = true) :
     FrontOutRef.outRef S hF onset capF RF LgF N x w = FrontSemTW.endOut hF g (capF N) (RF N) (LgF N) := by
   unfold FrontOutRef.outRef FrontSemTW.endOut
@@ -226,3 +209,5 @@ theorem outRef_valid (hF : FrontOutRef.GridFacts S) (onset : ℕ) (capF RF LgF :
 end Out
 
 end NearCubicWires.WireExponent3_5.UnionMachine.FrontSemDec
+
+end

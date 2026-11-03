@@ -1,12 +1,28 @@
+import Lean
+import Proof.Wire_3_5.Foundations.Skeleton
 import Proof.Wire_3_5.Foundations.Contracts
 import Proof.Wire_3_5.Ledger.LedgerBudget
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.Assembly.GateUnion
 import Proof.Wire_3_5.UnionMachine.UnionEventual
+import Statement_Wire_3_5
+import Proof.Foundations.RecoveryScheduleEnvelope
+import Proof.PCP.PCPPSubstitutionRequest
+import Proof.Wire_3_5.Foundations.SkeletonBase
+import Proof.Wire_3_5.Stars.StarSelectionChoice
+import Proof.Wire_3_5.Transfer.TransferSeedCalls
+import Proof.Wire_3_5.UnionMachine.UnionCodecBase
+import Proof.Wire_3_5.UnionMachine.UnionSchedule
 
-/-! # The split of `Parts`
+
+noncomputable section
+
+
+/-! # The freeze-gate split of `Parts`
 
 `literals_rowB_of_parts` leaves `Literals → Parts`. This module splits `Parts` into three independent leaves along the
 paper's order of choice (P3:3114-3115, 3632-3655, 3797-3811):
-* the **gate constants** `Gate`, fixed before any leaf: the envelope `E` ("every polynomial exponent, fixed
+* the **gate constants** `Gate`, fixed by root before any leaf: the envelope `E` ("every polynomial exponent, fixed
   before `r`"), the width padding `A_pad` (P3:3637-3640), the row-B ledger constants (`RowBParams`: `tr:B`, `C_D`,
   `c_r`, `s(q)`), and the caller's inputs of `lem:primitive` (P3:3068-3084: `D`, the envelopes, the name count, the
   endpoint error exponent);
@@ -27,7 +43,7 @@ open NearCubicWires NearCubicWires.RepairSource NearCubicWires.RepairRepresentat
 open NearCubicWires.Bindings.CLW20Theorem113 NearCubicWires.WireExponent3_5.Cost
 open NearCubicWires.WireExponent3_5.Ledger NearCubicWires.WireExponent3_5.Transfer NearCubicWires.ExecutableInterfaces
 
-/-- The gate constants, fixed before any leaf. -/
+/-- The gate constants, fixed by root at the freeze gate before any leaf. -/
 structure Gate where
   /-- every polynomial exponent of the machines (P3:3114-3115, 3803-3804) -/
   E : Envelope
@@ -55,7 +71,7 @@ structure Gate where
 namespace Gate
 variable (G : Gate)
 
-/-- The time ledger (B9's `rowBNativeBudget`) at the gate constants, the machines' coefficient `coef` (the
+/-- The time ledger (`rowBNativeBudget`) at the gate constants, the machines' coefficient `coef` (the
 cost contracts `costsOf`), and the union's clock and source work. -/
 noncomputable def budget (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) : TimeBudget kclk G.E :=
   rowBNativeBudget kclk G.Apad G.E G.hσ (Machine.costsOf G.E coef) G.row A a ha
@@ -71,7 +87,7 @@ abbrev Setup :=
 
 end Gate
 
-/-- The union construction with `tr:completeness` at a pinned setup (made EVENTUAL by): past an
+/-- The union construction with `tr:completeness` at a pinned setup (made EVENTUAL by #39): past an
 onset chosen after the primitive and the language, every accepting guess of the setup makes the built machine accept.
 The machine "rejects outright" at the finitely many lengths below it (P3:3675-3680; "Finite exceptional lengths may be
 fixed", P3:3771), which is what lets `tr:time` hold with the ledger's onset fixed before the language.
@@ -89,3 +105,5 @@ def PrimitiveLeaf :=
   Σ coef : ℕ, ∀ (kclk A a : ℕ) (ha : a ≤ kclk + 1), FusedPrimitive (G.inputs kclk coef A a ha)
 
 end NearCubicWires.WireExponent3_5.Split
+
+end

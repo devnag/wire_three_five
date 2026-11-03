@@ -1,5 +1,8 @@
+import Proof.Circuits.CanonicalBalancedCall
+import Proof.MachineModel.CanonicalTaggedParityProgram
 import Proof.CaseAnalysis.CaseTwoOccurrenceEvaluation
 import Proof.MachineModel.GeneratedBalancedRangeProgram
+import Proof.MachineModel.PreserveRightProgram
 
 /-!
 # The masked support parity of one Case-2 occurrence

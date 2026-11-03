@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RowsGateFieldsBudget
+import Proof.PCP.PCPPQueryField
 
 /-! The actual retained support bit controls one native signed-weight copy.
 The same payload scan checks zero outside support. Scratch is reused by

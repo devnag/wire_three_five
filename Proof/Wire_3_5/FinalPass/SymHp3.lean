@@ -1,11 +1,26 @@
+import Lean
 import Proof.Wire_3_5.FinalPass.SymHp2
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SymHp1
+import Proof.Wire_3_5.FinalPass.SymOcc4
+import Proof.Wire_3_5.FinalPass.SymSz2
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.SymOcc3Base
+
+
+noncomputable section
+set_option maxRecDepth 4096
+
 
 /-! # The SYM child request's precondition, part 3: `hpre`
 
 **`hpre_sym`**: at a SYM call of the gate, under the floors and the SYM constants' constraints, the child request
 of every prefix (`C4Child.chR (symR0 … h Q' 0 m dg pr 0) …`, the free numbers `freeVal2 (symK2 c)` and the degree
 `symDF c`) meets `C3Req.Pre` (alg:compiler, P3:1882-1900), for every batch of the given shape (`BatchFacts`: the SYM
-batch at `R = |carriers| + 2a`, or the degenerate call's padded batch at `R = 1`) whose rows' factor counts
+batch at `R = |carriers| + 2a`, or the degenerate call's padded batch at `R = 1`, #146 (c′)) whose rows' factor counts
 give `8·Σ f = m`.
 Paper quantity of the main type: alg:compiler's precondition at a SYM call. -/
 
@@ -84,3 +99,4 @@ end Gate
 
 end NearCubicWires.WireExponent3_5.FinalPass.SymFr
 
+end

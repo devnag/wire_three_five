@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.ScheduleCompare
+import Proof.Amplification.RecoveryEraseConstant
 import Proof.PCP.PCPPairReusable
 
 /-! The common recovery program tests its fixed source onset against the

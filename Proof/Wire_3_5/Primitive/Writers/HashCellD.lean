@@ -1,5 +1,7 @@
-import Proof.Wire_3_5.Primitive.ThresholdWriter.NumsPort4
 import Proof.Wire_3_5.Primitive.Writers.HashCellA
+import Proof.Wire_3_5.Primitive.Writers.DockW
+import Proof.Wire_3_5.Primitive.ThresholdWriter.PortsE
+import Proof.Wire_3_5.Primitive.ThresholdWriter.NumsPort4
 
 /-! # HASH setup (C), P2b part 2: the front end and the numbers machine, docked on the cell's streams
 

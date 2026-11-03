@@ -1,4 +1,5 @@
 import Proof.Wire_3_5.Primitive.Writers.CellUnit
+import Proof.MachineModel.BlockScrubEntry
 
 /-! # PA (d), the writers' loop (base `Cells.ofScrub` over the unit machine)
 

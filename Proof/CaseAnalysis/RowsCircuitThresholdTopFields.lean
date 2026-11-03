@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RowsCircuitSymmetricFields
+import Proof.CaseAnalysis.RowsCircuitThreshold
 
 /-! Expose the SAME accepted threshold-top bitmap through its complete
 parser/publication receipt, so the bottom loop preserves retained order. -/

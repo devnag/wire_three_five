@@ -21,6 +21,9 @@ def fcStep (A B : Fin (ns + 1)) (C PC : Fin nr) : WM ns nr :=
 /-- Copy `C` bits of `B` onto `A`. -/
 def fcLoop (A B : Fin (ns + 1)) (C PC : Fin nr) : WM ns nr := .whr C (fcStep A B C PC)
 
+theorem frameP_append' (l l' : List Bool) : frameP (l ++ l') = frameP l ++ frameP l' := by
+  simp [frameP, List.flatMap_append]
+
 /-- **The counted copy**: the first `n` bits of `A`'s word (after `preA`) become `B`'s next `n` bits. -/
 theorem fcLoop_spec (A B : Fin (ns + 1)) (C PC : Fin nr) (hAB : A ≠ B) (hCP : C ≠ PC) :
     ∀ (n : ℕ) (ws bs preA preB restA restB : List Bool) (σ : WState ns nr),

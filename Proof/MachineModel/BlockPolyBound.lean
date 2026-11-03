@@ -25,7 +25,28 @@ theorem add {a b m ca cb da db : ℕ} (ha : PolyBounded a m ca da) (hb : PolyBou
 /-- Constants are dominated at every degree. -/
 theorem const (k m d : ℕ) : PolyBounded k m k d := polyBounded_const k m d
 
+/-- **Monotone composition.** A charge polynomial in `S`, with `S` itself polynomial in `T`,
+is polynomial in `T` (degrees multiply). -/
+theorem comp {v S T c d c' d' : ℕ} (h : PolyBounded v S c d) (hS : PolyBounded S T c' d') :
+    PolyBounded v T (c*(c'+1)^d) (d*d') := by
+  unfold PolyBounded at h hS ⊢
+  have h1 : S+1 ≤ (c'+1)*(T+1)^d' := by
+    have := one_le_pow T d'
+    nlinarith
+  calc v ≤ c*(S+1)^d := h
+    _ ≤ c*((c'+1)*(T+1)^d')^d := Nat.mul_le_mul_left _ (Nat.pow_le_pow_left h1 d)
+    _ = c*(c'+1)^d*(T+1)^(d*d') := by rw [mul_pow, ← pow_mul, Nat.mul_comm d' d]; ring
+
 /-! ## 2. The driver: computed once, it covers the stage it serves -/
+
+/-- The entry's driver for a stage cost `f ≤ c*(S+1)^d` is `(c+1)*(S+1)^d ≥ f+1`: exactly the
+scrub premise `hR`, with `S` the parsed dimension. -/
+theorem driver_covers {f S c d : ℕ} (h : PolyBounded f S c d) :
+    f+1 ≤ UnaryCalc.value d (c+1) S := by
+  unfold PolyBounded at h
+  unfold UnaryCalc.value
+  have := one_le_pow S d
+  nlinarith
 
 /-- `Scrub.entry`'s own cost is a fixed polynomial in the dimension (degree `D+1`). -/
 theorem entryCost_polyBounded (D C n : ℕ) :

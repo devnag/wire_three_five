@@ -29,6 +29,19 @@ theorem fieldItems_choices {n bound : ℕ} (b : BooleanDAGBuilder (descriptionWi
       choices (fieldChoices (fun row value=>unaryEqualsExpr row start limit value hblock) row wires) :=
   fieldItems_zipIdx b row start limit 0 hblock wires
 
+theorem prefix_bound {n bound : ℕ} (row : Fin (bound+1)) (start limit value : ℕ)
+    (hblock : start+limit ≤ rowWidth n bound) (refs : List ℕ) :
+    prefixSize (fieldItems row start limit hblock value refs) ≤ refs.length*(3*limit+2) := by
+  induction refs generalizing value with
+  | nil=>simp [fieldItems,prefixSize]
+  | cons ref refs ih=>
+    have h:=prefixCount_bound (unaryItems row start limit value hblock)
+    have hl : (unaryItems row start limit value hblock).length=limit := by simp [unaryItems]
+    rw [hl] at h
+    have ht:=ih (value+1)
+    simp only [fieldItems,prefixSize,unary_count,List.length_cons,Nat.add_mul,Nat.one_mul]
+    omega
+
 theorem saved_bound {n : ℕ} (base : ℕ) (xs : List (BoolExpr n×ℕ)) (ref : ℕ)
     (hr : ref∈RecoveryBoundedUniversal.references base xs) : ref ≤ base+prefixSize xs := by
   induction xs generalizing base with

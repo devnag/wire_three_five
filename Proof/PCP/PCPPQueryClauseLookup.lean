@@ -1,4 +1,5 @@
 import Proof.PCP.PCPPQueryClauseMatrix
+import Proof.Hierarchy.HierarchyFixedWord
 
 /-! Final explicit clause lookup: parse the actual list-count field, write
 the constant two-literal result header, skip index preceding pairs and copy

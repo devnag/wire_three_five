@@ -1,7 +1,20 @@
-import Proof.Wire_3_5.FinalPass.SymBuild
-import Proof.Wire_3_5.Primitive.Writers.ThrCap4
+import Lean
+import Proof.Wire_3_5.FinalPass.SymBuildBase
+import Proof.Wire_3_5.Primitive.Writers.ThrCap4Base
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.SymSz1
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndex
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Assembly.Split
 
-/-! # c4 THR block, piece 6 part 1: the THR call's `n_T`, `Q`, `ℓ` below `2^{e(k+L)}` (twin of the SymSz2)
+
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # PA2 c4 THR block, piece 6 part 1: the THR call's `n_T`, `Q`, `ℓ` below `2^{e(k+L)}` (twin of the SymSz2)
 
 P3:2987-2988, 3154-3162 (`samp:q` at a THR call), P3:2543-2558 (`n_T = |GapSeed|·|𝒢|·Σ_{p ≤ cutoff} p`), P3:1189
 (`k = r⌊log₂(n/r+1)⌋`, `4c_r ≤ k`): at a THR call of the gate, `n_T ≤ 2^{e_N(k+L)}`, `Q ≤ 2^{e_Q(k+L)}` and
@@ -149,3 +162,5 @@ theorem thrEll_le {n a' : ℕ} (ha' : a' ≤ 4) (Cs : Fin a' → NormalizedThres
 end Call
 
 end NearCubicWires.WireExponent3_5.PrimAsm.ThrSide
+
+end

@@ -1,4 +1,5 @@
 import Proof.Amplification.RecoveryProjectionDimensionUnary
+import Proof.PCP.VerifierDecodingUnaryFrame
 
 /-! Physically derive the exponential randomness-loop count from the actual
 retained unary width. The existing frame writer and binary-to-unary parser

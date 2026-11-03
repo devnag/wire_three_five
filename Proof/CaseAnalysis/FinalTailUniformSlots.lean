@@ -1,5 +1,6 @@
-import Proof.CaseAnalysis.FinalDimensionWords
 import Proof.CaseAnalysis.FinalTailRecordFeedUniform
+import Proof.CaseAnalysis.FinalDimensionWords
+import Proof.Hierarchy.CompetitorThresholdConstants
 
 namespace NearCubicWires.RepairSource.CloseoutFinal.C10TailUniformSlots
 

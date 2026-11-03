@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RowsGateArityCheck
+import Proof.MachineModel.OrdinaryUnaryTemplate
 
 /-! Compare a decoded gate count with the already public source-domain
 template at head one. Both inputs retain their original head positions;

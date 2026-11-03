@@ -1,5 +1,6 @@
-import Proof.SourceAssembly.SourceFactorSelModes
 import Proof.SourceAssembly.SourceRequestTermReader
+import Proof.SourceAssembly.SourceFactorSelModes
+import Proof.Assembly.CappedCoordinate
 
 set_option autoImplicit false
 set_option maxRecDepth 120000

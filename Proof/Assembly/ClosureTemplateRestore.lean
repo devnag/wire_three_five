@@ -1,5 +1,6 @@
-import Proof.MachineModel.Layout
+import Proof.Amplification.RecoveryScratchErase
 import Proof.MachineModel.NativeFanoutReusable
+import Proof.MachineModel.Layout
 
 /-! Reusable hardwired-child scratch: erase arbitrary bounded targets and
 reload their exact padded templates from retained masters. The consumer is

@@ -1,4 +1,6 @@
 import Proof.CaseAnalysis.CaseTwoVariablePrep
+import Proof.PCP.ProjectionDimensionPowerBounds
+import Proof.Hierarchy.HierarchyFixedWord
 
 /-! From the physically computed block width and native clause-count template,
 produce the fixed block offset, the padded position offset, and raw native

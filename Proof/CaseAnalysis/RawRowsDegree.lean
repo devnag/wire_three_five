@@ -1,5 +1,6 @@
 import Proof.CaseAnalysis.RowsFamilyBudget
 import Proof.Circuits.ValidatorPolynomialDomination
+import Proof.MachineModel.CanonicalFourfoldRowProgram
 
 /-! The paper's existing raw list recurrence, applied to the current GF2
 constructors. Reuses the mathematical recurrence from ParityCapFirstProofs
@@ -56,6 +57,28 @@ decreasing_by omega
 def structuralListCoordinateRawDegree
     (depth : ℕ) (window : Fin depth → ℕ) (terminalWindow : ℕ) : ℕ :=
   structuralListCoordinateRawDegreeFrom depth window terminalWindow 0
+
+theorem structuralListCoordinateRawDegreeFrom_eq_listDegreeFrom
+    {depth : ℕ} (window : Fin depth → ℕ)
+    (terminalWindow level : ℕ) :
+    structuralListCoordinateRawDegreeFrom depth window terminalWindow level =
+      listDegreeFrom window terminalWindow level := by
+  rw [structuralListCoordinateRawDegreeFrom, listDegreeFrom]
+  by_cases hlevel : level < depth
+  · rw [dif_pos hlevel, dif_pos hlevel]
+    rw [structuralListCoordinateRawDegreeFrom_eq_listDegreeFrom window
+      terminalWindow (level + 1)]
+  · rw [dif_neg hlevel, dif_neg hlevel]
+termination_by depth - level
+decreasing_by omega
+
+theorem structuralListCoordinateRawDegree_eq_listDegree
+    {depth : ℕ} (window : Fin depth → ℕ) (terminalWindow : ℕ) :
+    structuralListCoordinateRawDegree depth window terminalWindow =
+      listDegree window terminalWindow := by
+  unfold structuralListCoordinateRawDegree listDegree
+  exact structuralListCoordinateRawDegreeFrom_eq_listDegreeFrom window
+    terminalWindow 0
 
 
 end

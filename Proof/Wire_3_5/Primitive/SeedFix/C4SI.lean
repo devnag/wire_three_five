@@ -1,7 +1,8 @@
-import Proof.Wire_3_5.Primitive.SeedFix.C4Pipe
 import Proof.Wire_3_5.Primitive.SeedFix.C4SH
+import Proof.Wire_3_5.Primitive.Writers.Modulus
 import Proof.Wire_3_5.Primitive.Writers.DataBlank
 import Proof.Wire_3_5.Primitive.Writers.NumsX
+import Proof.Wire_3_5.Primitive.SeedFix.C4Pipe
 
 /-! # C4 per-call setup (item 3), part 9: the stage's slots and its front runs in one form
 

@@ -1,4 +1,6 @@
 import Proof.PCP.PCPSerializerReuseReset
+import Proof.PCP.ProjectionNormalizationCursorRestore
+import Proof.PCP.ProjectionNormalizationField
 
 /-! Append the serializer's framed result before erasing its reusable bank.
 The result cursor is physically restored; the growing output cursor stays

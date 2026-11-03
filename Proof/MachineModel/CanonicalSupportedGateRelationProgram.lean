@@ -1,5 +1,10 @@
+import Proof.MachineModel.CanonicalBalancedLengthProgram
+import Proof.Circuits.CanonicalPairedCall
 import Proof.MachineModel.CanonicalNativeCallProgram
+import Proof.MachineModel.CanonicalNativeEqualityProgram
+import Proof.MachineModel.CanonicalSupplierSupportCompressionProgram
 import Proof.MachineModel.CanonicalSupportedGateValidationProgram
+import Proof.Circuits.CanonicalWitnessCodec
 import Proof.MachineModel.TaggedProgramChoice
 
 /-!

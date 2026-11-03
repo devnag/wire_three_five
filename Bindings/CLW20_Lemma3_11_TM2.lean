@@ -1,6 +1,7 @@
-import Bindings.CLW20_Lemma3_11
 import Bindings.TuringBridge.Budget
+import Bindings.CLW20_Lemma3_11
 import Proof.PCP.PCPPRequestBounds
+import Statement
 
 /-!
 # Tier 2 binding: CLW20 Lemma 3.11, the two algorithms in Mathlib's standard model

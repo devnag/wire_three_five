@@ -1,8 +1,22 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.RadSetupB4
+import Statement_Wire_3_5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.ThresholdWriter.RadSetup
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.DigsIface
+import Proof.Wire_3_5.UnionMachine.RadSetupB3
+import Proof.Wire_3_5.UnionMachine.RadSpecBase
 
-/-! # RADIX, Route B, v5 (follow-up): the measure sees the star row
 
-`RadSetupB4.RadSetupSpecB4` bounds the setup's capacity polynomially in `RadSetupB4.radMeas`, which sees the star
+noncomputable section
+set_option maxRecDepth 4096
+
+
+/-! # RADIX, Route B, v5 (#198 follow-up): the measure sees the star row
+
+`RadSetupB4.RadSetupSpecB4` (M68) bounds the setup's capacity polynomially in `RadSetupB4.radMeas`, which sees the star
 row `row` only through `Mlab = (4·row + 4)·G`; at `G = |thrPool| = 0` (no occurrences, no carriers) it does not see
 `row`, while the setup reads `row` from register `413` (the numbers' `Mlab`, the block writer's `row` input), and a
 register is read by counting it down (`WExec.dec` needs the value `≤ cap`). As `PopSetupSpecB` → `PopSetupSpecB2`
@@ -82,3 +96,5 @@ structure RadSetupSpecB5 (x : ℕ) (l : Literals) (F : GateFree l) where
       RadReadyB2 x σR ((thrReq n a' ha' Cs carriers translation).word ++ frame (List.ofFn (FinalPass.thrHashBits ((callInputs l F kclk coef A a ha).starParams n hs) (((callInputs l F kclk coef A a ha).starParams n hs).translationOfCodes translation) Cs carriers ((callInputs l F kclk coef A a ha).filterParams .thr n) (gate0 l F).alg (thrCallDen (gate0 l F).alg (callInputs l F kclk coef A a ha) hs Cs) (thrCallE (gate0 l F).alg (callInputs l F kclk coef A a ha) hs Cs carriers) (thrCallT (gate0 l F).alg (callInputs l F kclk coef A a ha) hs Cs carriers) (thrCallJ (gate0 l F).alg (callInputs l F kclk coef A a ha) hs Cs carriers)))) out j u q
 
 end NearCubicWires.WireExponent3_5.UnionMachine.RadSetupB5
+
+end

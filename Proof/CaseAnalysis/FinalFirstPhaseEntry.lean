@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.FinalWordEngines
+import Proof.MachineModel.Layout
 
 namespace NearCubicWires.RepairOrdinary.CloseoutFinalC10FirstPhaseEntry
 

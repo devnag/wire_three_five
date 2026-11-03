@@ -69,6 +69,18 @@ set_option warningAsError true
 
 /-! ## §0 Generic polynomial arithmetic -/
 
+/-- A list sum, as a `Finset` sum over the list's own index type.  This is the
+shape `Realizes.hexpansion` is stated in. -/
+theorem listSum_eq_finsetSum {α β : Type} [AddCommMonoid β]
+    (values : List α) (map : α → β) :
+    (values.map map).sum = ∑ i : Fin values.length, map values[i] := by
+  induction values with
+  | nil => simp
+  | cons value values inductionHypothesis =>
+      simp only [List.map_cons, List.sum_cons, List.length_cons,
+        Fin.sum_univ_succ, inductionHypothesis]
+      rfl
+
 /-! ## §1 The restriction seam, at PCPP coordinates -/
 
 /-- **The restriction seam.**  Each recovered PCPP coordinate is one linear
@@ -177,6 +189,215 @@ noncomputable def phasePolynomial {Atom : Type} {n : ℕ}
 
 /-! ## §3 The per-site quantity, and the site value theorem -/
 
+/-- The real quantity one site contributes, in the schedule's own language and
+already divided by the schedule's `divisor`. -/
+noncomputable def siteQuantity {n : ℕ} {circuit : BooleanCircuit n}
+    (ph : CloseoutRowsOriginalSchedule.Phase) (pcpp : PointwisePCPP circuit)
+    (input : BitInput n)
+    (v : Fin (pcpp.systematicBits + pcpp.auxiliaryBits) → ℝ)
+    (i : Fin (2 ^ pcpp.clauseBits)) : ℝ :=
+  match ph with
+  | .penalty =>
+      (2 : ℝ)⁻¹ *
+        (validityPenalty
+            (systematicConstraint pcpp input
+              (literalIndex (pcpp.clauses i).left))
+            (v (literalIndex (pcpp.clauses i).left)) +
+          validityPenalty
+            (systematicConstraint pcpp input
+              (literalIndex (pcpp.clauses i).right))
+            (v (literalIndex (pcpp.clauses i).right)))
+  | .moment => (v (literalIndex (pcpp.clauses i).left)) ^ 2
+  | .clause => clauseRealValue (pcpp.clauses i) v
+
+theorem coordinatePenalty_value {Atom : Type} {n : ℕ}
+    {circuit : BooleanCircuit n} (pcpp : PointwisePCPP circuit)
+    (evaluate : Atom → BitInput n → Bool)
+    (proofValue :
+      BitInput n → Fin (pcpp.systematicBits + pcpp.auxiliaryBits) → ℝ)
+    (coordinate :
+      Fin (pcpp.systematicBits + pcpp.auxiliaryBits) →
+        CircuitPolynomial Atom 1)
+    (hcoordinate : CoordinateExpands pcpp evaluate proofValue coordinate)
+    (systematicAtom : Fin pcpp.systematicBits → Atom)
+    (hsystematic : ∀ index input,
+      evaluate (systematicAtom index) input =
+        parityOn (pcpp.systematicSupport index) input)
+    (input : BitInput n)
+    (j : Fin (pcpp.systematicBits + pcpp.auxiliaryBits)) :
+    (coordinatePenalty pcpp coordinate systematicAtom j).value evaluate input =
+      validityPenalty (systematicConstraint pcpp input j)
+        (proofValue input j) := by
+  refine Fin.addCases ?_ ?_ j
+  · intro index
+    simp [coordinatePenalty, systematicConstraint, hcoordinate input,
+      hsystematic, validityPenalty, systematicPenalty]
+  · intro index
+    simp [coordinatePenalty, systematicConstraint, hcoordinate input,
+      validityPenalty, booleanityPenalty]
+
+/-- **One site, evaluated at one PCPP input, is the schedule's own per-site
+quantity.** -/
+theorem sitePolynomial_value {Atom : Type} {n : ℕ}
+    {circuit : BooleanCircuit n}
+    (ph : CloseoutRowsOriginalSchedule.Phase) (pcpp : PointwisePCPP circuit)
+    (evaluate : Atom → BitInput n → Bool)
+    (proofValue :
+      BitInput n → Fin (pcpp.systematicBits + pcpp.auxiliaryBits) → ℝ)
+    (coordinate :
+      Fin (pcpp.systematicBits + pcpp.auxiliaryBits) →
+        CircuitPolynomial Atom 1)
+    (hcoordinate : CoordinateExpands pcpp evaluate proofValue coordinate)
+    (systematicAtom : Fin pcpp.systematicBits → Atom)
+    (hsystematic : ∀ index input,
+      evaluate (systematicAtom index) input =
+        parityOn (pcpp.systematicSupport index) input)
+    (input : BitInput n) (i : Fin (2 ^ pcpp.clauseBits)) :
+    (sitePolynomial ph pcpp coordinate systematicAtom i).value evaluate input =
+      siteQuantity ph pcpp input (proofValue input) i := by
+  cases ph with
+  | penalty =>
+      show (penaltySite pcpp coordinate systematicAtom i).value evaluate input = _
+      rw [penaltySite, CircuitPolynomial.scale_value,
+        CircuitPolynomial.add_value,
+        coordinatePenalty_value pcpp evaluate proofValue coordinate hcoordinate
+          systematicAtom hsystematic input,
+        coordinatePenalty_value pcpp evaluate proofValue coordinate hcoordinate
+          systematicAtom hsystematic input]
+      show ((1 / 2 : ℚ) : ℝ) * _ = (2 : ℝ)⁻¹ * _
+      norm_num
+  | moment =>
+      show (momentSite pcpp coordinate i).value evaluate input = _
+      rw [momentSite, CircuitPolynomial.weaken_value,
+        secondMomentPolynomial_value, hcoordinate input]
+      rfl
+  | clause =>
+      show (clauseSite pcpp coordinate i).value evaluate input = _
+      rw [clauseSite, CircuitPolynomial.weaken_value, clausePolynomial_value,
+        hcoordinate input, hcoordinate input]
+      rfl
+
+/-- The phase polynomial at one PCPP input is the uniform average of its sites'
+quantities. -/
+theorem phasePolynomial_value {Atom : Type} {n : ℕ}
+    {circuit : BooleanCircuit n}
+    (ph : CloseoutRowsOriginalSchedule.Phase) (pcpp : PointwisePCPP circuit)
+    (evaluate : Atom → BitInput n → Bool)
+    (proofValue :
+      BitInput n → Fin (pcpp.systematicBits + pcpp.auxiliaryBits) → ℝ)
+    (coordinate :
+      Fin (pcpp.systematicBits + pcpp.auxiliaryBits) →
+        CircuitPolynomial Atom 1)
+    (hcoordinate : CoordinateExpands pcpp evaluate proofValue coordinate)
+    (systematicAtom : Fin pcpp.systematicBits → Atom)
+    (hsystematic : ∀ index input,
+      evaluate (systematicAtom index) input =
+        parityOn (pcpp.systematicSupport index) input)
+    (input : BitInput n) :
+    (phasePolynomial ph pcpp coordinate systematicAtom).value evaluate input =
+      𝔼 i ∈ (univ : Finset (Fin (2 ^ pcpp.clauseBits))),
+        siteQuantity ph pcpp input (proofValue input) i := by
+  rw [phasePolynomial, CircuitPolynomial.scale_value,
+    polynomialFinsetSum_value]
+  rw [Finset.sum_congr rfl fun i _ =>
+    sitePolynomial_value ph pcpp evaluate proofValue coordinate hcoordinate
+      systematicAtom hsystematic input i]
+  rw [Finset.expect_eq_sum_div_card]
+  simp only [Finset.card_univ, Fintype.card_fin]
+  push_cast
+  ring
+
 /-! ## §4 The exactness theorems -/
+
+/-- The grouped phase mean is the double average of the per-site quantities.
+This is `penalty_mean` / `moment_mean` / `clause_mean` unfolded once. -/
+theorem mean_eq_expect {n : ℕ} {circuit : BooleanCircuit n}
+    (ph : CloseoutRowsOriginalSchedule.Phase) (pcpp : PointwisePCPP circuit)
+    (proofValue :
+      BitInput n → Fin (pcpp.systematicBits + pcpp.auxiliaryBits) → ℝ) :
+    CloseoutRowsOriginalSchedule.mean ph pcpp proofValue =
+      𝔼 input : BitInput n,
+        𝔼 i ∈ (univ : Finset (Fin (2 ^ pcpp.clauseBits))),
+          siteQuantity ph pcpp input (proofValue input) i := by
+  cases ph with
+  | penalty =>
+      rw [CloseoutRowsOriginalSchedule.penalty_mean, aggregateClausePenaltyMean]
+      have hinner : ∀ input : BitInput n,
+          (𝔼 i ∈ (univ : Finset (Fin (2 ^ pcpp.clauseBits))),
+              siteQuantity .penalty pcpp input (proofValue input) i) =
+            (2 : ℝ)⁻¹ *
+              totalClausePenaltyMean pcpp input (proofValue input) := by
+        intro input
+        show (𝔼 i ∈ (univ : Finset (Fin (2 ^ pcpp.clauseBits))),
+            (2 : ℝ)⁻¹ * (_ + _)) = _
+        rw [← Finset.mul_expect, totalClausePenaltyMean, clausePenaltyMean,
+          clausePenaltyMean, ← Finset.expect_add_distrib]
+      rw [Finset.expect_congr rfl fun input _ => hinner input,
+        ← Finset.mul_expect]
+      ring
+  | moment =>
+      rw [CloseoutRowsOriginalSchedule.moment_mean,
+        CompetitorSourceAverage.leftSecondMoment, ← Finset.univ_product_univ,
+        Finset.expect_product]
+      exact Finset.expect_congr rfl fun input _ =>
+        Finset.expect_congr rfl fun i _ => rfl
+  | clause =>
+      rw [CloseoutRowsOriginalSchedule.clause_mean, aggregateClauseMean]
+      exact Finset.expect_congr rfl fun input _ => rfl
+
+/-- **THE EXACTNESS THEOREM (paper C.10).**  The grouped phase mean of the
+paper's three estimated reals IS the exact mean of a degree-four circuit
+polynomial: a finite sum of `coefficient * conjunctionProbability`, one
+AND-four supplier call per monomial.  A pure identity -- there is no error
+term. -/
+theorem mean_eq_exactMean {Atom : Type} {n : ℕ} {circuit : BooleanCircuit n}
+    (ph : CloseoutRowsOriginalSchedule.Phase) (pcpp : PointwisePCPP circuit)
+    (evaluate : Atom → BitInput n → Bool)
+    (proofValue :
+      BitInput n → Fin (pcpp.systematicBits + pcpp.auxiliaryBits) → ℝ)
+    (coordinate :
+      Fin (pcpp.systematicBits + pcpp.auxiliaryBits) →
+        CircuitPolynomial Atom 1)
+    (hcoordinate : CoordinateExpands pcpp evaluate proofValue coordinate)
+    (systematicAtom : Fin pcpp.systematicBits → Atom)
+    (hsystematic : ∀ index input,
+      evaluate (systematicAtom index) input =
+        parityOn (pcpp.systematicSupport index) input) :
+    CloseoutRowsOriginalSchedule.mean ph pcpp proofValue =
+      (phasePolynomial ph pcpp coordinate systematicAtom).exactMean evaluate := by
+  rw [CircuitPolynomial.exactMean_eq_uniformMean, CircuitPolynomial.uniformMean,
+    mean_eq_expect ph pcpp proofValue]
+  exact Finset.expect_congr rfl fun input _ =>
+    (phasePolynomial_value ph pcpp evaluate proofValue coordinate hcoordinate
+      systematicAtom hsystematic input).symm
+
+/-- **The expansion, fully unfolded** -- literally the `hexpansion` field of
+`Realizes`: a `Finset`-indexed sum of `coefficient * conjunctionProbability`,
+with `index = univ` over the monomial positions. -/
+theorem mean_eq_sum_conjunctionProbability {Atom : Type} {n : ℕ}
+    {circuit : BooleanCircuit n}
+    (ph : CloseoutRowsOriginalSchedule.Phase) (pcpp : PointwisePCPP circuit)
+    (evaluate : Atom → BitInput n → Bool)
+    (proofValue :
+      BitInput n → Fin (pcpp.systematicBits + pcpp.auxiliaryBits) → ℝ)
+    (coordinate :
+      Fin (pcpp.systematicBits + pcpp.auxiliaryBits) →
+        CircuitPolynomial Atom 1)
+    (hcoordinate : CoordinateExpands pcpp evaluate proofValue coordinate)
+    (systematicAtom : Fin pcpp.systematicBits → Atom)
+    (hsystematic : ∀ index input,
+      evaluate (systematicAtom index) input =
+        parityOn (pcpp.systematicSupport index) input) :
+    CloseoutRowsOriginalSchedule.mean ph pcpp proofValue =
+      ∑ i : Fin (phasePolynomial ph pcpp coordinate
+            systematicAtom).monomials.length,
+        (((phasePolynomial ph pcpp coordinate
+            systematicAtom).monomials[i].coefficient : ℚ) : ℝ) *
+          conjunctionProbability evaluate
+            (phasePolynomial ph pcpp coordinate
+              systematicAtom).monomials[i].factors := by
+  rw [mean_eq_exactMean ph pcpp evaluate proofValue coordinate hcoordinate
+      systematicAtom hsystematic, CircuitPolynomial.exactMean]
+  exact listSum_eq_finsetSum _ _
 
 end NearCubicWires.RepairOrdinary.CloseoutFinalC10Exactness

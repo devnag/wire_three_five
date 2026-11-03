@@ -1,4 +1,9 @@
 import Proof.Rows.RowsRowLevelFields
+import Proof.CaseAnalysis.RowsEstimatorScanRun
+import Proof.Hierarchy.CompetitorRecordRewind
+import Proof.MachineModel.ClockUnaryProduct
+import Proof.PCP.ProjectionRawFrame
+import Proof.Rows.Plan
 
 set_option autoImplicit false
 set_option maxRecDepth 120000

@@ -1,10 +1,28 @@
-import Proof.Wire_3_5.FinalPass.FpInLen
+import Lean
 import Proof.Wire_3_5.FinalPass.S5TNum2
-import Proof.Wire_3_5.FinalPass.ThrSz6
+import Proof.Wire_3_5.FinalPass.ThrSz6Base
+import Proof.Wire_3_5.FinalPass.FpInLenBase
+import Proof.Wire_3_5.Primitive.SeedFix.TS4O
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.S5TChC
+import Proof.Wire_3_5.FinalPass.ThrSz5
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Primitive.Writers.CallIndexR
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.TS4K
+import Proof.Wire_3_5.Primitive.SeedFix.TS4N
+import Proof.Wire_3_5.Primitive.SeedFix.ThrNumsPoly
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.FinalPass.S5TNum3Base
+
+
+noncomputable section
+set_option maxRecDepth 120000
+
 
 /-! # S5-THR, part 37: the THR half's constants and a request's facts (P3:3114-3115, 3170-3181)
 
-The THR half's parameters in the paper's order of choice: the degrees on `l` alone (**`DtT`**, `thrNumsPoly`
+The THR half's parameters in the paper's order of choice: the degrees on `l` alone (**`DtT`**, the `thrNumsPoly`
 degree at the cap's degree; **`Hd`**, at least every piece's degree; **`Zx`**, **`Dl`**, the half's exponent), the
 coefficient on `F` (**`KtT`**, **`c0T`**, at least every piece's coefficient). At a THR request: **`call_facts`**
 (the call's precondition: carriers `≤ 2`, descriptions `≤ (n+1)^{26}`, the carriers' envelope, the star
@@ -27,7 +45,7 @@ open NearCubicWires.WireExponent3_5.PrimAsm.Plan NearCubicWires.SupplierPipeline
 section Par
 variable (l : Literals)
 
-/-- The THR numbers' degree (`thrNumsPoly` at the cap's degree `capZR`). -/
+/-- The THR numbers' degree (the `thrNumsPoly` at the cap's degree `capZR`). -/
 noncomputable def DtT : ℕ := Classical.choose (PrimT.W6.thrNumsPoly l (PrimAsm.CallIndexR.capZR l))
 
 /-- The THR numbers' coefficient at `F`. -/
@@ -93,21 +111,6 @@ theorem vals_le {n : ℕ} (hs : (callInputs l F kclk coef A a ha).StarAt n) {a' 
 
 end Req
 
-/-- **The codes lie inside the request word.** -/
-theorem natWord_le_reqW (n : ℕ) (mb : Bool) (codes cc : List ℕ) (tl : List Bool) :
-    (∀ x ∈ codes, (RepairRepresentation.natWord x).length ≤ (PrimAsm.Data.reqW n mb codes cc tl).length) ∧
-    (∀ y ∈ cc, (RepairRepresentation.natWord y).length ≤ (PrimAsm.Data.reqW n mb codes cc tl).length) := by
-  unfold PrimAsm.Data.reqW RepairRepresentation.natListWord
-  simp only [List.length_append, List.length_flatMap]
-  refine ⟨fun x hx => ?_, fun y hy => ?_⟩
-  · have := List.le_sum_of_mem (List.mem_map.2 ⟨x, hx, rfl⟩ :
-      (RepairRepresentation.natWord x).length ∈ codes.map (fun c => (RepairRepresentation.natWord c).length))
-    omega
-  · have := List.le_sum_of_mem (List.mem_map.2 ⟨y, hy, rfl⟩ :
-      (RepairRepresentation.natWord y).length ∈ cc.map (fun c => (RepairRepresentation.natWord c).length))
-    omega
-
-theorem nbl_le_natWord (x : ℕ) : natBitLength x ≤ (RepairRepresentation.natWord x).length := by
-  rw [PrimAsm.ParseNat.natWord_length]; omega
-
 end NearCubicWires.WireExponent3_5.FinalPass.S5T
+
+end

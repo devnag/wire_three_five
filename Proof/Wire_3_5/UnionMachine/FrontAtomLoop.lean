@@ -1,10 +1,11 @@
 import Proof.Wire_3_5.UnionMachine.FrontAtomRound
+import Proof.Wire_3_5.UnionMachine.FrontEntriesRef
 
 /-! # C6 front, U1b: the atom loop (P3:3670)
 
 "It rejects malformed descriptions, oversized atoms" (P3:3670): the codec decodes every grid atom
 (`decodeAtom m q`). The loop runs one round (`FrontAtomRound`) per validated entry of the guess rest `r`, while the
-count `J` is positive and no atom was rejected, and ends with `BAD = 0` exactly when every atom passes the Theorem 2.5 repository's decoder.
+count `J` is positive and no atom was rejected, and ends with `BAD = 0` exactly when every atom passes v8's decoder.
 
 Main statements: **`round_pass`**, **`round_fail`** (one round), **`atoms_loop`** (the loop). Paper quantity: the
 rejection of malformed guessed atoms. -/

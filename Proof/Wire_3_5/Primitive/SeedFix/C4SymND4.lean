@@ -1,4 +1,5 @@
-import Proof.Wire_3_5.Primitive.SeedFix.C4SymND3
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymKA
+import Proof.Wire_3_5.Primitive.SeedFix.C4SymNC
 import Proof.Wire_3_5.Primitive.SeedFix.C4SymKA4
 
 /-! # C4.K SYM items (c)+(i), v4: the SYM stage from the numbers machine's run at the capacity `2^{⌊n/8⌋ + Cc}`

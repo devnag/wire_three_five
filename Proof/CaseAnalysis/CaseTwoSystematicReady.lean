@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.CaseTwoSystematicBit
+import Proof.PCP.PCPPNativeTemplateRaw
 
 /-! Charge the selected variable template's one-cell query positioning before
 the original support call. The systematic branch starts with that template at

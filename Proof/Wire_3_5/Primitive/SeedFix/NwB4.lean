@@ -1,9 +1,13 @@
 import Proof.Wire_3_5.Primitive.SeedFix.NwB2
+import Proof.Wire_3_5.Primitive.SeedFix.TS4Cap
+import Proof.Wire_3_5.Primitive.SeedFix.ThrDecA
+import Proof.Wire_3_5.FinalPass.S5TUtil
 import Proof.Wire_3_5.UnionMachine.NumsC1
 
 /-! # NW phase (b), part 4: the register moves around the decode's numbers
 
-Phase (b)'s registers `rN, rM, rE, rT, rV` (`505 … 509`) lie in the decode's `H` block (`472 … 511`), which the pre-dock program needs at `0`; so (b) first moves `n`, the mode bit, `e`, `T_f` to `450 … 453` (`saveW`), and the
+Phase (b)'s registers `rN, rM, rE, rT, rV` (`505 … 509`) lie in the decode's `H` block (`472 … 511`), which T3's
+pre-dock program needs at `0`; so (b) first moves `n`, the mode bit, `e`, `T_f` to `450 … 453` (`saveW`), and the
 decode's star numbers `k_h`, `f_e·L` to `454`, `455` before the THR cap's program reuses the star block (`keepW`,
 `clearL` of `SGb`); after the cap, `Hb 0 := |carriers|`, `Hb 1 := cap_T` (`setHbW`), the pre-dock program's inputs.
 

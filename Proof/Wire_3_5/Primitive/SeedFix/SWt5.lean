@@ -1,12 +1,33 @@
+import Lean
 import Proof.Wire_3_5.Primitive.SeedFix.SWt4
+import Statement_Wire_3_5
+import Proof.Wire_3_5.FinalPass.PlanFP
+import Proof.Wire_3_5.FinalPass.SWParts
+import Proof.Wire_3_5.FinalPass.SymFront3
+import Proof.Wire_3_5.FinalPass.SymFront4
+import Proof.Wire_3_5.Assembly.Gate0
+import Proof.Wire_3_5.Foundations.OutMachineJoinG
+import Proof.Wire_3_5.Primitive.Writers.Plan
+import Proof.Wire_3_5.Primitive.SeedFix.SWt3
+import Proof.Wire_3_5.Assembly.Split
+import Proof.Wire_3_5.UnionMachine.NumsC7
+import Proof.Wire_3_5.UnionMachine.NumsPh2
+import Proof.Wire_3_5.UnionMachine.NumsPh3
+import Proof.Wire_3_5.Primitive.SeedFix.SWt5Base
 
-/-! # SWt, part 5: **`swT x hx l : SWParts.SWtT l`**
+
+noncomputable section
+set_option maxRecDepth 120000
+
+
+/-! # T3 SWt, part 5: **`swT x hx l : SWParts.SWtT l`**
 
 **`tRun`**: at a SYM request, from the core's blank entry at the capacity `K_t·X^{D_t}`: the SYM front
-(`front_runA`), every register cleared (`clearL`), the four slots (`tops_run`, the words by `swt_word`); within
-`C_t·X^{D_t'}` steps, every head and register `0`, the residue the front's. **`swT`** packages it as `GuardedWordsMJ` at the SYM guard.
+(`front_runA`), every register cleared (the `clearL`), the four slots (`tops_run`, the words by `swt_word`); within
+`C_t·X^{D_t'}` steps, every head and register `0`, the residue the front's. **`swT`** packages it as X6's
+`GuardedWordsMJ` at the SYM guard.
 
-Paper quantity of the main type: the SYM call's framed top tables (`symWords`, kind `1`; P3:3170-3178). -/
+Paper quantity of the main type: the SYM call's framed top tables (the `symWords`, kind `1`; P3:3170-3178). -/
 
 set_option autoImplicit false
 set_option linter.unusedSimpArgs false
@@ -24,16 +45,6 @@ open NearCubicWires.RepairOrdinary.RecoveryRootRound
 
 section Gate
 variable (x : ℕ) (hx : DataDock.DT + 7 ≤ x) (l : Literals)
-
-theorem scan_len {n : ℕ} (C : NormalizedSymmetricThresholdCircuit n) :
-    2 * natBitLength C.bottomCount + 2 * (List.ofFn C.top).length + 2 ≤ (FinalPass.Out.DataW.scanWord C).length := by
-  have hnw : (natWord C.bottomCount).length = 2 * natBitLength C.bottomCount + 1 := by
-    have : natWord C.bottomCount = List.replicate (natBitLength C.bottomCount) true ++
-      false :: WilliamsPublishedForm.fixedWidthNatBits (natBitLength C.bottomCount) C.bottomCount := rfl
-    rw [this]; simp [WilliamsPublishedForm.fixedWidthNatBits]; omega
-  unfold FinalPass.Out.DataW.scanWord
-  simp only [List.length_append, hnw, frame_len']
-  omega
 
 /-- **The top tables' run** at a SYM request. -/
 theorem tRun (F : GateFree l) (kclk coef A a : ℕ) (ha : a ≤ kclk + 1) {n a' : ℕ} (ha' : a' ≤ 4)
@@ -162,3 +173,5 @@ noncomputable def swT : FinalPass.SWParts.SWtT l :=
 end Gate
 
 end NearCubicWires.WireExponent3_5.PrimT.SWt
+
+end

@@ -1,4 +1,22 @@
+import Lean
 import Proof.Wire_3_5.UnionMachine.FrontCostVal
+import Proof.Wire_3_5.Transfer.TransferUnion
+import Proof.Wire_3_5.UnionMachine.UnionCheck
+import Proof.Wire_3_5.UnionMachine.UnionCodec
+import Proof.Wire_3_5.UnionMachine.FrontDecode
+import Proof.Wire_3_5.UnionMachine.FrontSelReq
+import Proof.Wire_3_5.UnionMachine.FrontSemCap1
+import Proof.Wire_3_5.UnionMachine.FrontSemDec
+import Proof.Wire_3_5.UnionMachine.FrontSemEnt
+import Proof.Wire_3_5.UnionMachine.FrontSemPath
+import Proof.Wire_3_5.UnionMachine.FrontSemRun
+import Proof.Wire_3_5.UnionMachine.FrontSemTW
+import Proof.Wire_3_5.UnionMachine.PlanW3
+import Proof.Wire_3_5.UnionMachine.FrontCostRunBase
+
+
+noncomputable section
+
 
 /-! # C6 front, the time (8): the chain after phase 2 and the front's cost, per branch (P3:3669-3691)
 
@@ -27,22 +45,22 @@ variable {kclk : ℕ} {E : Envelope} {B : TimeBudget kclk E} {I : PrimitiveInput
 
 /-- **The valid branch's guess** passes its atoms and grid signs, and its entries' word opens the rest. -/
 theorem valid_ok (Cδ : ℕ) (hsS : ∀ q, S.gridSize q = Ledger.rowBSparse h0 h1 2 Cδ q) {N : ℕ} (x : BitInput N)
-    (b : Bool) (t : List Bool) (O : BooleanCircuit (S.pcp.nativeWidth N)) (hsc : scanOK t = true)
-    (hdec : CanonicalWitnessCodec.decodeBooleanCircuit (S.pcp.nativeWidth N) (value (payload t)) = some O)
-    (harity : (S.request x O).arity = S.pcp.nativeWidth N) (hx : (restOf t).length + 1 ≤ (List.ofFn x).length)
+    (b : Bool) (t : List Bool) (O : NearCubicGates.Close.Outer.OuterGuess (S.width N)) (hsc : scanOK t = true)
+    (hdec : NearCubicWires.WireExponent3_5.UnionMachine.Front35.pairOf (S.width N) (payload t) = some O)
+    (harity : (S.request x O).arity = S.width N) (hx : (restOf t).length + 1 ≤ (List.ofFn x).length)
     (hE' : (entScan (((S.pcppOf x O).systematicBits + (S.pcppOf x O).auxiliaryBits) *
-      Ledger.rowBSparse h0 h1 2 Cδ (S.pcp.nativeWidth N)) (restOf t)).isSome = true)
-    (hv0' : FrontAtomLoop.verdictOf (S.pcp.nativeWidth N) (FrontAtomStageL.capP (List.ofFn x).length)
-      ((S.pcp.nativeWidth N + 1) ^ I.descDeg) (modeOf b) (((S.pcppOf x O).systematicBits +
-        (S.pcppOf x O).auxiliaryBits) * Ledger.rowBSparse h0 h1 2 Cδ (S.pcp.nativeWidth N))
+      Ledger.rowBSparse h0 h1 2 Cδ (S.width N)) (restOf t)).isSome = true)
+    (hv0' : FrontAtomLoop.verdictOf (S.width N) (FrontAtomStageL.capP (List.ofFn x).length)
+      ((S.width N + 1) ^ I.descDeg) (modeOf b) (((S.pcppOf x O).systematicBits +
+        (S.pcppOf x O).auxiliaryBits) * Ledger.rowBSparse h0 h1 2 Cδ (S.width N))
       (payOf (restOf t) (((S.pcppOf x O).systematicBits + (S.pcppOf x O).auxiliaryBits) *
-        Ledger.rowBSparse h0 h1 2 Cδ (S.pcp.nativeWidth N))) = 0) :
+        Ledger.rowBSparse h0 h1 2 Cδ (S.width N))) = 0) :
     PlanW3.AtomsOkG (gOf S x b O (restOf t)) ∧
       ((gOf S x b O (restOf t)).checkData (gOf S x b O (restOf t)).translation).signsOk = true ∧
       (FrontTW.entsW (esOf (gOf S x b O (restOf t)))).length ≤ (restOf t).length := by
   have hEN := FrontSemRun.entN_eq h0 h1 Cδ hsS x O harity
   have hvA : FrontAtomLoop.verdictOf (S.request x O).arity (FrontAtomStageL.capP (List.ofFn x).length)
-      ((S.pcp.nativeWidth N + 1) ^ I.descDeg) (modeOf b) (entN S x O) (payOf (restOf t) (entN S x O)) = 0 := by
+      ((S.width N + 1) ^ I.descDeg) (modeOf b) (entN S x O) (payOf (restOf t) (entN S x O)) = 0 := by
     rw [harity, hEN]; exact hv0'
   obtain ⟨hd, hsg⟩ := FrontSemDec.valid_of b t hsc O hdec (by rw [hEN]; exact hE') _ _ hvA
   set g := gOf S x b O (restOf t) with hgdef
@@ -50,7 +68,7 @@ theorem valid_ok (Cδ : ℕ) (hsS : ∀ q, S.gridSize q = Ledger.rowBSparse h0 h
   obtain ⟨kz, hrz⟩ := FrontSemDec.rest_of hd
   change restOf t = _ at hrz
   have hEg : ((S.pcppOf x O).systematicBits + (S.pcppOf x O).auxiliaryBits) *
-      Ledger.rowBSparse h0 h1 2 Cδ (S.pcp.nativeWidth N) = (entsG g).length := by
+      Ledger.rowBSparse h0 h1 2 Cδ (S.width N) = (entsG g).length := by
     rw [← hEN]; exact FrontSemDec.entN_eq g
   have hvg : FrontAtomLoop.verdictOf g.q (FrontAtomStageL.capP (List.ofFn x).length) ((g.q + 1) ^ I.descDeg) g.mode
       (entsG g).length (payOf (((entsG g).map encE).flatten ++ List.replicate kz false) (entsG g).length) = 0 := by
@@ -70,103 +88,59 @@ theorem valid_ok (Cδ : ℕ) (hsS : ∀ q, S.gridSize q = Ledger.rowBSparse h0 h
   rw [e1, e2]
   omega
 
-/-- **The numbers' caps bound the counts.** -/
-theorem nums_le {cap Kb Db Cδ q sys aux cb : ℕ} (h : FrontCh3P.NumsCaps cap h0 h1 Kb Db Cδ q sys aux cb) :
-    q ≤ cap ∧ sys ≤ cap ∧ aux ≤ cap ∧ cb ≤ cap ∧ Ledger.rowBSparse h0 h1 2 Cδ q ≤ cap ∧
-      (sys + aux) * Ledger.rowBSparse h0 h1 2 Cδ q ≤ cap ∧ Kb * (q + 1) ^ Db ≤ cap := by
-  have hc1 := h.hcE
-  have hc2 := h.cc
-  have hc3 := CompilerMachine.Pool.lt_pow_natBitLength cb
-  rw [pow_succ] at hc2
-  have hc4 := h.hq4
-  have hc5 := h.hBc
-  refine ⟨by omega, by omega, by omega, by omega, by omega, by omega, by omega⟩
-
-/-- **The entries fail**: the chain's cost. -/
-theorem rejECost_le (Dw Kw Dl Kb Db Cδ q sys aux cb N : ℕ) (xs r : List Bool) (hx : xs.length ≤ N + 2)
-    (hr : r.length ≤ N + 2) (hnums : FrontCh3P.NumsCaps (2 * (Kw * (q + 1) ^ Dw) + 2) h0 h1 Kb Db Cδ q sys aux cb)
-    (h2W : 2 * (Kw * (q + 1) ^ Dw) + 2 ≤ N + 2) (hDb : Db ≤ N + 2)
-    (hP1 : PCPSerializerCapacity.Power.budget Dw Kw q ≤ N + 2) (hP2 : PCPSerializerCapacity.Power.budget Dl 1 q ≤ N + 2)
-    (ht : Ledger.rowBt h0 h1 q ≤ N + 2) :
-    FrontSemRun.rejECost h0 h1 Dw Kw Dl Kb Db Cδ q sys aux cb xs r ≤ 10 ^ 31 * (N + 2) ^ 12 := by
-  obtain ⟨a1, a2, a3, a4, a5, -, a7⟩ := nums_le h0 h1 hnums
-  have b := FrontCostRest.ch3Cost_le h0 h1 Dw Kw Dl Kb Db Cδ q sys aux cb N xs r hx hr (by omega) (by omega)
-    (by omega) (by omega) (by omega) (by omega) hDb hP1 hP2 (by omega) ht
-  have p1 : N + 2 ≤ (N + 2) ^ 12 := Nat.le_self_pow (by norm_num) _
-  unfold FrontSemRun.rejECost
-  omega
-
-/-- **An atom fails**: the chain's cost. -/
-theorem rejACost_le (m : Mode) (Dw Kw Dl Kb Db Cδ q sys aux cb N : ℕ) (xs r : List Bool) (hx : xs.length ≤ N)
-    (hr : r.length ≤ N) (hnums : FrontCh3P.NumsCaps (2 * (Kw * (q + 1) ^ Dw) + 2) h0 h1 Kb Db Cδ q sys aux cb)
-    (h2W : 2 * (Kw * (q + 1) ^ Dw) + 2 ≤ N + 2) (hDb : Db ≤ N + 2)
-    (hP1 : PCPSerializerCapacity.Power.budget Dw Kw q ≤ N + 2) (hP2 : PCPSerializerCapacity.Power.budget Dl 1 q ≤ N + 2)
-    (ht : Ledger.rowBt h0 h1 q ≤ N + 2) (hL : (q + 1) ^ Dl ≤ N + 2) :
-    FrontSemRun.rejACost m h0 h1 Dw Kw Dl Kb Db Cδ q sys aux cb xs r ≤ 10 ^ 81 * (N + 2) ^ 40 := by
-  obtain ⟨a1, a2, a3, a4, a5, a6, a7⟩ := nums_le h0 h1 hnums
-  have b := FrontCostRest.ch3Cost_le h0 h1 Dw Kw Dl Kb Db Cδ q sys aux cb N xs r (by omega) (by omega) (by omega)
-    (by omega) (by omega) (by omega) (by omega) (by omega) hDb hP1 hP2 (by omega) ht
-  have b2 := FrontCostRest.atCost_le m r xs q ((sys + aux) * Ledger.rowBSparse h0 h1 2 Cδ q) ((q + 1) ^ Dl) N hr hx
-    (by omega) (by omega) hL
-  have hn : 1 ≤ N + 2 := by omega
-  have p1 : N + 2 ≤ (N + 2) ^ 40 := Nat.le_self_pow (by norm_num) _
-  have p12 : (N + 2) ^ 12 ≤ (N + 2) ^ 40 := Nat.pow_le_pow_right hn (by norm_num)
-  unfold FrontSemRun.rejACost
-  omega
-
 /-- **The chain after phase 2**: on every branch at most `10^81·n^40 + 400·rOf + β`, `n = N + 2`, `β` C1's call's
 budget at the width. -/
 theorem restCostOf_le (Kw Dw De Ce Dt Ct Kb Db Cδ cr Vb aV bV aT bT crT KT AT Λ K : ℕ) {d : ℕ} (c : Plan.C1At d)
-    {N : ℕ} (x : BitInput N) (b : Bool) (t : List Bool) (O : BooleanCircuit (S.pcp.nativeWidth N))
+    {N : ℕ} (x : BitInput N) (b : Bool) (t : List Bool) (O : NearCubicGates.Close.Outer.OuterGuess (S.width N))
     (hsS : ∀ q, S.gridSize q = Ledger.rowBSparse h0 h1 2 Cδ q) (hr' : ∀ q, B.rOf q = Ledger.rowBr cr q)
     (hsc : scanOK t = true)
-    (hdec : CanonicalWitnessCodec.decodeBooleanCircuit (S.pcp.nativeWidth N) (value (payload t)) = some O)
-    (harity : (S.request x O).arity = S.pcp.nativeWidth N) (hx : (restOf t).length + 1 ≤ (List.ofFn x).length)
-    (hnums : FrontCh3P.NumsCaps (2 * (Kw * (S.pcp.nativeWidth N + 1) ^ Dw) + 2) h0 h1 Kb Db Cδ (S.pcp.nativeWidth N)
+    (hdec : NearCubicWires.WireExponent3_5.UnionMachine.Front35.pairOf (S.width N) (payload t) = some O)
+    (harity : (S.request x O).arity = S.width N) (hx : (restOf t).length + 1 ≤ (List.ofFn x).length)
+    (hnums : FrontCh3P.NumsCaps (2 * (Kw * (S.width N + 1) ^ Dw) + 2) h0 h1 Kb Db Cδ (S.width N)
       (S.pcppOf x O).systematicBits (S.pcppOf x O).auxiliaryBits (S.pcppOf x O).clauseBits)
-    (hcaps : ∀ g : UnionGuess S x, g.oracle = O → PlanW3.AtomsOkG g → (g.checkData g.translation).signsOk = true →
+    (hcaps : ∀ g : UnionGuess S x, g.pair = O → PlanW3.AtomsOkG g → (g.checkData g.translation).signsOk = true →
       FrontSemPath.PathCaps g h0 h1 Kw Dw I.descDeg De Ce Dt Ct Kb Db Cδ cr Vb c ∧
       FrontSemTW.EndCaps h0 h1 g (Kw * (g.q + 1) ^ Dw) Kb Db Cδ aV bV aT bT crT KT AT ∧
       (Plan.c1sized d c.E₁ c.c₁).pre (FrontSelReq.selReqOf g))
-    (hgenv : ∀ g : UnionGuess S x, g.oracle = O → PlanW3.AtomsOkG g → FrontSemCap1.GEnv g Λ K)
-    (hΛ : Ledger.rowBLambda h0 h1 2 (S.pcp.nativeWidth N) ≤ K) (hVb : Vb ≤ N + 2)
-    (h2W : 2 * (Kw * (S.pcp.nativeWidth N + 1) ^ Dw) + 2 ≤ N + 2)
-    (hKW : 2 * (K * K * K * K) + 2 * K + 1 ≤ Kw * (S.pcp.nativeWidth N + 1) ^ Dw) (hDb : Db ≤ N + 2)
-    (hP1 : PCPSerializerCapacity.Power.budget Dw Kw (S.pcp.nativeWidth N) ≤ N + 2)
-    (hP2 : PCPSerializerCapacity.Power.budget I.descDeg 1 (S.pcp.nativeWidth N) ≤ N + 2)
-    (hP3 : PCPSerializerCapacity.Power.budget I.carrierDeg 1 (S.pcp.nativeWidth N) ≤ N + 2)
-    (hP4 : PCPSerializerCapacity.Power.budget De Ce (Kw * (S.pcp.nativeWidth N + 1) ^ Dw) ≤ N + 2)
-    (hP5 : PCPSerializerCapacity.Power.budget Dt Ct (Kw * (S.pcp.nativeWidth N + 1) ^ Dw) ≤ N + 2)
-    (hv : BlockPlatform.UnaryCalc.value Dt Ct (Kw * (S.pcp.nativeWidth N + 1) ^ Dw) ≤ N + 2)
-    (hL : (S.pcp.nativeWidth N + 1) ^ I.descDeg ≤ N + 2) (ht : Ledger.rowBt h0 h1 (S.pcp.nativeWidth N) ≤ N + 2) :
+    (hgenv : ∀ g : UnionGuess S x, g.pair = O → PlanW3.AtomsOkG g → FrontSemCap1.GEnv g Λ K)
+    (hΛ : Ledger.rowBLambda h0 h1 2 (S.width N) ≤ K) (hVb : Vb ≤ N + 2)
+    (h2W : 2 * (Kw * (S.width N + 1) ^ Dw) + 2 ≤ N + 2)
+    (hKW : 2 * (K * K * K * K) + 2 * K + 1 ≤ Kw * (S.width N + 1) ^ Dw) (hDb : Db ≤ N + 2)
+    (hP1 : PCPSerializerCapacity.Power.budget Dw Kw (S.width N) ≤ N + 2)
+    (hP2 : PCPSerializerCapacity.Power.budget I.descDeg 1 (S.width N) ≤ N + 2)
+    (hP3 : PCPSerializerCapacity.Power.budget I.carrierDeg 1 (S.width N) ≤ N + 2)
+    (hP4 : PCPSerializerCapacity.Power.budget De Ce (Kw * (S.width N + 1) ^ Dw) ≤ N + 2)
+    (hP5 : PCPSerializerCapacity.Power.budget Dt Ct (Kw * (S.width N + 1) ^ Dw) ≤ N + 2)
+    (hv : BlockPlatform.UnaryCalc.value Dt Ct (Kw * (S.width N + 1) ^ Dw) ≤ N + 2)
+    (hL : (S.width N + 1) ^ I.descDeg ≤ N + 2) (ht : Ledger.rowBt h0 h1 (S.width N) ≤ N + 2) :
     FrontSemRun.restCostOf h0 h1 Kw Dw De Ce Dt Ct Kb Db Cδ cr Vb aV bV aT bT crT KT AT c x b t O ≤
-      10 ^ 81 * (N + 2) ^ 40 + 400 * FrontTail.rOf crT KT AT (S.pcp.nativeWidth N) +
-        c.budgetAt B (S.pcp.nativeWidth N) := by
+      10 ^ 81 * (N + 2) ^ 40 + 400 * FrontTail.rOf crT KT AT (S.width N) +
+        c.budgetAt B (S.width N) := by
   have hxl : (List.ofFn x).length = N := List.length_ofFn
   have hn : 1 ≤ N + 2 := by omega
   have p12 : (N + 2) ^ 12 ≤ (N + 2) ^ 40 := Nat.pow_le_pow_right hn (by norm_num)
   unfold FrontSemRun.restCostOf
   dsimp only
   split_ifs with hE hv' hpre
-  · have := rejECost_le h0 h1 Dw Kw I.descDeg Kb Db Cδ (S.pcp.nativeWidth N) (S.pcppOf x O).systematicBits
+  · have := rejECost_le h0 h1 Dw Kw I.descDeg Kb Db Cδ (S.width N) (S.pcppOf x O).systematicBits
       (S.pcppOf x O).auxiliaryBits (S.pcppOf x O).clauseBits N (List.ofFn x) (restOf t) (by omega) (by omega)
       hnums h2W hDb hP1 hP2 ht
     omega
-  · have := rejACost_le h0 h1 (modeOf b) Dw Kw I.descDeg Kb Db Cδ (S.pcp.nativeWidth N)
+  · have := rejACost_le h0 h1 (modeOf b) Dw Kw I.descDeg Kb Db Cδ (S.width N)
       (S.pcppOf x O).systematicBits (S.pcppOf x O).auxiliaryBits (S.pcppOf x O).clauseBits N (List.ofFn x) (restOf t)
       (by omega) (by omega) hnums h2W hDb hP1 hP2 ht hL
     omega
   · have hE' : (entScan (((S.pcppOf x O).systematicBits + (S.pcppOf x O).auxiliaryBits) *
-        Ledger.rowBSparse h0 h1 2 Cδ (S.pcp.nativeWidth N)) (restOf t)).isSome = true := by
+        Ledger.rowBSparse h0 h1 2 Cδ (S.width N)) (restOf t)).isSome = true := by
       cases h : (entScan (((S.pcppOf x O).systematicBits + (S.pcppOf x O).auxiliaryBits) *
-          Ledger.rowBSparse h0 h1 2 Cδ (S.pcp.nativeWidth N)) (restOf t)).isSome
+          Ledger.rowBSparse h0 h1 2 Cδ (S.width N)) (restOf t)).isSome
       · exact absurd h hE
       · rfl
     have hv0 := not_not.mp hv'
     obtain ⟨hat, hsg, hlen⟩ := valid_ok h0 h1 Cδ hsS x b t O hsc hdec harity hx hE' hv0
     obtain ⟨hPC, hEC, -⟩ := hcaps _ rfl hat hsg
     have hG := hgenv _ rfl hat
-    have hgq : (gOf S x b O (restOf t)).q = S.pcp.nativeWidth N := harity
+    have hgq : (gOf S x b O (restOf t)).q = S.width N := harity
     have hb := FrontCostVal.validCost_le h0 h1 (gOf S x b O (restOf t)) c hpre (List.ofFn x)
       ((restOf t).length - (FrontTW.entsW (esOf (gOf S x b O (restOf t)))).length) hG hPC hEC
       (hr' _) (hsS (gOf S x b O (restOf t)).q) (by rw [hgq]; exact hΛ) (M := N) (by omega) (by omega) hVb
@@ -186,21 +160,18 @@ variable {kclk : ℕ} {E : Envelope} {B : TimeBudget kclk E} {I : PrimitiveInput
   {ζ : ℚ} (h0 : 0 < ζ) (h1 : ζ < 1 / 2)
 
 /-- **The front's cost past the onset**: at most `4N + 20` plus phase 1, phase 2 and the chain after it. -/
-theorem costOf_le (source : ProjectionSourceAlgorithm UWhole.verifier UWhole.time) (a : PointwisePCPPAlgorithm)
-    (k Ap G Dw De Dt : ℕ) {d : ℕ} (c : Plan.C1At d) (C : ℕ) (Hh : OrdinaryHierarchy (fun n => n ^ (k + 2)))
-    (Cpad : ℕ) (hpad : k + 3 ≤ Cpad) (Kw Kb Db Cδ Ce Ct cr Vb aV bV aT bT crT KT AT : ℕ) {N : ℕ}
+theorem costOf_le {cutoff D copies : ℕ} {delta : ℚ} (CN : W3.NearCubicWires.RepairSource.Outer3.ColdNativeW S.mw S.SV
+    S.pcppAlg cutoff D S.G copies delta) (k Ap G Dw De Dt : ℕ) {d : ℕ} (c : Plan.C1At d) (C : ℕ)
+    (Kw Kb Db Cδ Ce Ct cr Vb aV bV aT bT crT KT AT : ℕ) {N : ℕ}
     (x : BitInput N) (w : List Bool) (hCN : C ≤ N) (P1 P2 R : ℕ)
     (hph1 : FrontTop.ph1C k Ap G (List.ofFn x) w ≤ P1)
-    (hph2 : ∀ O : BooleanCircuit (S.pcp.nativeWidth N),
-      O.size ≤ RecoveryScheduleEnvelope.oracleSizeBound G (S.pcp.nativeWidth N) →
-      ∀ hq : PCPPNativeHierarchyNodes.width source k Hh.coefficient Cpad (VerifierEncoding.code Hh.verifier) x ≤
-        S.pcp.nativeWidth N, FrontTop.ph2C source a k Hh Cpad hpad x (S.pcp.nativeWidth N) hq O ≤ P2)
-    (hrest : ∀ O : BooleanCircuit (S.pcp.nativeWidth N), FrontOracleField.okOf w = true →
-      CanonicalWitnessCodec.decodeBooleanCircuit (S.pcp.nativeWidth N) (value (payload w.tail)) = some O →
-      O.size ≤ RecoveryScheduleEnvelope.oracleSizeBound G (S.pcp.nativeWidth N) →
+    (hph2 : Front35.Top.ph2C CN x w ≤ P2)
+    (hrest : ∀ O : NearCubicGates.Close.Outer.OuterGuess (S.width N), FrontOracleField.okOf w = true →
+      CN.passed (List.ofFn x) (payload w.tail) = true →
+      NearCubicWires.WireExponent3_5.UnionMachine.Front35.pairOf (S.width N) (payload w.tail) = some O →
       FrontSemRun.restCostOf h0 h1 Kw Dw De Ce Dt Ct Kb Db Cδ cr Vb aV bV aT bT crT KT AT c x (w.headD false) w.tail O ≤
         R) :
-    FrontSemRun.costOf (S := S) source a k Ap G Dw De Dt c C Hh Cpad hpad Kw h0 h1 Kb Db Cδ Ce Ct cr Vb aV bV aT bT
+    FrontSemRun.costOf (S := S) CN k Ap G Dw De Dt c C Kw h0 h1 Kb Db Cδ Ce Ct cr Vb aV bV aT bT
       crT KT AT x w ≤ 4 * N + 20 + P1 + P2 + R := by
   unfold FrontSemRun.costOf
   rw [if_neg (by omega)]
@@ -211,20 +182,21 @@ theorem costOf_le (source : ProjectionSourceAlgorithm UWhole.verifier UWhole.tim
     cases h : FrontOracleField.okOf w
     · exact absurd h hO
     · rfl
+  by_cases hp : CN.passed (List.ofFn x) (payload w.tail) = false
+  · rw [if_pos hp]; omega
+  rw [if_neg hp]
   split
   · omega
   · rename_i O hdec
-    by_cases hsz : O.size ≤ RecoveryScheduleEnvelope.oracleSizeBound G (S.pcp.nativeWidth N)
-    · rw [if_pos hsz]
-      by_cases hq : PCPPNativeHierarchyNodes.width source k Hh.coefficient Cpad (VerifierEncoding.code Hh.verifier) x ≤
-          S.pcp.nativeWidth N
-      · rw [dif_pos hq]
-        have e1 := hph2 O hsz hq
-        have e2 := hrest O hO' hdec hsz
-        omega
-      · rw [dif_neg hq]; omega
-    · rw [if_neg hsz]; omega
+    have hp' : CN.passed (List.ofFn x) (payload w.tail) = true := by
+      cases h : CN.passed (List.ofFn x) (payload w.tail)
+      · exact absurd h hp
+      · rfl
+    have e2 := hrest O hO' hp' hdec
+    omega
 
 end Top
 
 end NearCubicWires.WireExponent3_5.UnionMachine.FrontCostRun
+
+end

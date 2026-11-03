@@ -1,4 +1,4 @@
-import Proof.Wire_3_5.Recovery.RecoveryLedgerAt
+import Proof.Wire_3_5.Recovery.RecoveryBudgetBase
 import Proof.Wire_3_5.Transfer.TransferTargets
 
 /-! # Case 1's numeric conditions at the oracle degree `17·c_STV` (P3:3704-3709, 3685-3692, 3839-3840; D1.4)

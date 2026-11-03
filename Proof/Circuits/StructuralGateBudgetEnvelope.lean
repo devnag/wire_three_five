@@ -1,4 +1,6 @@
+import Proof.Circuits.BoundedOracleStructuralCircuit
 import Proof.Circuits.CircuitInputClauseBalancedCall
+import Proof.Foundations.CanonicalBalanced
 import Proof.Circuits.ValidatorLeafWidthCore
 
 namespace NearCubicWires.R1Leaf56StructuralGateBudgetEnvelope

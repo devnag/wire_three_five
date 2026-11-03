@@ -1,6 +1,7 @@
+import Proof.MachineModel.OrdinaryUnaryTemplate
+import Proof.Foundations.OrdinaryStreaming
 import Proof.Amplification.RecoveryTimedExecution
 import Proof.Foundations.OrdinaryRewindCarrier
-import Proof.MachineModel.OrdinaryUnaryTemplate
 
 /-! P25 outside project (`ExtDecompositionBatch`): shared local tape lemmas for
 the bespoke frame workers. Nothing here depends on the source or on a layout. -/
@@ -25,6 +26,9 @@ theorem read_shift (pre mid rest : List Bool) (j : ℕ) (hj : j < mid.length) :
     readTapeBit (pre ++ mid ++ rest) (pre.length + j) = readTapeBit mid j := by
   rw [List.append_assoc, read_suffix, read_prefix _ _ j hj]
 
+theorem read_at (pre rest : List Bool) (b : Bool) :
+    readTapeBit (pre ++ b :: rest) pre.length = b := Streaming.read_append pre rest b
+
 theorem read_start (pre mid rest : List Bool) (hm : 0 < mid.length) :
     readTapeBit (pre ++ mid ++ rest) pre.length = readTapeBit mid 0 := by
   have h := read_shift pre mid rest 0 hm
@@ -46,6 +50,8 @@ theorem read_replicate_true (n j : ℕ) (hj : j < n) : readTapeBit (List.replica
 theorem read_replicate_end (n : ℕ) (b : Bool) : readTapeBit (List.replicate n b) n = false := by
   simp [readTapeBit, List.getD_eq_getElem?_getD]
 
+theorem read_frame_mark (w : List Bool) (b : Bool) : readTapeBit (frame (b :: w)) 0 = true := rfl
+theorem read_frame_end : readTapeBit (frame []) 0 = false := rfl
 
 theorem frame_cons (b : Bool) (w : List Bool) : frame (b :: w) = true :: b :: frame w := rfl
 theorem frame_nil : frame [] = [false] := rfl

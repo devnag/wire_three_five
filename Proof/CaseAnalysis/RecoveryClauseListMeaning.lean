@@ -1,4 +1,5 @@
 import Proof.CaseAnalysis.RecoveryClauseBody
+import Proof.Amplification.RecoveryBoundedNativeFoldMeaning
 
 /-! Only the original compileClauses recursion is exposed. Its forward
 clause suffixes and saved outputs will feed the existing reverse AND fold. -/

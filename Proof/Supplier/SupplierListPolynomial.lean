@@ -732,6 +732,22 @@ theorem aeval_listPolynomialVector
     hterminal hgood candidate]
   rw [hbase]
 
+def listDegreeFrom
+    {depth : ℕ} (window : Fin depth → ℕ)
+    (terminalWindow level : ℕ) : ℕ :=
+  if hlevel : level < depth then
+    listDegreeFrom window terminalWindow (level + 1) +
+      2 * window ⟨level, hlevel⟩
+  else
+    terminalWindow
+termination_by depth - level
+decreasing_by omega
+
+def listDegree
+    {depth : ℕ} (window : Fin depth → ℕ)
+    (terminalWindow : ℕ) : ℕ :=
+  listDegreeFrom window terminalWindow 0
+
 noncomputable def polynomialListSucceeds
     {rank depth population : ℕ}
     (active : Finset (Fin population))

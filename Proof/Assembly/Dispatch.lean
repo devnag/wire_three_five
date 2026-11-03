@@ -1,4 +1,5 @@
 import Proof.Assembly.Front
+import Proof.CaseAnalysis.RowsOriginalSwitch
 
 /-! One fixed runtime flag selects the native producer or a paid terminal
 prefix. Both branches retain the original initializer bank and complete costs.
